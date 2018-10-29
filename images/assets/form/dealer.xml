@@ -1,0 +1,923 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root>
+	<province name="辽宁省">
+		<city name="沈阳市">
+			<dealer name="沈阳新中联汽车销售服务有限公司" address="沈阳市和平区胜利南街72号"/>
+		</city>
+	</province>
+	<province name="湖北省">
+		<city name="武汉市">
+			<dealer name="武汉龙泰元汽车销售服务有限公司" address="武汉市洪山区雄楚大街430号"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="潍坊市">
+			<dealer name="潍坊东裕车业发展有限公司" address="山东省潍坊市坊子区潍州路十二公里处东145号"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="珠海市">
+			<dealer name="珠海市新通达汽车销售服务有限公司" address="珠海市香洲区前山工业区华威路126号"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="嘉兴市">
+			<dealer name="嘉兴恒顺达汽车销售服务有限公司" address="浙江省嘉兴市南湖区余新工业北区四支路"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="深圳市">
+			<dealer name="深圳通利华宝安汽车销售服务有限公司" address="广东省深圳市宝安区沙井后亭衙边学子围工业区整栋通利华马自达"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="台州市">
+			<dealer name="台州通利达汽车有限公司" address="浙江省临海市靖江南路116号"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="惠州市">
+			<dealer name="惠州市通力达汽车销售服务有限公司" address="惠州市惠博沿江大道金山汽车城一号展场"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="深圳市">
+			<dealer name="劲达汽车销售服务(深圳)有限公司" address="深圳市南山区月亮湾大道新濠汽车广场B-9A"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="汕头市">
+			<dealer name="汕头高新区鹰达机电实业有限公司" address="汕头市高新区科技西路3号"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="青岛市">
+			<dealer name="青岛华润达汽车销售有限公司" address="青岛市崂山区罗湖路6号"/>
+		</city>
+	</province>
+	<province name="湖南省">
+		<city name="长沙市">
+			<dealer name="湖南万达汽车销售服务有限公司" address="湖南省长沙市星沙中南汽车世界A区06号"/>
+		</city>
+	</province>
+	<province name="上海市">
+		<city name="上海市">
+			<dealer name="上海景和真南汽车销售有限公司" address="上海市普陀区真南路2121号"/>
+		</city>
+	</province>
+	<province name="福建省">
+		<city name="泉州市">
+			<dealer name="福建益成汽车销售服务有限公司" address="泉州市丰泽区华大南埔"/>
+		</city>
+	</province>
+	<province name="四川省">
+		<city name="绵阳市">
+			<dealer name="绵阳星鸿达汽车销售服务有限公司" address="四川省绵阳市经开区绵州大道北段102号 "/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="杭州市">
+			<dealer name="杭州骏兴汽车有限公司" address="浙江省杭州市下城区绍兴路341号"/>
+		</city>
+	</province>
+	<province name="江西省">
+		<city name="南昌市">
+			<dealer name="江西江铃海外马自达汽车销售服务有限公司" address="江西省南昌市迎宾大道755号"/>
+		</city>
+	</province>
+	<province name="甘肃省">
+		<city name="兰州市">
+			<dealer name="兰州金岛星马汽车销售有限公司" address="甘肃省兰州市西固区环形中路43号"/>
+		</city>
+	</province>
+	<province name="重庆市">
+		<city name="重庆市">
+			<dealer name="重庆市渝高汽车销售服务有限公司" address="重庆市北部新区金童路2号附2号"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="金华市">
+			<dealer name="金华振宇汽车贸易有限公司" address="金华市环城北路道院塘"/>
+		</city>
+	</province>
+	<province name="海南省">
+		<city name="海口市">
+			<dealer name="海口优之杰汽车服务有限公司" address="海南省海口市南海大道223号"/>
+		</city>
+	</province>
+	<province name="辽宁省">
+		<city name="大连市">
+			<dealer name="大连众联达贸易有限公司" address="大连市甘井子区山东路南41号"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="常州市">
+			<dealer name="常州外汽永嘉汽车销售服务有限公司" address="常州市武进汽车城C区7号"/>
+		</city>
+	</province>
+	<province name="天津市">
+		<city name="天津市">
+			<dealer name="天津市精开隆国际贸易有限公司" address="天津市西青区卫津南路王兰庄电器城旁"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="中山市">
+			<dealer name="中山市万事得汽车销售服务有限公司" address="中山市东区中山六路（检验检疫局对面）"/>
+		</city>
+	</province>
+	<province name="天津市">
+		<city name="天津市">
+			<dealer name="天津市骏辉汽车销售有限公司" address="天津市北辰区宜兴埠镇津围公路东侧新宜白大道南侧"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="温州市">
+			<dealer name="温州中信汽车销售服务有限公司" address="浙江省温州市机场大道788号"/>
+		</city>
+	</province>
+	<province name="上海市">
+		<city name="上海市">
+			<dealer name="上海恒昌银都汽车销售有限公司" address="上海市闵行区银都路2568号"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="郑州市">
+			<dealer name="河南涌盛汽车销售有限公司" address="河南省郑州市中原区中原西路139号"/>
+		</city>
+	</province>
+	<province name="河北省">
+		<city name="石家庄市">
+			<dealer name="河北骏达汽车贸易有限公司" address="石市北二环东路86号国际汽车贸易园区"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="昆山市">
+			<dealer name="昆山富骏汽车销售服务有限公司" address="昆山市新南中路99号"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="济宁市">
+			<dealer name="济宁东润源汽车贸易有限公司" address="济宁市高新区327国道（南营村）同济大道东2公里路南"/>
+		</city>
+	</province>
+	<province name="新疆维吾尔自治区">
+		<city name="乌鲁木齐市">
+			<dealer name="新疆天汇永达汽车销售服务有限责任公司" address="新疆乌鲁木齐市新市区北京北路240号"/>
+		</city>
+	</province>
+	<province name="陕西省">
+		<city name="西安市">
+			<dealer name="西安骏雄汽车销售服务有限公司" address="西安市西高新西部大道107号"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="临沂市">
+			<dealer name="临沂永华汽车销售服务有限公司" address="临沂市兰山区通达路321号（通达路与启阳路交汇处向南20米路西）"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="苏州市">
+			<dealer name="苏州六和汽车销售有限公司" address="苏州吴中区木渎中山东路183号1幢、2幢"/>
+		</city>
+	</province>
+	<province name="安徽省">
+		<city name="合肥市">
+			<dealer name="合肥海康达汽车销售有限公司" address="合肥市包河工业园区纬二路23号"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="杭州市">
+			<dealer name="浙江裕菲汽车销售服务有限公司" address="杭州市萧山区通惠北路479号"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="东莞市">
+			<dealer name="东莞市通益汽车销售服务有限公司" address="广东省东莞市寮步镇药勒村蟠龙路"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="佛山市">
+			<dealer name="佛山海迪汽车有限公司" address="佛山大道381号(国际)车城南区四座1号"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="广州市">
+			<dealer name="广州市福犸汽车有限公司" address="云城西路江夏第十工业区铁岗头自编8号二楼"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="宁波市">
+			<dealer name="宁波鑫之源汽车有限公司" address="宁波市鄞州区鄞县大道西段777号（古林段 杉杉科创基地对面）"/>
+		</city>
+	</province>
+	<province name="四川省">
+		<city name="成都市">
+			<dealer name="成都东成安邦汽车销售服务有限公司" address="成都市锦江区锦江大道1188号"/>
+		</city>
+	</province>
+	<province name="福建省">
+		<city name="厦门市">
+			<dealer name="福建盛成汽车贸易发展有限公司" address="福建省厦门市海沧区马青路1285号"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="南京市">
+			<dealer name="南京天和汽车销售服务有限公司" address="江苏省南京市秦淮区卡子门宜家家居北面100米 双桥门高架入口处"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="义乌市">
+			<dealer name="义乌市祥马汽车销售服务有限公司" address="义乌市后宅汽车城8-2号场地"/>
+		</city>
+	</province>
+	<province name="北京市">
+		<city name="北京市">
+			<dealer name="北京东仁庆开汽车销售服务有限公司" address="北京市朝阳区来广营西路18号"/>
+		</city>
+	</province>
+	<province name="上海市">
+		<city name="上海市">
+			<dealer name="上海绿地浦成汽车销售服务有限公司" address="上海市浦东新区川桥路350号"/>
+		</city>
+	</province>
+	<province name="北京市">
+		<city name="北京市">
+			<dealer name="北京拓佳诚商贸有限责任公司" address="北京市朝阳区东四环南路56号"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="烟台市">
+			<dealer name="烟台裕顺汽车服务有限公司" address="山东省烟台市莱山区源盛路6号"/>
+		</city>
+	</province>
+	<province name="上海市">
+		<city name="上海市">
+			<dealer name="上海宝悦汽车销售服务有限公司" address="上海市宝山区双庆路460号"/>
+		</city>
+	</province>
+	<province name="广西壮族自治区">
+		<city name="南宁市">
+			<dealer name="广西鑫广达长久汽车销售服务有限公司" address="广西南宁市南站大道19号"/>
+		</city>
+	</province>
+	<province name="山西省">
+		<city name="太原市">
+			<dealer name="山西香山晋达汽贸有限公司" address="山西省太原市新晋祠路晋源区488号万国汽贸园内"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="杭州市">
+			<dealer name="杭州骏田汽车有限公司" address="杭州市古墩路669号"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="济南市">
+			<dealer name="济南广森源汽车有限公司" address="济南市历城区北园大街41-1号"/>
+		</city>
+	</province>
+	<province name="内蒙古自治区">
+		<city name="包头市">
+			<dealer name="包头市利丰泰迪汽车服务有限责任公司" address="包头市九原区青年农场建设路南利丰汽车园区"/>
+		</city>
+	</province>
+	<province name="广西壮族自治区">
+		<city name="南宁市">
+			<dealer name="广西弘骏汽车销售服务有限公司" address="广西南宁市秀厢大道199号金源汽车城旁邕宾立交桥底"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="洛阳市">
+			<dealer name="洛阳华裕汽车贸易有限公司" address="洛阳九都东路名车苑6号"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="泰州市">
+			<dealer name="泰州天顺达汽车贸易有限公司" address="泰州开发区汽车城纬八路1号"/>
+		</city>
+	</province>
+	<province name="内蒙古自治区">
+		<city name="呼和浩特市">
+			<dealer name="内蒙古利丰泰迪汽车服务有限公司" address="呼和浩特市海拉尔西街利丰汽车文化广场"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="广州市">
+			<dealer name="广州市华灵汽车销售有限公司" address="广州黄埔大道西668号广州赛马场汽车城南区A栋1号"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="南通市">
+			<dealer name="南通博泰隆汽车贸易有限公司" address="南通工农北路599号"/>
+		</city>
+	</province>
+	<province name="福建省">
+		<city name="龙岩市">
+			<dealer name="龙岩市民源汽车发展有限公司" address="福建省龙岩市新罗区东城东兴路202号（森宝斜对面）"/>
+		</city>
+	</province>
+	<province name="北京市">
+		<city name="北京市">
+			<dealer name="北京博瑞祥浓汽车销售服务有限公司" address="北京市石景山求鲁谷大街80号"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="无锡市">
+			<dealer name="无锡市东方运达汽车销售服务有限公司" address="无锡市金城东路290号新东方汽车城A8座"/>
+		</city>
+	</province>
+	<province name="宁夏回族自治区">
+		<city name="银川市">
+			<dealer name="银川瑞鼎汽车销售服务有限公司" address="宁夏银川市得胜工业园109国道东侧"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="郑州市">
+			<dealer name="河南涌威汽车销售有限公司" address="郑州市花园北路与英才街交叉口路东&#xA;&#xA;"/>
+		</city>
+	</province>
+	<province name="云南省">
+		<city name="昆明市 ">
+			<dealer name="昆明京源达汽车销售有限责任公司" address="昆明市东三环虹桥加油站旁"/>
+		</city>
+	</province>
+	<province name="福建省">
+		<city name="福州市">
+			<dealer name="福州龙益汽车销售服务有限公司" address="福州市晋安区连江北路53-55号"/>
+		</city>
+	</province>
+	<province name="广西壮族自治区">
+		<city name="柳州市">
+			<dealer name="柳州鑫广达博骏汽车销售服务有限公司" address="柳州市广汽路汽车贸易园2号"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="镇江市">
+			<dealer name="镇江润马汽车销售有限公司" address="镇江市润州区蒋乔镇官塘沪宁高速出口东侧"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="常熟市">
+			<dealer name="常熟市华驰汽车销售有限公司" address="常熟市汽车市场品牌区188号"/>
+		</city>
+	</province>
+	<province name="四川省">
+		<city name="成都市">
+			<dealer name="成都通安汽车有限公司" address="成都市高新区新园南二路1号"/>
+		</city>
+	</province>
+	<province name="黑龙江省">
+		<city name="大庆市">
+			<dealer name="大庆市瑞玉百申汽车销售有限公司" address="黑龙江省大庆市新村开发区汽车工业园区长安马自达专营店"/>
+		</city>
+	</province>
+	<province name="河北省">
+		<city name="邯郸市">
+			<dealer name="邯郸市瑞华汽车销售服务有限公司" address="邯郸市开发区东环路北头路东（联华汽车广场）"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="江门市">
+			<dealer name="江门市振宇汽车销售服务有限公司" address="广东省江门市蓬江区建设三路113号"/>
+		</city>
+	</province>
+	<province name="贵州省">
+		<city name="贵阳市">
+			<dealer name="贵州康众汽车销售服务有限公司" address="贵州省贵阳市花溪区吉福路1号十和田汽车广场"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="台州市">
+			<dealer name="台州市诺亚汽车贸易有限公司" address="台州市路桥区方林汽车城D-803"/>
+		</city>
+	</province>
+	<province name="湖南省">
+		<city name="长沙市">
+			<dealer name="湖南万华汽车销售服务有限公司" address="湖南长沙市天心区雀园路（芙蓉南路省政府往南1000米）"/>
+		</city>
+	</province>
+	<province name="黑龙江省">
+		<city name="哈尔滨市">
+			<dealer name="哈尔滨龙洋汽车销售有限公司" address="哈尔滨市道外区先锋路1号"/>
+		</city>
+	</province>
+	<province name="湖北省">
+		<city name="武汉市">
+			<dealer name="武汉银马汽车销售有限公司" address="湖北省武汉市汉阳区黄金口都市工业园金色环路18号建银汽贸园3号楼武汉银马店"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="扬州市">
+			<dealer name="江苏森泰汽车销售有限公司" address="江苏省扬州市荷叶东路8号"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="苏州市">
+			<dealer name="苏州瀚龙汽车销售有限公司" address="苏州市吴中区吴东路286号"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="深圳市">
+			<dealer name="深圳通利华福滨汽车服务有限公司" address="广东省深圳市龙岗区坂田布龙路与坂雪岗大道交汇处富豪花园荣兴大厦首层104号商铺"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="淮安市">
+			<dealer name="淮安雨田长盛汽车销售有限公司" address="淮安市清河新区旺旺路18-2号"/>
+		</city>
+	</province>
+	<province name="青海省">
+		<city name="西宁市">
+			<dealer name="青海金岛星马汽车销售有限公司" address="西宁经济技术开发区昆仑东路6号"/>
+		</city>
+	</province>
+	<province name="吉林省">
+		<city name="长春市">
+			<dealer name="吉林省瑞祥汽车销售服务有限公司" address="吉林省长春市经济技术开发区仙台大街959号"/>
+		</city>
+	</province>
+	<province name="内蒙古自治区">
+		<city name="赤峰市">
+			<dealer name="赤峰新雅迪汽车销售服务有限公司" address="赤峰市红山区桥北物流园区商务广场南侧"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="湖州市">
+			<dealer name="湖州长鸿汽车销售服务有限公司" address="浙江省湖州市杭长桥北路978号"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="南阳市">
+			<dealer name="南阳华隆汽车贸易有限公司" address="南阳市信臣路与人民路交叉口西600米路北"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="徐州市">
+			<dealer name="徐州晖宏汽车贸易有限公司" address="江苏省徐州市黄山路2号"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="新乡市">
+			<dealer name="新乡市涌越汽车销售有限公司" address="新乡市和平路与南环路交叉口向西200米路南"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="吴江市">
+			<dealer name="吴江市久博汽车贸易有限公司" address="吴江市南北快速干线菀坪出口处东侧"/>
+		</city>
+	</province>
+	<province name="河北省">
+		<city name="邢台市">
+			<dealer name="邢台蓝池跃龙汽车服务有限公司" address="邢台市钢铁北路与北外环交叉口西行500米蓝池物流园内（原张东村）"/>
+		</city>
+	</province>
+	<province name="内蒙古自治区">
+		<city name="鄂尔多斯市">
+			<dealer name="鄂尔多斯市成兴汽车有限公司" address="鄂尔多斯市东胜区铜川镇汽车博览园和兴汽车城马自达4S店"/>
+		</city>
+	</province>
+	<province name="陕西省">
+		<city name="榆林市">
+			<dealer name="陕西榆林金岛汽车销售有限公司" address="陕西省榆林市开发区草海则电厂路"/>
+		</city>
+	</province>
+	<province name="安徽省">
+		<city name="合肥市">
+			<dealer name="合肥新海和信汽车有限公司" address="合肥市瑶海区新海大道与灵石路交口北50米"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="衢州市">
+			<dealer name="衢州龙达汽车销售服务有限公司" address="浙江省衢州市柯城区浙西大道109号"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="佛山市">
+			<dealer name="佛山骏迪汽车有限公司" address="佛山市南海区桂城海八西路（华南汽车城）G13号"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="绍兴市">
+			<dealer name="绍兴广隆汽车有限公司" address="绍兴市104国道北复线狮子桥头"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="连云港市">
+			<dealer name="连云港报业汽车销售服务有限公司" address="江苏省连云港市海州区瀛洲南路128号"/>
+		</city>
+	</province>
+	<province name="山西省">
+		<city name="运城市">
+			<dealer name="运城市鑫立达汽车销售有限公司" address="运城市盐湖区机场大道中段（建北桥东500米）"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="安阳市">
+			<dealer name="安阳市鼎祥汽车销售服务有限公司" address="安阳市东外环汽车市场院内"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="宜兴市">
+			<dealer name="宜兴市苏源汽车销售服务有限公司" address="江苏省宜兴市融达汽车城"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="佛山市">
+			<dealer name="佛山市耀田汽车有限公司" address="广东省佛山市顺德区伦教广珠公路荔村路段"/>
+		</city>
+	</province>
+	<province name="四川省">
+		<city name="泸州市">
+			<dealer name="泸州安马车业有限公司" address="泸州市龙马潭区鱼塘镇振兴路西侧"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="江阴市">
+			<dealer name="江阴市吉威汽车有限公司" address="江阴市澄杨路79号"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="商丘市">
+			<dealer name="商丘市达成汽车销售服务有限公司" address="河南省商丘市梁园区委西500米车城大道与金康路交叉口"/>
+		</city>
+	</province>
+	<province name="陕西省">
+		<city name="西安市">
+			<dealer name="陕西广行汽车销售服务有限公司" address="西安市未央区六村堡工业园六号"/>
+		</city>
+	</province>
+	<province name="上海市">
+		<city name="上海市">
+			<dealer name="上海弘绅汽车销售服务有限公司" address="上海浦东新区沪南公路3738号"/>
+		</city>
+	</province>
+	<province name="安徽省">
+		<city name="阜阳市">
+			<dealer name="阜阳市广旭汽车销售服务有限公司" address="阜阳经济技术开发区汽贸物流园东300米"/>
+		</city>
+	</province>
+	<province name="上海市">
+		<city name="上海市">
+			<dealer name="上海弘翔汽车销售服务有限公司" address="上海市奉贤区南桥镇环城北路988号"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="太仓市">
+			<dealer name="太仓华洋汽车销售服务有限公司" address="江苏省太仓市城厢镇东亭北路2号"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="焦作市">
+			<dealer name="焦作华飞汽车贸易有限公司" address="焦作市迎宾路沙河桥南100米路东"/>
+		</city>
+	</province>
+	<province name="西藏自治区">
+		<city name="拉萨市">
+			<dealer name="西藏新东方汽车销售服务有限公司" address="拉萨市金珠中路2号"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="盐城市">
+			<dealer name="盐城申大汽车销售服务有限公司" address="盐城市经济开发区聚亨路2号（中大工业园内）"/>
+		</city>
+	</province>
+	<province name="湖南省">
+		<city name="衡阳市">
+			<dealer name="衡阳津湘万华汽车销售服务有限公司" address="衡阳市蒸湘区西外环路杨柳汽贸城"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="聊城市">
+			<dealer name="聊城北斗泰达汽车销售有限公司" address="聊城开发区东昌东路235号北斗汽车文化园（东区）"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="菏泽市">
+			<dealer name="菏泽祥通汽车销售服务有限公司" address="山东省菏泽市黄河东路800号正大汽车广场内"/>
+		</city>
+	</province>
+	<province name="福建省">
+		<city name="厦门市">
+			<dealer name="厦门和齐汽车销售有限公司" address="厦门市湖里区嘉禾路中埔社10140号综合楼"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="揭阳市">
+			<dealer name="揭阳恒诚汽车贸易有限公司" address="揭阳市东山区环市北路与晓翠路交汇处"/>
+		</city>
+	</province>
+	<province name="四川省">
+		<city name="南充市">
+			<dealer name="南充通安汽车有限公司" address="四川省南充市航空港工业集中区南充国际汽车城"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="桐乡市">
+			<dealer name="桐乡市振华汽车贸易有限公司" address="桐乡市茅盾东路174号"/>
+		</city>
+	</province>
+	<province name="福建省">
+		<city name="福州市">
+			<dealer name="福建源和汽车销售服务有限公司" address="福建省福州市仓山区盖山投资区高南路2号"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="郑州市">
+			<dealer name="河南新宏源汽车销售服务有限公司" address="郑州市航海路与大学路交叉口东300米路北"/>
+		</city>
+	</province>
+	<province name="贵州省">
+		<city name="遵义市">
+			<dealer name="贵州康胜汽车销售服务有限公司" address="贵州省遵义市遵南大道黔北国际汽车超市区域B幢一层"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="威海市">
+			<dealer name="威海金蚂蚁汽车销售有限公司" address="山东省威海市环翠区温泉镇冶口村金蚂蚁汽车广场11号店"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="宁波市">
+			<dealer name="中国长安汽车集团宁波东祥汽车有限公司" address="浙江省宁海县梅林街道平安西路30号"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="滨州市">
+			<dealer name="滨州市圣钦汽贸有限公司" address="山东省滨州市205国道东方红路口往北2公里路西铂焱汽车商贸城"/>
+		</city>
+	</province>
+	<province name="江西省">
+		<city name="九江市">
+			<dealer name="九江和兴汽车销售服务有限公司" address="九江市庐山区浔南大道中段南侧"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="宿迁市">
+			<dealer name="宿迁市苏宁汽车贸易服务有限公司" address="双庄国际汽车城迅驰路南首"/>
+		</city>
+	</province>
+	<province name="江西省">
+		<city name="上饶市">
+			<dealer name="上饶市福铃达汽车有限公司" address="上饶市经济开发区三清山大道1号1栋"/>
+		</city>
+	</province>
+	<province name="四川省">
+		<city name="乐山市">
+			<dealer name="乐山市联合东升汽车销售服务有限公司" address="乐山市市中区白燕路中段534号"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="德州市">
+			<dealer name="德州德豪汽车销售服务有限公司" address="德州市经济开发区中傲大道1号汇一汽贸园"/>
+		</city>
+	</province>
+	<province name="山西省">
+		<city name="晋城市">
+			<dealer name="晋城市长港汽车销售服务有限公司" address="山西省晋城市迎宾街火车站西200米处"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="丹阳市">
+			<dealer name="丹阳市广胜天意汽车服务有限公司" address="江苏省丹阳市丹金路迈村工业园广胜汽贸城"/>
+		</city>
+	</province>
+	<province name="安徽省">
+		<city name="安庆市">
+			<dealer name="安庆市大庆汽车销售服务有限公司" address="安庆市英德利汽车城石塘湖路10号（新车管所对面）"/>
+		</city>
+	</province>
+	<province name="云南省">
+		<city name="曲靖市">
+			<dealer name="曲靖中达汽车销售服务有限公司" address="云南省曲靖市珠江源大道珠江源古镇红绿灯旁"/>
+		</city>
+	</province>
+	<province name="江西省">
+		<city name="赣州市">
+			<dealer name="赣州宏阳机电销售有限公司" address="江西省赣州市经济技术开发区金岭路工业一路东侧"/>
+		</city>
+	</province>
+	<province name="山西省">
+		<city name="太原市">
+			<dealer name="山西深业汽车销售服务有限公司" address="山西省太原市小店区龙城大街与太榆路交叉口郑村对面"/>
+		</city>
+	</province>
+	<province name="云南省">
+		<city name="玉溪市">
+			<dealer name="玉溪瑞信汽车销售服务有限公司" address="云南省玉溪市红塔区龙马路35号"/>
+		</city>
+	</province>
+	<province name="甘肃省">
+		<city name="兰州市">
+			<dealer name="甘肃海丰汽车销售有限公司" address="兰州市城关区大砂坪七公里"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="枣庄市">
+			<dealer name="枣庄贵翔汽车销售服务有限公司" address="山东省枣庄市市中区建华西路151号"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="南通市">
+			<dealer name="南通文峰恒丰汽车销售服务有限公司" address="南通市长江南路128号（体育会展中心大转盘南200米）"/>
+		</city>
+	</province>
+	<province name="湖北省">
+		<city name="十堰市">
+			<dealer name="十堰美泽贸易有限公司" address="售后建设中"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="驻马店市">
+			<dealer name="驻马店市腾达汽车销售服务有限公司" address="驻马店市文明路与纬四路交叉口路东"/>
+		</city>
+	</province>
+	<province name="内蒙古自治区">
+		<city name="通辽市">
+			<dealer name="通辽市新雅迪汽车销售有限公司" address="通辽市科尔沁区河西瑞丰物流园区"/>
+		</city>
+	</province>
+	<province name="黑龙江省">
+		<city name="佳木斯市">
+			<dealer name="佳木斯鑫维汽车销售服务有限公司" address="黑龙江省佳木斯市郊区友谊路西段沿江乡沿江村1377号"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="杭州市">
+			<dealer name="杭州广润汽车有限公司" address="浙江省杭州市余杭区东湖北路222-2号"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="丽水市">
+			<dealer name="丽水财通汽车销售服务有限公司" address="浙江省丽水市莲都区丽阳街1458号"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="清远市">
+			<dealer name="清远市骏昇汽车销售服务有限公司" address="清远市新城B28号区骏飞汽车城"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="青岛市">
+			<dealer name="青岛安隆达汽车销售有限公司" address="青岛市四方区重庆南路186号"/>
+		</city>
+	</province>
+	<province name="湖北省">
+		<city name="孝感市">
+			<dealer name="湖北爱康宏通汽车销售服务有限公司" address="湖北省孝感市槐荫大道9号"/>
+		</city>
+	</province>
+	<province name="广东省">
+		<city name="潮州市">
+			<dealer name="潮州市德隆汽车贸易有限公司" address="广东省潮州市潮安县浮洋镇乌洋村干渠东侧"/>
+		</city>
+	</province>
+	<province name="湖南省">
+		<city name="娄底市">
+			<dealer name="娄底市恒兴汽车销售服务有限公司" address="湖南省娄底市娄星区汽车南站往南400米"/>
+		</city>
+	</province>
+	<province name="安徽省">
+		<city name="芜湖市">
+			<dealer name="芜湖隆伟行汽车销售服务有限公司" address="芜湖市鸠江区祥盛路57号（鸠江区人民法院对面汽车园）"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="济南市">
+			<dealer name="山东银座天祥汽车有限公司" address="济南市经十路2289号银座汽车国际广场"/>
+		</city>
+	</province>
+	<province name="湖北省">
+		<city name="宜昌市">
+			<dealer name="宜昌大颜贸易有限责任公司" address="售后建设完毕，待验收"/>
+		</city>
+	</province>
+	<province name="福建省">
+		<city name="三明市">
+			<dealer name="三明万和汽车销售服务有限公司" address="三明市德安汽车贸易集中区长安马自达4S店"/>
+		</city>
+	</province>
+	<province name="湖南省">
+		<city name="常德市">
+			<dealer name="常德万通汽车销售服务有限公司" address="常德市柳叶湖旅游度假管理区柳叶大道与常德大道交汇处常德大道2768号"/>
+		</city>
+	</province>
+	<province name="安徽省">
+		<city name="六安市">
+			<dealer name="六安正大汽车销售服务有限公司" address="六安市裕安区城南镇樊通桥村"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="苍南县">
+			<dealer name="苍南信达汽车销售服务有限公司" address="温州市苍南县灵溪镇通福路金苹果工业园旁"/>
+		</city>
+	</province>
+	<province name="安徽省">
+		<city name="淮北市">
+			<dealer name="淮北市达马汽车销售服务有限公司" address="淮北市寇湾汽车城瑞骑路15号"/>
+		</city>
+	</province>
+	<province name="重庆市">
+		<city name="重庆市">
+			<dealer name="重庆同洲龙马汽车销售有限公司" address="重庆市渝北区余松路450号"/>
+		</city>
+	</province>
+	<province name="福建省">
+		<city name="漳州市">
+			<dealer name="漳州市悦驰汽车贸易有限公司" address="福建省漳州市芗城区金峰工业区埔尾片区闽南汽车贸易城7号"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="周口市">
+			<dealer name="周口禹泽汽车销售服务有限公司" address="周口市周商路与太昊路交叉口向西300米"/>
+		</city>
+	</province>
+	<province name="山东省">
+		<city name="淄博市">
+			<dealer name="淄博圣钦汽车贸易有限公司" address="淄博张店区山泉路132号"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="东阳市">
+			<dealer name="浙江中振贸易有限公司" address="东阳市甑山路与象金路交叉路口长安马自达4S店"/>
+		</city>
+	</province>
+	<province name="江苏省">
+		<city name="张家港市">
+			<dealer name="张家港市森联汽车销售服务有限公司" address="张家港市经济开发区东区大道北首"/>
+		</city>
+	</province>
+	<province name="山西省">
+		<city name="临汾市">
+			<dealer name="山西迈特利汽车销售有限公司" address="临汾市尧都区尧庙往南金井村北口"/>
+		</city>
+	</province>
+	<province name="四川省">
+		<city name="成都市">
+			<dealer name="成都温江区港宏鼎鑫汽车销售服务有限公司" address="成都成华区东三环路二段龙潭工业园长安马自达4S店"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="信阳市">
+			<dealer name="信阳市盛达汽车销售服务有限公司" address="信阳市南京路大柏树西侧50米处"/>
+		</city>
+	</province>
+	<province name="安徽省">
+		<city name="马鞍山市">
+			<dealer name="马鞍山中冠汽车销售服务有限公司" address="马鞍山市雨山经济技术开发区九华西路1350号"/>
+		</city>
+	</province>
+	<province name="辽宁省">
+		<city name="鞍山市">
+			<dealer name="辽宁旺达汽车销售服务有限公司" address="辽宁省鞍山市千山区建设大道591号"/>
+		</city>
+	</province>
+	<province name="浙江省">
+		<city name="温岭市">
+			<dealer name="台州诺亚方舟汽车有限公司" address="浙江省温岭市城东街道锦屏大道（曙光路交汇处）"/>
+		</city>
+	</province>
+	<province name="湖南省">
+		<city name="邵阳市">
+			<dealer name="邵阳市恒广通汽车销售服务有限公司" address="邵阳市双清区邵阳大道与大兴路交汇处"/>
+		</city>
+	</province>
+	<province name="重庆市">
+		<city name="重庆市">
+			<dealer name="重庆辰宇潼川汽车销售服务有限公司" address="重庆市潼南县创业大道工业园区"/>
+		</city>
+	</province>
+	<province name="安徽省">
+		<city name="宿州市">
+			<dealer name="宿州市禹潞汽车销售服务有限公司" address="宿州经济开发区西昌南路东侧"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="三门峡市">
+			<dealer name="三门峡瑞丰汽车销售服务有限公司" address="河南省三门峡市湖滨区侯桥村六组（连霍高速东出口瑞通汽车城内）"/>
+		</city>
+	</province>
+	<province name="四川省">
+		<city name="攀枝花">
+			<dealer name="攀枝花驭马车业有限公司" address="攀枝花市仁和区攀枝花大道南段356号1栋"/>
+		</city>
+	</province>
+	<province name="重庆市">
+		<city name="重庆市">
+			<dealer name="重庆锦铂汽车销售有限公司" address="重庆市南岸区白鹤路155号"/>
+		</city>
+	</province>
+	<province name="福建省">
+		<city name="南平市">
+			<dealer name="福建和庄汽车贸易有限公司" address="福建省建阳市海西林产工贸城11-08号"/>
+		</city>
+	</province>
+	<province name="四川省">
+		<city name="遂宁市">
+			<dealer name="遂宁驭通昌汽车销售有限公司" address="四川省遂宁市船山区中国西部现代物流港"/>
+		</city>
+	</province>
+	<province name="河南省">
+		<city name="许昌市">
+			<dealer name="许昌市锦天汽车销售服务有限公司" address="许昌市北环路万通汽贸城南院"/>
+		</city>
+	</province>
+</root>

@@ -1,0 +1,5 @@
+﻿<?xml version="1.0"?>
+<cross-domain-policy>
+	<site-control permitted-cross-domain-policies="by-content-type"/>
+	<allow-access-from domain="*.limbo-nova.com" />
+</cross-domain-policy>
