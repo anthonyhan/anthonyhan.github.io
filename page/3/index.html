@@ -72,7 +72,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Gemini',
-    version: '6.4.2',
+    version: '6.6.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
@@ -137,6 +137,8 @@
 
   gtag('config', 'UA-88266449-1');
 </script>
+
+
 
 
 
@@ -434,9 +436,7 @@ span.exturl {
   cursor: pointer;
 }
 a:hover,
-span.exturl:hover,
-a:active,
-span.exturl:active {
+span.exturl:hover {
   color: #222;
   border-bottom-color: #222;
 }
@@ -1361,7 +1361,8 @@ pre .javascript .function {
     margin-top: 10px;
   }
 }
-.menu .menu-item a {
+.menu .menu-item a,
+.menu .menu-item span.exturl {
   display: block;
   font-size: 13px;
   line-height: inherit;
@@ -1372,7 +1373,7 @@ pre .javascript .function {
   transition-delay: 0s;
 }
 .menu .menu-item a:hover,
-.menu-item-active a {
+.menu .menu-item span.exturl:hover {
   border-bottom-color: #222;
 }
 .menu .menu-item .fa {
@@ -1386,7 +1387,7 @@ pre .javascript .function {
   word-wrap: break-word;
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
-.post-body span.exturl .fa {
+.post-body .exturl .fa {
   font-size: 14px;
   margin-left: 4px;
 }
@@ -1609,7 +1610,8 @@ pre .javascript .function {
   margin-left: 3px;
   opacity: 0.6;
 }
-.posts-collapse .post-title a {
+.posts-collapse .post-title a,
+.posts-collapse .post-title span.exturl {
   color: #666;
   border-bottom: none;
 }
@@ -1660,7 +1662,8 @@ pre .javascript .function {
   transform: scaleX(1);
 }
 .posts-expand .post-title-link .fa {
-  font-size: 16px;
+  font-size: 20px;
+  margin-left: 5px;
 }
 .posts-expand .post-meta {
   margin: 3px 0 60px 0;
@@ -1994,7 +1997,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ed6911;
+  background: #257fff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2012,7 +2015,8 @@ pre .javascript .function {
 .links-of-blogroll-item {
   padding: 2px 10px;
 }
-.links-of-blogroll-item a {
+.links-of-blogroll-item a,
+.links-of-blogroll-item span.exturl {
   max-width: 280px;
   box-sizing: border-box;
   display: inline-block;
@@ -2390,6 +2394,14 @@ pre .javascript .function {
 .page-pv .busuanzi-value {
   margin: 0 5px;
 }
+.gt-header a,
+.gt-comments a,
+.gt-popup a {
+  border-bottom: none;
+}
+.gt-container .gt-popup .gt-action.is--active:before {
+  top: 0.7em;
+}
 .page-archive .archive-page-counter {
   position: relative;
   top: 3px;
@@ -2411,6 +2423,10 @@ pre .javascript .function {
   background: #555;
   border: 1px solid #fff;
   border-radius: 50%;
+}
+.page-archive .fa {
+  font-size: 15px;
+  margin-left: 5px;
 }
 .category-all-page .category-all-title {
   text-align: center;
@@ -2508,9 +2524,10 @@ pre .javascript .function {
 }
 #schedule ul#event-list li.event-past {
   background: #fcfcfc;
+  padding: 15px 0 15px 10px;
 }
 #schedule ul#event-list li.event-past > * {
-  opacity: 0.6;
+  opacity: 0.9;
 }
 #schedule ul#event-list li.event-past h2.event-summary {
   color: #bbb;
@@ -2533,6 +2550,23 @@ pre .javascript .function {
   animation: dot-flash 1s alternate infinite ease-in-out;
 }
 #schedule ul#event-list li.event-now * {
+  color: #fff !important;
+}
+#schedule ul#event-list li.event-future {
+  background: #222;
+  color: #fff;
+  padding: 15px 0 15px 10px;
+}
+#schedule ul#event-list li.event-future h2.event-summary:before {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
+  color: #fff;
+  animation: dot-flash 1s alternate infinite ease-in-out;
+}
+#schedule ul#event-list li.event-future * {
   color: #fff !important;
 }
 @-moz-keyframes dot-flash {
@@ -2834,11 +2868,31 @@ ul.breadcrumb li+li:last-child {
     display: block !important;
   }
 }
+.menu-item-active a,
+.menu .menu-item a:hover,
+.menu .menu-item span.exturl:hover {
+  background: #f9f9f9;
+  border-bottom-color: #fff;
+}
+.menu-item-active a:after,
+.menu .menu-item a:hover:after,
+.menu .menu-item span.exturl:hover:after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  margin-top: -3px;
+  right: 15px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #bbb;
+}
 .menu .menu-item {
   display: block;
   margin: 0;
 }
-.menu .menu-item a {
+.menu .menu-item a,
+.menu .menu-item span.exturl {
   position: relative;
   box-sizing: border-box;
   padding: 5px 20px;
@@ -2849,10 +2903,11 @@ ul.breadcrumb li+li:last-child {
   transition-timing-function: ease-in-out;
   transition-delay: 0s;
 }
-.menu .menu-item a:hover,
-.menu-item-active a {
-  background: #f9f9f9;
-  border-bottom-color: #fff;
+@media (hover: none) {
+  .menu .menu-item a:hover,
+  .menu .menu-item span.exturl:hover {
+    background: none;
+  }
 }
 .menu .menu-item .badge {
   display: inline-block;
@@ -2871,17 +2926,6 @@ ul.breadcrumb li+li:last-child {
 }
 .menu .menu-item br {
   display: none;
-}
-.menu-item-active a:after {
-  content: " ";
-  position: absolute;
-  top: 50%;
-  margin-top: -3px;
-  right: 15px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #bbb;
 }
 .btn-bar {
   background-color: #fff;
@@ -2967,22 +3011,22 @@ ul.breadcrumb li+li:last-child {
   clear: both;
 }
 .sidebar a,
-.sidebar .exturl {
+.sidebar span.exturl {
   color: #555;
 }
 .sidebar a:hover,
-.sidebar .exturl:hover {
+.sidebar span.exturl:hover {
   color: #222;
 }
 .site-state-item {
   padding: 0 10px;
 }
 .links-of-author-item a:before,
-.links-of-author-item .exturl:before {
+.links-of-author-item span.exturl:before {
   display: none;
 }
 .links-of-author-item a,
-.links-of-author-item .exturl {
+.links-of-author-item span.exturl {
   border-bottom: none;
   text-decoration: underline;
 }
@@ -3008,7 +3052,7 @@ ul.breadcrumb li+li:last-child {
   flex-wrap: wrap;
   justify-content: center;
 }
-.links-of-author .exturl {
+.links-of-author span.exturl {
   font-size: 13px;
 }
 .links-of-author-item {
@@ -3028,12 +3072,12 @@ ul.breadcrumb li+li:last-child {
   text-overflow: ellipsis;
 }
 .links-of-author-item a,
-.links-of-author-item .exturl {
+.links-of-author-item span.exturl {
   display: block;
   text-decoration: none;
 }
 .links-of-author-item a:hover,
-.links-of-author-item .exturl:hover {
+.links-of-author-item span.exturl:hover {
   border-radius: 4px;
   background: #eee;
 }
@@ -3324,32 +3368,68 @@ ul.breadcrumb li+li:last-child {
         
           
           <li class="menu-item menu-item-home">
-    <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
   </li>
 
       
@@ -3419,9 +3499,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/01/visioning-games-from-dear-esther-and-journey/" itemprop="url">
-                  从《Dear Esther》和《Journey》看当今游戏发展
-                </a>
+                
+                <a href="/2013/01/visioning-games-from-dear-esther-and-journey/" class="post-title-link" itemprop="http://www.limbonova.com/page/3/index.html">从《Dear Esther》和《Journey》看当今游戏发展</a>
               
             
           </h1>
@@ -3495,11 +3574,13 @@ ul.breadcrumb li+li:last-child {
 <p>真心希望当前的游戏领域现状能够发生改变。而我们也同时在当前的游戏身上找到了许多值得讨论和学习之处。</p>
 <p><img src="http://gamerboom.com/wp-content/uploads/2012/05/Journeyfrom-tmeink.com%EF%BC%89.jpg" alt="journey" title="Journey"></p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/01/visioning-games-from-dear-esther-and-journey/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/01/visioning-games-from-dear-esther-and-journey/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3513,6 +3594,9 @@ ul.breadcrumb li+li:last-child {
 
     
 
+    
+       
+    
     
 
     
@@ -3571,9 +3655,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2012/12/less-is-more-dear-esther-review/" itemprop="url">
-                  Less is more : Dear Esther 简评
-                </a>
+                
+                <a href="/2012/12/less-is-more-dear-esther-review/" class="post-title-link" itemprop="http://www.limbonova.com/page/3/index.html">Less is more : Dear Esther 简评</a>
               
             
           </h1>
@@ -3638,11 +3721,13 @@ ul.breadcrumb li+li:last-child {
 <p>Dear Esther 由独立游戏工作室 <a href="http://www.thechineseroom.co.uk/" target="_blank" rel="noopener">The Chinese Room [室] </a> 制作， 起初是作为Source引擎的Mod作品在2008年发布，2012年在Steam平台发售商业版。游戏没有复杂的操作，玩家所能做的只有前后左右(WSAD) 和放大(Zoom)，采用Source引擎，游戏画面渲染的很不错，诸如水面的反射，水流的折射等物理效果让人印象深刻。简单的操作，极少的交互凸显了叙事的重要性，让整个游戏的情节成为了该游戏的核心。</p>
 <p>游戏以一个废弃的海岛为场景，玩家可自由探索地区，并在途中某些地点触发画外音。叙述者自称“我”，即主角，也可指代为玩家自己。言语多以 “Dear Esther”开始，很像书信的开头，内容都是主角写给Esther的信件节选。玩家通过不断地探索来获得更多的叙述，以及结合游戏场景中的物件，从而获得零星的故事片段。随着探索区域的逐渐深入，获得的线索也越来越多，原本散乱的记忆拼图最终成为了一个整体。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2012/12/less-is-more-dear-esther-review/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2012/12/less-is-more-dear-esther-review/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3656,6 +3741,9 @@ ul.breadcrumb li+li:last-child {
 
     
 
+    
+       
+    
     
 
     
@@ -3714,9 +3802,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2012/09/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/" itemprop="url">
-                  Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性
-                </a>
+                
+                <a href="/2012/09/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/" class="post-title-link" itemprop="http://www.limbonova.com/page/3/index.html">Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性</a>
               
             
           </h1>
@@ -3804,6 +3891,9 @@ ActionScript 多线程支持共享二进制数据：允许开发者在多个工�
     
 
     
+       
+    
+    
 
     
 
@@ -3861,9 +3951,8 @@ ActionScript 多线程支持共享二进制数据：允许开发者在多个工�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2012/09/gif-animation-in-flash-player/" itemprop="url">
-                  在 Flash Player 中显示GIF动画
-                </a>
+                
+                <a href="/2012/09/gif-animation-in-flash-player/" class="post-title-link" itemprop="http://www.limbonova.com/page/3/index.html">在 Flash Player 中显示GIF动画</a>
               
             
           </h1>
@@ -3941,11 +4030,13 @@ ActionScript 多线程支持共享二进制数据：允许开发者在多个工�
 <p>优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。</p>
 <p>缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2012/09/gif-animation-in-flash-player/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2012/09/gif-animation-in-flash-player/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3959,6 +4050,9 @@ ActionScript 多线程支持共享二进制数据：允许开发者在多个工�
 
     
 
+    
+       
+    
     
 
     
@@ -4017,9 +4111,8 @@ ActionScript 多线程支持共享二进制数据：允许开发者在多个工�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2012/09/gif-format-and-lzw/" itemprop="url">
-                  GIF 格式及LZW算法浅析
-                </a>
+                
+                <a href="/2012/09/gif-format-and-lzw/" class="post-title-link" itemprop="http://www.limbonova.com/page/3/index.html">GIF 格式及LZW算法浅析</a>
               
             
           </h1>
@@ -4158,11 +4251,13 @@ GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充
 </tbody>
 </table>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2012/09/gif-format-and-lzw/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2012/09/gif-format-and-lzw/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4176,6 +4271,9 @@ GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充
 
     
 
+    
+       
+    
     
 
     
@@ -4234,9 +4332,8 @@ GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2012/08/asc2-release-notes/" itemprop="url">
-                  Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明
-                </a>
+                
+                <a href="/2012/08/asc2-release-notes/" class="post-title-link" itemprop="http://www.limbonova.com/page/3/index.html">Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</a>
               
             
           </h1>
@@ -4322,11 +4419,13 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 <li>英文编译器错误信息已经翻译成法文，日文，中文，区域取决于JVM的设置，并可以通过 -tools-locale 设置项改写。</li>
 </ul>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2012/08/asc2-release-notes/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2012/08/asc2-release-notes/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4340,6 +4439,9 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 
     
 
+    
+       
+    
     
 
     
@@ -4398,9 +4500,8 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2012/08/connecting-your-kindle-fire-to-adb/" itemprop="url">
-                  连接Kindle Fire到ADB(实体机调试)
-                </a>
+                
+                <a href="/2012/08/connecting-your-kindle-fire-to-adb/" class="post-title-link" itemprop="http://www.limbonova.com/page/3/index.html">连接Kindle Fire到ADB(实体机调试)</a>
               
             
           </h1>
@@ -4483,11 +4584,13 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 </ol>
 <p>注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2012/08/connecting-your-kindle-fire-to-adb/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2012/08/connecting-your-kindle-fire-to-adb/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4501,6 +4604,9 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 
     
 
+    
+       
+    
     
 
     
@@ -4559,9 +4665,8 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2012/08/similar-image-searching-algorithm-as3/" itemprop="url">
-                  基于AS3.0的相似图像搜索算法实现
-                </a>
+                
+                <a href="/2012/08/similar-image-searching-algorithm-as3/" class="post-title-link" itemprop="http://www.limbonova.com/page/3/index.html">基于AS3.0的相似图像搜索算法实现</a>
               
             
           </h1>
@@ -4642,11 +4747,13 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 <li>计算哈希值：将上述的比较结果拼起来构成一个64位的整数。</li>
 </ol>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2012/08/similar-image-searching-algorithm-as3/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2012/08/similar-image-searching-algorithm-as3/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4660,6 +4767,9 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 
     
 
+    
+       
+    
     
 
     
@@ -4718,9 +4828,8 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2012/08/actionscript-3-0-closure/" itemprop="url">
-                  ActionScript 3.0 闭包及作用域
-                </a>
+                
+                <a href="/2012/08/actionscript-3-0-closure/" class="post-title-link" itemprop="http://www.limbonova.com/page/3/index.html">ActionScript 3.0 闭包及作用域</a>
               
             
           </h1>
@@ -4811,11 +4920,13 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 <h3>作用域链(The scope chain)</h3>
 <p>无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2012/08/actionscript-3-0-closure/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2012/08/actionscript-3-0-closure/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4829,6 +4940,9 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 
     
 
+    
+       
+    
     
 
     
@@ -4887,9 +5001,8 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2012/07/actionscript3-inheritance-mechanism/" itemprop="url">
-                  ActionScript3的继承机制
-                </a>
+                
+                <a href="/2012/07/actionscript3-inheritance-mechanism/" class="post-title-link" itemprop="http://www.limbonova.com/page/3/index.html">ActionScript3的继承机制</a>
               
             
           </h1>
@@ -4959,11 +5072,13 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 <p>尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C++ 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。</p>
 <p>要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2012/07/actionscript3-inheritance-mechanism/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2012/07/actionscript3-inheritance-mechanism/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4977,6 +5092,9 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 
     
 
+    
+       
+    
     
 
     
@@ -5162,35 +5280,61 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
-                  <a href="https://t.me/antonius_hq" target="_blank" title="Telegram"><i class="fa fa-fw fa-telegram"></i>Telegram</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://t.me/antonius_hq" title="Telegram → https://t.me/antonius_hq" rel="noopener" target="_blank"><i class="fa fa-fw fa-telegram"></i>Telegram</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://twitter.com/antonius_hq" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/antonius_hq" title="Twitter → https://twitter.com/antonius_hq" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://github.com/anthonyhan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/anthonyhan" title="GitHub → https://github.com/anthonyhan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://steamcommunity.com/profiles/76561198046420839" target="_blank" title="Steam"><i class="fa fa-fw fa-steam"></i>Steam</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://steamcommunity.com/profiles/76561198046420839" title="Steam → https://steamcommunity.com/profiles/76561198046420839" rel="noopener" target="_blank"><i class="fa fa-fw fa-steam"></i>Steam</a>
                 </span>
               
             </div>
           
 
           
-          
-            <div class="cc-license motion-element" itemprop="license">
-              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
-              </a>
-            </div>
+             <div class="cc-license motion-element" itemprop="license">
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
           
 
           
@@ -5230,9 +5374,7 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 </div>
 
 
-
-
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -5240,7 +5382,7 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 
 
 
-  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.2</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
 
 
 
@@ -5377,6 +5519,8 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
   
 
   
+
+  
   
 
   
@@ -5408,6 +5552,8 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
 
 
   
+  
+
   
 
   

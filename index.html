@@ -72,7 +72,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Gemini',
-    version: '6.4.2',
+    version: '6.6.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
@@ -137,6 +137,8 @@
 
   gtag('config', 'UA-88266449-1');
 </script>
+
+
 
 
 
@@ -434,9 +436,7 @@ span.exturl {
   cursor: pointer;
 }
 a:hover,
-span.exturl:hover,
-a:active,
-span.exturl:active {
+span.exturl:hover {
   color: #222;
   border-bottom-color: #222;
 }
@@ -1361,7 +1361,8 @@ pre .javascript .function {
     margin-top: 10px;
   }
 }
-.menu .menu-item a {
+.menu .menu-item a,
+.menu .menu-item span.exturl {
   display: block;
   font-size: 13px;
   line-height: inherit;
@@ -1372,7 +1373,7 @@ pre .javascript .function {
   transition-delay: 0s;
 }
 .menu .menu-item a:hover,
-.menu-item-active a {
+.menu .menu-item span.exturl:hover {
   border-bottom-color: #222;
 }
 .menu .menu-item .fa {
@@ -1386,7 +1387,7 @@ pre .javascript .function {
   word-wrap: break-word;
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
-.post-body span.exturl .fa {
+.post-body .exturl .fa {
   font-size: 14px;
   margin-left: 4px;
 }
@@ -1609,7 +1610,8 @@ pre .javascript .function {
   margin-left: 3px;
   opacity: 0.6;
 }
-.posts-collapse .post-title a {
+.posts-collapse .post-title a,
+.posts-collapse .post-title span.exturl {
   color: #666;
   border-bottom: none;
 }
@@ -1660,7 +1662,8 @@ pre .javascript .function {
   transform: scaleX(1);
 }
 .posts-expand .post-title-link .fa {
-  font-size: 16px;
+  font-size: 20px;
+  margin-left: 5px;
 }
 .posts-expand .post-meta {
   margin: 3px 0 60px 0;
@@ -1994,7 +1997,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ed6911;
+  background: #257fff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2012,7 +2015,8 @@ pre .javascript .function {
 .links-of-blogroll-item {
   padding: 2px 10px;
 }
-.links-of-blogroll-item a {
+.links-of-blogroll-item a,
+.links-of-blogroll-item span.exturl {
   max-width: 280px;
   box-sizing: border-box;
   display: inline-block;
@@ -2390,6 +2394,14 @@ pre .javascript .function {
 .page-pv .busuanzi-value {
   margin: 0 5px;
 }
+.gt-header a,
+.gt-comments a,
+.gt-popup a {
+  border-bottom: none;
+}
+.gt-container .gt-popup .gt-action.is--active:before {
+  top: 0.7em;
+}
 .page-archive .archive-page-counter {
   position: relative;
   top: 3px;
@@ -2411,6 +2423,10 @@ pre .javascript .function {
   background: #555;
   border: 1px solid #fff;
   border-radius: 50%;
+}
+.page-archive .fa {
+  font-size: 15px;
+  margin-left: 5px;
 }
 .category-all-page .category-all-title {
   text-align: center;
@@ -2508,9 +2524,10 @@ pre .javascript .function {
 }
 #schedule ul#event-list li.event-past {
   background: #fcfcfc;
+  padding: 15px 0 15px 10px;
 }
 #schedule ul#event-list li.event-past > * {
-  opacity: 0.6;
+  opacity: 0.9;
 }
 #schedule ul#event-list li.event-past h2.event-summary {
   color: #bbb;
@@ -2533,6 +2550,23 @@ pre .javascript .function {
   animation: dot-flash 1s alternate infinite ease-in-out;
 }
 #schedule ul#event-list li.event-now * {
+  color: #fff !important;
+}
+#schedule ul#event-list li.event-future {
+  background: #222;
+  color: #fff;
+  padding: 15px 0 15px 10px;
+}
+#schedule ul#event-list li.event-future h2.event-summary:before {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
+  color: #fff;
+  animation: dot-flash 1s alternate infinite ease-in-out;
+}
+#schedule ul#event-list li.event-future * {
   color: #fff !important;
 }
 @-moz-keyframes dot-flash {
@@ -2834,11 +2868,31 @@ ul.breadcrumb li+li:last-child {
     display: block !important;
   }
 }
+.menu-item-active a,
+.menu .menu-item a:hover,
+.menu .menu-item span.exturl:hover {
+  background: #f9f9f9;
+  border-bottom-color: #fff;
+}
+.menu-item-active a:after,
+.menu .menu-item a:hover:after,
+.menu .menu-item span.exturl:hover:after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  margin-top: -3px;
+  right: 15px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #bbb;
+}
 .menu .menu-item {
   display: block;
   margin: 0;
 }
-.menu .menu-item a {
+.menu .menu-item a,
+.menu .menu-item span.exturl {
   position: relative;
   box-sizing: border-box;
   padding: 5px 20px;
@@ -2849,10 +2903,11 @@ ul.breadcrumb li+li:last-child {
   transition-timing-function: ease-in-out;
   transition-delay: 0s;
 }
-.menu .menu-item a:hover,
-.menu-item-active a {
-  background: #f9f9f9;
-  border-bottom-color: #fff;
+@media (hover: none) {
+  .menu .menu-item a:hover,
+  .menu .menu-item span.exturl:hover {
+    background: none;
+  }
 }
 .menu .menu-item .badge {
   display: inline-block;
@@ -2871,17 +2926,6 @@ ul.breadcrumb li+li:last-child {
 }
 .menu .menu-item br {
   display: none;
-}
-.menu-item-active a:after {
-  content: " ";
-  position: absolute;
-  top: 50%;
-  margin-top: -3px;
-  right: 15px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #bbb;
 }
 .btn-bar {
   background-color: #fff;
@@ -2967,22 +3011,22 @@ ul.breadcrumb li+li:last-child {
   clear: both;
 }
 .sidebar a,
-.sidebar .exturl {
+.sidebar span.exturl {
   color: #555;
 }
 .sidebar a:hover,
-.sidebar .exturl:hover {
+.sidebar span.exturl:hover {
   color: #222;
 }
 .site-state-item {
   padding: 0 10px;
 }
 .links-of-author-item a:before,
-.links-of-author-item .exturl:before {
+.links-of-author-item span.exturl:before {
   display: none;
 }
 .links-of-author-item a,
-.links-of-author-item .exturl {
+.links-of-author-item span.exturl {
   border-bottom: none;
   text-decoration: underline;
 }
@@ -3008,7 +3052,7 @@ ul.breadcrumb li+li:last-child {
   flex-wrap: wrap;
   justify-content: center;
 }
-.links-of-author .exturl {
+.links-of-author span.exturl {
   font-size: 13px;
 }
 .links-of-author-item {
@@ -3028,12 +3072,12 @@ ul.breadcrumb li+li:last-child {
   text-overflow: ellipsis;
 }
 .links-of-author-item a,
-.links-of-author-item .exturl {
+.links-of-author-item span.exturl {
   display: block;
   text-decoration: none;
 }
 .links-of-author-item a:hover,
-.links-of-author-item .exturl:hover {
+.links-of-author-item span.exturl:hover {
   border-radius: 4px;
   background: #eee;
 }
@@ -3324,32 +3368,68 @@ ul.breadcrumb li+li:last-child {
         
           
           <li class="menu-item menu-item-home menu-item-active">
-    <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
   </li>
 
       
@@ -3419,9 +3499,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/04/transistor-a-sonnet-to-cyberpunk/" itemprop="url">
-                  晶体管：献给赛博朋克的十四行诗
-                </a>
+                
+                <a href="/2018/04/transistor-a-sonnet-to-cyberpunk/" class="post-title-link" itemprop="http://www.limbonova.com/index.html">晶体管：献给赛博朋克的十四行诗</a>
               
             
           </h1>
@@ -3491,11 +3570,13 @@ Everyone except for them.</p>
 <p>虽然《晶体管》被官方定义为 ARPG ，但确切地说，它更应该被称作为一款 TRPG (Tactical RPG)。类似 XCOM 或者 神界：原罪 (Divinity: Original Sin) 的战斗规则 但又有所不同。首先，在行动规划阶段没有移动的次序和限制，玩家可以移动多次，并且在发动技能前后都可以移动，行动规划如同施放“时间暂停”一般。其次，个别技能会影响敌人位置，如拉近/击飞等效果。而在行动规划期间，受到此类效果影响的敌人并不会实时改变其位置，因为是规划嘛，所以需要一定的预判，游戏中会给出相应的提示。</p>
 <p><img src="/images/screenshots/20180426140854_1.jpg" alt="transistor"></p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/04/transistor-a-sonnet-to-cyberpunk/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2018/04/transistor-a-sonnet-to-cyberpunk/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3509,6 +3590,9 @@ Everyone except for them.</p>
 
     
 
+    
+       
+    
     
 
     
@@ -3567,9 +3651,8 @@ Everyone except for them.</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/setup-pixijs-with-typescript-using-webpack/" itemprop="url">
-                  基于TypeScript的PixiJS开发环境设置（webpack篇）
-                </a>
+                
+                <a href="/2017/09/setup-pixijs-with-typescript-using-webpack/" class="post-title-link" itemprop="http://www.limbonova.com/index.html">基于TypeScript的PixiJS开发环境设置（webpack篇）</a>
               
             
           </h1>
@@ -3658,11 +3741,13 @@ Everyone except for them.</p>
 </ol>
 <figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev ts-loader webpack webpack-dev-server</span><br></pre></td></tr></tbody></table></figure>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/setup-pixijs-with-typescript-using-webpack/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2017/09/setup-pixijs-with-typescript-using-webpack/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3676,6 +3761,9 @@ Everyone except for them.</p>
 
     
 
+    
+       
+    
     
 
     
@@ -3734,9 +3822,8 @@ Everyone except for them.</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/setup-pixijs-with-typescript-using-browserify/" itemprop="url">
-                  基于TypeScript的PixiJS开发环境设置（browserify篇）
-                </a>
+                
+                <a href="/2017/09/setup-pixijs-with-typescript-using-browserify/" class="post-title-link" itemprop="http://www.limbonova.com/index.html">基于TypeScript的PixiJS开发环境设置（browserify篇）</a>
               
             
           </h1>
@@ -3828,11 +3915,13 @@ Everyone except for them.</p>
 </ol>
 <figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev browserify browserify-shim http-server tsify tslint</span><br></pre></td></tr></tbody></table></figure>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/setup-pixijs-with-typescript-using-browserify/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2017/09/setup-pixijs-with-typescript-using-browserify/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3846,6 +3935,9 @@ Everyone except for them.</p>
 
     
 
+    
+       
+    
     
 
     
@@ -3904,9 +3996,8 @@ Everyone except for them.</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/behavior-trees-for-ai-how-they-work/" itemprop="url">
-                  AI行为树的工作原理
-                </a>
+                
+                <a href="/2017/09/behavior-trees-for-ai-how-they-work/" class="post-title-link" itemprop="http://www.limbonova.com/index.html">AI行为树的工作原理</a>
               
             
           </h1>
@@ -3980,11 +4071,13 @@ Everyone except for them.</p>
 <p>我在这篇文章提到的某些特定装饰器的节点类型，可能来自于 JBT 而不是一般的行为树概念，但是我发现它们是行为树系统中不可或缺的一部分。如果你的行为树不支持的话，你可以考虑实现一下。</p>
 <p>我不会自称是这个方面的专家，但是经过 Project Zomboid 游戏中NPC的开发工作，我觉得我还是有点本事的，所以我想我要爆料一些东西。如果我早点知道会让我的第一次尝试更顺利，或者至少打开了我的眼界，让我了解通过行为树可以做到什么。我不打算深入进行实现，但会给出一些在 Zomboid 项目中使用的抽象示例。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/09/behavior-trees-for-ai-how-they-work/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2017/09/behavior-trees-for-ai-how-they-work/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3998,6 +4091,9 @@ Everyone except for them.</p>
 
     
 
+    
+       
+    
     
 
     
@@ -4056,9 +4152,8 @@ Everyone except for them.</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/asked-an-architect-about-the-game-prison-architect/" itemprop="url">
-                  建筑师谈《监狱建筑师》
-                </a>
+                
+                <a href="/2017/08/asked-an-architect-about-the-game-prison-architect/" class="post-title-link" itemprop="http://www.limbonova.com/index.html">建筑师谈《监狱建筑师》</a>
               
             
           </h1>
@@ -4132,11 +4227,13 @@ Everyone except for them.</p>
 <p>游戏的最基本的建筑单元就是那些构成地图的方块。如何解决问题就看你如何有效使用分配给你的空间，经过足够长的时间后，你就会得到自己看待世界的方式（以自己的想法来构建世界），这就是模拟经营游戏的乐趣。这是一个关于最优化的练习。如果你像我一样，看到整齐有序的书架或者清洁干净的桌面感到莫名的享受时，玩模拟经营游戏尤其满足。</p>
 <p>但是，我依然会记得这个游戏的主题，尤其知道现实生活中这一切都是真实存在的之后，我意识到，原来我在游戏里干得很棒的工作竟然如此可怕。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/08/asked-an-architect-about-the-game-prison-architect/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2017/08/asked-an-architect-about-the-game-prison-architect/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4150,6 +4247,9 @@ Everyone except for them.</p>
 
     
 
+    
+       
+    
     
 
     
@@ -4208,9 +4308,8 @@ Everyone except for them.</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/12/a-conversation-with-anders-hejlsberg/" itemprop="url">
-                  Anders Hejlsberg谈C#、Java和C++中的泛型
-                </a>
+                
+                <a href="/2016/12/a-conversation-with-anders-hejlsberg/" class="post-title-link" itemprop="http://www.limbonova.com/index.html">Anders Hejlsberg谈C#、Java和C++中的泛型</a>
               
             
           </h1>
@@ -4287,11 +4386,13 @@ Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读�
 <li>C#泛型中的约束</li>
 </ul>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/12/a-conversation-with-anders-hejlsberg/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2016/12/a-conversation-with-anders-hejlsberg/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4305,6 +4406,9 @@ Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读�
 
     
 
+    
+       
+    
     
 
     
@@ -4363,9 +4467,8 @@ Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/09/bitnami-redmine-upgrade-guide/" itemprop="url">
-                  Bitnami Redmine 升级简易指南
-                </a>
+                
+                <a href="/2016/09/bitnami-redmine-upgrade-guide/" class="post-title-link" itemprop="http://www.limbonova.com/index.html">Bitnami Redmine 升级简易指南</a>
               
             
           </h1>
@@ -4466,11 +4569,13 @@ Redmine does not support JRuby because some gems do not support Rails 4.2.<br>
 <li>配置文件(apps\redmine\htdocs\config)</li>
 </ul>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/09/bitnami-redmine-upgrade-guide/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2016/09/bitnami-redmine-upgrade-guide/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4484,6 +4589,9 @@ Redmine does not support JRuby because some gems do not support Rails 4.2.<br>
 
     
 
+    
+       
+    
     
 
     
@@ -4542,9 +4650,8 @@ Redmine does not support JRuby because some gems do not support Rails 4.2.<br>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/08/markdown-syntax-zhtw/" itemprop="url">
-                  Markdown Syntax zhTW
-                </a>
+                
+                <a href="/2016/08/markdown-syntax-zhtw/" class="post-title-link" itemprop="http://www.limbonova.com/index.html">Markdown Syntax zhTW</a>
               
             
           </h1>
@@ -4644,11 +4751,13 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
 </ul>
 <p>**注意：**這份文件是用 Markdown 寫的，你可以<a href="https://github.com/othree/markdown-syntax-zhtw/blob/master/syntax.md" target="_blank" rel="noopener">看看它的原始檔</a> 。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/08/markdown-syntax-zhtw/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2016/08/markdown-syntax-zhtw/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4662,6 +4771,9 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
 
     
 
+    
+       
+    
     
 
     
@@ -4720,9 +4832,8 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/07/cascading-combobox-with-xml-dataprovider/" itemprop="url">
-                  XML数据源的级联ComboBox
-                </a>
+                
+                <a href="/2013/07/cascading-combobox-with-xml-dataprovider/" class="post-title-link" itemprop="http://www.limbonova.com/index.html">XML数据源的级联ComboBox</a>
               
             
           </h1>
@@ -4789,11 +4900,13 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
 <h3>“开发工具”选项卡</h3>
 <p>导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-“选项”-“自定义功能区”对话框，勾选“开发工具”。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/07/cascading-combobox-with-xml-dataprovider/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/07/cascading-combobox-with-xml-dataprovider/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4807,6 +4920,9 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
 
     
 
+    
+       
+    
     
 
     
@@ -4865,9 +4981,8 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/06/tour-of-taihu-lake-day-3/" itemprop="url">
-                  Tour of Taihu Lake Day 3
-                </a>
+                
+                <a href="/2013/06/tour-of-taihu-lake-day-3/" class="post-title-link" itemprop="http://www.limbonova.com/index.html">Tour of Taihu Lake Day 3</a>
               
             
           </h1>
@@ -4936,11 +5051,13 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
 <p>晚上和同学聊到一点多，早上醒来已经九点半，他已经去上班了，我便收拾好行李就离开了。去了他昨天介绍的早点店吃早饭，店家比较谦虚，写着一两4只的小笼包，我要了二两，端上来一看，恐怕一只就有一两了。酸辣汤勾芡稠度正好，味道也不错，喝了满满一大碗。可惜没吃到无锡的开洋馄饨，等下次有机会了。</p>
 <p><img src="https://lh3.googleusercontent.com/-JI2hwC_99oE/UayEPItuwaI/AAAAAAAAAMo/ZAyiRgsU0J0/s800/IMGP0782.jpg" alt="Alt text"></p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/06/tour-of-taihu-lake-day-3/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/06/tour-of-taihu-lake-day-3/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4954,6 +5071,9 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
 
     
 
+    
+       
+    
     
 
     
@@ -5139,35 +5259,61 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
-                  <a href="https://t.me/antonius_hq" target="_blank" title="Telegram"><i class="fa fa-fw fa-telegram"></i>Telegram</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://t.me/antonius_hq" title="Telegram → https://t.me/antonius_hq" rel="noopener" target="_blank"><i class="fa fa-fw fa-telegram"></i>Telegram</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://twitter.com/antonius_hq" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/antonius_hq" title="Twitter → https://twitter.com/antonius_hq" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://github.com/anthonyhan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/anthonyhan" title="GitHub → https://github.com/anthonyhan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://steamcommunity.com/profiles/76561198046420839" target="_blank" title="Steam"><i class="fa fa-fw fa-steam"></i>Steam</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://steamcommunity.com/profiles/76561198046420839" title="Steam → https://steamcommunity.com/profiles/76561198046420839" rel="noopener" target="_blank"><i class="fa fa-fw fa-steam"></i>Steam</a>
                 </span>
               
             </div>
           
 
           
-          
-            <div class="cc-license motion-element" itemprop="license">
-              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
-              </a>
-            </div>
+             <div class="cc-license motion-element" itemprop="license">
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
           
 
           
@@ -5207,9 +5353,7 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
 </div>
 
 
-
-
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -5217,7 +5361,7 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
 
 
 
-  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.2</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
 
 
 
@@ -5354,6 +5498,8 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
   
 
   
+
+  
   
 
   
@@ -5385,6 +5531,8 @@ Document. Please refer to <a href="http://daringfireball.net/projects/markdown/s
 
 
   
+  
+
   
 
   

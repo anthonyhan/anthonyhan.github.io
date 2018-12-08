@@ -72,7 +72,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Gemini',
-    version: '6.4.2',
+    version: '6.6.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
@@ -142,6 +142,8 @@
 
   gtag('config', 'UA-88266449-1');
 </script>
+
+
 
 
 
@@ -439,9 +441,7 @@ span.exturl {
   cursor: pointer;
 }
 a:hover,
-span.exturl:hover,
-a:active,
-span.exturl:active {
+span.exturl:hover {
   color: #222;
   border-bottom-color: #222;
 }
@@ -1366,7 +1366,8 @@ pre .javascript .function {
     margin-top: 10px;
   }
 }
-.menu .menu-item a {
+.menu .menu-item a,
+.menu .menu-item span.exturl {
   display: block;
   font-size: 13px;
   line-height: inherit;
@@ -1377,7 +1378,7 @@ pre .javascript .function {
   transition-delay: 0s;
 }
 .menu .menu-item a:hover,
-.menu-item-active a {
+.menu .menu-item span.exturl:hover {
   border-bottom-color: #222;
 }
 .menu .menu-item .fa {
@@ -1391,7 +1392,7 @@ pre .javascript .function {
   word-wrap: break-word;
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
-.post-body span.exturl .fa {
+.post-body .exturl .fa {
   font-size: 14px;
   margin-left: 4px;
 }
@@ -1614,7 +1615,8 @@ pre .javascript .function {
   margin-left: 3px;
   opacity: 0.6;
 }
-.posts-collapse .post-title a {
+.posts-collapse .post-title a,
+.posts-collapse .post-title span.exturl {
   color: #666;
   border-bottom: none;
 }
@@ -1665,7 +1667,8 @@ pre .javascript .function {
   transform: scaleX(1);
 }
 .posts-expand .post-title-link .fa {
-  font-size: 16px;
+  font-size: 20px;
+  margin-left: 5px;
 }
 .posts-expand .post-meta {
   margin: 3px 0 60px 0;
@@ -1999,7 +2002,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ed6911;
+  background: #257fff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2017,7 +2020,8 @@ pre .javascript .function {
 .links-of-blogroll-item {
   padding: 2px 10px;
 }
-.links-of-blogroll-item a {
+.links-of-blogroll-item a,
+.links-of-blogroll-item span.exturl {
   max-width: 280px;
   box-sizing: border-box;
   display: inline-block;
@@ -2395,6 +2399,14 @@ pre .javascript .function {
 .page-pv .busuanzi-value {
   margin: 0 5px;
 }
+.gt-header a,
+.gt-comments a,
+.gt-popup a {
+  border-bottom: none;
+}
+.gt-container .gt-popup .gt-action.is--active:before {
+  top: 0.7em;
+}
 .page-archive .archive-page-counter {
   position: relative;
   top: 3px;
@@ -2416,6 +2428,10 @@ pre .javascript .function {
   background: #555;
   border: 1px solid #fff;
   border-radius: 50%;
+}
+.page-archive .fa {
+  font-size: 15px;
+  margin-left: 5px;
 }
 .category-all-page .category-all-title {
   text-align: center;
@@ -2513,9 +2529,10 @@ pre .javascript .function {
 }
 #schedule ul#event-list li.event-past {
   background: #fcfcfc;
+  padding: 15px 0 15px 10px;
 }
 #schedule ul#event-list li.event-past > * {
-  opacity: 0.6;
+  opacity: 0.9;
 }
 #schedule ul#event-list li.event-past h2.event-summary {
   color: #bbb;
@@ -2538,6 +2555,23 @@ pre .javascript .function {
   animation: dot-flash 1s alternate infinite ease-in-out;
 }
 #schedule ul#event-list li.event-now * {
+  color: #fff !important;
+}
+#schedule ul#event-list li.event-future {
+  background: #222;
+  color: #fff;
+  padding: 15px 0 15px 10px;
+}
+#schedule ul#event-list li.event-future h2.event-summary:before {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
+  color: #fff;
+  animation: dot-flash 1s alternate infinite ease-in-out;
+}
+#schedule ul#event-list li.event-future * {
   color: #fff !important;
 }
 @-moz-keyframes dot-flash {
@@ -2839,11 +2873,31 @@ ul.breadcrumb li+li:last-child {
     display: block !important;
   }
 }
+.menu-item-active a,
+.menu .menu-item a:hover,
+.menu .menu-item span.exturl:hover {
+  background: #f9f9f9;
+  border-bottom-color: #fff;
+}
+.menu-item-active a:after,
+.menu .menu-item a:hover:after,
+.menu .menu-item span.exturl:hover:after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  margin-top: -3px;
+  right: 15px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #bbb;
+}
 .menu .menu-item {
   display: block;
   margin: 0;
 }
-.menu .menu-item a {
+.menu .menu-item a,
+.menu .menu-item span.exturl {
   position: relative;
   box-sizing: border-box;
   padding: 5px 20px;
@@ -2854,10 +2908,11 @@ ul.breadcrumb li+li:last-child {
   transition-timing-function: ease-in-out;
   transition-delay: 0s;
 }
-.menu .menu-item a:hover,
-.menu-item-active a {
-  background: #f9f9f9;
-  border-bottom-color: #fff;
+@media (hover: none) {
+  .menu .menu-item a:hover,
+  .menu .menu-item span.exturl:hover {
+    background: none;
+  }
 }
 .menu .menu-item .badge {
   display: inline-block;
@@ -2876,17 +2931,6 @@ ul.breadcrumb li+li:last-child {
 }
 .menu .menu-item br {
   display: none;
-}
-.menu-item-active a:after {
-  content: " ";
-  position: absolute;
-  top: 50%;
-  margin-top: -3px;
-  right: 15px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #bbb;
 }
 .btn-bar {
   background-color: #fff;
@@ -2972,22 +3016,22 @@ ul.breadcrumb li+li:last-child {
   clear: both;
 }
 .sidebar a,
-.sidebar .exturl {
+.sidebar span.exturl {
   color: #555;
 }
 .sidebar a:hover,
-.sidebar .exturl:hover {
+.sidebar span.exturl:hover {
   color: #222;
 }
 .site-state-item {
   padding: 0 10px;
 }
 .links-of-author-item a:before,
-.links-of-author-item .exturl:before {
+.links-of-author-item span.exturl:before {
   display: none;
 }
 .links-of-author-item a,
-.links-of-author-item .exturl {
+.links-of-author-item span.exturl {
   border-bottom: none;
   text-decoration: underline;
 }
@@ -3013,7 +3057,7 @@ ul.breadcrumb li+li:last-child {
   flex-wrap: wrap;
   justify-content: center;
 }
-.links-of-author .exturl {
+.links-of-author span.exturl {
   font-size: 13px;
 }
 .links-of-author-item {
@@ -3033,12 +3077,12 @@ ul.breadcrumb li+li:last-child {
   text-overflow: ellipsis;
 }
 .links-of-author-item a,
-.links-of-author-item .exturl {
+.links-of-author-item span.exturl {
   display: block;
   text-decoration: none;
 }
 .links-of-author-item a:hover,
-.links-of-author-item .exturl:hover {
+.links-of-author-item span.exturl:hover {
   border-radius: 4px;
   background: #eee;
 }
@@ -3277,7 +3321,7 @@ ul.breadcrumb li+li:last-child {
   </style>
 </noscript>
 
-<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css');</script><noscript><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"></noscript></head>
+<script>function loadCss(l){var d=document,h=d.head,s=d.createElement('link');s.rel='stylesheet';s.href=l;!function e(f){if (d.body)return f();setTimeout(function(){e(f)})}(function(){h.appendChild(s);});}loadCss('//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css');loadCss('//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css');</script><noscript><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css"></noscript></head>
 
 <body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
 
@@ -3328,32 +3372,68 @@ ul.breadcrumb li+li:last-child {
         
           
           <li class="menu-item menu-item-home">
-    <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
   </li>
 
       
@@ -3669,6 +3749,9 @@ rails server</p>
     
 
     
+       
+    
+    
 
     
 
@@ -3725,6 +3808,10 @@ rails server</p>
           </div>
           
 
+  
+    <div id="gitalk-container">
+    </div>
+    
   
 
 
@@ -3887,35 +3974,61 @@ rails server</p>
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
-                  <a href="https://t.me/antonius_hq" target="_blank" title="Telegram"><i class="fa fa-fw fa-telegram"></i>Telegram</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://t.me/antonius_hq" title="Telegram → https://t.me/antonius_hq" rel="noopener" target="_blank"><i class="fa fa-fw fa-telegram"></i>Telegram</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://twitter.com/antonius_hq" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/antonius_hq" title="Twitter → https://twitter.com/antonius_hq" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://github.com/anthonyhan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/anthonyhan" title="GitHub → https://github.com/anthonyhan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://steamcommunity.com/profiles/76561198046420839" target="_blank" title="Steam"><i class="fa fa-fw fa-steam"></i>Steam</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://steamcommunity.com/profiles/76561198046420839" title="Steam → https://steamcommunity.com/profiles/76561198046420839" rel="noopener" target="_blank"><i class="fa fa-fw fa-steam"></i>Steam</a>
                 </span>
               
             </div>
           
 
           
-          
-            <div class="cc-license motion-element" itemprop="license">
-              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
-              </a>
-            </div>
+             <div class="cc-license motion-element" itemprop="license">
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
           
 
           
@@ -3971,9 +4084,7 @@ rails server</p>
 </div>
 
 
-
-
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -3981,7 +4092,7 @@ rails server</p>
 
 
 
-  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.2</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
 
 
 
@@ -4109,6 +4220,21 @@ rails server</p>
 
 
 
+
+  
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  
+
+  
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+    
+   
+
   
 
 
@@ -4122,19 +4248,17 @@ rails server</p>
   
 
   
-  
 
   
   
-
-  
-
 
   
   
 
   
 
+
+  
   
 
   
@@ -4143,6 +4267,23 @@ rails server</p>
 
   
 
+  
+
+  
+
+  
 
 
-<script type="text/javascript" src="/bundle.js"></script></body></html>
+
+<script type="text/javascript" src="/bundle.js"></script><script type="text/javascript">
+        var gitalk = new Gitalk({
+          clientID: 'a67d293ffcf058f8106d',
+          clientSecret: '2575c93b34dba708805277ac6c9c08dcd910a36c',
+          repo: 'anthonyhan.github.io',
+          owner: 'anthonyhan',
+          admin: ['anthonyhan'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')           
+       </script></body></html>

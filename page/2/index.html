@@ -72,7 +72,7 @@
   var CONFIG = {
     root: '/',
     scheme: 'Gemini',
-    version: '6.4.2',
+    version: '6.6.0',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: false,
     fastclick: false,
@@ -137,6 +137,8 @@
 
   gtag('config', 'UA-88266449-1');
 </script>
+
+
 
 
 
@@ -434,9 +436,7 @@ span.exturl {
   cursor: pointer;
 }
 a:hover,
-span.exturl:hover,
-a:active,
-span.exturl:active {
+span.exturl:hover {
   color: #222;
   border-bottom-color: #222;
 }
@@ -1361,7 +1361,8 @@ pre .javascript .function {
     margin-top: 10px;
   }
 }
-.menu .menu-item a {
+.menu .menu-item a,
+.menu .menu-item span.exturl {
   display: block;
   font-size: 13px;
   line-height: inherit;
@@ -1372,7 +1373,7 @@ pre .javascript .function {
   transition-delay: 0s;
 }
 .menu .menu-item a:hover,
-.menu-item-active a {
+.menu .menu-item span.exturl:hover {
   border-bottom-color: #222;
 }
 .menu .menu-item .fa {
@@ -1386,7 +1387,7 @@ pre .javascript .function {
   word-wrap: break-word;
   font-family: 'Lato', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
-.post-body span.exturl .fa {
+.post-body .exturl .fa {
   font-size: 14px;
   margin-left: 4px;
 }
@@ -1609,7 +1610,8 @@ pre .javascript .function {
   margin-left: 3px;
   opacity: 0.6;
 }
-.posts-collapse .post-title a {
+.posts-collapse .post-title a,
+.posts-collapse .post-title span.exturl {
   color: #666;
   border-bottom: none;
 }
@@ -1660,7 +1662,8 @@ pre .javascript .function {
   transform: scaleX(1);
 }
 .posts-expand .post-title-link .fa {
-  font-size: 16px;
+  font-size: 20px;
+  margin-left: 5px;
 }
 .posts-expand .post-meta {
   margin: 3px 0 60px 0;
@@ -1994,7 +1997,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ed6911;
+  background: #257fff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2012,7 +2015,8 @@ pre .javascript .function {
 .links-of-blogroll-item {
   padding: 2px 10px;
 }
-.links-of-blogroll-item a {
+.links-of-blogroll-item a,
+.links-of-blogroll-item span.exturl {
   max-width: 280px;
   box-sizing: border-box;
   display: inline-block;
@@ -2390,6 +2394,14 @@ pre .javascript .function {
 .page-pv .busuanzi-value {
   margin: 0 5px;
 }
+.gt-header a,
+.gt-comments a,
+.gt-popup a {
+  border-bottom: none;
+}
+.gt-container .gt-popup .gt-action.is--active:before {
+  top: 0.7em;
+}
 .page-archive .archive-page-counter {
   position: relative;
   top: 3px;
@@ -2411,6 +2423,10 @@ pre .javascript .function {
   background: #555;
   border: 1px solid #fff;
   border-radius: 50%;
+}
+.page-archive .fa {
+  font-size: 15px;
+  margin-left: 5px;
 }
 .category-all-page .category-all-title {
   text-align: center;
@@ -2508,9 +2524,10 @@ pre .javascript .function {
 }
 #schedule ul#event-list li.event-past {
   background: #fcfcfc;
+  padding: 15px 0 15px 10px;
 }
 #schedule ul#event-list li.event-past > * {
-  opacity: 0.6;
+  opacity: 0.9;
 }
 #schedule ul#event-list li.event-past h2.event-summary {
   color: #bbb;
@@ -2533,6 +2550,23 @@ pre .javascript .function {
   animation: dot-flash 1s alternate infinite ease-in-out;
 }
 #schedule ul#event-list li.event-now * {
+  color: #fff !important;
+}
+#schedule ul#event-list li.event-future {
+  background: #222;
+  color: #fff;
+  padding: 15px 0 15px 10px;
+}
+#schedule ul#event-list li.event-future h2.event-summary:before {
+  -webkit-transform: scale(1.2);
+  -moz-transform: scale(1.2);
+  -ms-transform: scale(1.2);
+  -o-transform: scale(1.2);
+  transform: scale(1.2);
+  color: #fff;
+  animation: dot-flash 1s alternate infinite ease-in-out;
+}
+#schedule ul#event-list li.event-future * {
   color: #fff !important;
 }
 @-moz-keyframes dot-flash {
@@ -2834,11 +2868,31 @@ ul.breadcrumb li+li:last-child {
     display: block !important;
   }
 }
+.menu-item-active a,
+.menu .menu-item a:hover,
+.menu .menu-item span.exturl:hover {
+  background: #f9f9f9;
+  border-bottom-color: #fff;
+}
+.menu-item-active a:after,
+.menu .menu-item a:hover:after,
+.menu .menu-item span.exturl:hover:after {
+  content: " ";
+  position: absolute;
+  top: 50%;
+  margin-top: -3px;
+  right: 15px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #bbb;
+}
 .menu .menu-item {
   display: block;
   margin: 0;
 }
-.menu .menu-item a {
+.menu .menu-item a,
+.menu .menu-item span.exturl {
   position: relative;
   box-sizing: border-box;
   padding: 5px 20px;
@@ -2849,10 +2903,11 @@ ul.breadcrumb li+li:last-child {
   transition-timing-function: ease-in-out;
   transition-delay: 0s;
 }
-.menu .menu-item a:hover,
-.menu-item-active a {
-  background: #f9f9f9;
-  border-bottom-color: #fff;
+@media (hover: none) {
+  .menu .menu-item a:hover,
+  .menu .menu-item span.exturl:hover {
+    background: none;
+  }
 }
 .menu .menu-item .badge {
   display: inline-block;
@@ -2871,17 +2926,6 @@ ul.breadcrumb li+li:last-child {
 }
 .menu .menu-item br {
   display: none;
-}
-.menu-item-active a:after {
-  content: " ";
-  position: absolute;
-  top: 50%;
-  margin-top: -3px;
-  right: 15px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #bbb;
 }
 .btn-bar {
   background-color: #fff;
@@ -2967,22 +3011,22 @@ ul.breadcrumb li+li:last-child {
   clear: both;
 }
 .sidebar a,
-.sidebar .exturl {
+.sidebar span.exturl {
   color: #555;
 }
 .sidebar a:hover,
-.sidebar .exturl:hover {
+.sidebar span.exturl:hover {
   color: #222;
 }
 .site-state-item {
   padding: 0 10px;
 }
 .links-of-author-item a:before,
-.links-of-author-item .exturl:before {
+.links-of-author-item span.exturl:before {
   display: none;
 }
 .links-of-author-item a,
-.links-of-author-item .exturl {
+.links-of-author-item span.exturl {
   border-bottom: none;
   text-decoration: underline;
 }
@@ -3008,7 +3052,7 @@ ul.breadcrumb li+li:last-child {
   flex-wrap: wrap;
   justify-content: center;
 }
-.links-of-author .exturl {
+.links-of-author span.exturl {
   font-size: 13px;
 }
 .links-of-author-item {
@@ -3028,12 +3072,12 @@ ul.breadcrumb li+li:last-child {
   text-overflow: ellipsis;
 }
 .links-of-author-item a,
-.links-of-author-item .exturl {
+.links-of-author-item span.exturl {
   display: block;
   text-decoration: none;
 }
 .links-of-author-item a:hover,
-.links-of-author-item .exturl:hover {
+.links-of-author-item span.exturl:hover {
   border-radius: 4px;
   background: #eee;
 }
@@ -3324,32 +3368,68 @@ ul.breadcrumb li+li:last-child {
         
           
           <li class="menu-item menu-item-home">
-    <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-about">
-    <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-tags">
-    <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
   </li>
         
         
         
           
           <li class="menu-item menu-item-archives">
-    <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
   </li>
 
       
@@ -3419,9 +3499,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/05/tour-of-taihu-lake-day-2/" itemprop="url">
-                  Tour of Taihu Lake: Day 2
-                </a>
+                
+                <a href="/2013/05/tour-of-taihu-lake-day-2/" class="post-title-link" itemprop="http://www.limbonova.com/page/2/index.html">Tour of Taihu Lake: Day 2</a>
               
             
           </h1>
@@ -3490,11 +3569,13 @@ ul.breadcrumb li+li:last-child {
 <p>因为密切关注天气情况，知道今天要下雨。七点一刻起床时发现还没有下雨，喜出望外，赶紧吃了早饭收拾好行李。结果没骑200米就下起小雨来，好在车包和背包都有防雨罩。但是我没带雨衣，路上也没找到卖的，只好一路冒雨前行。从丁山龙溪公园出发，一路沿着方溪路向东骑行。逆风又淋雨的滋味真是不好受，但是一旦自己决定开始这段旅程，就不能抱怨这路上的苦。相比昨天，至少今天不用担心烈日造成的高温和晒伤了。大约15分钟后上了S230省道，逆风转为侧风，雨也停了，此时窃喜，觉得今天是最佳的骑行时间，真是太幸福了。</p>
 <p><img src="https://lh4.googleusercontent.com/-bcOmjbf5GZo/UayD-be639I/AAAAAAAAAKM/ARmI3AwmKXs/s800/IMGP0746.jpg" alt="补胎大桥"></p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/05/tour-of-taihu-lake-day-2/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/05/tour-of-taihu-lake-day-2/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3508,6 +3589,9 @@ ul.breadcrumb li+li:last-child {
 
     
 
+    
+       
+    
     
 
     
@@ -3566,9 +3650,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/05/tour-of-taihu-lake-day-1/" itemprop="url">
-                  Tour of Taihu Lake: Day 1
-                </a>
+                
+                <a href="/2013/05/tour-of-taihu-lake-day-1/" class="post-title-link" itemprop="http://www.limbonova.com/page/2/index.html">Tour of Taihu Lake: Day 1</a>
               
             
           </h1>
@@ -3644,11 +3727,13 @@ ul.breadcrumb li+li:last-child {
 </ul>
 <p>** 默念三遍：遵守交通，出入平安 **</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/05/tour-of-taihu-lake-day-1/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/05/tour-of-taihu-lake-day-1/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3662,6 +3747,9 @@ ul.breadcrumb li+li:last-child {
 
     
 
+    
+       
+    
     
 
     
@@ -3720,9 +3808,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/04/ror-tutorial-review/" itemprop="url">
-                  Ruby on Rails 入门体验
-                </a>
+                
+                <a href="/2013/04/ror-tutorial-review/" class="post-title-link" itemprop="http://www.limbonova.com/page/2/index.html">Ruby on Rails 入门体验</a>
               
             
           </h1>
@@ -3788,11 +3875,13 @@ ul.breadcrumb li+li:last-child {
 <p>这本书和以前看的 Flex 入门书——《Flex 3 权威指南》类似，都是以构建一个应用为主线，由浅入深地介绍 RoR 开发的基本知识，从最开始的静态页面到模型生成，控制器，路由，数据库，Ajax，还有贯彻整个开发过程的测试。教程里开发的是一个微博站点，而 Twitter 以前就是使用 RoR 开发的，做起来也饶有趣味。</p>
 <p>花了差不多两个月的业余时间看完了这个教程，并最终完成了那个微博网站，包括大部分练习题的功能。总的来说，还是有点挑战的。由于书中大部分都是编写步骤，注重手把手的教学实践。在原理的介绍上篇幅很少，而 RoR 这样“约定优于配置”的理念让我有点不适应，书中并无约定方面的解释，很多方法像变戏法一般地已经实现好了，而我却想一探究竟，搞清楚其幕后的动作。但毕竟这是一本入门书，或许是我要求太高了。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/04/ror-tutorial-review/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/04/ror-tutorial-review/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3806,6 +3895,9 @@ ul.breadcrumb li+li:last-child {
 
     
 
+    
+       
+    
     
 
     
@@ -3864,9 +3956,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/04/image-dithering-algorithm-as3/" itemprop="url">
-                  基于AS3.0的图像抖动实现
-                </a>
+                
+                <a href="/2013/04/image-dithering-algorithm-as3/" class="post-title-link" itemprop="http://www.limbonova.com/page/2/index.html">基于AS3.0的图像抖动实现</a>
               
             
           </h1>
@@ -3935,11 +4026,13 @@ ul.breadcrumb li+li:last-child {
 <p>当像素值大于设定阈值时，输出为亮点，否则输出为暗点，从而实现二值化。经过处理的图像往往失去细节，缺乏层次感。下图所示的就是二值化的图像。<br>
 <img src="http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg" alt="lena_binary"></p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/04/image-dithering-algorithm-as3/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/04/image-dithering-algorithm-as3/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -3953,6 +4046,9 @@ ul.breadcrumb li+li:last-child {
 
     
 
+    
+       
+    
     
 
     
@@ -4011,9 +4107,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/03/convert-hsv-hsl-to-rgb/" itemprop="url">
-                  HSV/HSL转换到RGB色彩空间
-                </a>
+                
+                <a href="/2013/03/convert-hsv-hsl-to-rgb/" class="post-title-link" itemprop="http://www.limbonova.com/page/2/index.html">HSV/HSL转换到RGB色彩空间</a>
               
             
           </h1>
@@ -4090,11 +4185,13 @@ ul.breadcrumb li+li:last-child {
 <p>因为 HSL 和 HSV 是设备依赖的 RGB 的简单变换，(h, s, l) 或 (h, s, v) 三元组定义的颜色依赖于所使用的特定红色、绿色和蓝色“加法原色”。每个独特的 RGB 设备都伴随着一个独特的 HSL 和 HSV 空间。但是 (h, s, l) 或 (h, s, v) 三元组在被约束于特定 RGB 空间比如 sRGB 的时候就变成明确的了。</p>
 <p>HSV 模型在 1978 年由计算机图形学先驱 Alvy Ray Smith 创立，它是三原色光模式的一种非线性变换。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/03/convert-hsv-hsl-to-rgb/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/03/convert-hsv-hsl-to-rgb/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4108,6 +4205,9 @@ ul.breadcrumb li+li:last-child {
 
     
 
+    
+       
+    
     
 
     
@@ -4166,9 +4266,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/02/cycling-log-chongyuan-temple/" itemprop="url">
-                  重元寺骑行
-                </a>
+                
+                <a href="/2013/02/cycling-log-chongyuan-temple/" class="post-title-link" itemprop="http://www.limbonova.com/page/2/index.html">重元寺骑行</a>
               
             
           </h1>
@@ -4232,11 +4331,13 @@ ul.breadcrumb li+li:last-child {
 <p>小西湖，是著名的大闸蟹产区——阳澄湖的内湖，隶属阳澄湖半岛度假区。这个度假区还在开发当中，目前主要有重元寺，莲池湖公园，小西湖这几个地方值得一去。湖边有一片很大的草地，绿茵葱葱，非常开阔。在距离市区这么近还有这么一处好地方，这里简直是世外桃源。每逢周末便能看到很多人自驾驱车前往，在草坪上搭帐篷，放风筝，这次还看到航模爱好者在试飞。沿湖修建了环湖自行车道，总长18公里，值得一提的是，还有一段3.5公里的水上赛道，让人一览湖光水色。</p>
 <p><img src="http://bn1files.storage.live.com/y1pxBk3iGmaOs39yRQQ-A40uXJOG0QqfqfeZXSsEaog5xtUE_kr7xos-kskw_qvUDCZIY2tQ0wVb9wH7nC_0fwBqQ/IMGP0248.jpg" alt="野营帐篷"></p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/02/cycling-log-chongyuan-temple/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/02/cycling-log-chongyuan-temple/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4250,6 +4351,9 @@ ul.breadcrumb li+li:last-child {
 
     
 
+    
+       
+    
     
 
     
@@ -4308,9 +4412,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/02/book-review-on-top-of-tides/" itemprop="url">
-                  观潮与弄潮
-                </a>
+                
+                <a href="/2013/02/book-review-on-top-of-tides/" class="post-title-link" itemprop="http://www.limbonova.com/page/2/index.html">观潮与弄潮</a>
               
             
           </h1>
@@ -4378,11 +4481,13 @@ ul.breadcrumb li+li:last-child {
 <p>Cisco，我只知道这是一家卖路由器等网络设备的公司，还参与过GFW这样为虎作伥的项目。没想到思科的历史这么久远，尤其是善待离职创业的员工，以及对其创业公司的扶持和收购，真是十分高明的手法。</p>
 <p>作者形容摩托罗拉是一家贵族式的公司，这个在模拟通信领域的佼佼者，在数字通信时代显得力不从心，依然孤傲地以技术为重心，却眼睁睁地看着木工厂起家的诺基亚超越了自己。在商业竞争中，光有技术显然是不行的。正如作者所言，“从技术角度看，铱星移动通信系统是非常成功的。这是真正的科技精品。我常常想，我们这些被成为高科技公司的互联网公司做到的东西和铱星系统相比，简直就像是玩具。” 君子之泽，五世而斩，虽然贵族式的摩托罗拉被Google收购，即便Google看中的是它若干的通信专利，但是至少它的技术创造依然造福于人。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/02/book-review-on-top-of-tides/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/02/book-review-on-top-of-tides/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4396,6 +4501,9 @@ ul.breadcrumb li+li:last-child {
 
     
 
+    
+       
+    
     
 
     
@@ -4454,9 +4562,8 @@ ul.breadcrumb li+li:last-child {
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/02/fix-nvidia-driver-on-kernel-3-7-7/" itemprop="url">
-                  3.7.7内核的nVidia驱动安装
-                </a>
+                
+                <a href="/2013/02/fix-nvidia-driver-on-kernel-3-7-7/" class="post-title-link" itemprop="http://www.limbonova.com/page/2/index.html">3.7.7内核的nVidia驱动安装</a>
               
             
           </h1>
@@ -4546,11 +4653,13 @@ driver download page at <a href="http://www.nvidia.com" target="_blank" rel="noo
 </blockquote>
 <p>大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。</p>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/02/fix-nvidia-driver-on-kernel-3-7-7/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/02/fix-nvidia-driver-on-kernel-3-7-7/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4564,6 +4673,9 @@ driver download page at <a href="http://www.nvidia.com" target="_blank" rel="noo
 
     
 
+    
+       
+    
     
 
     
@@ -4622,9 +4734,8 @@ driver download page at <a href="http://www.nvidia.com" target="_blank" rel="noo
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/01/install-nvidia-driver-on-fedora/" itemprop="url">
-                  在Fedora上安装nVidia显卡驱动程序
-                </a>
+                
+                <a href="/2013/01/install-nvidia-driver-on-fedora/" class="post-title-link" itemprop="http://www.limbonova.com/page/2/index.html">在Fedora上安装nVidia显卡驱动程序</a>
               
             
           </h1>
@@ -4721,11 +4832,13 @@ glibc               2.0                     ls /lib/libc.so.* &gt; 6</p>
 options nouveau modeset=0</p>
 </blockquote>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/01/install-nvidia-driver-on-fedora/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/01/install-nvidia-driver-on-fedora/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4739,6 +4852,9 @@ options nouveau modeset=0</p>
 
     
 
+    
+       
+    
     
 
     
@@ -4797,9 +4913,8 @@ options nouveau modeset=0</p>
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2013/01/install-ruby-on-rails-on-fedora/" itemprop="url">
-                  在Fedora上安装Ruby on Rails
-                </a>
+                
+                <a href="/2013/01/install-ruby-on-rails-on-fedora/" class="post-title-link" itemprop="http://www.limbonova.com/page/2/index.html">在Fedora上安装Ruby on Rails</a>
               
             
           </h1>
@@ -4887,11 +5002,13 @@ Paul Graham, Founders at Work</p>
 source ~/.rvm/scripts/rvm</p>
 </blockquote>
           <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2013/01/install-ruby-on-rails-on-fedora/#more" rel="contents">
-              阅读全文 »
-            </a>
-          </div>
+          
+            <div class="post-button text-center">
+              <a class="btn" href="/2013/01/install-ruby-on-rails-on-fedora/#more" rel="contents">
+                阅读全文 »
+              </a>
+            </div>
+         
           <!--/noindex-->
         
       
@@ -4905,6 +5022,9 @@ source ~/.rvm/scripts/rvm</p>
 
     
 
+    
+       
+    
     
 
     
@@ -5090,35 +5210,61 @@ source ~/.rvm/scripts/rvm</p>
             <div class="links-of-author motion-element">
               
                 <span class="links-of-author-item">
-                  <a href="https://t.me/antonius_hq" target="_blank" title="Telegram"><i class="fa fa-fw fa-telegram"></i>Telegram</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://t.me/antonius_hq" title="Telegram → https://t.me/antonius_hq" rel="noopener" target="_blank"><i class="fa fa-fw fa-telegram"></i>Telegram</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://twitter.com/antonius_hq" target="_blank" title="Twitter"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://twitter.com/antonius_hq" title="Twitter → https://twitter.com/antonius_hq" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://github.com/anthonyhan" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/anthonyhan" title="GitHub → https://github.com/anthonyhan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
                 </span>
               
                 <span class="links-of-author-item">
-                  <a href="https://steamcommunity.com/profiles/76561198046420839" target="_blank" title="Steam"><i class="fa fa-fw fa-steam"></i>Steam</a>
                   
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://steamcommunity.com/profiles/76561198046420839" title="Steam → https://steamcommunity.com/profiles/76561198046420839" rel="noopener" target="_blank"><i class="fa fa-fw fa-steam"></i>Steam</a>
                 </span>
               
             </div>
           
 
           
-          
-            <div class="cc-license motion-element" itemprop="license">
-              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" target="_blank">
-                <img src="/images/cc-by-nc-sa.svg" alt="Creative Commons">
-              </a>
-            </div>
+             <div class="cc-license motion-element" itemprop="license">
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+             </div>
           
 
           
@@ -5158,9 +5304,7 @@ source ~/.rvm/scripts/rvm</p>
 </div>
 
 
-
-
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.8.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
@@ -5168,7 +5312,7 @@ source ~/.rvm/scripts/rvm</p>
 
 
 
-  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Gemini</a> v6.4.2</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v6.6.0</div>
 
 
 
@@ -5305,6 +5449,8 @@ source ~/.rvm/scripts/rvm</p>
   
 
   
+
+  
   
 
   
@@ -5343,6 +5489,8 @@ source ~/.rvm/scripts/rvm</p>
 
 
   
+  
+
   
 
   
