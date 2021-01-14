@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>在 Flash Player 中显示GIF动画 | LimboNova</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">在 Flash Player 中显示GIF动画</span></h1>
+
+<h2 class="date">2012/09/26</h2>
+</div>
+
+<main>
+<p>之前遇到这个需求，本人坚持”不重复发明轮子”的原则，弘扬”积极的偷懒不算偷懒”的精神，找到了两个解决方案。因为之前研究了GIF格式和LWZ算法，所以理解起来，没有太大的问题。</p>
+<!-- raw HTML omitted -->
+<h2 id="方案一as3gif">方案一：as3gif</h2>
+<p>作者：Thibault Imbert
+项目地址：http://code.google.com/p/as3gif/</p>
+<p>2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#75715e">// we create the GIFPlayer, it plays automatically by default
+</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">myGIFPlayer</span><span style="color:#f92672">:</span><span style="color:#a6e22e">GIFPlayer</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">GIFPlayer</span>();
+	<span style="color:#75715e">// we show it
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">addChild</span> ( <span style="color:#a6e22e">myGIFPlayer</span> );
+	<span style="color:#75715e">// we load a gif file
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">load</span> ( <span style="color:#66d9ef">new</span> URLRequest (<span style="color:#e6db74">&#34;animation.gif&#34;</span>) );
+	<span style="color:#75715e">// you can also load any valid GIF stream (ByteArray) with the loadBytes method (version 0.2)
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">loadBytes</span> ( <span style="color:#a6e22e">gifStream</span> );
+	<span style="color:#75715e">// listen for the IOErrorEvent.IO_ERROR event, dispatched when the GIF fails to load
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">addEventListener</span> ( IOErrorEvent.<span style="color:#a6e22e">IO_ERROR</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">onIOError</span> );
+	<span style="color:#75715e">// listen for the GIFPlayerEvent.COMPLETE event, dispatched when GIF is loaded
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">addEventListener</span> ( <span style="color:#a6e22e">GIFPlayerEvent</span>.<span style="color:#a6e22e">COMPLETE</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">onCompleteGIFLoad</span> );
+	<span style="color:#75715e">// listen for the FrameEvent.FRAME_RENDERED event, dispatched when a GIF frame is rendered on screen
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">addEventListener</span> ( <span style="color:#a6e22e">FrameEvent</span>.<span style="color:#a6e22e">FRAME_RENDERED</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">onFrameRendered</span> );
+	<span style="color:#75715e">// listen for the FileTypeEvent.INVALID event, dispatched when an invalid file is loaded
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">addEventListener</span> ( <span style="color:#a6e22e">FileTypeEvent</span>.<span style="color:#a6e22e">INVALID</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">onInvalidFileLoaded</span> );
+	<span style="color:#75715e">// get total frames
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">totalFrames</span><span style="color:#f92672">;</span>
+	<span style="color:#75715e">// standard methods
+</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">play</span>();
+	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">stop</span>();
+	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">gotoAndStop</span>(<span style="color:#ae81ff">3</span>);
+	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">gotoAndPlay</span>(<span style="color:#ae81ff">3</span>);</code></pre></div>
+<p>优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。</p>
+<p>缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。</p>
+<h2 id="方案二as3gifplayer">方案二：AS3GifPlayer</h2>
+<p>作者：Brian McKelvey
+项目地址：https://github.com/Worlize/Flash-Animated-GIF-Library</p>
+<p>由于方案一在解码方面的不足，Brian McKelvey 完全从无到有，重写了基于Flash Player的GIF解码类，据称解码的性能提高了2个数量级(10^2)。另外动画帧的播放也更精确，因为是基于舞台的帧率而播放的，而且当舞台帧率太低时还支持跳帧。上面的Demo就是采用AS3GifPlayer的。</p>
+<p>示例代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#a6e22e">player</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#a6e22e">GIFPlayerEvent</span>.<span style="color:#a6e22e">COMPLETE</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">handleGifLoadComplete</span>);
+	<span style="color:#a6e22e">player</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#a6e22e">AsyncDecodeErrorEvent</span>.<span style="color:#a6e22e">ASYNC_DECODE_ERROR</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">handleAsyncDecodeErrorEvent</span>);
+	<span style="color:#a6e22e">player</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#a6e22e">GIFPlayerEvent</span>.<span style="color:#a6e22e">FRAME_RENDERED</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">handleFrameRendered</span>);
+	<span style="color:#a6e22e">player</span>.<span style="color:#a6e22e">loadBytes</span>(<span style="color:#a6e22e">ref</span>.<span style="color:#a6e22e">data</span>);</code></pre></div>
+<p>优点：简单易用，接口丰富，性能优越，代码结构清晰易读。</p>
+<p>缺点：只有解码和播放功能，无编码功能。</p>
+<hr>
+<p><strong>参考资料</strong></p>
+<ol>
+<li><a href="http://www.bytearray.org/?p=93">AS3 GIF Animation Encoding Class 0.1 by Thibault Imbert</a></li>
+<li><a href="http://www.bytearray.org/?p=95">AS3 GIF Player Class 0.3 by Thibault Imbert</a></li>
+<li><a href="https://github.com/Worlize/Flash-Animated-GIF-Library">https://github.com/Worlize/Flash-Animated-GIF-Library</a></li>
+</ol>
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
+  
+  </footer>
+  
+  </body>
+</html>
+

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on LimboNova</title>
+    <link>/tags/linux/</link>
+    <description>Recent content in linux on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 17 Feb 2013 18:23:39 +0800</lastBuildDate><atom:link href="/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>3.7.7内核的nVidia驱动安装</title>
+      <link>/posts/fix-nvidia-driver-on-kernel-3-7-7/</link>
+      <pubDate>Sun, 17 Feb 2013 18:23:39 +0800</pubDate>
+      
+      <guid>/posts/fix-nvidia-driver-on-kernel-3-7-7/</guid>
+      <description>&lt;p&gt;更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。&lt;/p&gt;
+&lt;h2 id=&#34;问题分析&#34;&gt;问题分析&lt;/h2&gt;
+&lt;p&gt;根据报错的信息，可以打开日志文件查看详细的原因：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;    less /var/log/nvidia-installer.log&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;日志信息如下：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;-&amp;gt; Kernel source path: &amp;lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&amp;rsquo;
+-&amp;gt; Kernel output path: &amp;lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/build&amp;rsquo;
+ERROR: If you are using a Linux 2.4 kernel, please make sure
+you either have configured kernel sources matching your
+kernel or the correct set of kernel headers installed
+on your system.&lt;/p&gt;
+&lt;p&gt;If you are using a Linux 2.6 kernel, please make sure
+you have configured kernel sources matching your kernel
+installed on your system. If you specified a separate
+output directory using either the &amp;ldquo;KBUILD_OUTPUT&amp;rdquo; or
+the &amp;ldquo;O&amp;rdquo; KBUILD parameter, make sure to specify this
+directory with the SYSOUT environment variable or with
+the equivalent nvidia-installer command line option.&lt;/p&gt;
+&lt;p&gt;Depending on where and how the kernel sources (or the
+kernel headers) were installed, you may need to specify
+their location with the SYSSRC environment variable or
+the equivalent nvidia-installer command line option.
+ERROR: Installation has failed. Please see the file
+&amp;lsquo;/var/log/nvidia-installer.log&amp;rsquo; for details. You may find suggestions
+on fixing installation problems in the README available on the Linux
+driver download page at &lt;a href=&#34;http://www.nvidia.com&#34;&gt;www.nvidia.com&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>在Fedora上安装nVidia显卡驱动程序</title>
+      <link>/posts/install-nvidia-driver-on-fedora/</link>
+      <pubDate>Thu, 24 Jan 2013 01:33:13 +0800</pubDate>
+      
+      <guid>/posts/install-nvidia-driver-on-fedora/</guid>
+      <description>&lt;p&gt;自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。&lt;/p&gt;
+&lt;h2 id=&#34;系统需求&#34;&gt;系统需求&lt;/h2&gt;
+&lt;h3 id=&#34;软件需求&#34;&gt;软件需求&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;Software Element&lt;/em&gt;  &lt;em&gt;Supported versions&lt;/em&gt;    &lt;em&gt;Check With&amp;hellip;&lt;/em&gt;
+Linux kernel        2.4.22 and newer        cat /proc/version
+XFree86*            4.0.1 and newer         XFree86 -version
+X.Org*              1.0 - 1.13              Xorg -version
+Kernel modutils     2.1.121 and newer       insmod &amp;ndash;version
+glibc               2.0                     ls /lib/libc.so.* &amp;gt; 6&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;硬件需求&#34;&gt;硬件需求&lt;/h3&gt;
+&lt;p&gt;当然是你的显卡要在驱动的支持列表内；&lt;/p&gt;
+&lt;p&gt;参见 &lt;a href=&#34;http://us.download.nvidia.com/XFree86/Linux-x86/310.19/README/supportedchips.html&#34;&gt;Supported NVIDIA GPU Products&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;安装步骤&#34;&gt;安装步骤&lt;/h2&gt;
+&lt;h3 id=&#34;禁用nouveau&#34;&gt;禁用nouveau&lt;/h3&gt;
+&lt;h4 id=&#34;blacklist&#34;&gt;blacklist&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;操作前保证有足够的权限，打开文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;vi /etc/modprobe.d/balcklist.conf&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;找到 nvidiafb这一行，注释掉&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;#blacklist nvidiafb&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;(可跳过，驱动会自动创建)新建文件 vi /etc/modprobe.d/disable-nouveau.conf,添加以下：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;blacklist nouveau
+options nouveau modeset=0&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

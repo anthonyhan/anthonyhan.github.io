@@ -1,750 +1,197 @@
 <!DOCTYPE html>
-
-
-
-
-
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#303030">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=7.4.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=7.4.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=7.4.0">
-  <link rel="mask-icon" href="/website_logo.svg?v=7.4.0" color="#303030">
-  <link rel="manifest" href="/manifest.json">
-
-<link rel="stylesheet" href="/css/main.css?v=7.4.0">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.4.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: '复制',
-      copy_success: '复制成功',
-      copy_failure: '复制失败'
-    },
-    sidebarPadding: 40
-  };
-</script>
-
-  <meta name="description" content="Carpe Diem">
-<meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="http://www.limbonova.com/tags/index.html">
-<meta property="og:site_name" content="Limbo-Nova">
-<meta property="og:description" content="Carpe Diem">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-29T08:01:26.914Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
-<meta name="twitter:description" content="Carpe Diem">
-  <link rel="alternate" href="/atom.xml" title="Limbo-Nova" type="application/atom+xml">
-  <link rel="canonical" href="http://www.limbonova.com/tags/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: false,
-    isPost: false,
-    isPage: true,
-    isArchive: false
-  };
-</script>
-
-  <title>tags | Limbo-Nova</title>
-  <meta name="generator" content="Hexo 3.9.0">
-  
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88266449-1"></script>
-  <script>
-    var host = window.location.hostname;
-    if (host !== "localhost" || !true) {
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-88266449-1');
-    }
-  </script>
-
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Limbo-Nova</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">Seize the Day</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tags | LimboNova</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
     
+  </head>
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
 
+
+<h1>Tags</h1>
+
+<ul class="terms">
+  
+  <li>
+    <a href="/tags/actionscript/">actionscript</a> (10)
   </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-about">
-      
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
+  
+  <li>
+    <a href="/tags/algorithm/">algorithm</a> (4)
   </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-tags">
-      
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
+  
+  <li>
+    <a href="/tags/android/">android</a> (1)
   </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
+  
+  <li>
+    <a href="/tags/behavior-tree/">behavior tree</a> (1)
   </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
   
-
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-    
-    
-    <div class="post-block page">
-      <header class="post-header">
-
-<h1 class="post-title" itemprop="name headline">tags
-
-</h1>
-
-<div class="post-meta">
+  <li>
+    <a href="/tags/biking/">biking</a> (4)
+  </li>
   
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
-        
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-              
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-              
-                
-              
-                
-                  
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-                
-                  
-                
-              
-              目前共计 39 个标签
-            </div>
-            <div class="tag-cloud-tags">
-              
-                <a href="/tags/html5/" style="font-size: 14.57px; color: #b1b1b1">HTML5</a> <a href="/tags/pixijs/" style="font-size: 14.57px; color: #b1b1b1">PixiJS</a> <a href="/tags/typescript/" style="font-size: 14.57px; color: #b1b1b1">TypeScript</a> <a href="/tags/actionscript/" style="font-size: 30px; color: #111">actionscript</a> <a href="/tags/algorithm/" style="font-size: 19.71px; color: #7c7c7c">algorithm</a> <a href="/tags/android/" style="font-size: 12px; color: #ccc">android</a> <a href="/tags/behavior-tree/" style="font-size: 12px; color: #ccc">behavior tree</a> <a href="/tags/biking/" style="font-size: 19.71px; color: #7c7c7c">biking</a> <a href="/tags/blog/" style="font-size: 12px; color: #ccc">blog</a> <a href="/tags/book/" style="font-size: 19.71px; color: #7c7c7c">book</a> <a href="/tags/c/" style="font-size: 12px; color: #ccc">c#</a> <a href="/tags/c/" style="font-size: 12px; color: #ccc">c++</a> <a href="/tags/closure/" style="font-size: 12px; color: #ccc">closure</a> <a href="/tags/fedora/" style="font-size: 17.14px; color: #979797">fedora</a> <a href="/tags/flash/" style="font-size: 27.43px; color: #2c2c2c">flash</a> <a href="/tags/flex/" style="font-size: 24.86px; color: #464646">flex</a> <a href="/tags/game/" style="font-size: 22.29px; color: #616161">game</a> <a href="/tags/game-ai/" style="font-size: 12px; color: #ccc">game ai</a> <a href="/tags/game-dev/" style="font-size: 17.14px; color: #979797">game dev</a> <a href="/tags/game-review/" style="font-size: 19.71px; color: #7c7c7c">game review</a> <a href="/tags/generics/" style="font-size: 12px; color: #ccc">generics</a> <a href="/tags/gif/" style="font-size: 14.57px; color: #b1b1b1">gif</a> <a href="/tags/image-processing/" style="font-size: 17.14px; color: #979797">image processing</a> <a href="/tags/java/" style="font-size: 12px; color: #ccc">java</a> <a href="/tags/linux/" style="font-size: 14.57px; color: #b1b1b1">linux</a> <a href="/tags/lzma/" style="font-size: 12px; color: #ccc">lzma</a> <a href="/tags/lzw/" style="font-size: 12px; color: #ccc">lzw</a> <a href="/tags/markdown/" style="font-size: 12px; color: #ccc">markdown</a> <a href="/tags/mind-map/" style="font-size: 12px; color: #ccc">mind map</a> <a href="/tags/misc/" style="font-size: 19.71px; color: #7c7c7c">misc</a> <a href="/tags/movie/" style="font-size: 22.29px; color: #616161">movie</a> <a href="/tags/notes/" style="font-size: 19.71px; color: #7c7c7c">notes</a> <a href="/tags/nvidia/" style="font-size: 14.57px; color: #b1b1b1">nvidia</a> <a href="/tags/programming/" style="font-size: 12px; color: #ccc">programming</a> <a href="/tags/rails/" style="font-size: 14.57px; color: #b1b1b1">rails</a> <a href="/tags/redmine/" style="font-size: 12px; color: #ccc">redmine</a> <a href="/tags/ruby/" style="font-size: 12px; color: #ccc">ruby</a> <a href="/tags/tool/" style="font-size: 14.57px; color: #b1b1b1">tool</a> <a href="/tags/travel/" style="font-size: 17.14px; color: #979797">travel</a>
-              
-            </div>
-          </div>
-        
-      </div>
-      
-      
-      
-    </div>
-    
-
-    
-    
-    
-  </div>
-
-
-          </div>
-          
-
-        </div>
-          
+  <li>
+    <a href="/tags/blog/">blog</a> (1)
+  </li>
   
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-        
-        
-        
-        
-      
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image"
-      src="/images/avatar.png"
-      alt="Anthony">
-  <p class="site-author-name" itemprop="name">Anthony</p>
-  <div class="site-description" itemprop="description">Carpe Diem</div>
-</div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">54</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-          
-            <a href="/tags/">
-          
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">39</span>
-        <span class="site-state-item-name">标签</span>
-        </a>
-      </div>
-    
-  </nav>
-  <div class="feed-link motion-element">
-    <a href="/atom.xml" rel="alternate">
-      <i class="fa fa-rss"></i>RSS
-    </a>
-  </div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/anthonyhan" title="GitHub &rarr; https://github.com/anthonyhan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://steamcommunity.com/profiles/76561198046420839" title="Steam &rarr; https://steamcommunity.com/profiles/76561198046420839" rel="noopener" target="_blank"><i class="fa fa-fw fa-steam"></i>Steam</a>
-      </span>
-    
-  </div>
-  <div class="cc-license motion-element" itemprop="license">
-    
+  <li>
+    <a href="/tags/book/">book</a> (4)
+  </li>
   
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
-  </div>
-
-
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Anthony</span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-  </div>
-
+  <li>
+    <a href="/tags/c#/">c#</a> (1)
+  </li>
   
-
-
-  <script src="/lib/anime.min.js?v=3.1.0"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
-<script src="/js/schemes/pisces.js?v=7.4.0"></script>
-
-<script src="/js/next-boot.js?v=7.4.0"></script>
-
-
-
+  <li>
+    <a href="/tags/c&#43;&#43;/">c&#43;&#43;</a> (1)
+  </li>
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  <li>
+    <a href="/tags/closure/">closure</a> (1)
+  </li>
   
-
+  <li>
+    <a href="/tags/fedora/">fedora</a> (3)
+  </li>
   
-
+  <li>
+    <a href="/tags/flash/">flash</a> (9)
+  </li>
   
-
+  <li>
+    <a href="/tags/flex/">flex</a> (7)
+  </li>
   
+  <li>
+    <a href="/tags/game/">game</a> (6)
+  </li>
+  
+  <li>
+    <a href="/tags/game-dev/">game dev</a> (3)
+  </li>
+  
+  <li>
+    <a href="/tags/game-review/">game review</a> (4)
+  </li>
+  
+  <li>
+    <a href="/tags/generics/">generics</a> (1)
+  </li>
+  
+  <li>
+    <a href="/tags/gif/">gif</a> (2)
+  </li>
+  
+  <li>
+    <a href="/tags/html5/">HTML5</a> (2)
+  </li>
+  
+  <li>
+    <a href="/tags/image-processing/">image processing</a> (3)
+  </li>
+  
+  <li>
+    <a href="/tags/java/">java</a> (1)
+  </li>
+  
+  <li>
+    <a href="/tags/linux/">linux</a> (2)
+  </li>
+  
+  <li>
+    <a href="/tags/lzma/">lzma</a> (1)
+  </li>
+  
+  <li>
+    <a href="/tags/lzw/">lzw</a> (1)
+  </li>
+  
+  <li>
+    <a href="/tags/markdown/">markdown</a> (1)
+  </li>
+  
+  <li>
+    <a href="/tags/mind-map/">mind map</a> (1)
+  </li>
+  
+  <li>
+    <a href="/tags/misc/">misc</a> (5)
+  </li>
+  
+  <li>
+    <a href="/tags/movie/">movie</a> (6)
+  </li>
+  
+  <li>
+    <a href="/tags/notes/">notes</a> (4)
+  </li>
+  
+  <li>
+    <a href="/tags/nvidia/">nvidia</a> (2)
+  </li>
+  
+  <li>
+    <a href="/tags/pixijs/">PixiJS</a> (2)
+  </li>
+  
+  <li>
+    <a href="/tags/programming/">programming</a> (1)
+  </li>
+  
+  <li>
+    <a href="/tags/rails/">rails</a> (2)
+  </li>
+  
+  <li>
+    <a href="/tags/redmine/">redmine</a> (1)
+  </li>
+  
+  <li>
+    <a href="/tags/ruby/">ruby</a> (1)
+  </li>
+  
+  <li>
+    <a href="/tags/tool/">tool</a> (2)
+  </li>
+  
+  <li>
+    <a href="/tags/travel/">travel</a> (3)
+  </li>
+  
+  <li>
+    <a href="/tags/typescript/">TypeScript</a> (2)
+  </li>
+  
+</ul>
 
-
-</body>
+  <footer>
+  
+  
+  <hr/>
+  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
+  
+  </footer>
+  
+  </body>
 </html>
+

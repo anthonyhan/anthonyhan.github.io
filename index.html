@@ -1,1500 +1,325 @@
 <!DOCTYPE html>
-
-
-
-
-
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#303030">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=7.4.0">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico?v=7.4.0">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico?v=7.4.0">
-  <link rel="mask-icon" href="/website_logo.svg?v=7.4.0" color="#303030">
-  <link rel="manifest" href="/manifest.json">
-
-<link rel="stylesheet" href="/css/main.css?v=7.4.0">
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-
-<script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.4.0',
-    exturl: false,
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: '复制',
-      copy_success: '复制成功',
-      copy_failure: '复制失败'
-    },
-    sidebarPadding: 40
-  };
-</script>
-
-  <meta name="description" content="Carpe Diem">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Limbo-Nova">
-<meta property="og:url" content="http://www.limbonova.com/index.html">
-<meta property="og:site_name" content="Limbo-Nova">
-<meta property="og:description" content="Carpe Diem">
-<meta property="og:locale" content="zh-CN">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Limbo-Nova">
-<meta name="twitter:description" content="Carpe Diem">
-  <link rel="alternate" href="/atom.xml" title="Limbo-Nova" type="application/atom+xml">
-  <link rel="canonical" href="http://www.limbonova.com/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome: true,
-    isPost: false,
-    isPage: false,
-    isArchive: false
-  };
-</script>
-
-  <title>Limbo-Nova</title>
-  <meta name="generator" content="Hexo 3.9.0">
-  
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-88266449-1"></script>
-  <script>
-    var host = window.location.hostname;
-    if (host !== "localhost" || !true) {
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-88266449-1');
-    }
-  </script>
-
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Limbo-Nova</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-        <p class="site-subtitle">Seize the Day</p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-<nav class="site-nav">
-  
-  <ul id="menu" class="menu">
-      
-      
-      
-        
-        <li class="menu-item menu-item-home">
-      
+<html lang="zh-cn">
+  <head>
+	<meta name="generator" content="Hugo 0.80.0" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LimboNova | LimboNova</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
     
+  </head>
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
 
+
+
+
+
+
+<ul>
+  
+  
+  
+  <li>
+    <span class="date">2018/04/26</span>
+    <a href="/posts/transistor-a-sonnet-to-cyberpunk/">晶体管：献给赛博朋克的十四行诗</a>
   </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-about">
-      
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
+  
+  <li>
+    <span class="date">2017/09/21</span>
+    <a href="/posts/setup-pixijs-with-typescript-using-webpack/">基于TypeScript的PixiJS开发环境设置（webpack篇）</a>
   </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-tags">
-      
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
+  
+  <li>
+    <span class="date">2017/09/18</span>
+    <a href="/posts/setup-pixijs-with-typescript-using-browserify/">基于TypeScript的PixiJS开发环境设置（browserify篇）</a>
   </li>
-      
-      
-      
-        
-        <li class="menu-item menu-item-archives">
-      
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
+  
+  <li>
+    <span class="date">2017/09/13</span>
+    <a href="/posts/behavior-trees-for-ai-how-they-work/">AI行为树的工作原理</a>
   </li>
-  </ul>
-
-</nav>
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-            
-
-          <div id="content" class="content">
-            
-  <div id="posts" class="posts-expand">
-        <article itemscope itemtype="http://schema.org/Article">
   
+  <li>
+    <span class="date">2017/08/08</span>
+    <a href="/posts/asked-an-architect-about-the-game-prison-architect/">建筑师谈《监狱建筑师》</a>
+  </li>
   
+  <li>
+    <span class="date">2016/12/02</span>
+    <a href="/posts/a-conversation-with-anders-hejlsberg/">Anders Hejlsberg谈C#、Java和C++中的泛型</a>
+  </li>
   
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://www.limbonova.com/2018/04/transistor-a-sonnet-to-cyberpunk/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anthony">
-      <meta itemprop="description" content="Carpe Diem">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Limbo-Nova">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2018/04/transistor-a-sonnet-to-cyberpunk/" class="post-title-link" itemprop="url">晶体管：献给赛博朋克的十四行诗</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2018-04-26 22:54:34" itemprop="dateCreated datePublished" datetime="2018-04-26T22:54:34+08:00">2018-04-26</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <blockquote>
-<p>When I first saw you up on that stage back there.<br>
-It was like…<br>
-everyone loved you.<br>
-Everyone except for them.</p>
-</blockquote>
-<p>《晶体管》(Transistor) 是一款由《堡垒》(Bastion)开发商 <a href="https://www.supergiantgames.com/" target="_blank" rel="noopener">Supergiant Games</a> 所开发的科幻题材作品。游戏讲述了主角——云堤城 (Cloudbank) 歌星红伶 (Red)，躲过卡梅拉塔组织 (The Camerata) 刺杀后，意外获得了一件名叫“晶体管” (Transistor) 的武器，并以此复仇的故事。</p>
-<p>虽然《晶体管》被官方定义为 ARPG ，但确切地说，它更应该被称作为一款 TRPG (Tactical RPG)。类似 XCOM 或者 神界：原罪 (Divinity: Original Sin) 的战斗规则 但又有所不同。首先，在行动规划阶段没有移动的次序和限制，玩家可以移动多次，并且在发动技能前后都可以移动，行动规划如同施放“时间暂停”一般。其次，个别技能会影响敌人位置，如拉近/击飞等效果。而在行动规划期间，受到此类效果影响的敌人并不会实时改变其位置，因为是规划嘛，所以需要一定的预判，游戏中会给出相应的提示。</p>
-<p><img src="/images/screenshots/20180426140854_1.jpg" alt="transistor"></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2018/04/transistor-a-sonnet-to-cyberpunk/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
+  <li>
+    <span class="date">2016/09/27</span>
+    <a href="/posts/bitnami-redmine-upgrade-guide/">Bitnami Redmine 升级简易指南</a>
+  </li>
   
+  <li>
+    <span class="date">2016/08/18</span>
+    <a href="/posts/markdown-syntax-zhtw/">Markdown Syntax zhTW</a>
+  </li>
   
+  <li>
+    <span class="date">2013/07/12</span>
+    <a href="/posts/cascading-combobox-with-xml-dataprovider/">XML数据源的级联ComboBox</a>
+  </li>
   
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
+  <li>
+    <span class="date">2013/06/01</span>
+    <a href="/posts/tour-of-taihu-lake-day-3/">Tour of Taihu Lake Day 3</a>
+  </li>
   
+  <li>
+    <span class="date">2013/05/31</span>
+    <a href="/posts/tour-of-taihu-lake-day-2/">Tour of Taihu Lake: Day 2</a>
+  </li>
   
+  <li>
+    <span class="date">2013/05/30</span>
+    <a href="/posts/tour-of-taihu-lake-day-1/">Tour of Taihu Lake: Day 1</a>
+  </li>
   
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-webpack/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anthony">
-      <meta itemprop="description" content="Carpe Diem">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Limbo-Nova">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2017/09/setup-pixijs-with-typescript-using-webpack/" class="post-title-link" itemprop="url">基于TypeScript的PixiJS开发环境设置（webpack篇）</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2017-09-21 23:36:47" itemprop="dateCreated datePublished" datetime="2017-09-21T23:36:47+08:00">2017-09-21</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>前几天写了一篇<a href="http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify">用<code>Browserify</code>打包的 PixiJS 的开发环境配置流程</a>，但是Web技术一日千里，开发工具也日新月异， Webpack 就是其中之一。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Webpack 作为模块打包工具的开发环境的配置过程，遵循简化易用的原则，省略了一些非必要模块的安装。</p>
-<h2 id="an-zhuang">安装</h2>
-<h3 id="xiang-mu-jie-gou">项目结构</h3>
-<ol>
-<li>创建项目目录</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir ts_pixi</span><br><span class="line">cd ts_pixi</span><br><span class="line">mkdir assets src dist</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>新建项目文件</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch index.html</span><br><span class="line">touch src/main.ts</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>初始化项目</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure>
-<h3 id="an-zhuang-mo-kuai">安装模块</h3>
-<ol>
-<li>PixiJS</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev pixi.js</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应<code>@types</code>文件，用于代码提示等功能。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev typescript @types/pixi.js @types/node</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>其它</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev ts-loader webpack webpack-dev-server</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/09/setup-pixijs-with-typescript-using-webpack/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
+  <li>
+    <span class="date">2013/04/12</span>
+    <a href="/posts/ror-tutorial-review/">Ruby on Rails 入门体验</a>
+  </li>
   
+  <li>
+    <span class="date">2013/04/02</span>
+    <a href="/posts/image-dithering-algorithm-as3/">基于AS3.0的图像抖动实现</a>
+  </li>
   
+  <li>
+    <span class="date">2013/03/08</span>
+    <a href="/posts/convert-hsv-hsl-to-rgb/">HSV/HSL转换到RGB色彩空间</a>
+  </li>
   
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
+  <li>
+    <span class="date">2013/02/24</span>
+    <a href="/posts/cycling-log-chongyuan-temple/">重元寺骑行</a>
+  </li>
   
+  <li>
+    <span class="date">2013/02/20</span>
+    <a href="/posts/book-review-on-top-of-tides/">观潮与弄潮</a>
+  </li>
   
+  <li>
+    <span class="date">2013/02/17</span>
+    <a href="/posts/fix-nvidia-driver-on-kernel-3-7-7/">3.7.7内核的nVidia驱动安装</a>
+  </li>
   
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anthony">
-      <meta itemprop="description" content="Carpe Diem">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Limbo-Nova">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2017/09/setup-pixijs-with-typescript-using-browserify/" class="post-title-link" itemprop="url">基于TypeScript的PixiJS开发环境设置（browserify篇）</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2017-09-18 21:28:22" itemprop="dateCreated datePublished" datetime="2017-09-18T21:28:22+08:00">2017-09-18</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。</p>
-<h2 id="qian-ti">前提</h2>
-<p>不可或缺的当然是node。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node --version</span><br></pre></td></tr></table></figure>
-<h2 id="an-zhuang">安装</h2>
-<h3 id="chu-shi-hua-xiang-mu">初始化项目</h3>
-<ol>
-<li>创建项目目录</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir ts_pixi</span><br><span class="line">cd ts_pixi</span><br><span class="line">mkdir assets src dist</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>新建项目文件</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">touch index.html</span><br><span class="line">touch src/main.ts</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>初始化项目</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure>
-<h3 id="an-zhuang-mo-kuai">安装模块</h3>
-<ol>
-<li>PixiJS</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save pixi.js</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>TypeScript</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev typescript</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>其它</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save-dev browserify browserify-shim http-server tsify tslint</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/09/setup-pixijs-with-typescript-using-browserify/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
+  <li>
+    <span class="date">2013/01/24</span>
+    <a href="/posts/install-nvidia-driver-on-fedora/">在Fedora上安装nVidia显卡驱动程序</a>
+  </li>
   
+  <li>
+    <span class="date">2013/01/20</span>
+    <a href="/posts/install-ruby-on-rails-on-fedora/">在Fedora上安装Ruby on Rails</a>
+  </li>
   
+  <li>
+    <span class="date">2013/01/03</span>
+    <a href="/posts/visioning-games-from-dear-esther-and-journey/">从《Dear Esther》和《Journey》看当今游戏发展</a>
+  </li>
   
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
+  <li>
+    <span class="date">2012/12/31</span>
+    <a href="/posts/less-is-more-dear-esther-review/">Less is more : Dear Esther 简评</a>
+  </li>
   
+  <li>
+    <span class="date">2012/09/27</span>
+    <a href="/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/">Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性</a>
+  </li>
   
+  <li>
+    <span class="date">2012/09/26</span>
+    <a href="/posts/gif-animation-in-flash-player/">在 Flash Player 中显示GIF动画</a>
+  </li>
   
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://www.limbonova.com/2017/09/behavior-trees-for-ai-how-they-work/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anthony">
-      <meta itemprop="description" content="Carpe Diem">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Limbo-Nova">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2017/09/behavior-trees-for-ai-how-they-work/" class="post-title-link" itemprop="url">AI行为树的工作原理</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2017-09-13 20:19:48" itemprop="dateCreated datePublished" datetime="2017-09-13T20:19:48+08:00">2017-09-13</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>原文：</strong> <a href="https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php" target="_blank" rel="noopener">Behavior trees for AI: How they work</a><br>
-<strong>作者：</strong> Chris Simpson<br>
-<strong>译者：</strong> <a href="https://www.limbonova.com/about/#blog-author">Anthony Han</a></p>
-<blockquote>
-<p>最近在研究行为树相关的内容，看了不少很好的文章。不同于其它文章阐述行为树的原理和实现，这篇文章着重于实践使用，介绍了行为树一般用法，还有一些开阔眼界的特别技巧。为加深印象，我利用业余时间翻译了一下，也希望对他人也有帮助。</p>
-</blockquote>
-<h2 id="yin-yan">引言</h2>
-<p>虽然网上有很多行为树的教程和指南，但是在研究能不能用在 <a href="http://store.steampowered.com/app/108600" target="_blank" rel="noopener">Project Zomboid</a> 中时，我总是遇到同样的问题。许多教程把重点放在行为树的代码实现上，或者仅仅专注在无上下文的流程图上，而没有任何真正适用的示例，其图表就像这样：<br>
-<img src="/images/bt_for_ai_image_01.png" alt="image"></p>
-<p>虽然在帮助我理解行为树的核心原则方面，这些教程是非常有价值的。但我发现自己处于一种情况：即使知道行为树的运作机制，我也不知道我应该为游戏创建什么样的节点，或者一个真正的完全成型的行为树是什么样子。</p>
-<p>我花了大量的时间进行实验（由于Zomboid项目是用Java写的，我一直在用很棒的JBT —— Java行为树（ <a href="http://sourceforge.net/projects/jbt/" target="_blank" rel="noopener">http://sourceforge.net/projects/jbt/</a> ），所以我没有必要关心自己的实际代码实现。尽管有很多教程的重点在这方面，还有许多常用的游戏引擎中的实现。</p>
-<p>我在这篇文章提到的某些特定装饰器的节点类型，可能来自于 JBT 而不是一般的行为树概念，但是我发现它们是行为树系统中不可或缺的一部分。如果你的行为树不支持的话，你可以考虑实现一下。</p>
-<p>我不会自称是这个方面的专家，但是经过 Project Zomboid 游戏中NPC的开发工作，我觉得我还是有点本事的，所以我想我要爆料一些东西。如果我早点知道会让我的第一次尝试更顺利，或者至少打开了我的眼界，让我了解通过行为树可以做到什么。我不打算深入进行实现，但会给出一些在 Zomboid 项目中使用的抽象示例。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/09/behavior-trees-for-ai-how-they-work/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
+  <li>
+    <span class="date">2012/09/20</span>
+    <a href="/posts/gif-format-and-lzw/">GIF 格式及LZW算法浅析</a>
+  </li>
   
+  <li>
+    <span class="date">2012/08/31</span>
+    <a href="/posts/asc2-release-notes/">Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</a>
+  </li>
   
+  <li>
+    <span class="date">2012/08/19</span>
+    <a href="/posts/connecting-your-kindle-fire-to-adb/">连接Kindle Fire到ADB(实体机调试)</a>
+  </li>
   
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
+  <li>
+    <span class="date">2012/08/14</span>
+    <a href="/posts/similar-image-searching-algorithm-as3/">基于AS3.0的相似图像搜索算法实现</a>
+  </li>
   
+  <li>
+    <span class="date">2012/08/05</span>
+    <a href="/posts/actionscript-3-0-closure/">ActionScript 3.0 闭包及作用域</a>
+  </li>
   
+  <li>
+    <span class="date">2012/07/31</span>
+    <a href="/posts/actionscript3-inheritance-mechanism/">ActionScript3的继承机制</a>
+  </li>
   
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://www.limbonova.com/2017/08/asked-an-architect-about-the-game-prison-architect/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anthony">
-      <meta itemprop="description" content="Carpe Diem">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Limbo-Nova">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2017/08/asked-an-architect-about-the-game-prison-architect/" class="post-title-link" itemprop="url">建筑师谈《监狱建筑师》</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2017-08-08 16:28:00" itemprop="dateCreated datePublished" datetime="2017-08-08T16:28:00+08:00">2017-08-08</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>原文：</strong> <a href="https://motherboard.vice.com/en_us/article/gvyzm4/we-asked-an-architect-about-the-game-prison-architect" target="_blank" rel="noopener">We Asked an Architect About the Game 'Prison Architect’</a><br>
-<strong>作者：</strong> EMANUEL MAIBERG<br>
-<strong>译者：</strong> <a href="https://www.limbonova.com/about/#blog-author">Anthony Han</a></p>
-<blockquote>
-<p>这是一篇我自己翻译的文章，主要动力源于几个月前玩的《监狱建筑师》这款游戏。因琐事所累，当时没有写下自己的体验感受。只留下书签栏中的这篇文章，或许可以从另一个角度来看这款游戏并审视其独特题材的社会意义。</p>
-</blockquote>
-<p><img src="https://www.introversion.co.uk/prisonarchitect/images/screenshots/large/prison-architect-12.jpg" alt="prison architect"></p>
-<p>《监狱建筑师》，一款类似模拟城市的监狱模拟经营游戏，恰到好处地探究到了其主题的骇人之处。</p>
-<p>玩家作为《监狱建筑师》的首要任务是用电椅处死一个囚犯，但在你按那个死亡开关前，你还得弄清楚很多细节。你需要建一个单独的建筑，带有一个执行室和拘留室。如果你心肠好的话，可以加一个窗和书架。每个房间需要一定的大小，并使用不同类型的地板。每个房间还需要连接到监狱的电网，电椅会消耗很多电力，所以你要为你的发电机增加一些电容器。</p>
-<p>当你处死囚犯的时候，这个事只是众多的待办事项中的一项：建更多的牢房，扩大食堂，建一个实施戒毒方案的公共房间，修复淋浴管道。还有，哦，处死这个囚犯。</p>
-<p>游戏开发商 Introversion Software 的创意总监克里斯·迪莱（Chris Delay）说，他们特意挑选了监狱生活中最黑暗的部分作为游戏的第一章节。他说：“如果把它当成建造酒店或者其它东西的游戏就会非常轻松。”“但从一开始，我们就认识到，必须让玩家知道这是不一样的体验，他必须要有不一样的思路。”</p>
-<p>游戏的最基本的建筑单元就是那些构成地图的方块。如何解决问题就看你如何有效使用分配给你的空间，经过足够长的时间后，你就会得到自己看待世界的方式（以自己的想法来构建世界），这就是模拟经营游戏的乐趣。这是一个关于最优化的练习。如果你像我一样，看到整齐有序的书架或者清洁干净的桌面感到莫名的享受时，玩模拟经营游戏尤其满足。</p>
-<p>但是，我依然会记得这个游戏的主题，尤其知道现实生活中这一切都是真实存在的之后，我意识到，原来我在游戏里干得很棒的工作竟然如此可怕。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/08/asked-an-architect-about-the-game-prison-architect/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
+  <li>
+    <span class="date">2012/07/27</span>
+    <a href="/posts/flash-player-11-4-bytearray-compression/">Flash Player 11.4 ByteArray压缩算法初探</a>
+  </li>
   
+  <li>
+    <span class="date">2012/07/23</span>
+    <a href="/posts/flash-builder-plugins/">Flash Builder 插件</a>
+  </li>
   
+  <li>
+    <span class="date">2012/07/11</span>
+    <a href="/posts/native-mouse-cursors-in-flash/">Flash中使用原生鼠标指针</a>
+  </li>
   
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
+  <li>
+    <span class="date">2012/07/09</span>
+    <a href="/posts/apache-flex-4-8-0-news-trial/">Apache Flex 4.8.0 近况及试用</a>
+  </li>
   
+  <li>
+    <span class="date">2011/08/01</span>
+    <a href="/posts/flex-4-fun-reading-notes/">Flex 4 Fun Reading Notes</a>
+  </li>
   
+  <li>
+    <span class="date">2011/07/25</span>
+    <a href="/posts/flex3-tfs-reading-summary/">《Flex3权威指南》阅读总结</a>
+  </li>
   
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://www.limbonova.com/2016/12/a-conversation-with-anders-hejlsberg/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anthony">
-      <meta itemprop="description" content="Carpe Diem">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Limbo-Nova">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2016/12/a-conversation-with-anders-hejlsberg/" class="post-title-link" itemprop="url">Anders Hejlsberg谈C#、Java和C++中的泛型</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2016-12-02 18:12:31" itemprop="dateCreated datePublished" datetime="2016-12-02T18:12:31+08:00">2016-12-02</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>标题：</strong> <a href="http://www.cstc.net.cn/docs/docs.php?id=258" target="_blank" rel="noopener">Anders Hejlsberg谈C#、Java和C++中的泛型</a><br>
-<strong>译者：</strong> lover_P</p>
-<p><strong>原文：</strong> <a href="http://www.artima.com/intv/generics.html" target="_blank" rel="noopener">Generics in C#, Java, and C++: A Conversation with Anders Hejlsberg, Part VII</a><br>
-<strong>作者：</strong> Bill Venners、Bruce Eckel</p>
-<p><strong>人物介绍</strong><br>
-Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读作：C-Sharp）程序设计语言。Hejlsberg第一次登上软件界历史舞台是在80年代早期，因为他为MS-DOS和CP/M设计了Pascal编译器。当时，还是一个小公司的Borland很快雇用了他，并买下了他的编译器，改称Turbo Pascal。在Borland，Hejlsberg继续开发Turbo Pascal，并最终带领他的小组设计了Turbo Pascal的替代品：Delphi。1996年，在进入Borland 13年后，Hejlsberg加入了微软。最初，他做Visual J++和Windows Fundatioin Classes（WFC）的架构师。随后，Hejlsberg成为C#<a href="http://xn--0trp4tfdo79hgnx7ea276g.NET" target="_blank" rel="noopener">的首席设计师和.NET</a> Framework的关键参与者。目前，Anders Hejlsberg还在领导着C#程序设计语言的继续开发。</p>
-<p>Bruce Eckel，Think in C++（C++编程思想）和Think in Java（Java编程思想）的作者。</p>
-<p>Bill Venners，Artima.com的主编。</p>
-<p><strong>内容</strong></p>
-<ul>
-<li>泛型概述</li>
-<li>C#中的泛型</li>
-<li>C#泛型和java泛型的比较</li>
-<li>C#泛型和C++模板的比较</li>
-<li>C#泛型中的约束</li>
+  <li>
+    <span class="date">2011/07/18</span>
+    <a href="/posts/flex3-tfs-notes-04/">《Flex3权威指南》学习笔记 04</a>
+  </li>
+  
+  <li>
+    <span class="date">2011/07/06</span>
+    <a href="/posts/flex3-tfs-notes-03/">《Flex3权威指南》学习笔记 03</a>
+  </li>
+  
+  <li>
+    <span class="date">2011/07/05</span>
+    <a href="/posts/flex3-tfs-notes-02/">《Flex3权威指南》学习笔记 02</a>
+  </li>
+  
+  <li>
+    <span class="date">2011/07/04</span>
+    <a href="/posts/flex3-tfs-notes-01/">《Flex3权威指南》学习笔记 01</a>
+  </li>
+  
+  <li>
+    <span class="date">2011/06/28</span>
+    <a href="/posts/the-best-of-youth/">绽放的青春，灿烂的人生</a>
+  </li>
+  
+  <li>
+    <span class="date">2011/03/05</span>
+    <a href="/posts/story-behind-balsamiq-mockups/">Balsamiq Mockups 的幕后故事</a>
+  </li>
+  
+  <li>
+    <span class="date">2011/02/28</span>
+    <a href="/posts/balsamiq-mockups/">原型设计工具 Balsamiq Mockups</a>
+  </li>
+  
+  <li>
+    <span class="date">2011/02/26</span>
+    <a href="/posts/do-requirement-analysis-using-personalbrain/">使用思维导图工具 PersonalBrain 进行需求分析</a>
+  </li>
+  
+  <li>
+    <span class="date">2008/07/16</span>
+    <a href="/posts/grizzly-man/">Grizzly Man</a>
+  </li>
+  
+  <li>
+    <span class="date">2008/05/23</span>
+    <a href="/posts/progressive-china/">行进中的中国</a>
+  </li>
+  
+  <li>
+    <span class="date">2008/01/06</span>
+    <a href="/posts/southern-weekly-the-system/">南方周末：《系统》[转载]</a>
+  </li>
+  
+  <li>
+    <span class="date">2007/11/06</span>
+    <a href="/posts/story-of-planescape-torment/">PlaneScape:Torment的故事[转载]</a>
+  </li>
+  
+  <li>
+    <span class="date">2006/10/11</span>
+    <a href="/posts/cancel-tcm-innovation-or-farce/">取消中医中药，革新还是闹剧？</a>
+  </li>
+  
+  <li>
+    <span class="date">2006/09/02</span>
+    <a href="/posts/silent-hill-the-movie-review/">看罢电影《寂静岭》</a>
+  </li>
+  
+  <li>
+    <span class="date">2006/09/01</span>
+    <a href="/posts/redemption-of-a-gangster/">黑帮暴徒的救赎</a>
+  </li>
+  
+  <li>
+    <span class="date">2005/11/09</span>
+    <a href="/posts/about-v/">About V</a>
+  </li>
+  
+  <li>
+    <span class="date">2005/11/08</span>
+    <a href="/posts/final-fantasy-vii-advent-children/">Final Fantasy VII - Advent Children</a>
+  </li>
+  
+  <li>
+    <span class="date">2005/11/07</span>
+    <a href="/posts/about-something/">Something</a>
+  </li>
+  
+  <li>
+    <span class="date">2005/10/15</span>
+    <a href="/posts/a-very-long-engagement/">A Very Long Engagement</a>
+  </li>
+  
 </ul>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2016/12/a-conversation-with-anders-hejlsberg/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
+  <footer>
   
   
+  <hr/>
+  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
   
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
+  </footer>
   
-  
-  
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://www.limbonova.com/2016/09/bitnami-redmine-upgrade-guide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anthony">
-      <meta itemprop="description" content="Carpe Diem">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Limbo-Nova">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2016/09/bitnami-redmine-upgrade-guide/" class="post-title-link" itemprop="url">Bitnami Redmine 升级简易指南</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2016-09-27 11:00:54" itemprop="dateCreated datePublished" datetime="2016-09-27T11:00:54+08:00">2016-09-27</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。</p>
-<h2 id="xi-tong-xu-qiu">系统需求</h2>
-<p>适用于Windows平台的 Bitnami Redmine 2.x+ 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表</p>
-<table>
-<thead>
-<tr>
-<th>Redmine version</th>
-<th>Supported Ruby versions</th>
-<th>Rails version used</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>3.3, current trunk</td>
-<td>ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3</td>
-<td>Rails 4.2</td>
-</tr>
-<tr>
-<td>3.2, 3.1</td>
-<td>ruby 1.9.3, 2.0.0, 2.1, 2.21</td>
-<td>Rails 4.2</td>
-</tr>
-</tbody>
-</table>
-<p>Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.<br>
-Redmine does not support JRuby because some gems do not support Rails 4.2.<br>
-细节参看 <a href="http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements" target="_blank" rel="noopener">Requirements</a></p>
-<h2 id="bei-fen-shu-ju">备份数据</h2>
-<h3 id="bitnami-stack">Bitnami Stack</h3>
-<p>若使用 Bitnami 集成包，可以直接备份整个目录即可。</p>
-<h3 id="redmine">Redmine</h3>
-<p>若只升级 Redmine 则先确认系统需求然后执行备份。</p>
-<h4 id="bei-fen-wen-jian">备份文件</h4>
-<p>最好备份整个 redmine 目录，主要包括</p>
-<ul>
-<li>上传文件(apps\redmine\htdocs\files)</li>
-<li>插件(apps\redmine\htdocs\plugins)</li>
-<li>主题(apps\redmine\htdocs\themes)</li>
-<li>配置文件(apps\redmine\htdocs\config)</li>
-</ul>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2016/09/bitnami-redmine-upgrade-guide/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://www.limbonova.com/2016/08/markdown-syntax-zhtw/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anthony">
-      <meta itemprop="description" content="Carpe Diem">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Limbo-Nova">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2016/08/markdown-syntax-zhtw/" class="post-title-link" itemprop="url">Markdown Syntax zhTW</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2016-08-18 14:12:40" itemprop="dateCreated datePublished" datetime="2016-08-18T14:12:40+08:00">2016-08-18</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><strong>NOTE:</strong> This is Traditional Chinese Edition Document of<br>
-Markdown Syntax. If you are seeking for English Edition<br>
-Document. Please refer to <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank" rel="noopener">Markdown: Syntax</a>.</p>
-<h1 id="markdown-syntax">Markdown: Syntax</h1>
-<ul>
-<li><a href="#overview">概述</a>
-<ul>
-<li><a href="#philosophy">哲學</a></li>
-<li><a href="#html">行內 HTML</a></li>
-<li><a href="#autoescape">特殊字元自動轉換</a></li>
-</ul>
-</li>
-<li><a href="#block">區塊元素</a>
-<ul>
-<li><a href="#p">段落和換行</a></li>
-<li><a href="#header">標題</a></li>
-<li><a href="#blockquote">區塊引言</a></li>
-<li><a href="#list">清單</a></li>
-<li><a href="#precode">程式碼區塊</a></li>
-<li><a href="#hr">分隔線</a></li>
-</ul>
-</li>
-<li><a href="#span">區段元素</a>
-<ul>
-<li><a href="#link">連結</a></li>
-<li><a href="#em">強調</a></li>
-<li><a href="#code">程式碼</a></li>
-<li><a href="#img">圖片</a></li>
-</ul>
-</li>
-<li><a href="#misc">其它</a>
-<ul>
-<li><a href="#backslash">跳脫字元</a></li>
-<li><a href="#autolink">自動連結</a></li>
-</ul>
-</li>
-<li><a href="#acknowledgement">感謝</a></li>
-</ul>
-<p>**注意：**這份文件是用 Markdown 寫的，你可以<a href="https://github.com/othree/markdown-syntax-zhtw/blob/master/syntax.md" target="_blank" rel="noopener">看看它的原始檔</a> 。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2016/08/markdown-syntax-zhtw/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://www.limbonova.com/2013/07/cascading-combobox-with-xml-dataprovider/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anthony">
-      <meta itemprop="description" content="Carpe Diem">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Limbo-Nova">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2013/07/cascading-combobox-with-xml-dataprovider/" class="post-title-link" itemprop="url">XML数据源的级联ComboBox</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2013-07-12 19:48:33" itemprop="dateCreated datePublished" datetime="2013-07-12T19:48:33+08:00">2013-07-12</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="background">Background</h2>
-<p>要做一个表单，其中自然少不了ComboBox，数据源不是从后台动态获取的，竟然是一个Excel表格文件！这个数据量很大，而且还有可能会修改，所以只能采用外部加载的方式。写一个解析Excel数据的库自然是不现实的，所以决定把Excel转换成XML格式，然后再加载。</p>
-<h2 id="excel-zhuan-huan-cheng-xml">Excel转换成XML</h2>
-<p>一般直接将Excel是不能导出成XML的，因为“不包含任何XML映射”，所以首先需要建立一个XML映射，其实就是设计一个XML结构，然后将Excel数据映射到对应的节点上。这一步其实很简单，但是颇具技巧性。</p>
-<h3 id="kai-fa-gong-ju-xuan-xiang-qia">“开发工具”选项卡</h3>
-<p>导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-“选项”-“自定义功能区”对话框，勾选“开发工具”。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2013/07/cascading-combobox-with-xml-dataprovider/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-        <article itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block home">
-    <link itemprop="mainEntityOfPage" href="http://www.limbonova.com/2013/06/tour-of-taihu-lake-day-3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Anthony">
-      <meta itemprop="description" content="Carpe Diem">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Limbo-Nova">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-            
-            <a href="/2013/06/tour-of-taihu-lake-day-3/" class="post-title-link" itemprop="url">Tour of Taihu Lake Day 3</a>
-          
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              
-                
-              
-
-              <time title="创建时间：2013-06-01 21:15:19" itemprop="dateCreated datePublished" datetime="2013-06-01T21:15:19+08:00">2013-06-01</time>
-            </span>
-          
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="gai-kuang">概况</h2>
-<p><strong>目标：</strong> 无锡市区 - 苏州园区<br>
-<strong>日期：</strong> 2013年5月27日<br>
-<strong>天气：</strong> 阴转多云<br>
-<strong>路线：</strong> 清宁大桥 → 运河西路 → S230省道 → 舟山路 → 望湖大道 → X204县道（环太湖大道） → 太湖大桥 → 太湖公园 → X206（胥香路） → X206（孙武路） → X206（中山东路） → 苏福路 → 南环路 → 通园路</p>
-<h2 id="xing-cheng">行程</h2>
-<p>晚上和同学聊到一点多，早上醒来已经九点半，他已经去上班了，我便收拾好行李就离开了。去了他昨天介绍的早点店吃早饭，店家比较谦虚，写着一两4只的小笼包，我要了二两，端上来一看，恐怕一只就有一两了。酸辣汤勾芡稠度正好，味道也不错，喝了满满一大碗。可惜没吃到无锡的开洋馄饨，等下次有机会了。</p>
-<p><img src="https://lh3.googleusercontent.com/-JI2hwC_99oE/UayEPItuwaI/AAAAAAAAAMo/ZAyiRgsU0J0/s800/IMGP0782.jpg" alt="Alt text"></p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2013/06/tour-of-taihu-lake-day-3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-          <div class="post-eof"></div>
-        
-      </footer>
-  </div>
-  
-  
-  
-  </article>
-
-    
-  </div>
-
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
-
-
-          </div>
-          
-
-        </div>
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image"
-      src="/images/avatar.png"
-      alt="Anthony">
-  <p class="site-author-name" itemprop="name">Anthony</p>
-  <div class="site-description" itemprop="description">Carpe Diem</div>
-</div>
-  <nav class="site-state motion-element">
-      <div class="site-state-item site-state-posts">
-        
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">54</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-    
-      
-      
-      <div class="site-state-item site-state-tags">
-        
-          
-            <a href="/tags/">
-          
-        
-        
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-          
-        
-        <span class="site-state-item-count">39</span>
-        <span class="site-state-item-name">标签</span>
-        </a>
-      </div>
-    
-  </nav>
-  <div class="feed-link motion-element">
-    <a href="/atom.xml" rel="alternate">
-      <i class="fa fa-rss"></i>RSS
-    </a>
-  </div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://github.com/anthonyhan" title="GitHub &rarr; https://github.com/anthonyhan" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-      </span>
-    
-      <span class="links-of-author-item">
-      
-      
-        
-      
-      
-        
-      
-        <a href="https://steamcommunity.com/profiles/76561198046420839" title="Steam &rarr; https://steamcommunity.com/profiles/76561198046420839" rel="noopener" target="_blank"><i class="fa fa-fw fa-steam"></i>Steam</a>
-      </span>
-    
-  </div>
-  <div class="cc-license motion-element" itemprop="license">
-    
-  
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
-  </div>
-
-
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Anthony</span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.4.0</div>
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-  </div>
-
-  
-
-
-  <script src="/lib/anime.min.js?v=3.1.0"></script>
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-<script src="/js/utils.js?v=7.4.0"></script><script src="/js/motion.js?v=7.4.0"></script>
-<script src="/js/schemes/pisces.js?v=7.4.0"></script>
-
-<script src="/js/next-boot.js?v=7.4.0"></script>
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-      
-    
-  
-
-  
-
-  
-
-
-</body>
+  </body>
 </html>
+

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>redmine on LimboNova</title>
+    <link>/tags/redmine/</link>
+    <description>Recent content in redmine on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 27 Sep 2016 11:00:54 +0800</lastBuildDate><atom:link href="/tags/redmine/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bitnami Redmine 升级简易指南</title>
+      <link>/posts/bitnami-redmine-upgrade-guide/</link>
+      <pubDate>Tue, 27 Sep 2016 11:00:54 +0800</pubDate>
+      
+      <guid>/posts/bitnami-redmine-upgrade-guide/</guid>
+      <description>&lt;p&gt;顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。&lt;/p&gt;
+&lt;h2 id=&#34;系统需求&#34;&gt;系统需求&lt;/h2&gt;
+&lt;p&gt;适用于Windows平台的 Bitnami Redmine 2.x+ 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Redmine version&lt;/th&gt;
+&lt;th&gt;Supported Ruby versions&lt;/th&gt;
+&lt;th&gt;Rails version used&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;3.3, current trunk&lt;/td&gt;
+&lt;td&gt;ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3&lt;/td&gt;
+&lt;td&gt;Rails 4.2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3.2, 3.1&lt;/td&gt;
+&lt;td&gt;ruby 1.9.3, 2.0.0, 2.1, 2.21&lt;/td&gt;
+&lt;td&gt;Rails 4.2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.
+Redmine does not support JRuby because some gems do not support Rails 4.2.
+细节参看 &lt;a href=&#34;http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements&#34;&gt;Requirements&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;备份数据&#34;&gt;备份数据&lt;/h2&gt;
+&lt;h3 id=&#34;bitnami-stack&#34;&gt;Bitnami Stack&lt;/h3&gt;
+&lt;p&gt;若使用 Bitnami 集成包，可以直接备份整个目录即可。&lt;/p&gt;
+&lt;h3 id=&#34;redmine&#34;&gt;Redmine&lt;/h3&gt;
+&lt;p&gt;若只升级 Redmine 则先确认系统需求然后执行备份。&lt;/p&gt;
+&lt;h4 id=&#34;备份文件&#34;&gt;备份文件&lt;/h4&gt;
+&lt;p&gt;最好备份整个 redmine 目录，主要包括&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;上传文件(apps\redmine\htdocs\files)&lt;/li&gt;
+&lt;li&gt;插件(apps\redmine\htdocs\plugins)&lt;/li&gt;
+&lt;li&gt;主题(apps\redmine\htdocs\themes)&lt;/li&gt;
+&lt;li&gt;配置文件(apps\redmine\htdocs\config)&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

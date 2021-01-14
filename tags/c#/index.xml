@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>c# on LimboNova</title>
+    <link>/tags/c#/</link>
+    <description>Recent content in c# on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 02 Dec 2016 18:12:31 +0800</lastBuildDate><atom:link href="/tags/c#/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型</title>
+      <link>/posts/a-conversation-with-anders-hejlsberg/</link>
+      <pubDate>Fri, 02 Dec 2016 18:12:31 +0800</pubDate>
+      
+      <guid>/posts/a-conversation-with-anders-hejlsberg/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;标题：&lt;/strong&gt; &lt;a href=&#34;http://www.cstc.net.cn/docs/docs.php?id=258&#34;&gt;Anders Hejlsberg谈C#、Java和C++中的泛型&lt;/a&gt;
+&lt;strong&gt;译者：&lt;/strong&gt; lover_P&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;http://www.artima.com/intv/generics.html&#34;&gt;Generics in C#, Java, and C++: A Conversation with Anders Hejlsberg, Part VII&lt;/a&gt;
+&lt;strong&gt;作者：&lt;/strong&gt; Bill Venners、Bruce Eckel&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;人物介绍&lt;/strong&gt;
+Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读作：C-Sharp）程序设计语言。Hejlsberg第一次登上软件界历史舞台是在80年代早期，因为他为MS-DOS和CP/M设计了Pascal编译器。当时，还是一个小公司的Borland很快雇用了他，并买下了他的编译器，改称Turbo Pascal。在Borland，Hejlsberg继续开发Turbo Pascal，并最终带领他的小组设计了Turbo Pascal的替代品：Delphi。1996年，在进入Borland 13年后，Hejlsberg加入了微软。最初，他做Visual J++和Windows Fundatioin Classes（WFC）的架构师。随后，Hejlsberg成为C#的首席设计师和.NET Framework的关键参与者。目前，Anders Hejlsberg还在领导着C#程序设计语言的继续开发。&lt;/p&gt;
+&lt;p&gt;Bruce Eckel，Think in C++（C++编程思想）和Think in Java（Java编程思想）的作者。&lt;/p&gt;
+&lt;p&gt;Bill Venners，Artima.com的主编。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;内容&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;泛型概述&lt;/li&gt;
+&lt;li&gt;C#中的泛型&lt;/li&gt;
+&lt;li&gt;C#泛型和java泛型的比较&lt;/li&gt;
+&lt;li&gt;C#泛型和C++模板的比较&lt;/li&gt;
+&lt;li&gt;C#泛型中的约束&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

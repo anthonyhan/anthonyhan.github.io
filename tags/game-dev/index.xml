@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>game dev on LimboNova</title>
+    <link>/tags/game-dev/</link>
+    <description>Recent content in game dev on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 21 Sep 2017 23:36:47 +0800</lastBuildDate><atom:link href="/tags/game-dev/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基于TypeScript的PixiJS开发环境设置（webpack篇）</title>
+      <link>/posts/setup-pixijs-with-typescript-using-webpack/</link>
+      <pubDate>Thu, 21 Sep 2017 23:36:47 +0800</pubDate>
+      
+      <guid>/posts/setup-pixijs-with-typescript-using-webpack/</guid>
+      <description>&lt;p&gt;前几天写了一篇&lt;a href=&#34;http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify&#34;&gt;用&lt;code&gt;Browserify&lt;/code&gt;打包的 PixiJS 的开发环境配置流程&lt;/a&gt;，但是Web技术一日千里，开发工具也日新月异， Webpack 就是其中之一。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Webpack 作为模块打包工具的开发环境的配置过程，遵循简化易用的原则，省略了一些非必要模块的安装。&lt;/p&gt;
+&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
+&lt;h3 id=&#34;项目结构&#34;&gt;项目结构&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;创建项目目录&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;mkdir ts_pixi
+cd ts_pixi
+mkdir assets src dist
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;新建项目文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;touch index.html
+touch src/main.ts
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;初始化项目&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;npm init
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;PixiJS&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;npm install --save-dev pixi.js
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应&lt;code&gt;@types&lt;/code&gt;文件，用于代码提示等功能。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;npm install --save-dev typescript @types/pixi.js @types/node
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;其它&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;npm install --save-dev ts-loader webpack webpack-dev-server
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>基于TypeScript的PixiJS开发环境设置（browserify篇）</title>
+      <link>/posts/setup-pixijs-with-typescript-using-browserify/</link>
+      <pubDate>Mon, 18 Sep 2017 21:28:22 +0800</pubDate>
+      
+      <guid>/posts/setup-pixijs-with-typescript-using-browserify/</guid>
+      <description>&lt;p&gt;PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。&lt;/p&gt;
+&lt;h2 id=&#34;前提&#34;&gt;前提&lt;/h2&gt;
+&lt;p&gt;不可或缺的当然是node。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;node --version
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
+&lt;h3 id=&#34;初始化项目&#34;&gt;初始化项目&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;创建项目目录&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;mkdir ts_pixi
+cd ts_pixi
+mkdir assets src dist
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;新建项目文件&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;touch index.html
+touch src/main.ts
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;初始化项目&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;npm init
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;PixiJS&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;npm install --save pixi.js
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;TypeScript&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;npm install --save-dev typescript
+&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;其它&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;npm install --save-dev browserify browserify-shim http-server tsify tslint
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    
+    <item>
+      <title>AI行为树的工作原理</title>
+      <link>/posts/behavior-trees-for-ai-how-they-work/</link>
+      <pubDate>Wed, 13 Sep 2017 20:19:48 +0800</pubDate>
+      
+      <guid>/posts/behavior-trees-for-ai-how-they-work/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php&#34;&gt;Behavior trees for AI: How they work&lt;/a&gt;
+&lt;strong&gt;作者：&lt;/strong&gt; Chris Simpson
+&lt;strong&gt;译者：&lt;/strong&gt; Anthony Han&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;最近在研究行为树相关的内容，看了不少很好的文章。不同于其它文章阐述行为树的原理和实现，这篇文章着重于实践使用，介绍了行为树一般用法，还有一些开阔眼界的特别技巧。为加深印象，我利用业余时间翻译了一下，也希望对他人也有帮助。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;引言&#34;&gt;引言&lt;/h2&gt;
+&lt;p&gt;虽然网上有很多行为树的教程和指南，但是在研究能不能用在 &lt;a href=&#34;http://store.steampowered.com/app/108600&#34;&gt;Project Zomboid&lt;/a&gt; 中时，我总是遇到同样的问题。许多教程把重点放在行为树的代码实现上，或者仅仅专注在无上下文的流程图上，而没有任何真正适用的示例，其图表就像这样：
+&lt;img src=&#34;/images/bt_for_ai_image_01.png&#34; alt=&#34;image&#34;&gt;&lt;/p&gt;
+&lt;p&gt;虽然在帮助我理解行为树的核心原则方面，这些教程是非常有价值的。但我发现自己处于一种情况：即使知道行为树的运作机制，我也不知道我应该为游戏创建什么样的节点，或者一个真正的完全成型的行为树是什么样子。&lt;/p&gt;
+&lt;p&gt;我花了大量的时间进行实验（由于Zomboid项目是用Java写的，我一直在用很棒的JBT —— Java行为树（ &lt;a href=&#34;http://sourceforge.net/projects/jbt/&#34;&gt;http://sourceforge.net/projects/jbt/&lt;/a&gt; ），所以我没有必要关心自己的实际代码实现。尽管有很多教程的重点在这方面，还有许多常用的游戏引擎中的实现。&lt;/p&gt;
+&lt;p&gt;我在这篇文章提到的某些特定装饰器的节点类型，可能来自于 JBT 而不是一般的行为树概念，但是我发现它们是行为树系统中不可或缺的一部分。如果你的行为树不支持的话，你可以考虑实现一下。&lt;/p&gt;
+&lt;p&gt;我不会自称是这个方面的专家，但是经过 Project Zomboid 游戏中NPC的开发工作，我觉得我还是有点本事的，所以我想我要爆料一些东西。如果我早点知道会让我的第一次尝试更顺利，或者至少打开了我的眼界，让我了解通过行为树可以做到什么。我不打算深入进行实现，但会给出一些在 Zomboid 项目中使用的抽象示例。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

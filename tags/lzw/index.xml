@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>lzw on LimboNova</title>
+    <link>/tags/lzw/</link>
+    <description>Recent content in lzw on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 20 Sep 2012 18:20:14 +0800</lastBuildDate><atom:link href="/tags/lzw/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GIF 格式及LZW算法浅析</title>
+      <link>/posts/gif-format-and-lzw/</link>
+      <pubDate>Thu, 20 Sep 2012 18:20:14 +0800</pubDate>
+      
+      <guid>/posts/gif-format-and-lzw/</guid>
+      <description>&lt;p&gt;前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。&lt;/p&gt;
+&lt;p&gt;花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/diego.gif&#34; alt=&#34;gif sample&#34; title=&#34;GIF 多帧动画&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;gif概述&#34;&gt;GIF概述&lt;/h2&gt;
+&lt;p&gt;Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。&lt;/p&gt;
+&lt;p&gt;GIF主要分为两个版本，即GIF 87a和GIF 89a：&lt;/p&gt;
+&lt;p&gt;GIF 87a：是在1987年制定的版本；
+GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。&lt;/p&gt;
+&lt;h2 id=&#34;gif格式结构&#34;&gt;GIF格式结构&lt;/h2&gt;
+&lt;p&gt;GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。&lt;/p&gt;
+&lt;h3 id=&#34;结构组成&#34;&gt;结构组成&lt;/h3&gt;
+&lt;p&gt;结构如下表所示：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Header&lt;/td&gt;
+&lt;td&gt;Header&lt;/td&gt;
+&lt;td&gt;Header&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Logical Screen Descriptor&lt;/td&gt;
+&lt;td&gt;Screen Descriptor Block&lt;/td&gt;
+&lt;td&gt;GIF Data Stream&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Global Color Table&lt;/td&gt;
+&lt;td&gt;Global Color Table(optional)&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Application Extension&lt;/td&gt;
+&lt;td&gt;Extension Blocks(optional, repeated)&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Graphic Control Extension*&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;…&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Image Descriptor&lt;/td&gt;
+&lt;td&gt;Image Blocks(repeated)&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Local Color Table&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Table Based Image Data&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;…&lt;/td&gt;
+&lt;td&gt;Extension Blocks(optional, repeated)&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Trailer&lt;/td&gt;
+&lt;td&gt;Trailer&lt;/td&gt;
+&lt;td&gt;Trailer&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,403 +1,493 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://www.limbonova.com/2017/09/behavior-trees-for-ai-how-they-work/</loc>
-    
-    <lastmod>2019-09-21T09:37:31.102Z</lastmod>
-    
+    <loc>/tags/game/</loc>
+    <lastmod>2018-04-26T22:54:34+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2017/08/asked-an-architect-about-the-game-prison-architect/</loc>
-    
-    <lastmod>2019-09-21T09:37:04.991Z</lastmod>
-    
+    <loc>/tags/game-review/</loc>
+    <lastmod>2018-04-26T22:54:34+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/about/index.html</loc>
-    
-    <lastmod>2019-09-18T09:47:29.975Z</lastmod>
-    
+    <loc>/</loc>
+    <lastmod>2018-04-26T22:54:34+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/tags/index.html</loc>
-    
-    <lastmod>2018-10-29T08:01:26.914Z</lastmod>
-    
+    <loc>/posts/</loc>
+    <lastmod>2018-04-26T22:54:34+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/manifest.json</loc>
-    
-    <lastmod>2018-10-29T08:01:26.911Z</lastmod>
-    
+    <loc>/tags/</loc>
+    <lastmod>2018-04-26T22:54:34+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/01/visioning-games-from-dear-esther-and-journey/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.822Z</lastmod>
-    
+    <loc>/posts/transistor-a-sonnet-to-cyberpunk/</loc>
+    <lastmod>2018-04-26T22:54:34+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2018/04/transistor-a-sonnet-to-cyberpunk/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.821Z</lastmod>
-    
+    <loc>/tags/game-dev/</loc>
+    <lastmod>2017-09-21T23:36:47+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/06/tour-of-taihu-lake-day-3/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.819Z</lastmod>
-    
+    <loc>/tags/html5/</loc>
+    <lastmod>2017-09-21T23:36:47+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/05/tour-of-taihu-lake-day-2/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.818Z</lastmod>
-    
+    <loc>/tags/pixijs/</loc>
+    <lastmod>2017-09-21T23:36:47+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/05/tour-of-taihu-lake-day-1/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.817Z</lastmod>
-    
+    <loc>/tags/typescript/</loc>
+    <lastmod>2017-09-21T23:36:47+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2011/06/the-best-of-youth/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.816Z</lastmod>
-    
+    <loc>/posts/setup-pixijs-with-typescript-using-webpack/</loc>
+    <lastmod>2017-09-21T23:36:47+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2007/11/story-of-planescape-torment/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.815Z</lastmod>
-    
+    <loc>/posts/setup-pixijs-with-typescript-using-browserify/</loc>
+    <lastmod>2017-09-18T21:28:22+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2011/03/story-behind-balsamiq-mockups/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.813Z</lastmod>
-    
+    <loc>/posts/behavior-trees-for-ai-how-they-work/</loc>
+    <lastmod>2017-09-13T20:19:48+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2008/01/southern-weekly-the-system/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.812Z</lastmod>
-    
+    <loc>/tags/behavior-tree/</loc>
+    <lastmod>2017-09-13T20:19:48+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/08/similar-image-searching-algorithm-as3/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.810Z</lastmod>
-    
+    <loc>/posts/asked-an-architect-about-the-game-prison-architect/</loc>
+    <lastmod>2017-08-08T16:28:00+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2006/09/silent-hill-the-movie-review/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.809Z</lastmod>
-    
+    <loc>/posts/a-conversation-with-anders-hejlsberg/</loc>
+    <lastmod>2016-12-02T18:12:31+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-webpack/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.808Z</lastmod>
-    
+    <loc>/tags/c#/</loc>
+    <lastmod>2016-12-02T18:12:31+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.807Z</lastmod>
-    
+    <loc>/tags/c&#43;&#43;/</loc>
+    <lastmod>2016-12-02T18:12:31+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/04/ror-tutorial-review/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.806Z</lastmod>
-    
+    <loc>/tags/generics/</loc>
+    <lastmod>2016-12-02T18:12:31+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2006/09/redemption-of-a-gangster/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.804Z</lastmod>
-    
+    <loc>/tags/java/</loc>
+    <lastmod>2016-12-02T18:12:31+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/09/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.802Z</lastmod>
-    
+    <loc>/tags/programming/</loc>
+    <lastmod>2016-12-02T18:12:31+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/07/native-mouse-cursors-in-flash/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.801Z</lastmod>
-    
+    <loc>/posts/bitnami-redmine-upgrade-guide/</loc>
+    <lastmod>2016-09-27T11:00:54+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2016/08/markdown-syntax-zhtw/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.800Z</lastmod>
-    
+    <loc>/tags/redmine/</loc>
+    <lastmod>2016-09-27T11:00:54+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/12/less-is-more-dear-esther-review/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.799Z</lastmod>
-    
+    <loc>/tags/blog/</loc>
+    <lastmod>2016-08-18T14:12:40+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/01/install-ruby-on-rails-on-fedora/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.797Z</lastmod>
-    
+    <loc>/tags/markdown/</loc>
+    <lastmod>2016-08-18T14:12:40+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/01/install-nvidia-driver-on-fedora/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.796Z</lastmod>
-    
+    <loc>/posts/markdown-syntax-zhtw/</loc>
+    <lastmod>2016-08-18T14:12:40+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/04/image-dithering-algorithm-as3/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.794Z</lastmod>
-    
+    <loc>/tags/actionscript/</loc>
+    <lastmod>2013-07-12T19:48:33+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2008/07/grizzly-man/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.793Z</lastmod>
-    
+    <loc>/tags/flash/</loc>
+    <lastmod>2013-07-12T19:48:33+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/09/gif-format-and-lzw/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.792Z</lastmod>
-    
+    <loc>/posts/cascading-combobox-with-xml-dataprovider/</loc>
+    <lastmod>2013-07-12T19:48:33+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/09/gif-animation-in-flash-player/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.791Z</lastmod>
-    
+    <loc>/tags/biking/</loc>
+    <lastmod>2013-06-01T21:15:19+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2011/07/flex3-tfs-reading-summary/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.789Z</lastmod>
-    
+    <loc>/posts/tour-of-taihu-lake-day-3/</loc>
+    <lastmod>2013-06-01T21:15:19+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2011/07/flex3-tfs-notes-04/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.788Z</lastmod>
-    
+    <loc>/tags/travel/</loc>
+    <lastmod>2013-06-01T21:15:19+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2011/07/flex3-tfs-notes-03/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.787Z</lastmod>
-    
+    <loc>/posts/tour-of-taihu-lake-day-2/</loc>
+    <lastmod>2013-05-31T20:26:35+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2011/07/flex3-tfs-notes-02/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.786Z</lastmod>
-    
+    <loc>/posts/tour-of-taihu-lake-day-1/</loc>
+    <lastmod>2013-05-30T19:53:44+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2011/07/flex3-tfs-notes-01/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.784Z</lastmod>
-    
+    <loc>/tags/book/</loc>
+    <lastmod>2013-04-12T12:16:03+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2011/08/flex-4-fun-reading-notes/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.783Z</lastmod>
-    
+    <loc>/tags/rails/</loc>
+    <lastmod>2013-04-12T12:16:03+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/07/flash-player-11-4-bytearray-compression/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.782Z</lastmod>
-    
+    <loc>/tags/ruby/</loc>
+    <lastmod>2013-04-12T12:16:03+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/07/flash-builder-plugins/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.781Z</lastmod>
-    
+    <loc>/posts/ror-tutorial-review/</loc>
+    <lastmod>2013-04-12T12:16:03+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/02/fix-nvidia-driver-on-kernel-3-7-7/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.779Z</lastmod>
-    
+    <loc>/tags/algorithm/</loc>
+    <lastmod>2013-04-02T20:21:09+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2005/11/final-fantasy-vii-advent-children/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.777Z</lastmod>
-    
+    <loc>/tags/image-processing/</loc>
+    <lastmod>2013-04-02T20:21:09+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2011/02/do-requirement-analysis-using-personalbrain/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.776Z</lastmod>
-    
+    <loc>/posts/image-dithering-algorithm-as3/</loc>
+    <lastmod>2013-04-02T20:21:09+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/02/cycling-log-chongyuan-temple/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.775Z</lastmod>
-    
+    <loc>/posts/convert-hsv-hsl-to-rgb/</loc>
+    <lastmod>2013-03-08T18:08:17+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/03/convert-hsv-hsl-to-rgb/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.774Z</lastmod>
-    
+    <loc>/posts/cycling-log-chongyuan-temple/</loc>
+    <lastmod>2013-02-24T22:19:53+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/08/connecting-your-kindle-fire-to-adb/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.773Z</lastmod>
-    
+    <loc>/posts/book-review-on-top-of-tides/</loc>
+    <lastmod>2013-02-20T20:00:58+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/07/cascading-combobox-with-xml-dataprovider/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.772Z</lastmod>
-    
+    <loc>/posts/fix-nvidia-driver-on-kernel-3-7-7/</loc>
+    <lastmod>2013-02-17T18:23:39+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2006/10/cancel-tcm-innovation-or-farce/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.770Z</lastmod>
-    
+    <loc>/tags/fedora/</loc>
+    <lastmod>2013-02-17T18:23:39+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2013/02/book-review-on-top-of-tides/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.769Z</lastmod>
-    
+    <loc>/tags/linux/</loc>
+    <lastmod>2013-02-17T18:23:39+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2016/09/bitnami-redmine-upgrade-guide/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.768Z</lastmod>
-    
+    <loc>/tags/nvidia/</loc>
+    <lastmod>2013-02-17T18:23:39+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2011/02/balsamiq-mockups/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.765Z</lastmod>
-    
+    <loc>/posts/install-nvidia-driver-on-fedora/</loc>
+    <lastmod>2013-01-24T01:33:13+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/08/asc2-release-notes/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.762Z</lastmod>
-    
+    <loc>/posts/install-ruby-on-rails-on-fedora/</loc>
+    <lastmod>2013-01-20T20:20:12+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/07/apache-flex-4-8-0-news-trial/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.761Z</lastmod>
-    
+    <loc>/posts/visioning-games-from-dear-esther-and-journey/</loc>
+    <lastmod>2013-01-03T22:02:16+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/07/actionscript3-inheritance-mechanism/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.760Z</lastmod>
-    
+    <loc>/posts/less-is-more-dear-esther-review/</loc>
+    <lastmod>2012-12-31T21:03:40+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2012/08/actionscript-3-0-closure/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.758Z</lastmod>
-    
+    <loc>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</loc>
+    <lastmod>2012-09-27T12:10:11+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2005/11/about-v/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.757Z</lastmod>
-    
+    <loc>/tags/gif/</loc>
+    <lastmod>2012-09-26T18:31:46+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2005/11/about-something/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.756Z</lastmod>
-    
+    <loc>/posts/gif-animation-in-flash-player/</loc>
+    <lastmod>2012-09-26T18:31:46+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2005/10/a-very-long-engagement/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.755Z</lastmod>
-    
+    <loc>/posts/gif-format-and-lzw/</loc>
+    <lastmod>2012-09-20T18:20:14+08:00</lastmod>
   </url>
   
   <url>
-    <loc>http://www.limbonova.com/2016/12/a-conversation-with-anders-hejlsberg/</loc>
-    
-    <lastmod>2018-10-29T08:01:26.754Z</lastmod>
-    
+    <loc>/tags/lzw/</loc>
+    <lastmod>2012-09-20T18:20:14+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/asc2-release-notes/</loc>
+    <lastmod>2012-08-31T17:50:12+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/android/</loc>
+    <lastmod>2012-08-19T11:30:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/connecting-your-kindle-fire-to-adb/</loc>
+    <lastmod>2012-08-19T11:30:08+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/similar-image-searching-algorithm-as3/</loc>
+    <lastmod>2012-08-14T19:59:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/actionscript-3-0-closure/</loc>
+    <lastmod>2012-08-05T19:11:50+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/closure/</loc>
+    <lastmod>2012-08-05T19:11:50+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/actionscript3-inheritance-mechanism/</loc>
+    <lastmod>2012-07-31T18:25:09+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/flash-player-11-4-bytearray-compression/</loc>
+    <lastmod>2012-07-27T18:31:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/lzma/</loc>
+    <lastmod>2012-07-27T18:31:25+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/flash-builder-plugins/</loc>
+    <lastmod>2012-07-23T20:32:21+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/native-mouse-cursors-in-flash/</loc>
+    <lastmod>2012-07-11T17:06:52+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/apache-flex-4-8-0-news-trial/</loc>
+    <lastmod>2012-07-09T19:51:11+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/flex/</loc>
+    <lastmod>2012-07-09T19:51:11+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/flex-4-fun-reading-notes/</loc>
+    <lastmod>2011-08-01T20:51:36+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/flex3-tfs-reading-summary/</loc>
+    <lastmod>2011-07-25T12:31:00+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/notes/</loc>
+    <lastmod>2011-07-18T22:23:56+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/flex3-tfs-notes-04/</loc>
+    <lastmod>2011-07-18T22:23:56+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/flex3-tfs-notes-03/</loc>
+    <lastmod>2011-07-06T22:40:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/flex3-tfs-notes-02/</loc>
+    <lastmod>2011-07-05T22:28:42+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/flex3-tfs-notes-01/</loc>
+    <lastmod>2011-07-04T22:03:38+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/movie/</loc>
+    <lastmod>2011-06-28T21:41:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/the-best-of-youth/</loc>
+    <lastmod>2011-06-28T21:41:59+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/story-behind-balsamiq-mockups/</loc>
+    <lastmod>2011-03-05T22:45:53+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/misc/</loc>
+    <lastmod>2011-03-05T22:45:53+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/tool/</loc>
+    <lastmod>2011-02-28T22:45:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/balsamiq-mockups/</loc>
+    <lastmod>2011-02-28T22:45:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/mind-map/</loc>
+    <lastmod>2011-02-26T16:16:18+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/do-requirement-analysis-using-personalbrain/</loc>
+    <lastmod>2011-02-26T16:16:18+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/grizzly-man/</loc>
+    <lastmod>2008-07-16T19:52:43+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/progressive-china/</loc>
+    <lastmod>2008-05-23T10:33:49+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/southern-weekly-the-system/</loc>
+    <lastmod>2008-01-06T06:06:29+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/story-of-planescape-torment/</loc>
+    <lastmod>2007-11-06T15:12:47+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/cancel-tcm-innovation-or-farce/</loc>
+    <lastmod>2006-10-11T21:31:01+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/silent-hill-the-movie-review/</loc>
+    <lastmod>2006-09-02T02:29:14+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/redemption-of-a-gangster/</loc>
+    <lastmod>2006-09-01T13:09:56+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/about-v/</loc>
+    <lastmod>2005-11-09T12:53:32+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/final-fantasy-vii-advent-children/</loc>
+    <lastmod>2005-11-08T13:24:43+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/about-something/</loc>
+    <lastmod>2005-11-07T19:32:27+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/a-very-long-engagement/</loc>
+    <lastmod>2005-10-15T22:43:02+08:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/about/</loc>
+  </url>
+  
+  <url>
+    <loc>/categories/</loc>
   </url>
   
 </urlset>
