@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>基于AS3.0的图像抖动实现 | LimboNova</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">基于AS3.0的图像抖动实现</span></h1>
+
+<h2 class="date">2013/04/02</h2>
+</div>
+
+<main>
+<p>不知当初自己出于什么目的，OneNote 里留了一条关于 Floyd–Steinberg dithering 的笔记。好奇之余，打开链接看了一下，方才想起这个当初让我觉得新奇的古老算法。</p>
+
+<h2 id="概述">概述</h2>
+
+<p>余忆童稚时，能张目对日，明察秋毫……”如果你对过去黑白报纸的图片仔细观察过的话，一定会发现，那些黑白照片由很多圆形或方形的图形组成。是的，那就是半色调（Halftone）和抖动（Dither ）技术。</p>
+
+<p><figure><img src="https://pixy.org/src/405/thumbs350/4057896.jpg" alt="Halftone"></figure></p>
+
+<p>半色调（Halftone）是指为了模拟出连续调影像（色阶）的视觉感觉，一般用墨点（半色调网点）的大小或频率的改变，来模拟明暗的变化。半色调广泛应用于报刊出版等领域，当年那些黑白出版物上尤其常见，现在的牛奶包装上也能看出来。</p>
+
+<h2 id="阈值法thresholding">阈值法（Thresholding）</h2>
+
+<p>当像素值大于设定阈值时，输出为亮点，否则输出为暗点，从而实现二值化。经过处理的图像往往失去细节，缺乏层次感。下图所示的就是二值化的图像。
+<figure><img src="http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg" alt="lena_binary"></figure></p>
+
+<h2 id="模式法patterning">模式法（patterning）</h2>
+
+<p>相对阈值法的二值化处理，这种方法使用一个黑白像素矩阵来表示一个像素点，这个矩阵里黑白点不同组合实现该区域的亮度变化，模拟这个像素点的不同灰度值，从而实现图像的灰度显示。</p>
+
+<p><figure><img src="https://bn1files.storage.live.com/y1p54W1_o4h3FbO4N6q-0FRCZkO_fu2gdIFq6URKFP32b0GU6OH8njTKg/lena_gray.jpg" alt="lena_gray" title="255级灰度图像"><figcaption>255级灰度图像</figcaption></figure></p>
+
+<p>一个2阶矩阵，有4个点的位置，可能的组合为：4黑，1黑3白，2黑2白，3黑1白，4白。因此可以用来表示5级灰度。当图象中有一片灰度为的1的区域时，有明显的水平和垂直线条。</p>
+
+<h2 id="抖动dithering">抖动（dithering）</h2>
+
+<p>patterning 方法虽然可行，但是消耗空间比较大，表示的灰度等级越高，需要的矩阵越大，256级灰度就需要16×16的矩阵空间来表示一个像素点。更坏的情况是，即使使用patternning，依然得不到要求的灰度等级。有没有一种只占用很少空间就可以表示的方法呢？显然有，这个时候抖动算法就派上用场了。</p>
+
+<h3 id="误差扩散error-diffusion">误差扩散（Error diffusion）</h3>
+
+<p>这个过程中用到了误差扩散算法，误差扩散的意思就是让误差扩散， ;-) 就是像素点在色彩深度降低时，产生的时误差扩散到其周围像素上。例如：当一个像素点灰度值为120，如果转换为16级灰度图像，120/16=7.5，取整后为7，误差为0.5，那么这0.5的误差就要按一定的算法规则扩散到其周围像素上。</p>
+
+<h3 id="floydsteinberg-抖动算法">Floyd–Steinberg 抖动算法</h3>
+
+<p>Floyd–Steinberg 是比较常见的抖动算法，误差扩散的规则用矩阵描述为：</p>
+
+<p><span  class="math">\[{1 \over 16} 
+\begin{bmatrix} 
+&* &7 \\
+3 &5 &1 
+\end{bmatrix}\]</span></p>
+
+<p>* 为当前计算的像素点，数字为其周围像素点的误差分配。
+算法伪码为：</p>
+<pre><code>    for each y from top to bottom
+       for each x from left to right
+          oldpixel := pixel[x][y]
+          newpixel := find_closest_palette_color(oldpixel)
+          pixel[x][y] := newpixel
+          quant_error := oldpixel - newpixel
+          pixel[x+1][y] := pixel[x+1][y] + 7/16 * quant_error
+          pixel[x-1][y+1] := pixel[x-1][y+1] + 3/16 * quant_error
+          pixel[x][y+1] := pixel[x][y+1] + 5/16 * quant_error
+          pixel[x+1][y+1] := pixel[x+1][y+1] + 1/16 * quant_error</code></pre>
+<h2 id="代码实现">代码实现</h2>
+
+<p>Ralph Hauwert 很久以前就已经在ActionScript上完整地实现了</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#75715e">/**
+</span><span style="color:#75715e"> * applyFloydSteinberg(bitmapData:BitmapData, levels:int);
+</span><span style="color:#75715e"> * 
+</span><span style="color:#75715e"> * Floyd-Steinberg dithering is an image dithering algorithm 
+</span><span style="color:#75715e"> * first published in 1976 by Robert W. Floyd and Louis Steinberg.
+</span><span style="color:#75715e"> * Using error diffusion, this form of dithering is visually much better then ordered diffusion like Bayer&#39;s.
+</span><span style="color:#75715e"> * R.W. Floyd, L. Steinberg, &#34;An adaptive algorithm for spatial grey scale&#34;. 
+</span><span style="color:#75715e"> * Proceedings of the Society of Information Display 17, 75–77 (1976).
+</span><span style="color:#75715e"> */</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">applyFloydSteinberg</span>(<span style="color:#a6e22e">bitmapData</span><span style="color:#f92672">:</span>BitmapData<span style="color:#f92672">,</span> <span style="color:#a6e22e">levels</span><span style="color:#f92672">:</span>int) <span style="color:#f92672">:</span> <span style="color:#a6e22e">void</span> {
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">lNorm</span><span style="color:#f92672">:</span>Number <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span><span style="color:#f92672">/</span><span style="color:#a6e22e">levels</span><span style="color:#f92672">;</span>
+
+<span style="color:#75715e">//The FS kernel...note the 16th. Optimisation can still be done.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">d1</span><span style="color:#f92672">:</span>Number <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span><span style="color:#f92672">/</span><span style="color:#ae81ff">16</span><span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">d2</span><span style="color:#f92672">:</span>Number <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span><span style="color:#f92672">/</span><span style="color:#ae81ff">16</span><span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">d3</span><span style="color:#f92672">:</span>Number <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span><span style="color:#f92672">/</span><span style="color:#ae81ff">16</span><span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">d4</span><span style="color:#f92672">:</span>Number <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">16</span><span style="color:#f92672">;</span>
+  
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">c</span><span style="color:#f92672">:</span>int<span style="color:#f92672">,</span> <span style="color:#a6e22e">nc</span><span style="color:#f92672">:</span>int<span style="color:#f92672">,</span> <span style="color:#a6e22e">lc</span><span style="color:#f92672">:</span>int<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">r</span><span style="color:#f92672">:</span>int<span style="color:#f92672">,</span><span style="color:#a6e22e">g</span><span style="color:#f92672">:</span>int<span style="color:#f92672">,</span><span style="color:#a6e22e">b</span><span style="color:#f92672">:</span>int<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">nr</span><span style="color:#f92672">:</span>int<span style="color:#f92672">,</span> <span style="color:#a6e22e">ng</span><span style="color:#f92672">:</span>int<span style="color:#f92672">,</span> <span style="color:#a6e22e">nb</span><span style="color:#f92672">:</span>int<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">er</span><span style="color:#f92672">:</span>int<span style="color:#f92672">,</span> <span style="color:#a6e22e">eg</span><span style="color:#f92672">:</span>int<span style="color:#f92672">,</span> <span style="color:#a6e22e">eb</span><span style="color:#f92672">:</span>int<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">lr</span><span style="color:#f92672">:</span>int<span style="color:#f92672">,</span> <span style="color:#a6e22e">lg</span><span style="color:#f92672">:</span>int<span style="color:#f92672">,</span> <span style="color:#a6e22e">lb</span><span style="color:#f92672">:</span>int<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">x</span><span style="color:#f92672">:</span>int <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">:</span>int <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span>
+  
+  <span style="color:#66d9ef">for</span>(<span style="color:#a6e22e">y</span><span style="color:#f92672">=</span><span style="color:#ae81ff">0</span><span style="color:#f92672">;</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">height</span><span style="color:#f92672">;</span><span style="color:#a6e22e">y</span><span style="color:#f92672">++</span>){
+    <span style="color:#66d9ef">for</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">=</span><span style="color:#ae81ff">0</span><span style="color:#f92672">;</span> <span style="color:#a6e22e">x</span><span style="color:#f92672">&lt;=</span><span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">width</span><span style="color:#f92672">;</span><span style="color:#a6e22e">x</span><span style="color:#f92672">++</span>){
+      <span style="color:#75715e">//Retrieve current RGB value.
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">c</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">getPixel</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span>);
+      <span style="color:#a6e22e">r</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">16</span> <span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">g</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span> <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">b</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span><span style="color:#f92672">;</span>
+      
+      <span style="color:#75715e">//Normalize and scale to the number of levels.
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">//basically a cheap but suboptimal form of color quantization.
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">nr</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">round</span>((<span style="color:#a6e22e">r</span><span style="color:#f92672">/</span><span style="color:#ae81ff">255</span>) <span style="color:#f92672">*</span> <span style="color:#a6e22e">levels</span>) <span style="color:#f92672">*</span> <span style="color:#a6e22e">lNorm</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">ng</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">round</span>((<span style="color:#a6e22e">g</span><span style="color:#f92672">/</span><span style="color:#ae81ff">255</span>) <span style="color:#f92672">*</span> <span style="color:#a6e22e">levels</span>) <span style="color:#f92672">*</span> <span style="color:#a6e22e">lNorm</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">nb</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">round</span>((<span style="color:#a6e22e">b</span><span style="color:#f92672">/</span><span style="color:#ae81ff">255</span>) <span style="color:#f92672">*</span> <span style="color:#a6e22e">levels</span>) <span style="color:#f92672">*</span> <span style="color:#a6e22e">lNorm</span><span style="color:#f92672">;</span>
+      
+      <span style="color:#75715e">//Set the current pixel.
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">nc</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">nr</span><span style="color:#f92672">&lt;&lt;</span><span style="color:#ae81ff">16</span><span style="color:#f92672">|</span><span style="color:#a6e22e">ng</span><span style="color:#f92672">&lt;&lt;</span><span style="color:#ae81ff">8</span><span style="color:#f92672">|</span><span style="color:#a6e22e">nb</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">setPixel</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">nc</span>);	
+      
+      <span style="color:#75715e">//Quantization error.
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">er</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r</span><span style="color:#f92672">-</span><span style="color:#a6e22e">nr</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">eg</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">g</span><span style="color:#f92672">-</span><span style="color:#a6e22e">ng</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">eb</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">b</span><span style="color:#f92672">-</span><span style="color:#a6e22e">nb</span><span style="color:#f92672">;</span>
+      
+      <span style="color:#75715e">//Apply the kernel.
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">//+1,0
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">lc</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">getPixel</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span>);
+      <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">16</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d1</span><span style="color:#f92672">*</span><span style="color:#a6e22e">er</span>);
+      <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">8</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d1</span><span style="color:#f92672">*</span><span style="color:#a6e22e">eg</span>);
+      <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d1</span><span style="color:#f92672">*</span><span style="color:#a6e22e">eb</span>);
+      <span style="color:#75715e">//Clip &amp; Set
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">lr</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lr</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">lg</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lg</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">lb</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lb</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">setPixel</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">lr</span><span style="color:#f92672">&lt;&lt;</span><span style="color:#ae81ff">16</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">lb</span>);
+      
+      <span style="color:#75715e">//-1,+1
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">lc</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">getPixel</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>);
+      <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">16</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d2</span><span style="color:#f92672">*</span><span style="color:#a6e22e">er</span>);
+      <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">8</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d2</span><span style="color:#f92672">*</span><span style="color:#a6e22e">eg</span>);
+      <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d2</span><span style="color:#f92672">*</span><span style="color:#a6e22e">eb</span>);
+      <span style="color:#75715e">//Clip &amp; Set
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">lr</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lr</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">lg</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lg</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">lb</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lb</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">setPixel</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">lr</span><span style="color:#f92672">&lt;&lt;</span><span style="color:#ae81ff">16</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">lg</span><span style="color:#f92672">&lt;&lt;</span><span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">lb</span>);
+      
+      <span style="color:#75715e">//0,+1
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">lc</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">getPixel</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>);
+      <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">16</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d3</span><span style="color:#f92672">*</span><span style="color:#a6e22e">er</span>);
+      <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">8</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d3</span><span style="color:#f92672">*</span><span style="color:#a6e22e">eg</span>);
+      <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d3</span><span style="color:#f92672">*</span><span style="color:#a6e22e">eb</span>);
+      <span style="color:#75715e">//Clip &amp; Set
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">lr</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lr</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">lg</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lg</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">lb</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lb</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">setPixel</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">lr</span><span style="color:#f92672">&lt;&lt;</span><span style="color:#ae81ff">16</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">lg</span><span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">lb</span>);
+      
+      <span style="color:#75715e">//+1,+1
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">lc</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">getPixel</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>);
+      <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">16</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d4</span><span style="color:#f92672">*</span><span style="color:#a6e22e">er</span>);
+      <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&gt;&gt;</span><span style="color:#ae81ff">8</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d4</span><span style="color:#f92672">*</span><span style="color:#a6e22e">eg</span>);
+      <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">lc</span><span style="color:#f92672">&amp;</span><span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">d4</span><span style="color:#f92672">*</span><span style="color:#a6e22e">eb</span>);
+      <span style="color:#75715e">//Clip &amp; Set
+</span><span style="color:#75715e"></span>      <span style="color:#a6e22e">lr</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lr</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">lg</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lg</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">lb</span> <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">lb</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">255</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">lb</span><span style="color:#f92672">;</span>
+      <span style="color:#a6e22e">bitmapData</span>.<span style="color:#a6e22e">setPixel</span>(<span style="color:#a6e22e">x</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">y</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">lr</span><span style="color:#f92672">&lt;&lt;</span><span style="color:#ae81ff">16</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">lg</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">lb</span>);		
+    }
+  }
+}</code></pre></div>
+
+<h2 id="应用示例">应用示例</h2>
+
+<p>Ralph Hauwert demo的基础上做了少量的修改，性能有所改善之外，为方便比较增加了一个保存图像的功能。</p>
+
+<p><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="swfobj_0" width="915" height="682">
+  <param name="movie" value="/images/ImageDitheringDemoFlex.swf" />
+  <!--[if !IE]>-->
+  <object type="application/x-shockwave-flash" data="/images/ImageDitheringDemoFlex.swf" width="915" height="682">
+  <!--<![endif]-->
+  <!--[if !IE]>-->
+  </object>
+  <!--<![endif]-->
+</object></p>
+
+<h2 id="总结">总结</h2>
+
+<p>半色调抖动算法本身并不复杂，但是实用性非常高，误差扩散的思想值得学习，也很有意思。最近接触了不少关于图像处理方面的算法，大多属于简单实用的类型，另一方面没有系统地学习图像处理，多数是看到有意思的算法，自己研究学习，纯属自娱自乐。关于Demo的优化，实际上也只用到了两句代码：</p>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">  <span style="color:#a6e22e">bitmapdata</span>.<span style="color:#a6e22e">lock</span>();
+  <span style="color:#75715e">// do some pixel manipulation...
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">bitmapdata</span>.<span style="color:#a6e22e">unlock</span>();</code></pre></div>
+性能提升明显，差不多提高了一倍。</p>
+
+<p>Web逐渐步入3D时代，图像处理方面的应用应该也会更加广泛，Web图像处理和Web 3D 还是很有前景的。</p>
+
+<p>p.s. 示例里测试图是有一段值得一书故事的，下次再说了。</p>
+
+<hr>
+
+<p><strong>参考资料</strong></p>
+
+<ol>
+<li><a href="http://unitzeroone.com/blog/2008/05/06/opensource-image-dithering-for-as3-demosource/">http://unitzeroone.com/blog/2008/05/06/opensource-image-dithering-for-as3-demosource/</a></li>
+<li><a href="http://vipbase.net/ipbook/chap04.htm">http://vipbase.net/ipbook/chap04.htm</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering">http://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering</a></li>
+<li><a href="https://gzhang1973.wordpress.com/2009/01/24/%E5%8D%8A%E8%89%B2%E8%B0%83%E7%AE%97%E6%B3%95%E7%9A%84%E5%9F%BA%E7%A1%80-%E8%AF%AF%E5%B7%AE%E6%89%A9%E6%95%A3%E6%B3%95/">https://gzhang1973.wordpress.com/2009/01/24/%E5%8D%8A%E8%89%B2%E8%B0%83%E7%AE%97%E6%B3%95%E7%9A%84%E5%9F%BA%E7%A1%80-%E8%AF%AF%E5%B7%AE%E6%89%A9%E6%95%A3%E6%B3%95/</a></li>
+<li><a href="http://www.c-s-a.org.cn/ch/reader/download_pdf.aspx?file_no=19990714&amp;year_id=1999&amp;quarter_id=7&amp;falg=1">http://www.c-s-a.org.cn/ch/reader/download_pdf.aspx?file_no=19990714&amp;year_id=1999&amp;quarter_id=7&amp;falg=1</a></li>
+</ol>
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
+  
+  </footer>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script type="module">
+    import renderMathInElement from "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.mjs";
+    renderMathInElement(document.body);
+</script>
+
+
+  
+  </body>
+</html>
+

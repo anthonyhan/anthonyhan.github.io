@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Flash Player 11.4 ByteArray压缩算法初探 | LimboNova</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Flash Player 11.4 ByteArray压缩算法初探</span></h1>
+
+<h2 class="date">2012/07/27</h2>
+</div>
+
+<main>
+<p>Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。</p>
+<h2 id="bytearray">ByteArray</h2>
+<p>“ByteArray 类提供用于优化读取、写入以及处理二进制数据的方法和属性。内存中的数据是一个压缩字节数组（数据类型的最紧凑表示形式），但可以使用标准 []（数组访问）运算符来操作 ByteArray 类的实例。也可以使用与 URLStream 和 Socket 类中的方法相类似的方法将它作为内存中的文件进行读取和写入。”</p>
+<p>“此外，还支持 zlib 压缩和解压缩，以及 Action Message Format (AMF) 对象序列化。”</p>
+<p>目前压缩/解压缩支持三种算法：CompressionAlgorithm. DEFLATE, CompressionAlgorithm. ZLIB, CompressionAlgorithm.LZMA(Flash Player 11.4)。</p>
+<h2 id="压缩算法">压缩算法</h2>
+<h3 id="deflate">DEFLATE</h3>
+<p>DEFLATE是同时使用了<a href="http://zh.wikipedia.org/wiki/LZ77%E4%B8%8ELZ78">LZ77</a> 算法与<a href="http://zh.wikipedia.org/wiki/%E5%93%88%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81">哈夫曼编码(Huffman Coding)</a> 的一个无损数据压缩算法。它最初是由Phil Katz为他的PKZIP归档工具第二版所定义的，后来定义在<a href="http://tools.ietf.org/html/rfc1951">RFC 1951</a>规范中。</p>
+<p>RFC：http://www.ietf.org/rfc/rfc1951.txt</p>
+<p>哈夫曼编码压缩算法的细节，可以参看<a href="http://coolshell.cn/articles/7459.html">这篇文章</a>。</p>
+<h3 id="zlib">ZLIB</h3>
+<p>deflate 压缩算法用于多种压缩格式，如 zlib、gzip、一些 zip 实现等。在使用这些压缩格式之一压缩数据时，除了存储原始数据的压缩版本之外，压缩格式数据（例如 .zip 文件）还包括元数据信息。举例来说，各种文件格式中包括的元数据的类型有文件名、文件修改日期/时间、原始文件大小、可选的注释、校验和数据等。</p>
+<p>例如，在使用 zlib 算法压缩 ByteArray 时，将以特定的格式构建生成的 ByteArray。一些字节包含有关所压缩数据的元数据，而另一些字节包含原始 ByteArray 数据的实际压缩版本。根据 zlib 压缩数据格式规范的定义，这些字节（即包含原始数据的压缩版本的部分）使用 deflate 算法进行压缩。因此，这些字节与对原始 ByteArray 调用 compress( air. CompressionAlgorithm.DEFLATE) 所得的结果相同。但是，compress( air.CompressionAlgorithm.ZLIB) 生成的结果包括额外的元数据，而 compress(CompressionAlgorithm.DEFLATE) 生成的结果只包括原始 ByteArray 数据的压缩版本，没有任何其他内容。</p>
+<p>若要使用 deflate 格式以 gzip 或 zip 等特定格式压缩 ByteArray 实例的数据，不能只调用 compress(CompressionAlgorithm.DEFLATE)。必须创建一个按照压缩格式规范构建的 ByteArray，包括相应的元数据以及使用 deflate 格式获取的压缩数据。同样，若要对以 gzip 或 zip 这样的格式压缩的数据进行解码，不能对该数据简单地调用 uncompress(CompressionAlgorithm.DEFLATE)。首先，必须将元数据与压缩数据分离，然后才能使用 deflate 格式对压缩数据进行解压缩。</p>
+<p>RFC：http://www.ietf.org/rfc/rfc1950.txt</p>
+<h3 id="lzma">LZMA</h3>
+<p>LZMA（Lempel-Ziv-<a href="http://zh.wikipedia.org/wiki/%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E9%93%BE">Markov chain</a> -Algorithm的缩写）是2001年以来得到发展的一个<a href="http://zh.wikipedia.org/wiki/%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9">数据压缩</a> 算法，它用于7-Zip归档工具中的<a href="http://zh.wikipedia.org/wiki/7z">7z</a> 格式。它使用类似于LZ77的字典编码机制，在一般的情况下压缩率比bzip2为高，用于压缩的字典档案大小可达4GB。</p>
+<h2 id="代码示例">代码示例</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">blackOps</span>(<span style="color:#a6e22e">isCompress</span><span style="color:#f92672">:</span>Boolean <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>)<span style="color:#f92672">:</span><span style="color:#a6e22e">void</span>
+{
+	<span style="color:#66d9ef">try</span>{
+		<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">_fileRef</span> <span style="color:#f92672">||</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">_fileRef</span>.<span style="color:#a6e22e">data</span>)
+		{
+			<span style="color:#a6e22e">Alert</span>.<span style="color:#a6e22e">show</span>(<span style="color:#e6db74">&#34;上传文件先!&#34;</span>);
+			<span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+		}
+ 
+		<span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">_bytes</span>)
+			<span style="color:#a6e22e">_bytes</span>.<span style="color:#a6e22e">clear</span>();
+		<span style="color:#a6e22e">_bytes</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ByteArray();
+		<span style="color:#a6e22e">_bytes</span>.<span style="color:#a6e22e">writeBytes</span>(<span style="color:#a6e22e">_fileRef</span>.<span style="color:#a6e22e">data</span>);
+ 
+		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">algo</span><span style="color:#f92672">:</span>String<span style="color:#f92672">;</span>
+		<span style="color:#66d9ef">switch</span>(<span style="color:#a6e22e">cbxAlgo</span>.<span style="color:#a6e22e">selectedIndex</span>)
+		{
+			<span style="color:#66d9ef">case</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span>
+				<span style="color:#a6e22e">algo</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">CompressionAlgorithm</span>.<span style="color:#a6e22e">DEFLATE</span><span style="color:#f92672">;</span>
+				<span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+			<span style="color:#66d9ef">case</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span>
+				<span style="color:#a6e22e">algo</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">CompressionAlgorithm</span>.<span style="color:#a6e22e">ZLIB</span><span style="color:#f92672">;</span>
+				<span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+			<span style="color:#66d9ef">case</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>
+				<span style="color:#a6e22e">algo</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">CompressionAlgorithm</span>.<span style="color:#a6e22e">LZMA</span><span style="color:#f92672">;</span>
+				<span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+			<span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+				<span style="color:#a6e22e">Alert</span>.<span style="color:#a6e22e">show</span>(<span style="color:#e6db74">&#34;选择压缩算法先!&#34;</span>);
+				<span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+				<span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+		}
+ 
+		<span style="color:#a6e22e">isCompress</span><span style="color:#f92672">?</span><span style="color:#a6e22e">_bytes</span>.<span style="color:#a6e22e">compress</span>(<span style="color:#a6e22e">algo</span>)<span style="color:#f92672">:</span><span style="color:#a6e22e">_bytes</span>.<span style="color:#a6e22e">uncompress</span>(<span style="color:#a6e22e">algo</span>);
+ 
+		<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#34;使用压缩算法：&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">cbxAlgo</span>.<span style="color:#a6e22e">selectedItem</span>.<span style="color:#a6e22e">label</span>);
+		<span style="color:#a6e22e">log</span>( (<span style="color:#a6e22e">isCompress</span><span style="color:#f92672">?</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;解&#34;</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;压缩后字节数：&#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">_bytes</span>.<span style="color:#a6e22e">length</span>);
+ 
+		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">fileRef</span><span style="color:#f92672">:</span>FileReference <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> FileReference();
+		<span style="color:#a6e22e">fileRef</span>.<span style="color:#a6e22e">save</span>(<span style="color:#a6e22e">_bytes</span><span style="color:#f92672">,</span> (<span style="color:#a6e22e">isCompress</span><span style="color:#f92672">?</span><span style="color:#e6db74">&#34;comp_&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;unComp_&#34;</span>) 
+                   <span style="color:#f92672">+</span> <span style="color:#a6e22e">algo</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;_&#34;</span> <span style="color:#f92672">+</span><span style="color:#a6e22e">_fileRef</span>.<span style="color:#a6e22e">name</span>);
+	}
+	<span style="color:#66d9ef">catch</span>(<span style="color:#a6e22e">e</span><span style="color:#f92672">:</span>Error)
+	{
+		<span style="color:#a6e22e">Alert</span>.<span style="color:#a6e22e">show</span>(<span style="color:#a6e22e">e</span>.<span style="color:#a6e22e">message</span>);
+	}
+}</code></pre></div>
+<h2 id="demo">Demo</h2>
+<p>Flash Player 11.4+ required</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Source: <a href="http://sdrv.ms/QGh9HC">点击下载</a></p>
+<h2 id="结论">结论</h2>
+<p>用210KB的电子书txt文件做了简单的测试，ZLIB和DEFLATE相差不大，约67KB，LZMA非常给力，压缩到了58KB。在文件中的存在大量重复数据情况下，LZMA相比另外2种更显优势。但是如解压缩数据时，如果没有采用相应的解压缩算法，ZLIB和DEFLATE解压时都会报“Error #2058: 解压缩数据时出错。”的错误，而LZMA解压不正确的数据时报 “Error #1000: 系统内存不足。”,让人有点意外 :-?。</p>
+<p>这次主要使用ByteArray支持的三种压缩算法，并作了简单的比较。可能是因为LZMA比较新，压缩率超过前两种，而实际上ZLIB也是采用DEFLATE压缩算法，但是在压缩过程中加入了额外的元数据，形成了较为完备的数据格式。具体算法没有去深入研究，有点可惜和遗憾。</p>
+<hr>
+<p><strong>参考资料</strong></p>
+<ol>
+<li><a href="http://zh.wikipedia.org/wiki/DEFLATE">http://zh.wikipedia.org/wiki/DEFLATE</a></li>
+<li><a href="http://zh.wikipedia.org/wiki/Zlib">http://zh.wikipedia.org/wiki/Zlib</a></li>
+<li><a href="http://zh.wikipedia.org/wiki/LZMA">http://zh.wikipedia.org/wiki/LZMA</a></li>
+<li><a href="http://zh.wikipedia.org/wiki/%E9%9C%8D%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81">http://zh.wikipedia.org/wiki/%E9%9C%8D%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81</a></li>
+<li><a href="http://coolshell.cn/articles/7459.html">http://coolshell.cn/articles/7459.html</a></li>
+<li><a href="http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/flash/utils/ByteArray.html">http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/flash/utils/ByteArray.html</a></li>
+<li><a href="http://www.ietf.org/rfc/rfc1950.txt">http://www.ietf.org/rfc/rfc1950.txt</a></li>
+<li><a href="http://www.ietf.org/rfc/rfc1951.txt">http://www.ietf.org/rfc/rfc1951.txt</a></li>
+</ol>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
+  
+  </footer>
+  
+  </body>
+</html>
+

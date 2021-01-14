@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>XML数据源的级联ComboBox | LimboNova</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">XML数据源的级联ComboBox</span></h1>
+
+<h2 class="date">2013/07/12</h2>
+</div>
+
+<main>
+<h2 id="background">Background</h2>
+<p>要做一个表单，其中自然少不了ComboBox，数据源不是从后台动态获取的，竟然是一个Excel表格文件！这个数据量很大，而且还有可能会修改，所以只能采用外部加载的方式。写一个解析Excel数据的库自然是不现实的，所以决定把Excel转换成XML格式，然后再加载。</p>
+<h2 id="excel转换成xml">Excel转换成XML</h2>
+<p>一般直接将Excel是不能导出成XML的，因为“不包含任何XML映射”，所以首先需要建立一个XML映射，其实就是设计一个XML结构，然后将Excel数据映射到对应的节点上。这一步其实很简单，但是颇具技巧性。</p>
+<h3 id="开发工具选项卡">“开发工具”选项卡</h3>
+<p>导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-&ldquo;选项&rdquo;-“自定义功能区”对话框，勾选“开发工具”。</p>
+<p><img src="/images/excel_01.png" alt="开发工具"></p>
+<h3 id="设计xml结构">设计XML结构</h3>
+<p>XML结构根据自己要求设计，多个相同子节点表示可以重复。比如这个：
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;root&gt;</span>
+	<span style="color:#f92672">&lt;province</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">&gt;</span>
+	 	<span style="color:#f92672">&lt;city</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">&gt;</span>
+	 		<span style="color:#f92672">&lt;dealer</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;&#34;</span> <span style="color:#a6e22e">address=</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">/&gt;</span>
+	 	<span style="color:#f92672">&lt;/city&gt;</span>
+	<span style="color:#f92672">&lt;/province&gt;</span>
+	<span style="color:#f92672">&lt;province</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">&gt;</span>
+	 	<span style="color:#f92672">&lt;city</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">&gt;</span>
+	 		<span style="color:#f92672">&lt;dealer</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;&#34;</span> <span style="color:#a6e22e">address=</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">/&gt;</span>
+	 	<span style="color:#f92672">&lt;/city&gt;</span>
+	<span style="color:#f92672">&lt;/province&gt;</span>
+<span style="color:#f92672">&lt;/root&gt;</span></code></pre></div></p>
+<h3 id="导入xml文件">导入XML文件</h3>
+<p>回到Excel里，新建一个空白Excel文档，点击“开发工具”里的“源”按钮，在右侧弹出的面板里点击“XML映射”，然后添加之前的XML文件。如果成功右侧面板里会显示XML的树形结构。</p>
+<p><img src="/images/excel_02.png" alt="导入XML文件"></p>
+<h3 id="映射数据">映射数据</h3>
+<p>这步更简单，把那个树状结构根节点拖到工作表上，工作表上会显示行以XML节点属性为名称的表头。把数据对应地粘贴到这个表里。</p>
+<p><img src="/images/excel_03.png" alt="映射数据"></p>
+<h3 id="导出文件">导出文件</h3>
+<p>点击“源”按钮右边的“导出”，就可以导出XML了。导出后检查下数据映射对不对，如果没问题就算完成了。</p>
+<h2 id="加载xml数据">加载XML数据</h2>
+<p>加载直接用URLLoader就可以。
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">url</span><span style="color:#f92672">:</span>String <span style="color:#f92672">=</span> <span style="color:#a6e22e">xmlUrl</span><span style="color:#f92672">;</span>
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">vars</span><span style="color:#f92672">:</span><span style="color:#a6e22e">URLVariables</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">URLVariables</span>();
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">request</span><span style="color:#f92672">:</span>URLRequest <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> URLRequest(<span style="color:#a6e22e">url</span>);
+	 
+	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span>URLLoader <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> URLLoader();
+	<span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">addEventListener</span>(Event.<span style="color:#a6e22e">COMPLETE</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">dealerInfoLoadHandler</span>);
+	<span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">addEventListener</span>(IOErrorEvent.<span style="color:#a6e22e">IO_ERROR</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">loadErrorHandler</span>);
+	<span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">addEventListener</span>(SecurityErrorEvent.<span style="color:#a6e22e">SECURITY_ERROR</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">loadErrorHandler</span>);
+	 
+	<span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">load</span>(<span style="color:#a6e22e">request</span>);</code></pre></div></p>
+<h2 id="级联combobox">级联ComboBox</h2>
+<p>由于ActionScript E4X 的处理能力很强，所以利用XML作为数据源是完全可行的。经过几个简单的处理步骤就可以作为数据源提供给ComboBox。代码如下：
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#75715e">/**
+</span><span style="color:#75715e">	 *  加载XML数据 
+</span><span style="color:#75715e">	 * @param event
+</span><span style="color:#75715e">	 * 
+</span><span style="color:#75715e">	 */</span>    
+	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">dealerInfoLoadHandler</span>(<span style="color:#a6e22e">event</span><span style="color:#f92672">:</span>Event)<span style="color:#f92672">:</span><span style="color:#a6e22e">void</span> {
+	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">loader</span><span style="color:#f92672">:</span>URLLoader <span style="color:#f92672">=</span> <span style="color:#a6e22e">event</span>.<span style="color:#a6e22e">target</span> <span style="color:#a6e22e">as</span> URLLoader<span style="color:#f92672">;</span>
+	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">xml</span><span style="color:#f92672">:</span>XML <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> XML(<span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">data</span>);
+	  <span style="color:#66d9ef">if</span>(<span style="color:#a6e22e">xml</span>) 
+	  {
+		<span style="color:#a6e22e">dealerXML</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">xml</span><span style="color:#f92672">;</span> 
+		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">arrProv</span><span style="color:#f92672">:</span>Array <span style="color:#f92672">=</span> [];
+		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">seen</span><span style="color:#f92672">:</span>Object<span style="color:#f92672">=</span>{};
+		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">prov</span><span style="color:#f92672">:</span>XMLList <span style="color:#f92672">=</span> <span style="color:#a6e22e">xml</span>.<span style="color:#a6e22e">province</span>.<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">name</span>.(<span style="color:#f92672">!</span><span style="color:#a6e22e">seen</span>[<span style="color:#a6e22e">valueOf</span>()]<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">amp</span><span style="color:#f92672">;&amp;</span><span style="color:#a6e22e">amp</span><span style="color:#f92672">;</span>(<span style="color:#a6e22e">seen</span>[<span style="color:#a6e22e">valueOf</span>()]<span style="color:#f92672">=</span><span style="color:#66d9ef">true</span>));
+		<span style="color:#a6e22e">prov</span>.  (
+		  <span style="color:#a6e22e">arrProv</span>.<span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">toString</span>())
+		); 
+	 
+		<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">provinces</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">arrProv</span><span style="color:#f92672">;</span>
+	  }
+	  <span style="color:#a6e22e">cbxProv</span>.<span style="color:#a6e22e">dataProvider</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">DataProvider</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">provinces</span>);
+	}
+	 
+	<span style="color:#75715e">/**
+</span><span style="color:#75715e">	 *  省份ComboBox变化处理函数 
+</span><span style="color:#75715e">	 * @param event
+</span><span style="color:#75715e">	 * 
+</span><span style="color:#75715e">	 */</span>    
+	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">cbxProvChangeHandler</span>(<span style="color:#a6e22e">event</span><span style="color:#f92672">:</span>Event)<span style="color:#f92672">:</span><span style="color:#a6e22e">void</span> {
+	  <span style="color:#a6e22e">cbxCity</span>.<span style="color:#a6e22e">dataProvider</span>.<span style="color:#a6e22e">removeAll</span>();          <span style="color:#75715e">//清空City DP
+</span><span style="color:#75715e"></span>	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">seen</span><span style="color:#f92672">:</span>Object<span style="color:#f92672">=</span>{};    
+	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">provStr</span><span style="color:#f92672">:</span>String <span style="color:#f92672">=</span> <span style="color:#a6e22e">cbxProv</span>.<span style="color:#a6e22e">selectedItem</span>.<span style="color:#a6e22e">data</span><span style="color:#f92672">;</span>  
+	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">prov</span><span style="color:#f92672">:</span>XMLList <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">dealerXML</span>.<span style="color:#a6e22e">province</span>.(<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">name</span><span style="color:#f92672">==</span><span style="color:#a6e22e">provStr</span>);  <span style="color:#75715e">//根据省份名称从XML检索所有符合条件的城市子节点
+</span><span style="color:#75715e"></span>	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">city</span><span style="color:#f92672">:</span>XMLList <span style="color:#f92672">=</span> <span style="color:#a6e22e">prov</span>.<span style="color:#a6e22e">city</span>.<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">name</span>.(<span style="color:#f92672">!</span><span style="color:#a6e22e">seen</span>[<span style="color:#a6e22e">valueOf</span>()]<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">amp</span><span style="color:#f92672">;&amp;</span><span style="color:#a6e22e">amp</span><span style="color:#f92672">;</span>(<span style="color:#a6e22e">seen</span>[<span style="color:#a6e22e">valueOf</span>()]<span style="color:#f92672">=</span><span style="color:#66d9ef">true</span>));  <span style="color:#75715e">//过滤重复的城市节点
+</span><span style="color:#75715e"></span>	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">arrCity</span><span style="color:#f92672">:</span>Array <span style="color:#f92672">=</span> [];
+	  <span style="color:#a6e22e">city</span>. (
+		<span style="color:#a6e22e">arrCity</span>.<span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">toString</span>())  <span style="color:#75715e">//把City数据灌到Array里
+</span><span style="color:#75715e"></span>	  ); 
+	 
+	  <span style="color:#a6e22e">cbxCity</span>.<span style="color:#a6e22e">dataProvider</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">DataProvider</span>(<span style="color:#a6e22e">arrCity</span>);
+	  <span style="color:#a6e22e">cbxCity</span>.<span style="color:#a6e22e">selectedIndex</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span>
+	 
+	  <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">cbxCityChangeHandler</span>(<span style="color:#a6e22e">event</span>);  <span style="color:#75715e">//联动一次cbxCity
+</span><span style="color:#75715e"></span>	}
+	 
+	<span style="color:#75715e">/**
+</span><span style="color:#75715e">	 *  城市ComboBox变化处理函数 
+</span><span style="color:#75715e">	 * @param event
+</span><span style="color:#75715e">	 * 
+</span><span style="color:#75715e">	 */</span>    
+	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">cbxCityChangeHandler</span>(<span style="color:#a6e22e">event</span><span style="color:#f92672">:</span>Event)<span style="color:#f92672">:</span><span style="color:#a6e22e">void</span> {
+	  <span style="color:#a6e22e">cbxDealer</span>.<span style="color:#a6e22e">dataProvider</span>.<span style="color:#a6e22e">removeAll</span>();
+	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cityStr</span><span style="color:#f92672">:</span>String <span style="color:#f92672">=</span> <span style="color:#a6e22e">cbxCity</span>.<span style="color:#a6e22e">selectedItem</span>.<span style="color:#a6e22e">data</span><span style="color:#f92672">;</span>
+	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">city</span><span style="color:#f92672">:</span>XMLList <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">dealerXML</span>..<span style="color:#a6e22e">city</span>.(<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">name</span><span style="color:#f92672">==</span><span style="color:#a6e22e">cityStr</span>);
+	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">dealer</span><span style="color:#f92672">:</span>XMLList <span style="color:#f92672">=</span> <span style="color:#a6e22e">city</span>.<span style="color:#a6e22e">dealer</span>.<span style="color:#960050;background-color:#1e0010">@</span><span style="color:#a6e22e">name</span><span style="color:#f92672">;</span> <span style="color:#75715e">//末节点经销商数据不会重复，不需要过滤重复的
+</span><span style="color:#75715e"></span>	  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">arrDealer</span><span style="color:#f92672">:</span>Array <span style="color:#f92672">=</span> [];
+	  <span style="color:#a6e22e">dealer</span>. (
+		<span style="color:#a6e22e">arrDealer</span>.<span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">toString</span>())
+	  ); 
+	  <span style="color:#a6e22e">cbxDealer</span>.<span style="color:#a6e22e">dataProvider</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">DataProvider</span>(<span style="color:#a6e22e">arrDealer</span>);
+	  <span style="color:#a6e22e">cbxDealer</span>.<span style="color:#a6e22e">selectedIndex</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span>
+	}</code></pre></div></p>
+<h2 id="示例">示例</h2>
+<!-- raw HTML omitted -->
+<h2 id="总结">总结</h2>
+<p>单纯验证了XML作为级联ComboBox数据源的可行性。如果考虑重用性和稳定性，还有一些工作要做的。不过作为临时想出来的解决方案，也完全满足要求了，还挺有趣味性的。 ;-)</p>
+<hr>
+<p><strong>参考资料</strong></p>
+<ol>
+<li><a href="http://zzfei.com/excel-to-xml">http://zzfei.com/excel-to-xml</a></li>
+</ol>
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
+  
+  </footer>
+  
+  </body>
+</html>
+

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>基于TypeScript的PixiJS开发环境设置（webpack篇） | LimboNova</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">基于TypeScript的PixiJS开发环境设置（webpack篇）</span></h1>
+
+<h2 class="date">2017/09/21</h2>
+</div>
+
+<main>
+<p>前几天写了一篇<a href="http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify">用<code>Browserify</code>打包的 PixiJS 的开发环境配置流程</a>，但是Web技术一日千里，开发工具也日新月异， Webpack 就是其中之一。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Webpack 作为模块打包工具的开发环境的配置过程，遵循简化易用的原则，省略了一些非必要模块的安装。</p>
+<h2 id="安装">安装</h2>
+<h3 id="项目结构">项目结构</h3>
+<ol>
+<li>创建项目目录</li>
+</ol>
+<pre><code>mkdir ts_pixi
+cd ts_pixi
+mkdir assets src dist
+</code></pre><ol start="2">
+<li>新建项目文件</li>
+</ol>
+<pre><code>touch index.html
+touch src/main.ts
+</code></pre><ol start="3">
+<li>初始化项目</li>
+</ol>
+<pre><code>npm init
+</code></pre><h3 id="安装模块">安装模块</h3>
+<ol>
+<li>PixiJS</li>
+</ol>
+<pre><code>npm install --save-dev pixi.js
+</code></pre><ol start="2">
+<li>TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应<code>@types</code>文件，用于代码提示等功能。</li>
+</ol>
+<pre><code>npm install --save-dev typescript @types/pixi.js @types/node
+</code></pre><ol start="3">
+<li>其它</li>
+</ol>
+<pre><code>npm install --save-dev ts-loader webpack webpack-dev-server
+</code></pre><ul>
+<li><code>ts-loader</code> TypeScript加载器， 用于处理 TypeScript 文件。</li>
+<li><code>webpack</code> 模块加打包器，将JavaScript 文件打包在一起，打包后的文件用于在浏览器中使用。</li>
+<li><code>webpack-dev-server</code> webpack提供的简易服务器，用于运行调试。也可以选择安装<code>http-server</code>或者<code>live-server</code>；</li>
+</ul>
+<h3 id="初始化模块">初始化模块</h3>
+<p>生成 tsconfig.json</p>
+<pre><code>node_modules/.bin/tsc --init
+</code></pre><h2 id="设置">设置</h2>
+<h3 id="packagejson-设置">package.json 设置</h3>
+<p>配置scripts中的构建和测试命令。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;ts_pixi&#34;</span>,
+  <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;1.0.0&#34;</span>,
+  <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+  <span style="color:#f92672">&#34;main&#34;</span>: <span style="color:#e6db74">&#34;index.html&#34;</span>,
+  <span style="color:#f92672">&#34;scripts&#34;</span>: {
+    <span style="color:#f92672">&#34;start&#34;</span>: <span style="color:#e6db74">&#34;node_modules/.bin/webpack-dev-server&#34;</span>,
+    <span style="color:#f92672">&#34;build&#34;</span>: <span style="color:#e6db74">&#34;node_modules/.bin/webpack&#34;</span>,
+    <span style="color:#f92672">&#34;build:watch&#34;</span>: <span style="color:#e6db74">&#34;node_modules/.bin/webpack -w&#34;</span>,
+    <span style="color:#f92672">&#34;clean&#34;</span>: <span style="color:#e6db74">&#34;rm ./dist/*&#34;</span>
+  },
+  <span style="color:#f92672">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+  <span style="color:#f92672">&#34;license&#34;</span>: <span style="color:#e6db74">&#34;ISC&#34;</span>,
+  <span style="color:#f92672">&#34;dependencies&#34;</span>: {
+    <span style="color:#f92672">&#34;pixi.js&#34;</span>: <span style="color:#e6db74">&#34;^4.5.6&#34;</span>
+  },
+  <span style="color:#f92672">&#34;devDependencies&#34;</span>: {
+    <span style="color:#f92672">&#34;@types/node&#34;</span>: <span style="color:#e6db74">&#34;^8.0.29&#34;</span>,
+    <span style="color:#f92672">&#34;@types/pixi.js&#34;</span>: <span style="color:#e6db74">&#34;^4.5.4&#34;</span>,
+    <span style="color:#f92672">&#34;source-map-loader&#34;</span>: <span style="color:#e6db74">&#34;^0.2.1&#34;</span>,
+    <span style="color:#f92672">&#34;ts-loader&#34;</span>: <span style="color:#e6db74">&#34;^2.3.7&#34;</span>,
+    <span style="color:#f92672">&#34;typescript&#34;</span>: <span style="color:#e6db74">&#34;^2.5.2&#34;</span>,
+    <span style="color:#f92672">&#34;webpack&#34;</span>: <span style="color:#e6db74">&#34;^3.6.0&#34;</span>,
+    <span style="color:#f92672">&#34;webpack-dev-server&#34;</span>: <span style="color:#e6db74">&#34;^2.8.2&#34;</span>
+  }
+}
+</code></pre></div><h3 id="tsconfigjson-设置">tsconfig.json 设置</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;compilerOptions&#34;</span>: {
+    <span style="color:#f92672">&#34;strictNullChecks&#34;</span>: <span style="color:#66d9ef">true</span>,
+    <span style="color:#f92672">&#34;noImplicitAny&#34;</span>: <span style="color:#66d9ef">true</span>,
+    <span style="color:#f92672">&#34;outDir&#34;</span>: <span style="color:#e6db74">&#34;./dist/&#34;</span>,
+    <span style="color:#f92672">&#34;sourceMap&#34;</span>: <span style="color:#66d9ef">true</span>,
+    <span style="color:#f92672">&#34;target&#34;</span>: <span style="color:#e6db74">&#34;es5&#34;</span>
+  },
+  <span style="color:#f92672">&#34;filesGlob&#34;</span>: [
+    <span style="color:#e6db74">&#34;./src/*.ts&#34;</span>
+  ]
+}
+</code></pre></div><h3 id="webpackconfigjs-设置">webpack.config.js 设置</h3>
+<p>在项目根目录下创建<code>webpack.config.js</code>文件，并加入以下内容：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">path</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;path&#34;</span>);
+<span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> {
+    <span style="color:#a6e22e">entry</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;./src/main.ts&#34;</span>,
+    <span style="color:#a6e22e">output</span><span style="color:#f92672">:</span> {
+        <span style="color:#a6e22e">filename</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;./dist/bundle.js&#34;</span>
+    },
+    <span style="color:#75715e">// Enable sourcemaps for debugging webpack&#39;s output.
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">devtool</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;inline-source-map&#34;</span>,
+    <span style="color:#a6e22e">resolve</span><span style="color:#f92672">:</span> {
+        <span style="color:#75715e">// Add &#39;.ts&#39; as resolvable extensions.
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">extensions</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#34;.ts&#34;</span>, <span style="color:#e6db74">&#34;.js&#34;</span>]
+    },
+    <span style="color:#a6e22e">module</span><span style="color:#f92672">:</span> {
+        <span style="color:#a6e22e">rules</span><span style="color:#f92672">:</span> [
+            {
+                <span style="color:#a6e22e">test</span><span style="color:#f92672">:</span> <span style="color:#e6db74">/\.ts$/</span>,
+                <span style="color:#a6e22e">use</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#34;ts-loader&#34;</span>]
+            }
+        ]
+    },
+    <span style="color:#a6e22e">devServer</span><span style="color:#f92672">:</span> {
+        <span style="color:#a6e22e">contentBase</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">__dirname</span>, <span style="color:#e6db74">&#34;.&#34;</span>),
+        <span style="color:#a6e22e">compress</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+        <span style="color:#a6e22e">port</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">8080</span>
+    },
+    <span style="color:#75715e">// Omit &#34;externals&#34; if you don&#39;t have any. Just an example because it&#39;s
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// common to have them.
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">externals</span><span style="color:#f92672">:</span> {
+        <span style="color:#75715e">// Don&#39;t bundle giant dependencies, instead assume they&#39;re available in
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// the html doc as global variables node module name -&gt; JS global
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// through which it is available
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//&#34;pixi.js&#34;: &#34;PIXI&#34;
+</span><span style="color:#75715e"></span>    }
+};
+</code></pre></div><p>需要注意的是，使用vs code chrome debug插件调试时，<code>devtool</code>需要配置为<code>inline-source-map</code>，否则断点命中有问题。
+如果有些第三方的JS库较大,比如 PixiJS，可以考虑不用<code>webpack</code>打包，而通过 HTML 的<code>&lt;scrpt&gt;</code>标签从外部加载。那么就需要在 <code>externals</code>选项中启用，并在html中包含对应的 JavaScript 文件。</p>
+<h2 id="测试">测试</h2>
+<h3 id="修改文件">修改文件</h3>
+<h4 id="maints">main.ts</h4>
+<p>写一段测试代码，如下所示：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-TypeScript" data-lang="TypeScript"><span style="color:#66d9ef">import</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">as</span> <span style="color:#a6e22e">PIXI</span> <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#34;pixi.js&#34;</span>;
+
+<span style="color:#75715e">//Create the renderer
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">renderer</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">PIXI</span>.<span style="color:#a6e22e">autoDetectRenderer</span>(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>);
+
+<span style="color:#75715e">//Add the canvas to the HTML document
+</span><span style="color:#75715e"></span>document.<span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">renderer</span>.<span style="color:#a6e22e">view</span>);
+
+<span style="color:#75715e">//Create a container object called the `stage`
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stage</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">PIXI</span>.<span style="color:#a6e22e">Container</span>();
+
+<span style="color:#75715e">//Tell the `renderer` to `render` the `stage`
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">renderer</span>.<span style="color:#a6e22e">render</span>(<span style="color:#a6e22e">stage</span>);
+</code></pre></div><h4 id="indexhtml">index.html</h4>
+<p>修改文件内容为</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!DOCTYPE html&gt;</span>
+&lt;<span style="color:#f92672">html</span>&gt;
+    &lt;<span style="color:#f92672">head</span>&gt;
+        &lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">charset</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span> /&gt;
+        &lt;<span style="color:#f92672">title</span>&gt;Hello World, Pixi!&lt;/<span style="color:#f92672">title</span>&gt;
+    &lt;/<span style="color:#f92672">head</span>&gt;
+    &lt;<span style="color:#f92672">body</span>&gt;
+        &lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./dist/bundle.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+    &lt;/<span style="color:#f92672">body</span>&gt;
+&lt;/<span style="color:#f92672">html</span>&gt;
+</code></pre></div><h3 id="编译测试">编译测试</h3>
+<h4 id="编译">编译</h4>
+<pre><code>npm run build
+</code></pre><p>此举将会执行<code>package.json</code>中设置的<code>build</code>命令，编译TypeScript文件，并打包至<code>dist/bundle.js</code>中</p>
+<h4 id="测试-1">测试</h4>
+<pre><code>npm run start
+</code></pre><p>执行命令，打开相应的网址，测试刚刚编写的代码，查看代码是否正确执行。</p>
+<h2 id="总结">总结</h2>
+<p>Web 技术更新很快，Webpack 3.6 已经发布了， 而网上的很多资料还停留在 1.x， 2.x 的时代，PixiJS也更新到了 4.5.6，环境配置也不再像以前那么复杂。但是 Web 前端的发展实在是太快，重复造的“轮子”也是花样百出，让人目不暇接。“若无必要，勿增实体”，引入更多的模块会产生更多的问题，如果将来重新配置环境，可以考虑将<code>Webpack</code>也去掉。</p>
+<hr>
+<p><strong>参考资料</strong></p>
+<ol>
+<li><a href="http://www.proofbyexample.com/typescript-project-setup-with-npm.html">http://www.proofbyexample.com/typescript-project-setup-with-npm.html</a></li>
+<li><a href="http://www.proofbyexample.com/typescript-pixi-webpack.html">http://www.proofbyexample.com/typescript-pixi-webpack.html</a></li>
+<li><a href="https://gist.github.com/mjackson/ecd3914ebee934f4daf4">https://gist.github.com/mjackson/ecd3914ebee934f4daf4</a></li>
+</ol>
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
+  
+  </footer>
+  
+  </body>
+</html>
+

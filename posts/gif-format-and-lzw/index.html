@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GIF 格式及LZW算法浅析 | LimboNova</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GIF 格式及LZW算法浅析</span></h1>
+
+<h2 class="date">2012/09/20</h2>
+</div>
+
+<main>
+<p>前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。</p>
+<p>花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。</p>
+<p><img src="/images/diego.gif" alt="gif sample" title="GIF 多帧动画"></p>
+<h2 id="gif概述">GIF概述</h2>
+<p>Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。</p>
+<p>GIF主要分为两个版本，即GIF 87a和GIF 89a：</p>
+<p>GIF 87a：是在1987年制定的版本；
+GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。</p>
+<h2 id="gif格式结构">GIF格式结构</h2>
+<p>GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。</p>
+<h3 id="结构组成">结构组成</h3>
+<p>结构如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Header</td>
+<td>Header</td>
+<td>Header</td>
+</tr>
+<tr>
+<td>Logical Screen Descriptor</td>
+<td>Screen Descriptor Block</td>
+<td>GIF Data Stream</td>
+</tr>
+<tr>
+<td>Global Color Table</td>
+<td>Global Color Table(optional)</td>
+<td></td>
+</tr>
+<tr>
+<td>Application Extension</td>
+<td>Extension Blocks(optional, repeated)</td>
+<td></td>
+</tr>
+<tr>
+<td>Graphic Control Extension*</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Image Descriptor</td>
+<td>Image Blocks(repeated)</td>
+<td></td>
+</tr>
+<tr>
+<td>Local Color Table</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Table Based Image Data</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>…</td>
+<td>Extension Blocks(optional, repeated)</td>
+<td></td>
+</tr>
+<tr>
+<td>Trailer</td>
+<td>Trailer</td>
+<td>Trailer</td>
+</tr>
+</tbody>
+</table>
+<p>常见版本结构如下：</p>
+<p>GIF87a:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Header</td>
+<td>Header</td>
+</tr>
+<tr>
+<td>Logical Screen Descriptor</td>
+<td>Screen Descriptor Block</td>
+</tr>
+<tr>
+<td>Global Color Table</td>
+<td>Global Color Table(optional)</td>
+</tr>
+<tr>
+<td>Image Descriptor</td>
+<td>Image Blocks</td>
+</tr>
+<tr>
+<td>Local Color Table</td>
+<td></td>
+</tr>
+<tr>
+<td>Table Based Image Data</td>
+<td></td>
+</tr>
+<tr>
+<td>Trailer</td>
+<td>Trailer</td>
+</tr>
+</tbody>
+</table>
+<p>GIF89a :</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Header</td>
+<td>Header</td>
+</tr>
+<tr>
+<td>Header</td>
+<td>Header</td>
+</tr>
+<tr>
+<td>Logical Screen Descriptor</td>
+<td>Screen Descriptor Block</td>
+</tr>
+<tr>
+<td>Global Color Table</td>
+<td>Global Color Table(optional)</td>
+</tr>
+<tr>
+<td>Application Extension</td>
+<td>Extension Blocks(optional, repeated)</td>
+</tr>
+<tr>
+<td>Graphic Control Extension*</td>
+<td></td>
+</tr>
+<tr>
+<td>…</td>
+<td></td>
+</tr>
+<tr>
+<td>Image Descriptor</td>
+<td>Image Blocks(repeated)</td>
+</tr>
+<tr>
+<td>Local Color Table</td>
+<td></td>
+</tr>
+<tr>
+<td>Table Based Image Data</td>
+<td></td>
+</tr>
+<tr>
+<td>…</td>
+<td>Extension Blocks(optional, repeated)</td>
+</tr>
+<tr>
+<td>Trailer</td>
+<td>Trailer</td>
+</tr>
+<tr>
+<td>Logical Screen Descriptor</td>
+<td>Screen Descriptor Block</td>
+</tr>
+<tr>
+<td>Global Color Table</td>
+<td>Global Color Table(optional)</td>
+</tr>
+<tr>
+<td>Image Descriptor</td>
+<td>Image Blocks</td>
+</tr>
+<tr>
+<td>Local Color Table</td>
+<td></td>
+</tr>
+<tr>
+<td>Table Based Image Data</td>
+<td></td>
+</tr>
+<tr>
+<td>Trailer</td>
+<td>Trailer</td>
+</tr>
+</tbody>
+</table>
+<p>*: 如果为多帧图像，则必须要Graphic Control Extension.</p>
+<h3 id="结构说明">结构说明</h3>
+<p>Header：描述GIF Signature和 Version；
+Logical Screen Descriptor：包含定义图像显示区域的参数，包括背景颜色信息；
+Global Color Table：GIF图像是基于颜色表的，存储的数据是该点的颜色对应于颜色表的索引值。全局颜色表作用域为整个数据流，可以用于那些没有局部颜色表的图像。
+Image Descriptor：定义图像的属性，包括图像相对于逻辑屏幕边界的偏移量、图像大小以及有无局部颜色列表和颜色列表大小；
+Local Color Table：和Global的一样，都是可选的颜色表；
+Table Based Image Data：GIF使用LZW压缩算法，包含LZW编码长度(LZW Minimum Code Size)和图像数据(Image Data)两部分。
+Graphic Control Extension：控制跟在它后面的第一个图像（或文本）的渲染方式；
+Comment Extension：用来说明图形、作者或者其他任何非图形数据和控制信息的文本信息；
+Plain Text Extension：包含文本数据和描绘文本所需的参数
+Application Extension：包含制作该图像文件的应用程序的相关信息；
+Trailer：表示GIF文件的结尾，它包含一个固定的数值：0x3B。
+各部分的数据结构及编码细则可参考 <a href="http://www.w3.org/Graphics/GIF/spec-gif89a.txt">GIF89a Specification</a>，不再赘述。</p>
+<h2 id="lzw压缩算法">LZW压缩算法</h2>
+<p>GIF采用的LZW(Lempel-Ziv-Welch)压缩算法，这是一种基于字典的无损数据压缩算法。1978年Abraham Lempel与Jacob Ziv在发布了LZ78 压缩算法， Terry Welchy 以此作为基础，1984年发布其改进版本—— LZW。</p>
+<h3 id="算法说明">算法说明</h3>
+<p>LZW压缩算法的基本思想是建立一个编码表(字典),将输入字符串映射成定长的码字输出,通常码长设为12bit。把数字图像当作一个一维的比特串,算法在产生输出串的同时动态地更新编码表,这样码表与串表对应产生压缩图像的特殊性质。串表是动态产生的,编码前先初始化,使其包含所有的单字符串。压缩过程中,串表中不断产生新字符串(串表中没有的字符串),存储新字符串时也保存与新串的前缀相应的子码。</p>
+<p>简单地讲,编码过程如下：</p>
+<ol>
+<li>初始化字典，包含字符串中所有的单个字符；</li>
+<li>在当前读到的位置，从字典里找到能够匹配的最长字符串ω；</li>
+<li>返回ω在字典中的索引值，替代ω；</li>
+<li>把ω+其后一个字符组成一个新的字符串，添加到字典中；</li>
+<li>回到第2步 。</li>
+</ol>
+<h3 id="算法示例">算法示例</h3>
+<p>下面借助Wikipedia的示例有助于理解，实际编码规则并非如此：</p>
+<p>有这么一段字符串</p>
+<blockquote>
+<p>TOBEORNOTTOBEORTOBEORNOT#</p>
+</blockquote>
+<p>#假定为LZW的结束符，因此字符编码表中需要包含A-Z 和 # 27个项；当字典扩展时，需要增加码字(Code Word)位宽以满足不断增加的新表项 (前缀，Prefix)。25=32，5bit就够存储初始编码表所有数据流。如果码字位宽，每次加1位。初始编码表如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Symbol</td>
+<td>Binary</td>
+<td>Decimal</td>
+</tr>
+<tr>
+<td>#</td>
+<td>00000</td>
+<td>0</td>
+</tr>
+<tr>
+<td>A</td>
+<td>00001</td>
+<td>1</td>
+</tr>
+<tr>
+<td>B</td>
+<td>00010</td>
+<td>2</td>
+</tr>
+<tr>
+<td>C</td>
+<td>00011</td>
+<td>3</td>
+</tr>
+<tr>
+<td>D</td>
+<td>00100</td>
+<td>4</td>
+</tr>
+<tr>
+<td>E</td>
+<td>00101</td>
+<td>5</td>
+</tr>
+<tr>
+<td>F</td>
+<td>00110</td>
+<td>6</td>
+</tr>
+<tr>
+<td>G</td>
+<td>00111</td>
+<td>7</td>
+</tr>
+<tr>
+<td>H</td>
+<td>01000</td>
+<td>8</td>
+</tr>
+<tr>
+<td>I</td>
+<td>01001</td>
+<td>9</td>
+</tr>
+<tr>
+<td>J</td>
+<td>01010</td>
+<td>10</td>
+</tr>
+<tr>
+<td>K</td>
+<td>01011</td>
+<td>11</td>
+</tr>
+<tr>
+<td>L</td>
+<td>01100</td>
+<td>12</td>
+</tr>
+<tr>
+<td>M</td>
+<td>01101</td>
+<td>13</td>
+</tr>
+<tr>
+<td>N</td>
+<td>01110</td>
+<td>14</td>
+</tr>
+<tr>
+<td>O</td>
+<td>01111</td>
+<td>15</td>
+</tr>
+<tr>
+<td>P</td>
+<td>10000</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>10001</td>
+<td>17</td>
+</tr>
+<tr>
+<td>R</td>
+<td>10010</td>
+<td>18</td>
+</tr>
+<tr>
+<td>S</td>
+<td>10011</td>
+<td>19</td>
+</tr>
+<tr>
+<td>T</td>
+<td>10100</td>
+<td>20</td>
+</tr>
+<tr>
+<td>U</td>
+<td>10101</td>
+<td>21</td>
+</tr>
+<tr>
+<td>V</td>
+<td>10110</td>
+<td>22</td>
+</tr>
+<tr>
+<td>W</td>
+<td>10111</td>
+<td>23</td>
+</tr>
+<tr>
+<td>X</td>
+<td>11000</td>
+<td>24</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>11001</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Z</td>
+<td>11010</td>
+<td>26</td>
+</tr>
+</tbody>
+</table>
+<h4 id="编码">编码</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Current Sequence</td>
+<td>Next Char</td>
+<td>Output</td>
+<td>Extended Dictionary</td>
+<td>Comments</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Code</td>
+<td>Bits</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>NULL</td>
+<td>T</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>T</td>
+<td>O</td>
+<td>20</td>
+<td>10100</td>
+<td>27:</td>
+<td>TO</td>
+<td>27 = first available code after 0 through 26</td>
+</tr>
+<tr>
+<td>O</td>
+<td>B</td>
+<td>15</td>
+<td>01111</td>
+<td>28:</td>
+<td>OB</td>
+<td></td>
+</tr>
+<tr>
+<td>B</td>
+<td>E</td>
+<td>2</td>
+<td>00010</td>
+<td>29:</td>
+<td>BE</td>
+<td></td>
+</tr>
+<tr>
+<td>E</td>
+<td>O</td>
+<td>5</td>
+<td>00101</td>
+<td>30:</td>
+<td>EO</td>
+<td></td>
+</tr>
+<tr>
+<td>O</td>
+<td>R</td>
+<td>15</td>
+<td>01111</td>
+<td>31:</td>
+<td>OR</td>
+<td></td>
+</tr>
+<tr>
+<td>R</td>
+<td>N</td>
+<td>18</td>
+<td>10010</td>
+<td>32:</td>
+<td>RN</td>
+<td>32 requires 6 bits, so for next output use 6 bits</td>
+</tr>
+<tr>
+<td>N</td>
+<td>O</td>
+<td>14</td>
+<td>001110</td>
+<td>33:</td>
+<td>NO</td>
+<td></td>
+</tr>
+<tr>
+<td>O</td>
+<td>T</td>
+<td>15</td>
+<td>001111</td>
+<td>34:</td>
+<td>OT</td>
+<td></td>
+</tr>
+<tr>
+<td>T</td>
+<td>T</td>
+<td>20</td>
+<td>010100</td>
+<td>35:</td>
+<td>TT</td>
+<td></td>
+</tr>
+<tr>
+<td>TO</td>
+<td>B</td>
+<td>27</td>
+<td>011011</td>
+<td>36:</td>
+<td>TOB</td>
+<td></td>
+</tr>
+<tr>
+<td>BE</td>
+<td>O</td>
+<td>29</td>
+<td>011101</td>
+<td>37:</td>
+<td>BEO</td>
+<td></td>
+</tr>
+<tr>
+<td>OR</td>
+<td>T</td>
+<td>31</td>
+<td>011111</td>
+<td>38:</td>
+<td>ORT</td>
+<td></td>
+</tr>
+<tr>
+<td>TOB</td>
+<td>E</td>
+<td>36</td>
+<td>100100</td>
+<td>39:</td>
+<td>TOBE</td>
+<td></td>
+</tr>
+<tr>
+<td>EO</td>
+<td>R</td>
+<td>30</td>
+<td>011110</td>
+<td>40:</td>
+<td>EOR</td>
+<td></td>
+</tr>
+<tr>
+<td>RN</td>
+<td>O</td>
+<td>32</td>
+<td>100000</td>
+<td>41:</td>
+<td>RNO</td>
+<td></td>
+</tr>
+<tr>
+<td>OT</td>
+<td>#</td>
+<td>34</td>
+<td>100010</td>
+<td></td>
+<td></td>
+<td># stops the algorithm; send the cur seq</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>0</td>
+<td>000000</td>
+<td></td>
+<td></td>
+<td>and the stop code</td>
+</tr>
+</tbody>
+</table>
+<p>编码前长度 ： 25 symbols × 5 bits/symbol = 125 bits</p>
+<p>编码后长度：(6 codes × 5 bits/code) + (11 codes × 6 bits/code) = 96 bits</p>
+<p>使用LZW节省了29 bits, 差不多减少了 22%的数据量，效果明显。</p>
+<h4 id="解码">解码</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input</td>
+<td>Output Sequence</td>
+<td>New Dictionary Entry</td>
+<td>Comments</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Bits</td>
+<td>Code</td>
+<td></td>
+<td>Full</td>
+<td>Conjecture</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>10100</td>
+<td>20</td>
+<td>T</td>
+<td></td>
+<td></td>
+<td>27:</td>
+<td>T?</td>
+<td></td>
+</tr>
+<tr>
+<td>01111</td>
+<td>15</td>
+<td>O</td>
+<td>27:</td>
+<td>TO</td>
+<td>28:</td>
+<td>O?</td>
+<td></td>
+</tr>
+<tr>
+<td>00010</td>
+<td>2</td>
+<td>B</td>
+<td>28:</td>
+<td>OB</td>
+<td>29:</td>
+<td>B?</td>
+<td></td>
+</tr>
+<tr>
+<td>00101</td>
+<td>5</td>
+<td>E</td>
+<td>29:</td>
+<td>BE</td>
+<td>30:</td>
+<td>E?</td>
+<td></td>
+</tr>
+<tr>
+<td>01111</td>
+<td>15</td>
+<td>O</td>
+<td>30:</td>
+<td>EO</td>
+<td>31:</td>
+<td>O?</td>
+<td></td>
+</tr>
+<tr>
+<td>10010</td>
+<td>18</td>
+<td>R</td>
+<td>31:</td>
+<td>OR</td>
+<td>32:</td>
+<td>R?</td>
+<td>created code 31 (last to fit in 5 bits)</td>
+</tr>
+<tr>
+<td>001110</td>
+<td>14</td>
+<td>N</td>
+<td>32:</td>
+<td>RN</td>
+<td>33:</td>
+<td>N?</td>
+<td>so start reading input at 6 bits</td>
+</tr>
+<tr>
+<td>001111</td>
+<td>15</td>
+<td>O</td>
+<td>33:</td>
+<td>NO</td>
+<td>34:</td>
+<td>O?</td>
+<td></td>
+</tr>
+<tr>
+<td>010100</td>
+<td>20</td>
+<td>T</td>
+<td>34:</td>
+<td>OT</td>
+<td>35:</td>
+<td>T?</td>
+<td></td>
+</tr>
+<tr>
+<td>011011</td>
+<td>27</td>
+<td>TO</td>
+<td>35:</td>
+<td>TT</td>
+<td>36:</td>
+<td>TO?</td>
+<td></td>
+</tr>
+<tr>
+<td>011101</td>
+<td>29</td>
+<td>BE</td>
+<td>36:</td>
+<td>TOB</td>
+<td>37:</td>
+<td>BE?</td>
+<td>36 = TO + 1st symbol (B) of</td>
+</tr>
+<tr>
+<td>011111</td>
+<td>31</td>
+<td>OR</td>
+<td>37:</td>
+<td>BEO</td>
+<td>38:</td>
+<td>OR?</td>
+<td>next coded sequence received (BE)</td>
+</tr>
+<tr>
+<td>100100</td>
+<td>36</td>
+<td>TOB</td>
+<td>38:</td>
+<td>ORT</td>
+<td>39:</td>
+<td>TOB?</td>
+<td></td>
+</tr>
+<tr>
+<td>011110</td>
+<td>30</td>
+<td>EO</td>
+<td>39:</td>
+<td>TOBE</td>
+<td>40:</td>
+<td>EO?</td>
+<td></td>
+</tr>
+<tr>
+<td>100000</td>
+<td>32</td>
+<td>RN</td>
+<td>40:</td>
+<td>EOR</td>
+<td>41:</td>
+<td>RN?</td>
+<td></td>
+</tr>
+<tr>
+<td>100010</td>
+<td>34</td>
+<td>OT</td>
+<td>41:</td>
+<td>RNO</td>
+<td>42:</td>
+<td>OT?</td>
+<td></td>
+</tr>
+<tr>
+<td>000000</td>
+<td>0</td>
+<td>#</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="总结">总结</h2>
+<p>简单介绍了GIF文件格式的特点及其内部的结构，并浅析了LZW压缩算法的原理，通过简单的例子演示了LZW编码/解码的过程。相比GIF 87a，GIF 89a增加了很实用的两项功能：透明色支持和多帧动画，也正是因此GIF才会在Internet上如此受欢迎。虽然遭遇了专利风波，但也因此催生了PNG格式，如今LZW的专利都过期了，GIF依然流行。 😉</p>
+<h2 id="阅读延伸">阅读延伸</h2>
+<p><a href="http://www.w3.org/Graphics/GIF/spec-gif89a.txt">GIF89a Specification(W3C)</a>
+<a href="http://en.wikipedia.org/wiki/Lempel-Ziv-Markov_chain_algorithm">LZMA(Wikipedia)</a></p>
+<hr>
+<p><strong>参考资料</strong></p>
+<ol>
+<li><a href="http://en.wikipedia.org/wiki/Graphics_Interchange_Format">Graphics Interchange Format(Wikipedia)</a></li>
+<li><a href="http://www.w3.org/Graphics/GIF/spec-gif89a.txt">GIF89a Specification</a></li>
+<li><a href="http://graphcomp.com/info/specs/ani_gif.html">The Structure of a GIF89a file</a></li>
+<li><a href="http://www.chinaai.org/ip/image-processing/gif-struct.html">GIF format</a></li>
+<li><a href="http://www.cnblogs.com/KevinXer1129/archive/2008/10/09/1307251.html">http://www.cnblogs.com/KevinXer1129/archive/2008/10/09/1307251.html</a></li>
+<li><a href="http://www.chinaai.org/ip/image-processing/gif-struct.html">http://www.chinaai.org/ip/image-processing/gif-struct.html</a></li>
+<li><a href="http://zh.wikipedia.org/wiki/LZW">LZW(Wikipedia)</a></li>
+<li><a href="http://www.chinaai.org/ip/image-processing/lzw-gif.html">http://www.chinaai.org/ip/image-processing/lzw-gif.html</a></li>
+<li>Terry Welch, <a href="http://www.cs.duke.edu/courses/spring03/cps296.5/papers/welch_1984_technique_for.pdf">&ldquo;A Technique for High-Performance Data Compression&rdquo;</a>, IEEE Computer, June 1984, p. 8–19</li>
+</ol>
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
+  
+  </footer>
+  
+  </body>
+</html>
+
