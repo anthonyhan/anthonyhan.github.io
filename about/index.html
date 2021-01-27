@@ -71,7 +71,43 @@
 
 </main>
 
-  <footer>
+
+<link rel="stylesheet" href="https://unpkg.com/vssue/dist/vssue.min.css">
+<div id="vssue"></div>
+
+
+
+<script src="https://unpkg.com/vue/dist/vue.runtime.min.js"></script>
+
+
+
+<script src="https://unpkg.com/vssue/dist/vssue.github.min.js"></script>
+
+
+
+
+<script>
+    new Vue({
+        el: '#vssue',
+
+        render: h => h('Vssue', {
+            props: {
+                
+                title: 'about | LimboNova',
+
+                
+                options: {
+                    owner: '',
+                    repo: '',
+                    clientId: '',
+                    clientSecret: '', 
+                },
+            }
+        })
+    })
+</script>
+
+<footer>
   
   
   <hr/>

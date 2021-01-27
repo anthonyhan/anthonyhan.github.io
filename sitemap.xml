@@ -3,6 +3,91 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>/tags/ai/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/behavior-tree/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/fsm/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/game-ai/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/game-dev/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/goap/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/hfsm/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/learning/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/navigation/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/planning/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/utility-based/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/the-total-beginners-guide-to-game-ai-part-3/</loc>
+    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/the-total-beginners-guide-to-game-ai-part-2/</loc>
+    <lastmod>2019-03-25T23:10:09+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/posts/the-total-beginners-guide-to-game-ai-part-1/</loc>
+    <lastmod>2019-03-20T20:30:43+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/tags/game/</loc>
     <lastmod>2018-04-26T22:54:34+08:00</lastmod>
   </url>
@@ -13,28 +98,8 @@
   </url>
   
   <url>
-    <loc>/</loc>
-    <lastmod>2018-04-26T22:54:34+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/posts/</loc>
-    <lastmod>2018-04-26T22:54:34+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
-    <lastmod>2018-04-26T22:54:34+08:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/posts/transistor-a-sonnet-to-cyberpunk/</loc>
     <lastmod>2018-04-26T22:54:34+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/game-dev/</loc>
-    <lastmod>2017-09-21T23:36:47+08:00</lastmod>
   </url>
   
   <url>
@@ -64,11 +129,6 @@
   
   <url>
     <loc>/posts/behavior-trees-for-ai-how-they-work/</loc>
-    <lastmod>2017-09-13T20:19:48+08:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/behavior-tree/</loc>
     <lastmod>2017-09-13T20:19:48+08:00</lastmod>
   </url>
   
