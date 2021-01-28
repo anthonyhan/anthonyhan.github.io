@@ -121,9 +121,9 @@
 }</code></pre></div></p>
 <p>如前所述，可以将属性附加到类定义外部的类原型对象。例如，也可以在 Object 类定义外部定义 toString() 方法，如下所示：</p>
 <blockquote>
-<p>Object.prototype.toString = function() 
-{ 
-// statements 
+<p>Object.prototype.toString = function()
+{
+// statements
 };</p>
 </blockquote>
 <p>但是，原型继承与固定属性继承不一样，如果要重新定义子类中的方法，原型继承不需要 override 关键字。例如. 如果要重新定义 Object 类的子类中的 valueOf() 方法，您有以下三种选择。第一，可以在类定义中的子类原型对象上定义 valueOf() 方法。以下代码创建一个名为 Foo 的 Object 子类，并将 Foo 原型对象的 valueOf() 方法重新定义为类定义的一部分。因为每个类都是从 Object 继承的，所以不需要使用 extends 关键字。
@@ -174,6 +174,7 @@
 </main>
 
 
+<<<<<<< HEAD
 <script src="https://utteranc.es/client.js"
         repo="anthonyhan/anthonyhan.github.io"
         issue-term="title"
@@ -183,6 +184,8 @@
         async>
 </script>
 
+=======
+>>>>>>> fc94299128ee14a5e693c17e0e17562800d6a7a7
 <footer>
   
   

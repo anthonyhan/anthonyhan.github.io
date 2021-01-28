@@ -27,7 +27,7 @@
   样式继承： ASDoc中，每个样式有个 “CSS继承”(CSS Inheritance) 的属性。表示该样式是否可以从其父容器出继承；
   &amp;lt;mx:Style&amp;gt; 设置样式约定：
  样式名小写，单词之间使用连字符隔开：background-color: #FFFFFF; 也可使用大小写混合的方式： backgroundColor: #00FF00;    类选择符：将一组样式属性定义为一个样式类。 .CustomCombo { color: #00FF00; selectedColor: #EA800C; } 组件可使用 styleName 调用：
- &amp;lt;mx:ComboBox styleName=”customCombo”/&amp;gt;   类型选择符 ComboBox { color: #FF0000; selectedColor: #EA800C; } 这样设置，将影响所有叫 “ComboBox”类的样式；
+ &amp;lt;mx:ComboBox styleName=”customCombo”/&amp;gt;    类型选择符 ComboBox { color: #FF0000; selectedColor: #EA800C; } 这样设置，将影响所有叫 “ComboBox”类的样式；
   使用 Flash Builder 编写 CSS，只要打开CSS文件编辑即可；
   使用CSS文件设置样式，将文件编译到应用程序中，就必须重新编译应用程序；</description>
     </item>
