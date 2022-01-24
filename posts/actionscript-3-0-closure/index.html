@@ -65,7 +65,7 @@
 <h3 id="函数闭包function-closures">函数闭包(Function closures)</h3>
 <p>函数闭包 是一个对象，其中包含函数的快照及其”词汇环境”。函数的词汇环境包括函数范围链中的所有变量、属性、方法和对象以及它们的值。无论何时在对象或类之外的位置执行函数，都会创建函数闭包。函数闭包保留定义它们的作用域，这样，在将函数作为参数或返回值传递给另一个作用域时，会产生有趣的结果。</p>
 <p>例如，下面的代码创建两个函数：foo()（返回一个用来计算矩形面积的嵌套函数 rectArea()）和 bar()（调用 foo() 并将返回的函数闭包存储在名为 myProduct 的变量中）。即使 bar() 函数定义了自己的局部变量 x（值为 2），当调用函数闭包 myProduct() 时，该函数闭包仍保留在函数 foo() 中定义的变量 x（值为 40）。因此，bar() 函数会返回值 160，而不是 8。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	 <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">foo</span>()<span style="color:#f92672">:</span>Function 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	 <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">foo</span>()<span style="color:#f92672">:</span>Function 
 	{ 
 		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">x</span><span style="color:#f92672">:</span>int <span style="color:#f92672">=</span> <span style="color:#ae81ff">40</span><span style="color:#f92672">;</span> 
 		<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">rectArea</span>(<span style="color:#a6e22e">y</span><span style="color:#f92672">:</span>int)<span style="color:#f92672">:</span>int <span style="color:#75715e">// function closure defined 
@@ -84,7 +84,7 @@
 	<span style="color:#a6e22e">bar</span>(); <span style="color:#e6db74">//</span> <span style="color:#ae81ff">160</span></code></pre></div>
 <h2 id="绑定方法bound-methods">绑定方法(Bound methods)</h2>
 <p>绑定方法有时也叫做闭包方法(Method Closure)，就是从它的实例提取的方法。作为参数传递给函数的方法或作为值从函数返回的方法都是绑定方法。在 ActionScript 3.0 中，新增的绑定方法类似于闭包函数，其中保留了词汇环境，即使从其实例中提取出来也是如此。绑定方法与闭包函数之间的主要不同差别是，绑定函数的 this 引用保留到实现方法的实例的链接或绑定。换句话说，绑定方法中的 this 引用总是指向实现方法的原始对象。对于闭包函数，this 引用是通用的，这意味着调用函数时，该引用指向与函数关联的任何对象。 如果使用 this 关键字，了解绑定方法就很重要。重新调用 this 关键字可提供对方法父对象的引用。大多数 ActionScript 程序员都希望 this 关键字总是引用包含方法定义的对象或类。但是，如果不使用方法绑定，并不是总是做到这样。例如，在以前版本的 ActionScript 中，this 引用并不总是引用实现方法的实例。从 ActionScript 2.0 的实例中提取方法后，不但 this 引用不绑定到原始实例，而且实例类的成员变量和方法也不可用。在 ActionScript 3.0 中不存在这样的问题，这是因为将方法当作参数传递时会自动创建绑定方法。绑定方法用于确保 this 关键字总是引用在其中定义了方法的对象或类。 下面的代码定义了名为 ThisTest 的类，该类包含一个名为 foo() 的方法（该方法定义绑定方法）和一个名为 bar() 的方法（该方法返回绑定方法）。类外部的代码创建 ThisTest 类的实例，然后调用 bar() 方法，最后将返回值存储在名为 myFunc 的变量中。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThisTest</span> 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ThisTest</span> 
 	{ 
 		<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">num</span><span style="color:#f92672">:</span>Number <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span><span style="color:#f92672">;</span> 
 		<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">foo</span>()<span style="color:#f92672">:</span><span style="color:#a6e22e">void</span> <span style="color:#75715e">// bound method defined 

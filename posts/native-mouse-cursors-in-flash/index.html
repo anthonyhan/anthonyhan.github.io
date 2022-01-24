@@ -52,7 +52,7 @@
 </ul>
 <h2 id="代码示例">代码示例</h2>
 <p>动态光标和静态光标的实现方式差不多，只需要在data中存入多个位图并设置frameRate。代码如下：
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">createFakeCursor</span>()<span style="color:#f92672">:</span><span style="color:#a6e22e">void</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">createFakeCursor</span>()<span style="color:#f92672">:</span><span style="color:#a6e22e">void</span>
 {
 	<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">fakeCursor</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Shape();
 	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">bmp</span><span style="color:#f92672">:</span>BitmapData <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">generateCursorBmp</span>(<span style="color:#ae81ff">8</span>);

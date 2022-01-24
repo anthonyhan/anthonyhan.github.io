@@ -38,7 +38,7 @@
 <p>作者：Thibault Imbert
 项目地址：http://code.google.com/p/as3gif/</p>
 <p>2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#75715e">// we create the GIFPlayer, it plays automatically by default
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#75715e">// we create the GIFPlayer, it plays automatically by default
 </span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">myGIFPlayer</span><span style="color:#f92672">:</span><span style="color:#a6e22e">GIFPlayer</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">GIFPlayer</span>();
 	<span style="color:#75715e">// we show it
 </span><span style="color:#75715e"></span>	<span style="color:#a6e22e">addChild</span> ( <span style="color:#a6e22e">myGIFPlayer</span> );
@@ -68,7 +68,7 @@
 项目地址：https://github.com/Worlize/Flash-Animated-GIF-Library</p>
 <p>由于方案一在解码方面的不足，Brian McKelvey 完全从无到有，重写了基于Flash Player的GIF解码类，据称解码的性能提高了2个数量级(10^2)。另外动画帧的播放也更精确，因为是基于舞台的帧率而播放的，而且当舞台帧率太低时还支持跳帧。上面的Demo就是采用AS3GifPlayer的。</p>
 <p>示例代码如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#a6e22e">player</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#a6e22e">GIFPlayerEvent</span>.<span style="color:#a6e22e">COMPLETE</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">handleGifLoadComplete</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#a6e22e">player</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#a6e22e">GIFPlayerEvent</span>.<span style="color:#a6e22e">COMPLETE</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">handleGifLoadComplete</span>);
 	<span style="color:#a6e22e">player</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#a6e22e">AsyncDecodeErrorEvent</span>.<span style="color:#a6e22e">ASYNC_DECODE_ERROR</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">handleAsyncDecodeErrorEvent</span>);
 	<span style="color:#a6e22e">player</span>.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#a6e22e">GIFPlayerEvent</span>.<span style="color:#a6e22e">FRAME_RENDERED</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">handleFrameRendered</span>);
 	<span style="color:#a6e22e">player</span>.<span style="color:#a6e22e">loadBytes</span>(<span style="color:#a6e22e">ref</span>.<span style="color:#a6e22e">data</span>);</code></pre></div>

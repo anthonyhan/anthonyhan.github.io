@@ -6,7 +6,25 @@
     <description>Recent content in redmine on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 27 Sep 2016 11:00:54 +0800</lastBuildDate><atom:link href="/tags/redmine/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 03 Apr 2019 00:36:28 +0000</lastBuildDate><atom:link href="/tags/redmine/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Debian Redmine 备份与恢复</title>
+      <link>/posts/debian-redmine-backup-and-restore/</link>
+      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      
+      <guid>/posts/debian-redmine-backup-and-restore/</guid>
+      <description>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。
+系统需求  Redmine 3.3 installed with apt on Debian 9 (stretch). Database: PostgreSQL  备份 配置文件 配置文件包含路径：/etc/redmine/{instance}
+例如，默认实例名称为default，则配置文件路径为/etc/redmine/{default}。包含以下配置文件：
+ configuration.yml database.xml secret_key.txt  数据库 在备份脚本执行用户的主目录创建 .pgpass 文件，加入连接数据库的用户名密码等连接信息。
+echo &amp;#34;HOST:PORT:DB_NAME:USERNAME:PASSWORD&amp;#34; &amp;gt; ~/.pgpass 例如：
+echo &amp;#34;localhost:5432:redmine_default:redmine/instances/default:PASSWORD&amp;#34; &amp;gt; ~/.pgpass 使用 pg_dump 导出数据：
+pg_dump -U redmine/instances/default -d redmine_default -h localhost -Fc --file=/home/redmine/redmine_backup/db_dumps/redmine_`date +%Y-%m-%d`.sqlc 附件 路径：/var/lib/redmine/${instance}/files
+rsync -a /var/lib/redmine/default/files /home/redmine/redmine_backup/ 插件 路径：/usr/share/redmine/plugins
+主题 路径：/usr/share/redmine/public/themes
+备份脚本 #!/bin/bash # Redmine Backup Shell # Author: Han Qian # Version: 1.</description>
+    </item>
+    
     <item>
       <title>Bitnami Redmine 升级简易指南</title>
       <link>/posts/bitnami-redmine-upgrade-guide/</link>

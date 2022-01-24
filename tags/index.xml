@@ -98,6 +98,15 @@
     </item>
     
     <item>
+      <title>redmine</title>
+      <link>/tags/redmine/</link>
+      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      
+      <guid>/tags/redmine/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>utility-based</title>
       <link>/tags/utility-based/</link>
       <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
@@ -193,15 +202,6 @@
       <pubDate>Fri, 02 Dec 2016 18:12:31 +0800</pubDate>
       
       <guid>/tags/programming/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>redmine</title>
-      <link>/tags/redmine/</link>
-      <pubDate>Tue, 27 Sep 2016 11:00:54 +0800</pubDate>
-      
-      <guid>/tags/redmine/</guid>
       <description></description>
     </item>
     

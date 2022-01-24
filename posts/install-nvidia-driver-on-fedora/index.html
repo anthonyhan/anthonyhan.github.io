@@ -93,10 +93,10 @@ GRUB_CMDLINE_LINUX=&quot;&hellip; nouveau.modeset=0&quot;</li>
 <p>使用上面这种方式的好处是，内核更新了，也会自动添加&quot;nouveau.modeset=0&quot;的启动参数，如果不设置则无法启动Gnome桌面系统。内核升级后也会无法启动Gnome桌面系统，届时只要在grub启动界面，手动设置启动参数，即在上述参数后加 3，进系统后再重新安装驱动即可。</p>
 <h3 id="开始安装">开始安装</h3>
 <h4 id="设置运行级别">设置运行级别</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">su - root
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">su - root
 init <span style="color:#ae81ff">3</span></code></pre></div>
 <h4 id="运行安装包">运行安装包</h4>
-<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sh NVIDIA-Linux-x86-310.19.run</code></pre></div>
+<p><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sh NVIDIA-Linux-x86-310.19.run</code></pre></div>
 安装很简单，安装包已经很自动化了，只要按照提示基本没有什么问题。如果提示nouveau正在运行,无法安装，则要重新启动，进入系统后重复开始安装这个步骤。安装过程中会提示是否自动创建屏蔽nouveau的blacklist配置，是否更新X设置，都选是即可。</p>
 <p>安装完毕之后重新启动桌面系统</p>
 <blockquote>

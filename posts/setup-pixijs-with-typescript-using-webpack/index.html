@@ -38,31 +38,31 @@
 <ol>
 <li>创建项目目录</li>
 </ol>
-<pre><code>mkdir ts_pixi
+<pre tabindex="0"><code>mkdir ts_pixi
 cd ts_pixi
 mkdir assets src dist
 </code></pre><ol start="2">
 <li>新建项目文件</li>
 </ol>
-<pre><code>touch index.html
+<pre tabindex="0"><code>touch index.html
 touch src/main.ts
 </code></pre><ol start="3">
 <li>初始化项目</li>
 </ol>
-<pre><code>npm init
+<pre tabindex="0"><code>npm init
 </code></pre><h3 id="安装模块">安装模块</h3>
 <ol>
 <li>PixiJS</li>
 </ol>
-<pre><code>npm install --save-dev pixi.js
+<pre tabindex="0"><code>npm install --save-dev pixi.js
 </code></pre><ol start="2">
 <li>TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应<code>@types</code>文件，用于代码提示等功能。</li>
 </ol>
-<pre><code>npm install --save-dev typescript @types/pixi.js @types/node
+<pre tabindex="0"><code>npm install --save-dev typescript @types/pixi.js @types/node
 </code></pre><ol start="3">
 <li>其它</li>
 </ol>
-<pre><code>npm install --save-dev ts-loader webpack webpack-dev-server
+<pre tabindex="0"><code>npm install --save-dev ts-loader webpack webpack-dev-server
 </code></pre><ul>
 <li><code>ts-loader</code> TypeScript加载器， 用于处理 TypeScript 文件。</li>
 <li><code>webpack</code> 模块加打包器，将JavaScript 文件打包在一起，打包后的文件用于在浏览器中使用。</li>
@@ -70,11 +70,11 @@ touch src/main.ts
 </ul>
 <h3 id="初始化模块">初始化模块</h3>
 <p>生成 tsconfig.json</p>
-<pre><code>node_modules/.bin/tsc --init
+<pre tabindex="0"><code>node_modules/.bin/tsc --init
 </code></pre><h2 id="设置">设置</h2>
 <h3 id="packagejson-设置">package.json 设置</h3>
 <p>配置scripts中的构建和测试命令。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
   <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;ts_pixi&#34;</span>,
   <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;1.0.0&#34;</span>,
   <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
@@ -101,7 +101,7 @@ touch src/main.ts
   }
 }
 </code></pre></div><h3 id="tsconfigjson-设置">tsconfig.json 设置</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
   <span style="color:#f92672">&#34;compilerOptions&#34;</span>: {
     <span style="color:#f92672">&#34;strictNullChecks&#34;</span>: <span style="color:#66d9ef">true</span>,
     <span style="color:#f92672">&#34;noImplicitAny&#34;</span>: <span style="color:#66d9ef">true</span>,
@@ -115,7 +115,7 @@ touch src/main.ts
 }
 </code></pre></div><h3 id="webpackconfigjs-设置">webpack.config.js 设置</h3>
 <p>在项目根目录下创建<code>webpack.config.js</code>文件，并加入以下内容：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">path</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;path&#34;</span>);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-JavaScript" data-lang="JavaScript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">path</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#34;path&#34;</span>);
 <span style="color:#a6e22e">module</span>.<span style="color:#a6e22e">exports</span> <span style="color:#f92672">=</span> {
     <span style="color:#a6e22e">entry</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;./src/main.ts&#34;</span>,
     <span style="color:#a6e22e">output</span><span style="color:#f92672">:</span> {
@@ -155,7 +155,7 @@ touch src/main.ts
 <h3 id="修改文件">修改文件</h3>
 <h4 id="maints">main.ts</h4>
 <p>写一段测试代码，如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-TypeScript" data-lang="TypeScript"><span style="color:#66d9ef">import</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">as</span> <span style="color:#a6e22e">PIXI</span> <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#34;pixi.js&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-TypeScript" data-lang="TypeScript"><span style="color:#66d9ef">import</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">as</span> <span style="color:#a6e22e">PIXI</span> <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#34;pixi.js&#34;</span>;
 
 <span style="color:#75715e">//Create the renderer
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">renderer</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">PIXI</span>.<span style="color:#a6e22e">autoDetectRenderer</span>(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>);
@@ -170,7 +170,7 @@ touch src/main.ts
 </span><span style="color:#75715e"></span><span style="color:#a6e22e">renderer</span>.<span style="color:#a6e22e">render</span>(<span style="color:#a6e22e">stage</span>);
 </code></pre></div><h4 id="indexhtml">index.html</h4>
 <p>修改文件内容为</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!DOCTYPE html&gt;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#75715e">&lt;!DOCTYPE html&gt;</span>
 &lt;<span style="color:#f92672">html</span>&gt;
     &lt;<span style="color:#f92672">head</span>&gt;
         &lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">charset</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span> /&gt;
@@ -182,10 +182,10 @@ touch src/main.ts
 &lt;/<span style="color:#f92672">html</span>&gt;
 </code></pre></div><h3 id="编译测试">编译测试</h3>
 <h4 id="编译">编译</h4>
-<pre><code>npm run build
+<pre tabindex="0"><code>npm run build
 </code></pre><p>此举将会执行<code>package.json</code>中设置的<code>build</code>命令，编译TypeScript文件，并打包至<code>dist/bundle.js</code>中</p>
 <h4 id="测试-1">测试</h4>
-<pre><code>npm run start
+<pre tabindex="0"><code>npm run start
 </code></pre><p>执行命令，打开相应的网址，测试刚刚编写的代码，查看代码是否正确执行。</p>
 <h2 id="总结">总结</h2>
 <p>Web 技术更新很快，Webpack 3.6 已经发布了， 而网上的很多资料还停留在 1.x， 2.x 的时代，PixiJS也更新到了 4.5.6，环境配置也不再像以前那么复杂。但是 Web 前端的发展实在是太快，重复造的“轮子”也是花样百出，让人目不暇接。“若无必要，勿增实体”，引入更多的模块会产生更多的问题，如果将来重新配置环境，可以考虑将<code>Webpack</code>也去掉。</p>

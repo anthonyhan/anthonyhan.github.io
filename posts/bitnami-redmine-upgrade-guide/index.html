@@ -79,7 +79,7 @@ Redmine does not support JRuby because some gems do not support Rails 4.2.
 <h3 id="卸载旧版本">卸载旧版本</h3>
 <p>如果使用的 Bitnami 集成包，需要先停止并删除服务。
 以管理员身份运行 cmd；</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat"><span style="color:#66d9ef">cd</span> bitnami_dir
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat"><span style="color:#66d9ef">cd</span> bitnami_dir
 servicerun.bat STOP
 serviceinstall.bat REMOVE
 </code></pre></div><p>打开 manager-windows.exe 查看 Manage Servers 服务状态，确认所有服务已经被移除。</p>
@@ -109,7 +109,7 @@ serviceinstall.bat REMOVE
 <li>运行 manager-windows.exe，停止数据库外的其它所有服务；</li>
 <li>登录数据库，如果数据库不在本地需要加 -h 参数指定主机名；</li>
 </ol>
-<pre><code>mysql -u root -p 
+<pre tabindex="0"><code>mysql -u root -p 
 mysql&gt; drop database bitnami_redmine;
 mysql&gt; create database bitnami_redmine;
 mysql&gt; grant all privileges on bitnami_redmine.* to 'bn_redmine'@'localhost' identified by 'DATABASE_PASSWORD';
@@ -117,10 +117,10 @@ mysql&gt; quit
 </code></pre><ol start="3">
 <li>导入之前的备份数据</li>
 </ol>
-<pre><code>mysql -u root -p bitnami_redmine &lt; redmine_backup.sql
+<pre tabindex="0"><code>mysql -u root -p bitnami_redmine &lt; redmine_backup.sql
 </code></pre><ol start="4">
 <li>更新数据库用户名和密码，配置文件为 <code>apps/redmine/htdocs/config/database.yml</code>，如果安装时设置了，似乎不用再设置
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#f92672">production</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#f92672">production</span>:
   <span style="color:#f92672">adapter</span>: <span style="color:#ae81ff">mysql2</span>
   <span style="color:#f92672">database</span>: <span style="color:#ae81ff">bitnami_redmine</span>
   <span style="color:#f92672">host</span>: <span style="color:#ae81ff">localhost</span>
@@ -129,7 +129,7 @@ mysql&gt; quit
   <span style="color:#f92672">encoding</span>: <span style="color:#ae81ff">utf8</span></code></pre></div></li>
 <li>迁移数据库到最新版</li>
 </ol>
-<pre><code>cd apps/redmine/htdocs 
+<pre tabindex="0"><code>cd apps/redmine/htdocs 
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 </code></pre><p>如果安装过插件，执行 <code>bundle exec rake redmine:plugins:migrate RAILS_ENV=production</code></p>
 <h3 id="清理">清理</h3>

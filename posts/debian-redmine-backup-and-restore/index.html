@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Debian Redmine 备份与恢复 | LimboNova</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Debian Redmine 备份与恢复</span></h1>
+
+<h2 class="date">2019/04/03</h2>
+</div>
+
+<main>
+<p>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。</p>
+<h2 id="系统需求">系统需求</h2>
+<ol>
+<li>Redmine 3.3 installed with apt on Debian 9 (stretch).</li>
+<li>Database: PostgreSQL</li>
+</ol>
+<h2 id="备份">备份</h2>
+<h3 id="配置文件">配置文件</h3>
+<p>配置文件包含路径：<code>/etc/redmine/{instance}</code></p>
+<p>例如，默认实例名称为<code>default</code>，则配置文件路径为<code>/etc/redmine/{default}</code>。包含以下配置文件：</p>
+<ul>
+<li>configuration.yml</li>
+<li>database.xml</li>
+<li>secret_key.txt</li>
+</ul>
+<h3 id="数据库">数据库</h3>
+<p>在备份脚本执行用户的主目录创建 <code>.pgpass</code> 文件，加入连接数据库的用户名密码等连接信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">echo <span style="color:#e6db74">&#34;HOST:PORT:DB_NAME:USERNAME:PASSWORD&#34;</span> &gt; ~/.pgpass
+</code></pre></div><p>例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">echo <span style="color:#e6db74">&#34;localhost:5432:redmine_default:redmine/instances/default:PASSWORD&#34;</span> &gt; ~/.pgpass
+</code></pre></div><p>使用 pg_dump 导出数据：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pg_dump -U redmine/instances/default -d redmine_default -h localhost -Fc --file<span style="color:#f92672">=</span>/home/redmine/redmine_backup/db_dumps/redmine_<span style="color:#e6db74">`</span>date +%Y-%m-%d<span style="color:#e6db74">`</span>.sqlc 
+</code></pre></div><h3 id="附件">附件</h3>
+<p>路径：<code>/var/lib/redmine/${instance}/files</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">rsync -a  /var/lib/redmine/default/files /home/redmine/redmine_backup/
+</code></pre></div><h3 id="插件">插件</h3>
+<p>路径：<code>/usr/share/redmine/plugins</code></p>
+<h3 id="主题">主题</h3>
+<p>路径：<code>/usr/share/redmine/public/themes</code></p>
+<h3 id="备份脚本">备份脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span><span style="color:#75715e"># Redmine Backup Shell</span>
+<span style="color:#75715e"># Author: Han Qian</span>
+<span style="color:#75715e"># Version: 1.0</span>
+
+<span style="color:#75715e"># Reference: </span>
+<span style="color:#75715e">#1. https://www.redmine.org/projects/redmine/wiki/RedmineBackupRestore</span>
+<span style="color:#75715e">#2. https://wiki.debian.org/Redmine</span>
+
+echo <span style="color:#e6db74">&#34;Redmine backup start...&#34;</span>
+
+<span style="color:#75715e"># variables</span>
+redmine_instance<span style="color:#f92672">=</span>default
+backup_root_dir<span style="color:#f92672">=</span>/home/redmine/redmine_backup/<span style="color:#e6db74">${</span>redmine_instance<span style="color:#e6db74">}</span>
+
+echo <span style="color:#e6db74">&#34;Instance:&#34;</span> <span style="color:#e6db74">${</span>redmine_instance<span style="color:#e6db74">}</span>
+echo <span style="color:#e6db74">&#34;Backup dir:&#34;</span> <span style="color:#e6db74">${</span>backup_root_dir<span style="color:#e6db74">}</span>
+echo <span style="color:#e6db74">&#34;------------------------------&#34;</span>
+
+<span style="color:#75715e"># Configs</span>
+echo <span style="color:#e6db74">&#34;backing up configs...&#34;</span>
+backup_config_dir<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>backup_root_dir<span style="color:#e6db74">}</span>/config
+mkdir -p <span style="color:#e6db74">${</span>backup_config_dir<span style="color:#e6db74">}</span>
+sudo rsync -a /etc/redmine/<span style="color:#e6db74">${</span>redmine_instance<span style="color:#e6db74">}</span>/* <span style="color:#e6db74">${</span>backup_config_dir<span style="color:#e6db74">}</span>
+echo <span style="color:#e6db74">&#34;backup configs finished&#34;</span>
+
+
+<span style="color:#75715e"># Database</span>
+echo <span style="color:#e6db74">&#34;backing up database...&#34;</span>
+backup_db_dir<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>backup_root_dir<span style="color:#e6db74">}</span>/db_dumps
+mkdir -p <span style="color:#e6db74">${</span>backup_db_dir<span style="color:#e6db74">}</span>
+pg_dump -U redmine/instances/<span style="color:#e6db74">${</span>redmine_instance<span style="color:#e6db74">}</span> -d redmine_<span style="color:#e6db74">${</span>redmine_instance<span style="color:#e6db74">}</span> -h localhost -Fc --file<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>backup_db_dir<span style="color:#e6db74">}</span>/redmine_<span style="color:#e6db74">`</span>date +%Y-%m-%d<span style="color:#e6db74">`</span>.sqlc 
+echo <span style="color:#e6db74">&#34;backup database finished&#34;</span>
+
+<span style="color:#75715e"># Attachments</span>
+echo <span style="color:#e6db74">&#34;backing up attachments...&#34;</span>
+rsync -a  /var/lib/redmine/<span style="color:#e6db74">${</span>redmine_instance<span style="color:#e6db74">}</span>/files <span style="color:#e6db74">${</span>backup_root_dir<span style="color:#e6db74">}</span>
+echo <span style="color:#e6db74">&#34;backup attachments finished&#34;</span>
+
+echo <span style="color:#e6db74">&#34;------------------------------&#34;</span>
+echo <span style="color:#e6db74">&#34;backup completed!&#34;</span>
+</code></pre></div><h2 id="恢复">恢复</h2>
+<h3 id="数据库-1">数据库</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">pg_restore -U redmine/instances/default -d redmine_default -h localhost -c redmine_bak.sqlc
+</code></pre></div><h3 id="附件-1">附件</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">rsync -a  /home/redmine/redmine_backup/ /var/lib/redmine/default/files 
+</code></pre></div><h3 id="插件-1">插件</h3>
+<ol>
+<li>恢复插件至路径 <code>/usr/share/redmine/plugins</code></li>
+<li>更新插件
+<pre tabindex="0"><code>cd /var/lib/redmine/default
+rake redmine:plugins:migrate RAILS_ENV=production
+</code></pre></li>
+<li>重启 Redmine
+<pre tabindex="0"><code>cd /var/lib/redmine/default/tmp
+touch restart.txt
+</code></pre></li>
+</ol>
+<h3 id="主题-1">主题</h3>
+<p>恢复主题文件路径：<code>/usr/share/redmine/public/themes</code></p>
+<h3 id="heading"></h3>
+<h3 id="恢复脚本">恢复脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span><span style="color:#75715e"># Redmine Restore Shell</span>
+<span style="color:#75715e"># Author: Han Qian</span>
+<span style="color:#75715e"># Version: 1.0</span>
+
+<span style="color:#75715e"># Reference: </span>
+<span style="color:#75715e">#1. https://www.redmine.org/projects/redmine/wiki/RedmineBackupRestore</span>
+<span style="color:#75715e">#2. https://wiki.debian.org/Redmine</span>
+
+echo <span style="color:#e6db74">&#34;Redmine restore start...&#34;</span>
+
+<span style="color:#75715e"># variables</span>
+redmine_instance<span style="color:#f92672">=</span>default
+backup_root_dir<span style="color:#f92672">=</span>/home/redmine/redmine_backup/<span style="color:#e6db74">${</span>redmine_instance<span style="color:#e6db74">}</span>
+
+echo <span style="color:#e6db74">&#34;Instance:&#34;</span> <span style="color:#e6db74">${</span>redmine_instance<span style="color:#e6db74">}</span>
+echo <span style="color:#e6db74">&#34;Backup dir:&#34;</span> <span style="color:#e6db74">${</span>backup_root_dir<span style="color:#e6db74">}</span>
+echo <span style="color:#e6db74">&#34;------------------------------&#34;</span>
+
+<span style="color:#75715e"># Configs</span>
+echo <span style="color:#e6db74">&#34;restoring configs...&#34;</span>
+backup_config_dir<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>backup_root_dir<span style="color:#e6db74">}</span>/config
+sudo rsync -a <span style="color:#e6db74">${</span>backup_config_dir<span style="color:#e6db74">}</span>/* /etc/redmine/<span style="color:#e6db74">${</span>redmine_instance<span style="color:#e6db74">}</span>/
+echo <span style="color:#e6db74">&#34;restore configs finished&#34;</span>
+
+
+<span style="color:#75715e"># Database</span>
+echo <span style="color:#e6db74">&#34;restoring database...&#34;</span>
+backup_db_dir<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>backup_root_dir<span style="color:#e6db74">}</span>/db_dumps
+pg_restore -U redmine/instances/default -d redmine_default -h localhost -c <span style="color:#e6db74">${</span>backup_db_dir<span style="color:#e6db74">}</span>/redmine_<span style="color:#e6db74">`</span>date +%Y-%m-%d<span style="color:#e6db74">`</span>.sqlc .sqlc
+echo <span style="color:#e6db74">&#34;restore database finished&#34;</span>
+
+<span style="color:#75715e"># Attachments</span>
+echo <span style="color:#e6db74">&#34;restoring attachments...&#34;</span>
+sudo rsync -a <span style="color:#e6db74">${</span>backup_root_dir<span style="color:#e6db74">}</span>/files/* /var/lib/redmine/<span style="color:#e6db74">${</span>redmine_instance<span style="color:#e6db74">}</span>/files/
+echo <span style="color:#e6db74">&#34;restore attachments finished&#34;</span>
+
+echo <span style="color:#e6db74">&#34;------------------------------&#34;</span>
+echo <span style="color:#e6db74">&#34;restore completed!&#34;</span>
+
+</code></pre></div>
+</main>
+
+<script src="https://utteranc.es/client.js"
+        repo="anthonyhan/anthonyhan.github.io"
+        issue-term="title"
+        label="💬comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+<footer>
+  
+  
+  <hr/>
+  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
+  
+  </footer>
+  
+  </body>
+</html>
+

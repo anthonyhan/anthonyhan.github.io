@@ -16,7 +16,7 @@
       <description>&lt;p&gt;更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。&lt;/p&gt;
 &lt;h2 id=&#34;问题分析&#34;&gt;问题分析&lt;/h2&gt;
 &lt;p&gt;根据报错的信息，可以打开日志文件查看详细的原因：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;    less /var/log/nvidia-installer.log&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;    less /var/log/nvidia-installer.log&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;日志信息如下：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;-&amp;gt; Kernel source path: &amp;lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&amp;rsquo;

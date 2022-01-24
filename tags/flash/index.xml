@@ -46,7 +46,7 @@
 &lt;p&gt;作者：Thibault Imbert
 项目地址：http://code.google.com/p/as3gif/&lt;/p&gt;
 &lt;p&gt;2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-actionscript&#34; data-lang=&#34;actionscript&#34;&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we create the GIFPlayer, it plays automatically by default
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-actionscript&#34; data-lang=&#34;actionscript&#34;&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we create the GIFPlayer, it plays automatically by default
 &lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt;();
 	&lt;span style=&#34;color:#75715e&#34;&gt;// we show it
 &lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;addChild&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt; );

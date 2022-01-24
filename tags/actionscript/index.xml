@@ -28,19 +28,13 @@
       
       <guid>/posts/image-dithering-algorithm-as3/</guid>
       <description>&lt;p&gt;不知当初自己出于什么目的，OneNote 里留了一条关于 Floyd–Steinberg dithering 的笔记。好奇之余，打开链接看了一下，方才想起这个当初让我觉得新奇的古老算法。&lt;/p&gt;
-
 &lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
-
 &lt;p&gt;余忆童稚时，能张目对日，明察秋毫……”如果你对过去黑白报纸的图片仔细观察过的话，一定会发现，那些黑白照片由很多圆形或方形的图形组成。是的，那就是半色调（Halftone）和抖动（Dither ）技术。&lt;/p&gt;
-
-&lt;p&gt;&lt;figure&gt;&lt;img src=&#34;https://pixy.org/src/405/thumbs350/4057896.jpg&#34; alt=&#34;Halftone&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
-
+&lt;p&gt;&lt;img src=&#34;https://pixy.org/src/405/thumbs350/4057896.jpg&#34; alt=&#34;Halftone&#34;&gt;&lt;/p&gt;
 &lt;p&gt;半色调（Halftone）是指为了模拟出连续调影像（色阶）的视觉感觉，一般用墨点（半色调网点）的大小或频率的改变，来模拟明暗的变化。半色调广泛应用于报刊出版等领域，当年那些黑白出版物上尤其常见，现在的牛奶包装上也能看出来。&lt;/p&gt;
-
 &lt;h2 id=&#34;阈值法thresholding&#34;&gt;阈值法（Thresholding）&lt;/h2&gt;
-
 &lt;p&gt;当像素值大于设定阈值时，输出为亮点，否则输出为暗点，从而实现二值化。经过处理的图像往往失去细节，缺乏层次感。下图所示的就是二值化的图像。
-&lt;figure&gt;&lt;img src=&#34;http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg&#34; alt=&#34;lena_binary&#34;&gt;&lt;/figure&gt;&lt;/p&gt;</description>
+&lt;img src=&#34;http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg&#34; alt=&#34;lena_binary&#34;&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -50,15 +44,10 @@
       
       <guid>/posts/convert-hsv-hsl-to-rgb/</guid>
       <description>&lt;p&gt;处理图像时，有时候会遇到不同色彩空间转换的情况。比较常见的是HSV/HSL到RGB的转换。&lt;/p&gt;
-
 &lt;h2 id=&#34;hsvhsbhsl简介&#34;&gt;HSV(HSB)/HSL简介&lt;/h2&gt;
-
 &lt;p&gt;不同于RGB/CYMK，HSV和HSL是两种比较常见的基于圆柱坐标系的色彩表示方法。这种方法对颜色的表达,对人来说更直观，更易于感受。因此艺术家有时偏好使用 HSL或HSV 而不选择 三原色光模式（即RGB模型） 或 印刷四分色模式（即CMYK模型），因为它类似于人类感觉颜色的方式，具有较强的感知度。RGB 和 CMYK 分别是加法原色和减法原色模型，以原色组合的方式定义颜色，而 HSV 以人类更熟悉的方式封装了关于颜色的信息：“这是什么颜色？深浅如何？明暗如何？”。&lt;/p&gt;
-
-&lt;p&gt;&lt;figure&gt;&lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/500px-Hsl-hsv_models.svg.png&#34; alt=&#34;&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
-
+&lt;p&gt;&lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/500px-Hsl-hsv_models.svg.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;色彩定义&#34;&gt;色彩定义&lt;/h3&gt;
-
 &lt;ul&gt;
 &lt;li&gt;H ：Hue(色相)，色彩的基本属性，就是平常所说的颜色名称，如红色、黄色等。&lt;/li&gt;
 &lt;li&gt;S ：saturation(饱和度)，色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值。&lt;/li&gt;
@@ -66,13 +55,9 @@
 &lt;li&gt;B ：brightness(明度)，取0-100%。&lt;/li&gt;
 &lt;li&gt;L ：lightness(亮度)，取0-100%。&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;HSL 和 HSV 二者都把颜色描述在圆柱坐标系内的点，这个圆柱的中心轴取值为自底部的黑色到顶部的白色而在它们中间是的灰色，绕这个轴的角度对应于“色相”，到这个轴的距离对应于“饱和度”，而沿着这个轴的高度对应于“亮度”，“色调”或“明度”。&lt;/p&gt;
-
 &lt;p&gt;这两种表示在用目的上类似，但在方法上有区别。二者在数学上都是圆柱，但 HSV（色相，饱和度，色调）在概念上可以被认为是颜色的倒圆锥体（黑点在下顶点，白色在上底面圆心），HSL 在概念上表示了一个双圆锥体和圆球体（白色在上顶点，黑色在下顶点，最大横切面的圆心是半程灰色）。注意尽管在 HSL 和 HSV 中“色相”指称相同的性质，它们的“饱和度”的定义是明显不同的。&lt;/p&gt;
-
 &lt;p&gt;因为 HSL 和 HSV 是设备依赖的 RGB 的简单变换，(h, s, l) 或 (h, s, v) 三元组定义的颜色依赖于所使用的特定红色、绿色和蓝色“加法原色”。每个独特的 RGB 设备都伴随着一个独特的 HSL 和 HSV 空间。但是 (h, s, l) 或 (h, s, v) 三元组在被约束于特定 RGB 空间比如 sRGB 的时候就变成明确的了。&lt;/p&gt;
-
 &lt;p&gt;HSV 模型在 1978 年由计算机图形学先驱 Alvy Ray Smith 创立，它是三原色光模式的一种非线性变换。&lt;/p&gt;</description>
     </item>
     
@@ -101,7 +86,7 @@
 &lt;p&gt;作者：Thibault Imbert
 项目地址：http://code.google.com/p/as3gif/&lt;/p&gt;
 &lt;p&gt;2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-actionscript&#34; data-lang=&#34;actionscript&#34;&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we create the GIFPlayer, it plays automatically by default
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-actionscript&#34; data-lang=&#34;actionscript&#34;&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we create the GIFPlayer, it plays automatically by default
 &lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt;();
 	&lt;span style=&#34;color:#75715e&#34;&gt;// we show it
 &lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;addChild&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt; );

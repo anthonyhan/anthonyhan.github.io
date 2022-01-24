@@ -8,6 +8,24 @@
     <language>zh-cn</language>
     <lastBuildDate>Wed, 03 Apr 2019 00:36:28 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Debian Redmine 备份与恢复</title>
+      <link>/posts/debian-redmine-backup-and-restore/</link>
+      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      
+      <guid>/posts/debian-redmine-backup-and-restore/</guid>
+      <description>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。
+系统需求  Redmine 3.3 installed with apt on Debian 9 (stretch). Database: PostgreSQL  备份 配置文件 配置文件包含路径：/etc/redmine/{instance}
+例如，默认实例名称为default，则配置文件路径为/etc/redmine/{default}。包含以下配置文件：
+ configuration.yml database.xml secret_key.txt  数据库 在备份脚本执行用户的主目录创建 .pgpass 文件，加入连接数据库的用户名密码等连接信息。
+echo &amp;#34;HOST:PORT:DB_NAME:USERNAME:PASSWORD&amp;#34; &amp;gt; ~/.pgpass 例如：
+echo &amp;#34;localhost:5432:redmine_default:redmine/instances/default:PASSWORD&amp;#34; &amp;gt; ~/.pgpass 使用 pg_dump 导出数据：
+pg_dump -U redmine/instances/default -d redmine_default -h localhost -Fc --file=/home/redmine/redmine_backup/db_dumps/redmine_`date +%Y-%m-%d`.sqlc 附件 路径：/var/lib/redmine/${instance}/files
+rsync -a /var/lib/redmine/default/files /home/redmine/redmine_backup/ 插件 路径：/usr/share/redmine/plugins
+主题 路径：/usr/share/redmine/public/themes
+备份脚本 #!/bin/bash # Redmine Backup Shell # Author: Han Qian # Version: 1.</description>
+    </item>
+    
+    <item>
       <title>游戏AI入门指南(Part 3)</title>
       <link>/posts/the-total-beginners-guide-to-game-ai-part-3/</link>
       <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
@@ -115,31 +133,31 @@ Everyone except for them.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;创建项目目录&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;mkdir ts_pixi
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;mkdir ts_pixi
 cd ts_pixi
 mkdir assets src dist
 &lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;新建项目文件&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;touch index.html
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;touch index.html
 touch src/main.ts
 &lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;初始化项目&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm init
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm init
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;PixiJS&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save-dev pixi.js
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev pixi.js
 &lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应&lt;code&gt;@types&lt;/code&gt;文件，用于代码提示等功能。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save-dev typescript @types/pixi.js @types/node
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev typescript @types/pixi.js @types/node
 &lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;其它&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save-dev ts-loader webpack webpack-dev-server
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev ts-loader webpack webpack-dev-server
 &lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
@@ -152,37 +170,37 @@ touch src/main.ts
       <description>&lt;p&gt;PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。&lt;/p&gt;
 &lt;h2 id=&#34;前提&#34;&gt;前提&lt;/h2&gt;
 &lt;p&gt;不可或缺的当然是node。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;node --version
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;node --version
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
 &lt;h3 id=&#34;初始化项目&#34;&gt;初始化项目&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;创建项目目录&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;mkdir ts_pixi
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;mkdir ts_pixi
 cd ts_pixi
 mkdir assets src dist
 &lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;新建项目文件&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;touch index.html
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;touch index.html
 touch src/main.ts
 &lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;初始化项目&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm init
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm init
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;PixiJS&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save pixi.js
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save pixi.js
 &lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;TypeScript&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save-dev typescript
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev typescript
 &lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;其它&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save-dev browserify browserify-shim http-server tsify tslint
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev browserify browserify-shim http-server tsify tslint
 &lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     
@@ -401,19 +419,13 @@ Markdown: Syntax  概述  哲學 行內 HTML 特殊字元自動轉換   區塊�
       
       <guid>/posts/image-dithering-algorithm-as3/</guid>
       <description>&lt;p&gt;不知当初自己出于什么目的，OneNote 里留了一条关于 Floyd–Steinberg dithering 的笔记。好奇之余，打开链接看了一下，方才想起这个当初让我觉得新奇的古老算法。&lt;/p&gt;
-
 &lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
-
 &lt;p&gt;余忆童稚时，能张目对日，明察秋毫……”如果你对过去黑白报纸的图片仔细观察过的话，一定会发现，那些黑白照片由很多圆形或方形的图形组成。是的，那就是半色调（Halftone）和抖动（Dither ）技术。&lt;/p&gt;
-
-&lt;p&gt;&lt;figure&gt;&lt;img src=&#34;https://pixy.org/src/405/thumbs350/4057896.jpg&#34; alt=&#34;Halftone&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
-
+&lt;p&gt;&lt;img src=&#34;https://pixy.org/src/405/thumbs350/4057896.jpg&#34; alt=&#34;Halftone&#34;&gt;&lt;/p&gt;
 &lt;p&gt;半色调（Halftone）是指为了模拟出连续调影像（色阶）的视觉感觉，一般用墨点（半色调网点）的大小或频率的改变，来模拟明暗的变化。半色调广泛应用于报刊出版等领域，当年那些黑白出版物上尤其常见，现在的牛奶包装上也能看出来。&lt;/p&gt;
-
 &lt;h2 id=&#34;阈值法thresholding&#34;&gt;阈值法（Thresholding）&lt;/h2&gt;
-
 &lt;p&gt;当像素值大于设定阈值时，输出为亮点，否则输出为暗点，从而实现二值化。经过处理的图像往往失去细节，缺乏层次感。下图所示的就是二值化的图像。
-&lt;figure&gt;&lt;img src=&#34;http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg&#34; alt=&#34;lena_binary&#34;&gt;&lt;/figure&gt;&lt;/p&gt;</description>
+&lt;img src=&#34;http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg&#34; alt=&#34;lena_binary&#34;&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -423,15 +435,10 @@ Markdown: Syntax  概述  哲學 行內 HTML 特殊字元自動轉換   區塊�
       
       <guid>/posts/convert-hsv-hsl-to-rgb/</guid>
       <description>&lt;p&gt;处理图像时，有时候会遇到不同色彩空间转换的情况。比较常见的是HSV/HSL到RGB的转换。&lt;/p&gt;
-
 &lt;h2 id=&#34;hsvhsbhsl简介&#34;&gt;HSV(HSB)/HSL简介&lt;/h2&gt;
-
 &lt;p&gt;不同于RGB/CYMK，HSV和HSL是两种比较常见的基于圆柱坐标系的色彩表示方法。这种方法对颜色的表达,对人来说更直观，更易于感受。因此艺术家有时偏好使用 HSL或HSV 而不选择 三原色光模式（即RGB模型） 或 印刷四分色模式（即CMYK模型），因为它类似于人类感觉颜色的方式，具有较强的感知度。RGB 和 CMYK 分别是加法原色和减法原色模型，以原色组合的方式定义颜色，而 HSV 以人类更熟悉的方式封装了关于颜色的信息：“这是什么颜色？深浅如何？明暗如何？”。&lt;/p&gt;
-
-&lt;p&gt;&lt;figure&gt;&lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/500px-Hsl-hsv_models.svg.png&#34; alt=&#34;&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
-
+&lt;p&gt;&lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/500px-Hsl-hsv_models.svg.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;色彩定义&#34;&gt;色彩定义&lt;/h3&gt;
-
 &lt;ul&gt;
 &lt;li&gt;H ：Hue(色相)，色彩的基本属性，就是平常所说的颜色名称，如红色、黄色等。&lt;/li&gt;
 &lt;li&gt;S ：saturation(饱和度)，色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值。&lt;/li&gt;
@@ -439,13 +446,9 @@ Markdown: Syntax  概述  哲學 行內 HTML 特殊字元自動轉換   區塊�
 &lt;li&gt;B ：brightness(明度)，取0-100%。&lt;/li&gt;
 &lt;li&gt;L ：lightness(亮度)，取0-100%。&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;HSL 和 HSV 二者都把颜色描述在圆柱坐标系内的点，这个圆柱的中心轴取值为自底部的黑色到顶部的白色而在它们中间是的灰色，绕这个轴的角度对应于“色相”，到这个轴的距离对应于“饱和度”，而沿着这个轴的高度对应于“亮度”，“色调”或“明度”。&lt;/p&gt;
-
 &lt;p&gt;这两种表示在用目的上类似，但在方法上有区别。二者在数学上都是圆柱，但 HSV（色相，饱和度，色调）在概念上可以被认为是颜色的倒圆锥体（黑点在下顶点，白色在上底面圆心），HSL 在概念上表示了一个双圆锥体和圆球体（白色在上顶点，黑色在下顶点，最大横切面的圆心是半程灰色）。注意尽管在 HSL 和 HSV 中“色相”指称相同的性质，它们的“饱和度”的定义是明显不同的。&lt;/p&gt;
-
 &lt;p&gt;因为 HSL 和 HSV 是设备依赖的 RGB 的简单变换，(h, s, l) 或 (h, s, v) 三元组定义的颜色依赖于所使用的特定红色、绿色和蓝色“加法原色”。每个独特的 RGB 设备都伴随着一个独特的 HSL 和 HSV 空间。但是 (h, s, l) 或 (h, s, v) 三元组在被约束于特定 RGB 空间比如 sRGB 的时候就变成明确的了。&lt;/p&gt;
-
 &lt;p&gt;HSV 模型在 1978 年由计算机图形学先驱 Alvy Ray Smith 创立，它是三原色光模式的一种非线性变换。&lt;/p&gt;</description>
     </item>
     
@@ -484,7 +487,7 @@ Markdown: Syntax  概述  哲學 行內 HTML 特殊字元自動轉換   區塊�
       <description>&lt;p&gt;更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。&lt;/p&gt;
 &lt;h2 id=&#34;问题分析&#34;&gt;问题分析&lt;/h2&gt;
 &lt;p&gt;根据报错的信息，可以打开日志文件查看详细的原因：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;    less /var/log/nvidia-installer.log&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;    less /var/log/nvidia-installer.log&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;日志信息如下：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;-&amp;gt; Kernel source path: &amp;lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&amp;rsquo;
@@ -649,7 +652,7 @@ source ~/.rvm/scripts/rvm&lt;/p&gt;
 &lt;p&gt;作者：Thibault Imbert
 项目地址：http://code.google.com/p/as3gif/&lt;/p&gt;
 &lt;p&gt;2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-actionscript&#34; data-lang=&#34;actionscript&#34;&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we create the GIFPlayer, it plays automatically by default
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-actionscript&#34; data-lang=&#34;actionscript&#34;&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we create the GIFPlayer, it plays automatically by default
 &lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt;();
 	&lt;span style=&#34;color:#75715e&#34;&gt;// we show it
 &lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;addChild&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt; );
@@ -1368,9 +1371,7 @@ Life is a garden We are all gardeners</description>
       <guid>/about/</guid>
       <description>blog.author a game developer at EasyTech.
 LOVE GAMES, PLAY GAMES, AND MAKE GAMES.
-Games  Three Kingdoms Conqueror (iOS, Android) World Conqueror III (iOS, Android) Glory of Generals II (iOS, Android) European War V: Empire (iOS, Android) World Conqueror IV (iOS, Android) European War VI: 1804 (iOS, Android) Great Conqueror: Rome (iOS, Android) Glory of Generals III (iOS, Android)   blog.log 2005-10-14：开通 MSN Spaces，首次尝试网络博客；
-2006-07-14：百度推出Baidu空间，由于教育网内访问速度快，还有搬家功能，遂迁移至此,偶尔使用；
-2007-10-18：MSN Spaces 被升级成 Windows Live Spaces；</description>
+Games  Three Kingdoms Conqueror (iOS, Android) World Conqueror III (iOS, Android) Glory of Generals II (iOS, Android) European War V: Empire (iOS, Android) World Conqueror IV (iOS, Android) European War VI: 1804 (iOS, Android) Great Conqueror: Rome (iOS, Android) Glory of Generals III (iOS, Android) European War VII: Medieval   blog.log 2005-10-14：开通 MSN Spaces，首次尝试网络博客；</description>
     </item>
     
   </channel>

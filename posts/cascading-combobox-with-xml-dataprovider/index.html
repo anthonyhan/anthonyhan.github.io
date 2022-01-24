@@ -41,7 +41,7 @@
 <p><img src="/images/excel_01.png" alt="开发工具"></p>
 <h3 id="设计xml结构">设计XML结构</h3>
 <p>XML结构根据自己要求设计，多个相同子节点表示可以重复。比如这个：
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
 <span style="color:#f92672">&lt;root&gt;</span>
 	<span style="color:#f92672">&lt;province</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">&gt;</span>
 	 	<span style="color:#f92672">&lt;city</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">&gt;</span>
@@ -64,7 +64,7 @@
 <p>点击“源”按钮右边的“导出”，就可以导出XML了。导出后检查下数据映射对不对，如果没问题就算完成了。</p>
 <h2 id="加载xml数据">加载XML数据</h2>
 <p>加载直接用URLLoader就可以。
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">url</span><span style="color:#f92672">:</span>String <span style="color:#f92672">=</span> <span style="color:#a6e22e">xmlUrl</span><span style="color:#f92672">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">url</span><span style="color:#f92672">:</span>String <span style="color:#f92672">=</span> <span style="color:#a6e22e">xmlUrl</span><span style="color:#f92672">;</span>
 	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">vars</span><span style="color:#f92672">:</span><span style="color:#a6e22e">URLVariables</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">URLVariables</span>();
 	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">request</span><span style="color:#f92672">:</span>URLRequest <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> URLRequest(<span style="color:#a6e22e">url</span>);
 	 
@@ -76,7 +76,7 @@
 	<span style="color:#a6e22e">loader</span>.<span style="color:#a6e22e">load</span>(<span style="color:#a6e22e">request</span>);</code></pre></div></p>
 <h2 id="级联combobox">级联ComboBox</h2>
 <p>由于ActionScript E4X 的处理能力很强，所以利用XML作为数据源是完全可行的。经过几个简单的处理步骤就可以作为数据源提供给ComboBox。代码如下：
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#75715e">/**
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#75715e">/**
 </span><span style="color:#75715e">	 *  加载XML数据 
 </span><span style="color:#75715e">	 * @param event
 </span><span style="color:#75715e">	 * 
