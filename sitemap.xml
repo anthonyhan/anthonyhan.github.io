@@ -2,13 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/posts/debian-redmine-backup-and-restore/</loc>
+    <lastmod>2022-01-23T22:36:28+00:00</lastmod>
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2022-01-23T22:36:28+00:00</lastmod>
+  </url><url>
+    <loc>/posts/</loc>
+    <lastmod>2022-01-23T22:36:28+00:00</lastmod>
+  </url><url>
+    <loc>/tags/redmine/</loc>
+    <lastmod>2022-01-23T22:36:28+00:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2022-01-23T22:36:28+00:00</lastmod>
+  </url><url>
     <loc>/tags/ai/</loc>
     <lastmod>2019-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/behavior-tree/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
-  </url><url>
-    <loc>/posts/debian-redmine-backup-and-restore/</loc>
     <lastmod>2019-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/fsm/</loc>
@@ -29,22 +41,10 @@
     <loc>/tags/learning/</loc>
     <lastmod>2019-04-03T00:36:28+00:00</lastmod>
   </url><url>
-    <loc>/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
-  </url><url>
     <loc>/tags/navigation/</loc>
     <lastmod>2019-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/planning/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
-  </url><url>
-    <loc>/posts/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
-  </url><url>
-    <loc>/tags/redmine/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
     <lastmod>2019-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/utility-based/</loc>

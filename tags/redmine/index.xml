@@ -6,11 +6,11 @@
     <description>Recent content in redmine on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 03 Apr 2019 00:36:28 +0000</lastBuildDate><atom:link href="/tags/redmine/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 23 Jan 2022 22:36:28 +0000</lastBuildDate><atom:link href="/tags/redmine/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Debian Redmine 备份与恢复</title>
       <link>/posts/debian-redmine-backup-and-restore/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      <pubDate>Sun, 23 Jan 2022 22:36:28 +0000</pubDate>
       
       <guid>/posts/debian-redmine-backup-and-restore/</guid>
       <description>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。
