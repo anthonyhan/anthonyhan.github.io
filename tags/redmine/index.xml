@@ -18,11 +18,10 @@
 例如，默认实例名称为default，则配置文件路径为/etc/redmine/{default}。包含以下配置文件：
  configuration.yml database.xml secret_key.txt  数据库 在备份脚本执行用户的主目录创建 .pgpass 文件，加入连接数据库的用户名密码等连接信息。
 echo &amp;#34;HOST:PORT:DB_NAME:USERNAME:PASSWORD&amp;#34; &amp;gt; ~/.pgpass 例如：
-echo &amp;#34;localhost:5432:redmine_default:redmine/instances/default:PASSWORD&amp;#34; &amp;gt; ~/.pgpass 使用 pg_dump 导出数据：
+echo &amp;#34;localhost:5432:redmine_default:redmine/instances/default:PASSWORD&amp;#34; &amp;gt; ~/.pgpass # 赋予权限 chmod 600 ~/.pgpass 使用 pg_dump 导出数据：
 pg_dump -U redmine/instances/default -d redmine_default -h localhost -Fc --file=/home/redmine/redmine_backup/db_dumps/redmine_`date +%Y-%m-%d`.sqlc 附件 路径：/var/lib/redmine/${instance}/files
 rsync -a /var/lib/redmine/default/files /home/redmine/redmine_backup/ 插件 路径：/usr/share/redmine/plugins
-主题 路径：/usr/share/redmine/public/themes
-备份脚本 #!/bin/bash # Redmine Backup Shell # Author: Han Qian # Version: 1.</description>
+主题 路径：/usr/share/redmine/public/themes</description>
     </item>
     
     <item>
