@@ -1,138 +1,49 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flash中使用原生鼠标指针 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
-
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
-
-<div class="article-meta">
-<h1><span class="title">Flash中使用原生鼠标指针</span></h1>
-
-<h2 class="date">2012/07/11</h2>
-</div>
-
-<main>
-<p>Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过操作系统指针机制实现基于位图的原生鼠标指针，此方式比使用显示对象来显示自定义指针图像更有效。</p>
-<p><img src="/images/native_mouse_cursor_in_flash.png" alt="image"></p>
-<h2 id="理解原生位图指针">理解原生位图指针</h2>
-<p>自Flash Player 5开始，一直使用 InteractiveObject.startDrag 和 Mouse.hide 来自定义光标外形。但是之前的这种实现有以下几个限制：</p>
-<ul>
-<li>显示对象实现的光标受限于舞台的维度。当用户把光标在舞台边界处，自定义光标会显示不完全。</li>
-<li>显示对象光标在Flash Player 渲染时非常消耗资源，因为整个舞台必须在很高的帧数下重新渲染。updateAfterEvent 方法的使用会导致高CPU占用。</li>
-<li>如果SWF因为某些原因停顿了几毫秒，光标动画也会停顿，用户会误认为程序不响应了。</li>
-<li>总体上看，相比原生光标，显示对象实现的光标比较迟缓，不够流畅，用户体验不好。</li>
-</ul>
-<h2 id="实现原生鼠标光标">实现原生鼠标光标</h2>
-<p>实现原生鼠标光标只需要 MouseCursorData 类的几个属性，非常简洁高效。</p>
-<p>flash.ui.MouseCursorData 的三个属性：</p>
-<ul>
-<li>data：BitmapData 对象的 Vector 包含光标图像或图像。可提供多个图像，并将 frameRate 属性设置为使光标具有动画效果。但是位图大小有限制，最大光标大小为 32×32 像素。</li>
-<li>frameRate：使光标具有动画效果的帧速率，在 data 属性中提供多个图像并将帧速率设置为大于 0 的值，以便为指针添加动画效果。光标帧速率可能不同于当前的 SWF 帧速率，就是说调整帧率后光标动画帧率不会变化。</li>
-<li>hotSpot：以像素表示的光标热点，热点是指在光标上注册鼠标单击所在的点。默认情况下位于左上角 (0,0)。</li>
-</ul>
-<h2 id="代码示例">代码示例</h2>
-<p>动态光标和静态光标的实现方式差不多，只需要在data中存入多个位图并设置frameRate。代码如下：
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">createFakeCursor</span>()<span style="color:#f92672">:</span><span style="color:#a6e22e">void</span>
-{
-	<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">fakeCursor</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Shape();
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">bmp</span><span style="color:#f92672">:</span>BitmapData <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">generateCursorBmp</span>(<span style="color:#ae81ff">8</span>);
-	<span style="color:#a6e22e">fakeCursor</span>.<span style="color:#a6e22e">graphics</span>.<span style="color:#a6e22e">beginBitmapFill</span>(<span style="color:#a6e22e">bmp</span>);
-	<span style="color:#a6e22e">fakeCursor</span>.<span style="color:#a6e22e">graphics</span>.<span style="color:#a6e22e">drawRect</span>(<span style="color:#ae81ff">0</span><span style="color:#f92672">,</span><span style="color:#ae81ff">0</span><span style="color:#f92672">,</span><span style="color:#a6e22e">bmp</span>.<span style="color:#a6e22e">width</span><span style="color:#f92672">,</span><span style="color:#a6e22e">bmp</span>.<span style="color:#a6e22e">height</span>);
-	<span style="color:#a6e22e">fakeCursor</span>.<span style="color:#a6e22e">graphics</span>.<span style="color:#a6e22e">endFill</span>();
-	<span style="color:#a6e22e">fakeCursor</span>.<span style="color:#a6e22e">visible</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
-	<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">addChild</span>(<span style="color:#a6e22e">fakeCursor</span>);
-}
- 
-<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">createStaticNativeCursor</span>()<span style="color:#f92672">:</span><span style="color:#a6e22e">void</span>
-{
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cursorData</span><span style="color:#f92672">:</span><span style="color:#a6e22e">MouseCursorData</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">MouseCursorData</span>();
-	<span style="color:#a6e22e">cursorData</span>.<span style="color:#a6e22e">hotSpot</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Point(<span style="color:#ae81ff">0</span><span style="color:#f92672">,</span><span style="color:#ae81ff">0</span>);
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">bitmapDatas</span><span style="color:#f92672">:</span><span style="color:#a6e22e">Vector</span>. <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Vector</span>.();
- 
-	<span style="color:#75715e">//static
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">bitmapDatas</span>.<span style="color:#a6e22e">push</span>( <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">generateCursorBmp</span>(<span style="color:#ae81ff">8</span>) );
-	<span style="color:#75715e">// we assign the bitmap to the MouseCursor object
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cursorData</span>.<span style="color:#a6e22e">data</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bitmapDatas</span><span style="color:#f92672">;</span>
-	<span style="color:#75715e">// we register the MouseCursorData to the Mouse
-</span><span style="color:#75715e"></span>	Mouse.<span style="color:#a6e22e">registerCursor</span>(<span style="color:#a6e22e">MY_STATIC_CURSOR</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">cursorData</span>);
-}
- 
-<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">createAnimatedNativeCursor</span>()<span style="color:#f92672">:</span><span style="color:#a6e22e">void</span>
-{
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cursorData</span><span style="color:#f92672">:</span><span style="color:#a6e22e">MouseCursorData</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">MouseCursorData</span>();
-	<span style="color:#a6e22e">cursorData</span>.<span style="color:#a6e22e">hotSpot</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Point(<span style="color:#ae81ff">0</span><span style="color:#f92672">,</span><span style="color:#ae81ff">0</span>);
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">bitmapDatas</span><span style="color:#f92672">:</span><span style="color:#a6e22e">Vector</span>. <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Vector</span>.();
-	<span style="color:#75715e">//animated
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">bitmapDatas</span>.<span style="color:#a6e22e">push</span>( <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">generateCursorBmp</span>(<span style="color:#ae81ff">5</span>) );
-	<span style="color:#a6e22e">bitmapDatas</span>.<span style="color:#a6e22e">push</span>( <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">generateCursorBmp</span>(<span style="color:#ae81ff">7</span>) );
-	<span style="color:#a6e22e">bitmapDatas</span>.<span style="color:#a6e22e">push</span>( <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">generateCursorBmp</span>(<span style="color:#ae81ff">8</span>) );
-	<span style="color:#a6e22e">bitmapDatas</span>.<span style="color:#a6e22e">push</span>( <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">generateCursorBmp</span>(<span style="color:#ae81ff">9</span>) );
-	<span style="color:#a6e22e">bitmapDatas</span>.<span style="color:#a6e22e">push</span>( <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">generateCursorBmp</span>(<span style="color:#ae81ff">10</span>) );
- 
-	<span style="color:#75715e">// we assign the bitmap to the MouseCursor object
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cursorData</span>.<span style="color:#a6e22e">data</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bitmapDatas</span><span style="color:#f92672">;</span>
-	<span style="color:#75715e">// we register the MouseCursorData to the Mouse
-</span><span style="color:#75715e"></span>	Mouse.<span style="color:#a6e22e">registerCursor</span>(<span style="color:#a6e22e">MY_ANIMATED_CURSOR</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">cursorData</span>);
-	<span style="color:#75715e">// we just pas a frame rate
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">cursorData</span>.<span style="color:#a6e22e">frameRate</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span><span style="color:#f92672">;</span>
-}
- 
-<span style="color:#75715e">//设置光标:只须赋值注册的光标名称即可
-</span><span style="color:#75715e">//set a cursor 
-</span><span style="color:#75715e"></span><span style="color:#e6db74">//</span>Mouse.<span style="color:#a6e22e">cursor</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">MY_STATIC_CURSOR</span><span style="color:#f92672">;</span></code></pre></div></p>
-<h3 id="demo">Demo</h3>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p><strong>说明：</strong></p>
-<ul>
-<li>Static 和 Animated 都采用基于位图的原生光标。Static是静态的，Animated是一个5帧的动态光标，Oldfashioned 是利用显示对象实现的光标，System为系统光标。</li>
-<li>在选择Oldfashioned光标，然后点击ComboBox的时候，明显可以看到层次不对的问题。类似的情况还发生在TextInput以及相似的组件上，而且鼠标指针离开舞台时，光标不能隐藏。使用原生光标这类问题统统没有。</li>
-<li>为方便得到不同大小光标，位图是用代码生成的。</li>
-<li>左键按住画图，右键清屏。右键菜单屏蔽是利用11.3 里 MouseEvent.RIGHT_CLICK 实现的，纯属娱乐。</li>
-</ul>
-<p>总体上看，原生光标完全超越传统的“冒牌”光标，无论是在性能和代码编写，以及用户体验上，都是让人满意的。</p>
-<p><strong>Source:</strong>
-<a href="http://sdrv.ms/LQbKwA">点击下载</a></p>
-<hr>
-<p><strong>参考资料</strong></p>
-<ol>
-<li><a href="http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/flash/ui/MouseCursorData.html">http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/flash/ui/MouseCursorData.html</a></li>
-<li><a href="http://www.adobe.com/devnet/flashplayer/articles/native-mouse-cursors.html">http://www.adobe.com/devnet/flashplayer/articles/native-mouse-cursors.html</a></li>
-<li><a href="http://www.bytearray.org/?p=2373">http://www.bytearray.org/?p=2373</a></li>
-<li><a href="http://www.cnblogs.com/ddw1997/archive/2011/04/11/2013061.html">http://www.cnblogs.com/ddw1997/archive/2011/04/11/2013061.html</a></li>
-</ol>
-
-</main>
-
-  <footer>
-  
-  
-  <hr/>
-  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
-
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Flash中使用原生鼠标指针 | LimboNova</title><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=/css/fonts.css></head><body><nav><ul class=menu><li><a href=/>Home</a></li><li><a href=/tags/>Tags</a></li><li><a href=/about/>About</a></li><li><a href=/index.xml>Subscribe</a></li></ul><hr></nav><div class=article-meta><h1><span class=title>Flash中使用原生鼠标指针</span></h1><h2 class=date>2012/07/11</h2></div><main><p>Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过操作系统指针机制实现基于位图的原生鼠标指针，此方式比使用显示对象来显示自定义指针图像更有效。</p><p><img src=/images/native_mouse_cursor_in_flash.png alt=image></p><h2 id=理解原生位图指针>理解原生位图指针</h2><p>自Flash Player 5开始，一直使用 InteractiveObject.startDrag 和 Mouse.hide 来自定义光标外形。但是之前的这种实现有以下几个限制：</p><ul><li>显示对象实现的光标受限于舞台的维度。当用户把光标在舞台边界处，自定义光标会显示不完全。</li><li>显示对象光标在Flash Player 渲染时非常消耗资源，因为整个舞台必须在很高的帧数下重新渲染。updateAfterEvent 方法的使用会导致高CPU占用。</li><li>如果SWF因为某些原因停顿了几毫秒，光标动画也会停顿，用户会误认为程序不响应了。</li><li>总体上看，相比原生光标，显示对象实现的光标比较迟缓，不够流畅，用户体验不好。</li></ul><h2 id=实现原生鼠标光标>实现原生鼠标光标</h2><p>实现原生鼠标光标只需要 MouseCursorData 类的几个属性，非常简洁高效。</p><p>flash.ui.MouseCursorData 的三个属性：</p><ul><li>data：BitmapData 对象的 Vector 包含光标图像或图像。可提供多个图像，并将 frameRate 属性设置为使光标具有动画效果。但是位图大小有限制，最大光标大小为 32×32 像素。</li><li>frameRate：使光标具有动画效果的帧速率，在 data 属性中提供多个图像并将帧速率设置为大于 0 的值，以便为指针添加动画效果。光标帧速率可能不同于当前的 SWF 帧速率，就是说调整帧率后光标动画帧率不会变化。</li><li>hotSpot：以像素表示的光标热点，热点是指在光标上注册鼠标单击所在的点。默认情况下位于左上角 (0,0)。</li></ul><h2 id=代码示例>代码示例</h2><p>动态光标和静态光标的实现方式差不多，只需要在data中存入多个位图并设置frameRate。代码如下：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span><span style=color:#66d9ef>private</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>createFakeCursor</span>()<span style=color:#f92672>:</span><span style=color:#a6e22e>void</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>fakeCursor</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Shape();
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>bmp</span><span style=color:#f92672>:</span>BitmapData <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>generateCursorBmp</span>(<span style=color:#ae81ff>8</span>);
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fakeCursor</span>.<span style=color:#a6e22e>graphics</span>.<span style=color:#a6e22e>beginBitmapFill</span>(<span style=color:#a6e22e>bmp</span>);
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fakeCursor</span>.<span style=color:#a6e22e>graphics</span>.<span style=color:#a6e22e>drawRect</span>(<span style=color:#ae81ff>0</span><span style=color:#f92672>,</span><span style=color:#ae81ff>0</span><span style=color:#f92672>,</span><span style=color:#a6e22e>bmp</span>.<span style=color:#a6e22e>width</span><span style=color:#f92672>,</span><span style=color:#a6e22e>bmp</span>.<span style=color:#a6e22e>height</span>);
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fakeCursor</span>.<span style=color:#a6e22e>graphics</span>.<span style=color:#a6e22e>endFill</span>();
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>fakeCursor</span>.<span style=color:#a6e22e>visible</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>addChild</span>(<span style=color:#a6e22e>fakeCursor</span>);
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span><span style=color:#66d9ef>private</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>createStaticNativeCursor</span>()<span style=color:#f92672>:</span><span style=color:#a6e22e>void</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>cursorData</span><span style=color:#f92672>:</span><span style=color:#a6e22e>MouseCursorData</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>MouseCursorData</span>();
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>cursorData</span>.<span style=color:#a6e22e>hotSpot</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Point(<span style=color:#ae81ff>0</span><span style=color:#f92672>,</span><span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>bitmapDatas</span><span style=color:#f92672>:</span><span style=color:#a6e22e>Vector</span>. <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Vector</span>.();
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//static
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>bitmapDatas</span>.<span style=color:#a6e22e>push</span>( <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>generateCursorBmp</span>(<span style=color:#ae81ff>8</span>) );
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// we assign the bitmap to the MouseCursor object
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>cursorData</span>.<span style=color:#a6e22e>data</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>bitmapDatas</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// we register the MouseCursorData to the Mouse
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	Mouse.<span style=color:#a6e22e>registerCursor</span>(<span style=color:#a6e22e>MY_STATIC_CURSOR</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>cursorData</span>);
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span><span style=color:#66d9ef>private</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>createAnimatedNativeCursor</span>()<span style=color:#f92672>:</span><span style=color:#a6e22e>void</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>cursorData</span><span style=color:#f92672>:</span><span style=color:#a6e22e>MouseCursorData</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>MouseCursorData</span>();
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>cursorData</span>.<span style=color:#a6e22e>hotSpot</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Point(<span style=color:#ae81ff>0</span><span style=color:#f92672>,</span><span style=color:#ae81ff>0</span>);
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>bitmapDatas</span><span style=color:#f92672>:</span><span style=color:#a6e22e>Vector</span>. <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Vector</span>.();
+</span></span><span style=display:flex><span>	<span style=color:#75715e>//animated
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>bitmapDatas</span>.<span style=color:#a6e22e>push</span>( <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>generateCursorBmp</span>(<span style=color:#ae81ff>5</span>) );
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>bitmapDatas</span>.<span style=color:#a6e22e>push</span>( <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>generateCursorBmp</span>(<span style=color:#ae81ff>7</span>) );
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>bitmapDatas</span>.<span style=color:#a6e22e>push</span>( <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>generateCursorBmp</span>(<span style=color:#ae81ff>8</span>) );
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>bitmapDatas</span>.<span style=color:#a6e22e>push</span>( <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>generateCursorBmp</span>(<span style=color:#ae81ff>9</span>) );
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>bitmapDatas</span>.<span style=color:#a6e22e>push</span>( <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>generateCursorBmp</span>(<span style=color:#ae81ff>10</span>) );
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// we assign the bitmap to the MouseCursor object
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>cursorData</span>.<span style=color:#a6e22e>data</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>bitmapDatas</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// we register the MouseCursorData to the Mouse
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	Mouse.<span style=color:#a6e22e>registerCursor</span>(<span style=color:#a6e22e>MY_ANIMATED_CURSOR</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>cursorData</span>);
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// we just pas a frame rate
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>cursorData</span>.<span style=color:#a6e22e>frameRate</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>10</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span><span style=color:#75715e>//设置光标:只须赋值注册的光标名称即可
+</span></span></span><span style=display:flex><span><span style=color:#75715e>//set a cursor 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#e6db74>//</span>Mouse.<span style=color:#a6e22e>cursor</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>MY_STATIC_CURSOR</span><span style=color:#f92672>;</span></span></span></code></pre></div></p><h3 id=demo>Demo</h3><p><strong>说明：</strong></p><ul><li>Static 和 Animated 都采用基于位图的原生光标。Static是静态的，Animated是一个5帧的动态光标，Oldfashioned 是利用显示对象实现的光标，System为系统光标。</li><li>在选择Oldfashioned光标，然后点击ComboBox的时候，明显可以看到层次不对的问题。类似的情况还发生在TextInput以及相似的组件上，而且鼠标指针离开舞台时，光标不能隐藏。使用原生光标这类问题统统没有。</li><li>为方便得到不同大小光标，位图是用代码生成的。</li><li>左键按住画图，右键清屏。右键菜单屏蔽是利用11.3 里 MouseEvent.RIGHT_CLICK 实现的，纯属娱乐。</li></ul><p>总体上看，原生光标完全超越传统的“冒牌”光标，无论是在性能和代码编写，以及用户体验上，都是让人满意的。</p><p><strong>Source:</strong>
+<a href=http://sdrv.ms/LQbKwA>点击下载</a></p><hr><p><strong>参考资料</strong></p><ol><li><a href=http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/flash/ui/MouseCursorData.html>http://help.adobe.com/zh_CN/FlashPlatform/reference/actionscript/3/flash/ui/MouseCursorData.html</a></li><li><a href=http://www.adobe.com/devnet/flashplayer/articles/native-mouse-cursors.html>http://www.adobe.com/devnet/flashplayer/articles/native-mouse-cursors.html</a></li><li><a href="http://www.bytearray.org/?p=2373">http://www.bytearray.org/?p=2373</a></li><li><a href=http://www.cnblogs.com/ddw1997/archive/2011/04/11/2013061.html>http://www.cnblogs.com/ddw1997/archive/2011/04/11/2013061.html</a></li></ol></main><script src=https://utteranc.es/client.js repo=anthonyhan/anthonyhan.github.io issue-term=title label=💬comment theme=github-light crossorigin=anonymous async></script><footer><hr>© 2005 - 2022 Anthony | <a href=https://github.com/anthonyhan>Github</a> | <a href=https://twitter.com/antonius_hq>Twitter</a></footer></body></html>

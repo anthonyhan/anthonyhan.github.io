@@ -1,186 +1,125 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>algorithm on LimboNova</title>
-    <link>/tags/algorithm/</link>
-    <description>Recent content in algorithm on LimboNova</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Tue, 02 Apr 2013 20:21:09 +0800</lastBuildDate><atom:link href="/tags/algorithm/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>基于AS3.0的图像抖动实现</title>
-      <link>/posts/image-dithering-algorithm-as3/</link>
-      <pubDate>Tue, 02 Apr 2013 20:21:09 +0800</pubDate>
-      
-      <guid>/posts/image-dithering-algorithm-as3/</guid>
-      <description>&lt;p&gt;不知当初自己出于什么目的，OneNote 里留了一条关于 Floyd–Steinberg dithering 的笔记。好奇之余，打开链接看了一下，方才想起这个当初让我觉得新奇的古老算法。&lt;/p&gt;
-
-&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
-
-&lt;p&gt;余忆童稚时，能张目对日，明察秋毫……”如果你对过去黑白报纸的图片仔细观察过的话，一定会发现，那些黑白照片由很多圆形或方形的图形组成。是的，那就是半色调（Halftone）和抖动（Dither ）技术。&lt;/p&gt;
-
-&lt;p&gt;&lt;figure&gt;&lt;img src=&#34;https://pixy.org/src/405/thumbs350/4057896.jpg&#34; alt=&#34;Halftone&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
-
-&lt;p&gt;半色调（Halftone）是指为了模拟出连续调影像（色阶）的视觉感觉，一般用墨点（半色调网点）的大小或频率的改变，来模拟明暗的变化。半色调广泛应用于报刊出版等领域，当年那些黑白出版物上尤其常见，现在的牛奶包装上也能看出来。&lt;/p&gt;
-
-&lt;h2 id=&#34;阈值法thresholding&#34;&gt;阈值法（Thresholding）&lt;/h2&gt;
-
-&lt;p&gt;当像素值大于设定阈值时，输出为亮点，否则输出为暗点，从而实现二值化。经过处理的图像往往失去细节，缺乏层次感。下图所示的就是二值化的图像。
-&lt;figure&gt;&lt;img src=&#34;http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg&#34; alt=&#34;lena_binary&#34;&gt;&lt;/figure&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>HSV/HSL转换到RGB色彩空间</title>
-      <link>/posts/convert-hsv-hsl-to-rgb/</link>
-      <pubDate>Fri, 08 Mar 2013 18:08:17 +0800</pubDate>
-      
-      <guid>/posts/convert-hsv-hsl-to-rgb/</guid>
-      <description>&lt;p&gt;处理图像时，有时候会遇到不同色彩空间转换的情况。比较常见的是HSV/HSL到RGB的转换。&lt;/p&gt;
-
-&lt;h2 id=&#34;hsvhsbhsl简介&#34;&gt;HSV(HSB)/HSL简介&lt;/h2&gt;
-
-&lt;p&gt;不同于RGB/CYMK，HSV和HSL是两种比较常见的基于圆柱坐标系的色彩表示方法。这种方法对颜色的表达,对人来说更直观，更易于感受。因此艺术家有时偏好使用 HSL或HSV 而不选择 三原色光模式（即RGB模型） 或 印刷四分色模式（即CMYK模型），因为它类似于人类感觉颜色的方式，具有较强的感知度。RGB 和 CMYK 分别是加法原色和减法原色模型，以原色组合的方式定义颜色，而 HSV 以人类更熟悉的方式封装了关于颜色的信息：“这是什么颜色？深浅如何？明暗如何？”。&lt;/p&gt;
-
-&lt;p&gt;&lt;figure&gt;&lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/500px-Hsl-hsv_models.svg.png&#34; alt=&#34;&#34;&gt;&lt;/figure&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;色彩定义&#34;&gt;色彩定义&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;H ：Hue(色相)，色彩的基本属性，就是平常所说的颜色名称，如红色、黄色等。&lt;/li&gt;
-&lt;li&gt;S ：saturation(饱和度)，色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值。&lt;/li&gt;
-&lt;li&gt;V ：value(色调)，取0-100%。&lt;/li&gt;
-&lt;li&gt;B ：brightness(明度)，取0-100%。&lt;/li&gt;
-&lt;li&gt;L ：lightness(亮度)，取0-100%。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;HSL 和 HSV 二者都把颜色描述在圆柱坐标系内的点，这个圆柱的中心轴取值为自底部的黑色到顶部的白色而在它们中间是的灰色，绕这个轴的角度对应于“色相”，到这个轴的距离对应于“饱和度”，而沿着这个轴的高度对应于“亮度”，“色调”或“明度”。&lt;/p&gt;
-
-&lt;p&gt;这两种表示在用目的上类似，但在方法上有区别。二者在数学上都是圆柱，但 HSV（色相，饱和度，色调）在概念上可以被认为是颜色的倒圆锥体（黑点在下顶点，白色在上底面圆心），HSL 在概念上表示了一个双圆锥体和圆球体（白色在上顶点，黑色在下顶点，最大横切面的圆心是半程灰色）。注意尽管在 HSL 和 HSV 中“色相”指称相同的性质，它们的“饱和度”的定义是明显不同的。&lt;/p&gt;
-
-&lt;p&gt;因为 HSL 和 HSV 是设备依赖的 RGB 的简单变换，(h, s, l) 或 (h, s, v) 三元组定义的颜色依赖于所使用的特定红色、绿色和蓝色“加法原色”。每个独特的 RGB 设备都伴随着一个独特的 HSL 和 HSV 空间。但是 (h, s, l) 或 (h, s, v) 三元组在被约束于特定 RGB 空间比如 sRGB 的时候就变成明确的了。&lt;/p&gt;
-
-&lt;p&gt;HSV 模型在 1978 年由计算机图形学先驱 Alvy Ray Smith 创立，它是三原色光模式的一种非线性变换。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>GIF 格式及LZW算法浅析</title>
-      <link>/posts/gif-format-and-lzw/</link>
-      <pubDate>Thu, 20 Sep 2012 18:20:14 +0800</pubDate>
-      
-      <guid>/posts/gif-format-and-lzw/</guid>
-      <description>&lt;p&gt;前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。&lt;/p&gt;
-&lt;p&gt;花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/images/diego.gif&#34; alt=&#34;gif sample&#34; title=&#34;GIF 多帧动画&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;gif概述&#34;&gt;GIF概述&lt;/h2&gt;
-&lt;p&gt;Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。&lt;/p&gt;
-&lt;p&gt;GIF主要分为两个版本，即GIF 87a和GIF 89a：&lt;/p&gt;
-&lt;p&gt;GIF 87a：是在1987年制定的版本；
-GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。&lt;/p&gt;
-&lt;h2 id=&#34;gif格式结构&#34;&gt;GIF格式结构&lt;/h2&gt;
-&lt;p&gt;GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。&lt;/p&gt;
-&lt;h3 id=&#34;结构组成&#34;&gt;结构组成&lt;/h3&gt;
-&lt;p&gt;结构如下表所示：&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Header&lt;/td&gt;
-&lt;td&gt;Header&lt;/td&gt;
-&lt;td&gt;Header&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Logical Screen Descriptor&lt;/td&gt;
-&lt;td&gt;Screen Descriptor Block&lt;/td&gt;
-&lt;td&gt;GIF Data Stream&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Global Color Table&lt;/td&gt;
-&lt;td&gt;Global Color Table(optional)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Application Extension&lt;/td&gt;
-&lt;td&gt;Extension Blocks(optional, repeated)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Graphic Control Extension*&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;…&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Image Descriptor&lt;/td&gt;
-&lt;td&gt;Image Blocks(repeated)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Local Color Table&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Table Based Image Data&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;…&lt;/td&gt;
-&lt;td&gt;Extension Blocks(optional, repeated)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Trailer&lt;/td&gt;
-&lt;td&gt;Trailer&lt;/td&gt;
-&lt;td&gt;Trailer&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;</description>
-    </item>
-    
-    <item>
-      <title>基于AS3.0的相似图像搜索算法实现</title>
-      <link>/posts/similar-image-searching-algorithm-as3/</link>
-      <pubDate>Tue, 14 Aug 2012 19:59:25 +0800</pubDate>
-      
-      <guid>/posts/similar-image-searching-algorithm-as3/</guid>
-      <description>&lt;p&gt;Google的图像搜索，可以根据用户上传或者网络上的图片找到与此最相似的图片(百度也有类似功能)。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://pjkm4w.bay.livefilestore.com/y1pOjCa3mvtvwKjegr_UmRLkNG9nUpMQU-uMfHod4eqmrtsEsIHz4jI_4yyhi7oe7xURPx9ZOu-lMQsUi8FbN4reRvqjqVlik3i/google_image_search.png&#34; alt=&#34;google image search&#34; title=&#34;Google Image Search&#34;&gt;&lt;/p&gt;
-&lt;p&gt;阮一峰的博客曾经提到过 “感知哈希算法(Perceptual hash algorithm)”，主要介绍了 Dr. Neal Krawetz基于感知哈希算法的”平均哈希算法(Average Hash algorithm)”。相比其他算法，这种算法简单快速，很容易实现。&lt;/p&gt;
-&lt;p&gt;对于图像来说，高频信息体现图像的细节，低频信息体现图像的边缘和轮廓。一幅大而清晰的图像不仅包含低频，而且会包含很多高频分量。而小图片因为缺乏细节部分，往往只有低频信息。因此用只包含低频分量的图像来做图像相似度匹配是非常合适的。&lt;/p&gt;
-&lt;p&gt;感知哈希算法的基本原理是根据图像特征生成一个特定(但非唯一)的指纹，根据指纹来比较图像的相似度。其特点是，即使图像放大缩小，调整高宽，或者有少许色彩变化（对比度，亮度等等），仍然可以匹配到相似的图像。&lt;/p&gt;
-&lt;h2 id=&#34;平均哈希算法average-hash-algorithm&#34;&gt;平均哈希算法(Average Hash algorithm)&lt;/h2&gt;
-&lt;p&gt;实现步骤如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;缩小尺寸：移除高频部分，将图像缩小至8×8像素,不考虑高宽比；
-{% img &lt;a href=&#34;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg&#34;&gt;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg&lt;/a&gt; 64 64 %}&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;减少颜色：转为灰度图，将64像素的RGB 64×3个颜色值简化为 64个色值；
-{% img &lt;a href=&#34;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg&#34;&gt;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg&lt;/a&gt; 64 64 %}&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;计算平均值：计算64个颜色的均值；&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;比较灰度值：将每个像素的颜色值与平均值比较，小于均值记0，否则记1；&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;计算哈希值：将上述的比较结果拼起来构成一个64位的整数。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>algorithm on LimboNova</title><link>/tags/algorithm/</link><description>Recent content in algorithm on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 02 Apr 2013 20:21:09 +0800</lastBuildDate><atom:link href="/tags/algorithm/index.xml" rel="self" type="application/rss+xml"/><item><title>基于AS3.0的图像抖动实现</title><link>/posts/image-dithering-algorithm-as3/</link><pubDate>Tue, 02 Apr 2013 20:21:09 +0800</pubDate><guid>/posts/image-dithering-algorithm-as3/</guid><description>&lt;p>不知当初自己出于什么目的，OneNote 里留了一条关于 Floyd–Steinberg dithering 的笔记。好奇之余，打开链接看了一下，方才想起这个当初让我觉得新奇的古老算法。&lt;/p>
+&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>余忆童稚时，能张目对日，明察秋毫……”如果你对过去黑白报纸的图片仔细观察过的话，一定会发现，那些黑白照片由很多圆形或方形的图形组成。是的，那就是半色调（Halftone）和抖动（Dither ）技术。&lt;/p>
+&lt;p>&lt;img src="https://pixy.org/src/405/thumbs350/4057896.jpg" alt="Halftone">&lt;/p>
+&lt;p>半色调（Halftone）是指为了模拟出连续调影像（色阶）的视觉感觉，一般用墨点（半色调网点）的大小或频率的改变，来模拟明暗的变化。半色调广泛应用于报刊出版等领域，当年那些黑白出版物上尤其常见，现在的牛奶包装上也能看出来。&lt;/p>
+&lt;h2 id="阈值法thresholding">阈值法（Thresholding）&lt;/h2>
+&lt;p>当像素值大于设定阈值时，输出为亮点，否则输出为暗点，从而实现二值化。经过处理的图像往往失去细节，缺乏层次感。下图所示的就是二值化的图像。
+&lt;img src="http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg" alt="lena_binary">&lt;/p></description></item><item><title>HSV/HSL转换到RGB色彩空间</title><link>/posts/convert-hsv-hsl-to-rgb/</link><pubDate>Fri, 08 Mar 2013 18:08:17 +0800</pubDate><guid>/posts/convert-hsv-hsl-to-rgb/</guid><description>&lt;p>处理图像时，有时候会遇到不同色彩空间转换的情况。比较常见的是HSV/HSL到RGB的转换。&lt;/p>
+&lt;h2 id="hsvhsbhsl简介">HSV(HSB)/HSL简介&lt;/h2>
+&lt;p>不同于RGB/CYMK，HSV和HSL是两种比较常见的基于圆柱坐标系的色彩表示方法。这种方法对颜色的表达,对人来说更直观，更易于感受。因此艺术家有时偏好使用 HSL或HSV 而不选择 三原色光模式（即RGB模型） 或 印刷四分色模式（即CMYK模型），因为它类似于人类感觉颜色的方式，具有较强的感知度。RGB 和 CMYK 分别是加法原色和减法原色模型，以原色组合的方式定义颜色，而 HSV 以人类更熟悉的方式封装了关于颜色的信息：“这是什么颜色？深浅如何？明暗如何？”。&lt;/p>
+&lt;p>&lt;img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/500px-Hsl-hsv_models.svg.png" alt="">&lt;/p>
+&lt;h3 id="色彩定义">色彩定义&lt;/h3>
+&lt;ul>
+&lt;li>H ：Hue(色相)，色彩的基本属性，就是平常所说的颜色名称，如红色、黄色等。&lt;/li>
+&lt;li>S ：saturation(饱和度)，色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值。&lt;/li>
+&lt;li>V ：value(色调)，取0-100%。&lt;/li>
+&lt;li>B ：brightness(明度)，取0-100%。&lt;/li>
+&lt;li>L ：lightness(亮度)，取0-100%。&lt;/li>
+&lt;/ul>
+&lt;p>HSL 和 HSV 二者都把颜色描述在圆柱坐标系内的点，这个圆柱的中心轴取值为自底部的黑色到顶部的白色而在它们中间是的灰色，绕这个轴的角度对应于“色相”，到这个轴的距离对应于“饱和度”，而沿着这个轴的高度对应于“亮度”，“色调”或“明度”。&lt;/p>
+&lt;p>这两种表示在用目的上类似，但在方法上有区别。二者在数学上都是圆柱，但 HSV（色相，饱和度，色调）在概念上可以被认为是颜色的倒圆锥体（黑点在下顶点，白色在上底面圆心），HSL 在概念上表示了一个双圆锥体和圆球体（白色在上顶点，黑色在下顶点，最大横切面的圆心是半程灰色）。注意尽管在 HSL 和 HSV 中“色相”指称相同的性质，它们的“饱和度”的定义是明显不同的。&lt;/p>
+&lt;p>因为 HSL 和 HSV 是设备依赖的 RGB 的简单变换，(h, s, l) 或 (h, s, v) 三元组定义的颜色依赖于所使用的特定红色、绿色和蓝色“加法原色”。每个独特的 RGB 设备都伴随着一个独特的 HSL 和 HSV 空间。但是 (h, s, l) 或 (h, s, v) 三元组在被约束于特定 RGB 空间比如 sRGB 的时候就变成明确的了。&lt;/p>
+&lt;p>HSV 模型在 1978 年由计算机图形学先驱 Alvy Ray Smith 创立，它是三原色光模式的一种非线性变换。&lt;/p></description></item><item><title>GIF 格式及LZW算法浅析</title><link>/posts/gif-format-and-lzw/</link><pubDate>Thu, 20 Sep 2012 18:20:14 +0800</pubDate><guid>/posts/gif-format-and-lzw/</guid><description>&lt;p>前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。&lt;/p>
+&lt;p>花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。&lt;/p>
+&lt;p>&lt;img src="/images/diego.gif" alt="gif sample" title="GIF 多帧动画">&lt;/p>
+&lt;h2 id="gif概述">GIF概述&lt;/h2>
+&lt;p>Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。&lt;/p>
+&lt;p>GIF主要分为两个版本，即GIF 87a和GIF 89a：&lt;/p>
+&lt;p>GIF 87a：是在1987年制定的版本；
+GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。&lt;/p>
+&lt;h2 id="gif格式结构">GIF格式结构&lt;/h2>
+&lt;p>GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。&lt;/p>
+&lt;h3 id="结构组成">结构组成&lt;/h3>
+&lt;p>结构如下表所示：&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;/th>
+&lt;th>&lt;/th>
+&lt;th>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Header&lt;/td>
+&lt;td>Header&lt;/td>
+&lt;td>Header&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Logical Screen Descriptor&lt;/td>
+&lt;td>Screen Descriptor Block&lt;/td>
+&lt;td>GIF Data Stream&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Global Color Table&lt;/td>
+&lt;td>Global Color Table(optional)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Application Extension&lt;/td>
+&lt;td>Extension Blocks(optional, repeated)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Graphic Control Extension*&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>…&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Image Descriptor&lt;/td>
+&lt;td>Image Blocks(repeated)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Local Color Table&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Table Based Image Data&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>…&lt;/td>
+&lt;td>Extension Blocks(optional, repeated)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Trailer&lt;/td>
+&lt;td>Trailer&lt;/td>
+&lt;td>Trailer&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table></description></item><item><title>基于AS3.0的相似图像搜索算法实现</title><link>/posts/similar-image-searching-algorithm-as3/</link><pubDate>Tue, 14 Aug 2012 19:59:25 +0800</pubDate><guid>/posts/similar-image-searching-algorithm-as3/</guid><description>&lt;p>Google的图像搜索，可以根据用户上传或者网络上的图片找到与此最相似的图片(百度也有类似功能)。&lt;/p>
+&lt;p>&lt;img src="https://pjkm4w.bay.livefilestore.com/y1pOjCa3mvtvwKjegr_UmRLkNG9nUpMQU-uMfHod4eqmrtsEsIHz4jI_4yyhi7oe7xURPx9ZOu-lMQsUi8FbN4reRvqjqVlik3i/google_image_search.png" alt="google image search" title="Google Image Search">&lt;/p>
+&lt;p>阮一峰的博客曾经提到过 “感知哈希算法(Perceptual hash algorithm)”，主要介绍了 Dr. Neal Krawetz基于感知哈希算法的”平均哈希算法(Average Hash algorithm)”。相比其他算法，这种算法简单快速，很容易实现。&lt;/p>
+&lt;p>对于图像来说，高频信息体现图像的细节，低频信息体现图像的边缘和轮廓。一幅大而清晰的图像不仅包含低频，而且会包含很多高频分量。而小图片因为缺乏细节部分，往往只有低频信息。因此用只包含低频分量的图像来做图像相似度匹配是非常合适的。&lt;/p>
+&lt;p>感知哈希算法的基本原理是根据图像特征生成一个特定(但非唯一)的指纹，根据指纹来比较图像的相似度。其特点是，即使图像放大缩小，调整高宽，或者有少许色彩变化（对比度，亮度等等），仍然可以匹配到相似的图像。&lt;/p>
+&lt;h2 id="平均哈希算法average-hash-algorithm">平均哈希算法(Average Hash algorithm)&lt;/h2>
+&lt;p>实现步骤如下：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>缩小尺寸：移除高频部分，将图像缩小至8×8像素,不考虑高宽比；
+{% img &lt;a href="https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg">https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg&lt;/a> 64 64 %}&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>减少颜色：转为灰度图，将64像素的RGB 64×3个颜色值简化为 64个色值；
+{% img &lt;a href="https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg">https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg&lt;/a> 64 64 %}&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>计算平均值：计算64个颜色的均值；&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>比较灰度值：将每个像素的颜色值与平均值比较，小于均值记0，否则记1；&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>计算哈希值：将上述的比较结果拼起来构成一个64位的整数。&lt;/p>
+&lt;/li>
+&lt;/ol></description></item></channel></rss>

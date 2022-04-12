@@ -1,222 +1,102 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>基于AS3.0的相似图像搜索算法实现 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
-
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
-
-<div class="article-meta">
-<h1><span class="title">基于AS3.0的相似图像搜索算法实现</span></h1>
-
-<h2 class="date">2012/08/14</h2>
-</div>
-
-<main>
-<p>Google的图像搜索，可以根据用户上传或者网络上的图片找到与此最相似的图片(百度也有类似功能)。</p>
-<p><img src="https://pjkm4w.bay.livefilestore.com/y1pOjCa3mvtvwKjegr_UmRLkNG9nUpMQU-uMfHod4eqmrtsEsIHz4jI_4yyhi7oe7xURPx9ZOu-lMQsUi8FbN4reRvqjqVlik3i/google_image_search.png" alt="google image search" title="Google Image Search"></p>
-<p>阮一峰的博客曾经提到过 “感知哈希算法(Perceptual hash algorithm)”，主要介绍了 Dr. Neal Krawetz基于感知哈希算法的”平均哈希算法(Average Hash algorithm)”。相比其他算法，这种算法简单快速，很容易实现。</p>
-<p>对于图像来说，高频信息体现图像的细节，低频信息体现图像的边缘和轮廓。一幅大而清晰的图像不仅包含低频，而且会包含很多高频分量。而小图片因为缺乏细节部分，往往只有低频信息。因此用只包含低频分量的图像来做图像相似度匹配是非常合适的。</p>
-<p>感知哈希算法的基本原理是根据图像特征生成一个特定(但非唯一)的指纹，根据指纹来比较图像的相似度。其特点是，即使图像放大缩小，调整高宽，或者有少许色彩变化（对比度，亮度等等），仍然可以匹配到相似的图像。</p>
-<h2 id="平均哈希算法average-hash-algorithm">平均哈希算法(Average Hash algorithm)</h2>
-<p>实现步骤如下：</p>
-<ol>
-<li>
-<p>缩小尺寸：移除高频部分，将图像缩小至8×8像素,不考虑高宽比；
-{% img <a href="https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg">https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg</a> 64 64 %}</p>
-</li>
-<li>
-<p>减少颜色：转为灰度图，将64像素的RGB 64×3个颜色值简化为 64个色值；
-{% img <a href="https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg">https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg</a> 64 64 %}</p>
-</li>
-<li>
-<p>计算平均值：计算64个颜色的均值；</p>
-</li>
-<li>
-<p>比较灰度值：将每个像素的颜色值与平均值比较，小于均值记0，否则记1；</p>
-</li>
-<li>
-<p>计算哈希值：将上述的比较结果拼起来构成一个64位的整数。</p>
-</li>
-</ol>
-<h2 id="phash算法">pHash算法</h2>
-<p>平均哈希简单快速，但是缺点也显而易见，如果图像的gamma校正或者直方图变化，识别就差多啦。这是因为图像颜色经过了非线性的变换，而上述算法是基于平均值的。更加健壮的算法是pHash，pHash使用DCT(Discrete Cosine Transform 离散余弦变换)来降频。(高数、信号处理完璧归赵了吗？)。Neal自己对pHash作了稍稍改动，但概念相同，其实现步骤如下：</p>
-<ol>
-<li>缩小尺寸：目的是减少DCT计算量，而不是移除高频分量，32*32像素为宜；</li>
-<li>减少颜色：进一步减少计算量；</li>
-<li>计算DCT：DCT将图像分割处理成频率和标量的集合。JPEG有损压缩使用8×8 DCT，这里使用32×32 DCT；</li>
-<li>减少DCT：采用32×32 DCT，但只保留左上角的8×8 部分，取该图像的最低频部分。</li>
-<li>计算均值：和平均哈希一样，计算DCT均值；</li>
-<li>再次减少DCT：和DCT均值比较，大于等于记1，小于记0。得到一组64位数。这组数据没有明确最低频的确切值，但是描述了和平均频率的相对关系。因此只要图像整体结构不变，结果也将保持不变。即便经过gamma校正和直方图改变也可以正确匹配。</li>
-<li>构建哈希：将上述64位的结果转换为64位整数。即得到该图像的Hash指纹。想知道指纹图是什么样？只要设置值(根据各个位是1还是0使用+255和-255)并将32×32 DCT转换回32×32像素的图像。
-<img src="http://lh6.googleusercontent.com/-kxozFTZ1CSE/Td8I2HJeLoI/AAAAAAAAB4A/IeFNcx4lRQQ/s800/Alyson_Hannigan_200512-phash-dct.png" alt="phash-dct"> = 8a0303f6df3ec8cd</li>
-</ol>
-<p>乍看上去像是随机的点点。但是仔细看就会发现深色点围成的圈是人物的头发，右边的黑点是背景墙上的那道水平线。</p>
-<h2 id="as30-的算法实现">AS3.0 的算法实现</h2>
-<p>平均哈希的算法比较简单，所以简单地用ActionScript写了一下。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#66d9ef">package</span>
-{
-	<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">flash</span>.<span style="color:#a6e22e">display</span>.Bitmap<span style="color:#f92672">;</span>
-	<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">flash</span>.<span style="color:#a6e22e">display</span>.BitmapData<span style="color:#f92672">;</span>
-	<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">flash</span>.<span style="color:#a6e22e">events</span>.Event<span style="color:#f92672">;</span>
-	<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">flash</span>.<span style="color:#a6e22e">events</span>.MouseEvent<span style="color:#f92672">;</span>
-	<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">flash</span>.<span style="color:#a6e22e">geom</span>.Matrix<span style="color:#f92672">;</span>
-	
-	<span style="color:#66d9ef">import</span> <span style="color:#a6e22e">mx</span>.<span style="color:#a6e22e">controls</span>.<span style="color:#a6e22e">Alert</span><span style="color:#f92672">;</span>
-	
-	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PHAImage</span>
-	{
-		<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">PHAImage</span>()
-		{
-		}
-		
-		<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">process</span>(<span style="color:#a6e22e">bmpData</span><span style="color:#f92672">:</span>BitmapData)<span style="color:#f92672">:</span>String
-		{
-			<span style="color:#75715e">//processing the image
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">trace</span>(<span style="color:#e6db74">&#34;Start processing...n&#34;</span>);
-			<span style="color:#75715e">//scaling and converting
-</span><span style="color:#75715e"></span>			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">resizedData</span><span style="color:#f92672">:</span>BitmapData <span style="color:#f92672">=</span> <span style="color:#a6e22e">reduceSize</span>(<span style="color:#a6e22e">bmpData</span><span style="color:#f92672">,</span><span style="color:#ae81ff">8</span><span style="color:#f92672">,</span><span style="color:#ae81ff">8</span>);
-			<span style="color:#75715e">//转换为灰度
-</span><span style="color:#75715e"></span>			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">greyBmp</span><span style="color:#f92672">:</span>BitmapData <span style="color:#f92672">=</span> <span style="color:#a6e22e">reduceColor</span>(<span style="color:#a6e22e">resizedData</span>);
-			<span style="color:#75715e">//计算灰度平均值
-</span><span style="color:#75715e"></span>			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">avgGrey</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> <span style="color:#a6e22e">calcAvgGrey</span>(<span style="color:#a6e22e">greyBmp</span>);
-			<span style="color:#a6e22e">trace</span>(<span style="color:#e6db74">&#34;Average GreyScale：0x&#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">avgGrey</span>.<span style="color:#a6e22e">toString</span>(<span style="color:#ae81ff">16</span>)<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;n&#34;</span>);
-			<span style="color:#75715e">//比较灰度值与平均值，建立哈希指纹
-</span><span style="color:#75715e"></span>			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">hashArr</span><span style="color:#f92672">:</span>Array <span style="color:#f92672">=</span> <span style="color:#a6e22e">calcAvgHash</span>(<span style="color:#a6e22e">greyBmp</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">avgGrey</span>);
-			<span style="color:#a6e22e">trace</span>(<span style="color:#e6db74">&#34;hashArr: &#34;</span><span style="color:#f92672">,</span><span style="color:#a6e22e">hashArr</span>.<span style="color:#a6e22e">join</span>(<span style="color:#e6db74">&#34;&#34;</span>));
-			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">hashArr</span>.<span style="color:#a6e22e">join</span>(<span style="color:#e6db74">&#34;&#34;</span>);
-		}
-		
-		<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">reduceSize</span>(<span style="color:#a6e22e">source</span><span style="color:#f92672">:</span>BitmapData<span style="color:#f92672">,</span><span style="color:#a6e22e">width</span><span style="color:#f92672">:</span>Number <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">height</span><span style="color:#f92672">:</span>Number<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span>)<span style="color:#f92672">:</span>BitmapData
-		{
-			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">newData</span><span style="color:#f92672">:</span>BitmapData <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BitmapData(<span style="color:#a6e22e">width</span><span style="color:#f92672">,</span><span style="color:#a6e22e">height</span>);
-			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">matrix</span><span style="color:#f92672">:</span>Matrix <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Matrix();
-			<span style="color:#75715e">//缩小至 8x8
-</span><span style="color:#75715e"></span>			<span style="color:#a6e22e">matrix</span>.<span style="color:#a6e22e">scale</span>(<span style="color:#a6e22e">newData</span>.<span style="color:#a6e22e">width</span><span style="color:#e6db74">/source.width, newData.height/</span><span style="color:#a6e22e">source</span>.<span style="color:#a6e22e">height</span>);
-			<span style="color:#a6e22e">newData</span>.<span style="color:#a6e22e">draw</span>(<span style="color:#a6e22e">source</span><span style="color:#f92672">,</span><span style="color:#a6e22e">matrix</span>);
-			
-			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">newData</span><span style="color:#f92672">;</span>
-		}
-		
-		<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">reduceColor</span>(<span style="color:#a6e22e">source</span><span style="color:#f92672">:</span>BitmapData)<span style="color:#f92672">:</span>BitmapData
-		{
-			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">result</span><span style="color:#f92672">:</span>BitmapData <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> BitmapData(<span style="color:#a6e22e">source</span>.<span style="color:#a6e22e">width</span><span style="color:#f92672">,</span><span style="color:#a6e22e">source</span>.<span style="color:#a6e22e">height</span>);
-			<span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:</span>int <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">source</span>.<span style="color:#a6e22e">height</span><span style="color:#f92672">;</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
-			{
-				<span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">j</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span> <span style="color:#a6e22e">j</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">source</span>.<span style="color:#a6e22e">width</span><span style="color:#f92672">;</span> <span style="color:#a6e22e">j</span><span style="color:#f92672">++</span>)
-				{
-					<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">color</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> <span style="color:#a6e22e">source</span>.<span style="color:#a6e22e">getPixel</span>(<span style="color:#a6e22e">i</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">j</span>);
-					<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">red</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> (<span style="color:#a6e22e">color</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0</span><span style="color:#a6e22e">xFF0000</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">16</span><span style="color:#f92672">;</span>
-					<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">green</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> (<span style="color:#a6e22e">color</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x00</span><span style="color:#a6e22e">FF00</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">8</span><span style="color:#f92672">;</span>
-					<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">blue</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> (<span style="color:#a6e22e">color</span> <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x0000</span><span style="color:#a6e22e">FF</span>) <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span>
-					<span style="color:#75715e">//var bwColor:uint = (red + green + blue) / 3;
-</span><span style="color:#75715e"></span>					<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">bwColor</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> (<span style="color:#a6e22e">red</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">30</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">green</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">59</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">blue</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">11</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">100</span><span style="color:#f92672">;</span>
-					<span style="color:#75715e">// puts the average in each channel
-</span><span style="color:#75715e"></span>					<span style="color:#a6e22e">bwColor</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">bwColor</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">16</span>) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">bwColor</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">8</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">bwColor</span><span style="color:#f92672">;</span> 
-					<span style="color:#a6e22e">result</span>.<span style="color:#a6e22e">setPixel</span>(<span style="color:#a6e22e">i</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">j</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">bwColor</span>);
-				}
-			}
-			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">result</span><span style="color:#f92672">;</span>
-		}
-		
-		<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">calcAvgGrey</span>(<span style="color:#a6e22e">bmpData</span><span style="color:#f92672">:</span>BitmapData)<span style="color:#f92672">:</span>uint
-		{
-			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">vecGrey</span><span style="color:#f92672">:</span><span style="color:#a6e22e">Vector</span>.<span style="color:#f92672">&lt;</span>uint<span style="color:#f92672">&gt;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bmpData</span>.<span style="color:#a6e22e">getVector</span>(<span style="color:#a6e22e">bmpData</span>.<span style="color:#a6e22e">rect</span>);
-			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">total</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span>
-			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">length</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> <span style="color:#a6e22e">vecGrey</span>.<span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
-			<span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:</span>int <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">length</span><span style="color:#f92672">;</span><span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
-			{
-				<span style="color:#a6e22e">total</span> <span style="color:#f92672">+=</span> (<span style="color:#a6e22e">vecGrey</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x00</span><span style="color:#a6e22e">FFFFFF</span>);
-			}
-			
-			<span style="color:#66d9ef">return</span> uint(<span style="color:#a6e22e">total</span><span style="color:#f92672">/</span><span style="color:#a6e22e">vecGrey</span>.<span style="color:#a6e22e">length</span>);
-		}
-		
-		<span style="color:#75715e">//计算哈希
-</span><span style="color:#75715e"></span>		<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">calcAvgHash</span>(<span style="color:#a6e22e">bmpData</span><span style="color:#f92672">:</span>BitmapData<span style="color:#f92672">,</span> <span style="color:#a6e22e">avgValue</span><span style="color:#f92672">:</span>uint)<span style="color:#f92672">:</span>Array
-		{
-			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">vecGrey</span><span style="color:#f92672">:</span><span style="color:#a6e22e">Vector</span>.<span style="color:#f92672">&lt;</span>uint<span style="color:#f92672">&gt;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bmpData</span>.<span style="color:#a6e22e">getVector</span>(<span style="color:#a6e22e">bmpData</span>.<span style="color:#a6e22e">rect</span>);
-			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">length</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> <span style="color:#a6e22e">vecGrey</span>.<span style="color:#a6e22e">length</span><span style="color:#f92672">;</span>
-			<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">hashArr</span><span style="color:#f92672">:</span>Array <span style="color:#f92672">=</span> [];
-			<span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">:</span>int <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">;</span> <span style="color:#a6e22e">i</span><span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">length</span><span style="color:#f92672">;</span><span style="color:#a6e22e">i</span><span style="color:#f92672">++</span>)
-			{
-				<span style="color:#75715e">//ARGB 32位数据,只取RGB
-</span><span style="color:#75715e"></span>				<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">pxColor</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span> <span style="color:#a6e22e">vecGrey</span>[<span style="color:#a6e22e">i</span>] <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x00</span><span style="color:#a6e22e">FFFFFF</span><span style="color:#f92672">;</span>	
-				<span style="color:#75715e">//是否小于灰度均值，小于记0，否则记0
-</span><span style="color:#75715e"></span>				<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span>uint <span style="color:#f92672">=</span>  <span style="color:#a6e22e">pxColor</span> <span style="color:#f92672">&lt;</span> <span style="color:#a6e22e">avgValue</span> <span style="color:#f92672">?</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span><span style="color:#f92672">;</span>
-				<span style="color:#a6e22e">hashArr</span>.<span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">value</span>);
-			}
-			<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">hashArr</span><span style="color:#f92672">;</span>
-		}
-	}
-}</code></pre></div>
-<p>值得一提的几点：</p>
-<ol>
-<li>灰度的转换，可以采用(R+G+B)/3,也可以(R * 30 + G * 59 + B * 11) / 100；而且还有用移位取代除法以获得更高性能的方法；</li>
-<li>ActionScript 没有64位整型，在获得最后hash，我输出成了字符串。如果想用64Int可以自己定义个数据结构，也可以使用 protoc-gen-as3 的Int64/UInt64。</li>
-<li>图像相似度的比较：只需计算2个哈希值的汉明距离，距离越小，相似度越高。</li>
-</ol>
-<h2 id="实例演示">实例演示</h2>
-<p>一般搜索要用到服务器，为了省事，直接写了个简单的AIR应用来测试算法。浏览文件目录，遍历并计算目录下所有图像文件(jpg,png,gif)的哈希值。然后上传一个图片，便会找出目录中与之汉明距离最短的图片。
-<img src="https://pjkm4w.bay.livefilestore.com/y1p8ZntIp9GlbC8AxGFhtTxfA9ToxuWossa6_MVtpU2hk7Otoc5rjJuhzJ58udppAQfPpXhMi7inKD-kMq9L29-TQk6AzXIpw4T/similar_img_air.PNG" alt="demo"></p>
-<p>应用比较粗糙，包含了测试需要的基本功能，即使图像被缩小并且去除了色彩，依然可以匹配到。</p>
-<h2 id="总结">总结</h2>
-<p>简要介绍了用于图像相似度匹配的感知哈希算法，以及其简化版——平均哈希算法—— 的功能，特点以及实现步骤。使用ActionScript 3.0 实现了平均哈希算法并编写应用测试，验证了该算法的性能和可行性。</p>
-<p>图像处理的算法也非常多，目前相似图片匹配的算法除了上述的还有pHash，SIFT等等。但是图像处理也是数字信号的处理，因此高等数学，信号处理的知识非常重要，也是我需要提高和学习的重点之一。</p>
-<p>吐槽：看了Neal的几篇文章，里面都提到了 “his next wife, actress Alyson Hannigan”。
-<img src="http://lh5.googleusercontent.com/-0iu4m4njVmQ/S3YH3wwXuPI/AAAAAAAABeU/i8jX5uKGCFo/s800/Alyson_Hannigan_200512.jpg" alt="alyson">
-以及这段:</p>
-<blockquote>
-<p>A couple of people at Reddit complained about my used of Alyson Hannigan as the example image. (She’s so cute that she is distracting.) However, it is actually part of my master plan. (Don’t tell Alyson!) I’m hoping that she’ll notice it one day and call me. Maybe she and I can double-date at Defcon this year… <em>sigh</em></p>
-</blockquote>
-<blockquote>
-<p>有几个家伙在Reddit上抱怨我用Alyson Hannigan作为示例图片。（她太可爱太让我着迷啦）不管怎样，这确实是我宏伟计划的一个部分。（别告诉Alyson！）我盼着哪天她能注意到这个还打电话给我。那样或许我和她可以在今年的Defcon（DEF CON ，世界上规模最大的黑客大会之一）来个Double-date（双双约会，两对情侣约会）。。。唉</p>
-</blockquote>
-<p>略带Nerd气质的Geek风范尽显无遗啊~ 哈哈 😎</p>
-<hr>
-<p><strong>参考资料</strong></p>
-<ol>
-<li><a href="http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html">http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html</a></li>
-<li><a href="http://www.ruanyifeng.com/blog/2011/07/principle_of_similar_image_search.html">http://www.ruanyifeng.com/blog/2011/07/principle_of_similar_image_search.html</a></li>
-<li><a href="http://www.cnblogs.com/technology/archive/2012/07/12/Perceptual-Hash-Algorithm.html">http://www.cnblogs.com/technology/archive/2012/07/12/Perceptual-Hash-Algorithm.html</a></li>
-<li><a href="http://www.hackerfactor.com/blog/index.php?/archives/355-How-I-Met-Your-Mother-Through-Photoshop.html">http://www.hackerfactor.com/blog/index.php?/archives/355-How-I-Met-Your-Mother-Through-Photoshop.html</a></li>
-<li><a href="http://phash.org/">http://phash.org/</a></li>
-<li><a href="http://zh.wikipedia.org/wiki/%E7%A6%BB%E6%95%A3%E4%BD%99%E5%BC%A6%E5%8F%98%E6%8D%A2">http://zh.wikipedia.org/wiki/%E7%A6%BB%E6%95%A3%E4%BD%99%E5%BC%A6%E5%8F%98%E6%8D%A2</a></li>
-<li><a href="http://blog.csdn.net/lin_zyang/article/details/2603028">http://blog.csdn.net/lin_zyang/article/details/2603028</a></li>
-<li><a href="http://blog.csdn.net/v_JULY_v/article/details/6186942">http://blog.csdn.net/v_JULY_v/article/details/6186942</a></li>
-<li><a href="http://www.isnowfy.com/similar-image-search/">http://www.isnowfy.com/similar-image-search/</a></li>
-<li><a href="http://blog.csdn.net/v_JULY_v/article/details/6186942">http://blog.csdn.net/v_JULY_v/article/details/6186942</a></li>
-<li><a href="http://code.google.com/p/protoc-gen-as3/">http://code.google.com/p/protoc-gen-as3/</a></li>
-</ol>
-</main>
-
-  <footer>
-  
-  
-  <hr/>
-  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
-
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>基于AS3.0的相似图像搜索算法实现 | LimboNova</title><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=/css/fonts.css></head><body><nav><ul class=menu><li><a href=/>Home</a></li><li><a href=/tags/>Tags</a></li><li><a href=/about/>About</a></li><li><a href=/index.xml>Subscribe</a></li></ul><hr></nav><div class=article-meta><h1><span class=title>基于AS3.0的相似图像搜索算法实现</span></h1><h2 class=date>2012/08/14</h2></div><main><p>Google的图像搜索，可以根据用户上传或者网络上的图片找到与此最相似的图片(百度也有类似功能)。</p><p><img src=https://pjkm4w.bay.livefilestore.com/y1pOjCa3mvtvwKjegr_UmRLkNG9nUpMQU-uMfHod4eqmrtsEsIHz4jI_4yyhi7oe7xURPx9ZOu-lMQsUi8FbN4reRvqjqVlik3i/google_image_search.png alt="google image search" title="Google Image Search"></p><p>阮一峰的博客曾经提到过 “感知哈希算法(Perceptual hash algorithm)”，主要介绍了 Dr. Neal Krawetz基于感知哈希算法的”平均哈希算法(Average Hash algorithm)”。相比其他算法，这种算法简单快速，很容易实现。</p><p>对于图像来说，高频信息体现图像的细节，低频信息体现图像的边缘和轮廓。一幅大而清晰的图像不仅包含低频，而且会包含很多高频分量。而小图片因为缺乏细节部分，往往只有低频信息。因此用只包含低频分量的图像来做图像相似度匹配是非常合适的。</p><p>感知哈希算法的基本原理是根据图像特征生成一个特定(但非唯一)的指纹，根据指纹来比较图像的相似度。其特点是，即使图像放大缩小，调整高宽，或者有少许色彩变化（对比度，亮度等等），仍然可以匹配到相似的图像。</p><h2 id=平均哈希算法average-hash-algorithm>平均哈希算法(Average Hash algorithm)</h2><p>实现步骤如下：</p><ol><li><p>缩小尺寸：移除高频部分，将图像缩小至8×8像素,不考虑高宽比；
+{% img <a href=https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg>https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg</a> 64 64 %}</p></li><li><p>减少颜色：转为灰度图，将64像素的RGB 64×3个颜色值简化为 64个色值；
+{% img <a href=https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg>https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg</a> 64 64 %}</p></li><li><p>计算平均值：计算64个颜色的均值；</p></li><li><p>比较灰度值：将每个像素的颜色值与平均值比较，小于均值记0，否则记1；</p></li><li><p>计算哈希值：将上述的比较结果拼起来构成一个64位的整数。</p></li></ol><h2 id=phash算法>pHash算法</h2><p>平均哈希简单快速，但是缺点也显而易见，如果图像的gamma校正或者直方图变化，识别就差多啦。这是因为图像颜色经过了非线性的变换，而上述算法是基于平均值的。更加健壮的算法是pHash，pHash使用DCT(Discrete Cosine Transform 离散余弦变换)来降频。(高数、信号处理完璧归赵了吗？)。Neal自己对pHash作了稍稍改动，但概念相同，其实现步骤如下：</p><ol><li>缩小尺寸：目的是减少DCT计算量，而不是移除高频分量，32*32像素为宜；</li><li>减少颜色：进一步减少计算量；</li><li>计算DCT：DCT将图像分割处理成频率和标量的集合。JPEG有损压缩使用8×8 DCT，这里使用32×32 DCT；</li><li>减少DCT：采用32×32 DCT，但只保留左上角的8×8 部分，取该图像的最低频部分。</li><li>计算均值：和平均哈希一样，计算DCT均值；</li><li>再次减少DCT：和DCT均值比较，大于等于记1，小于记0。得到一组64位数。这组数据没有明确最低频的确切值，但是描述了和平均频率的相对关系。因此只要图像整体结构不变，结果也将保持不变。即便经过gamma校正和直方图改变也可以正确匹配。</li><li>构建哈希：将上述64位的结果转换为64位整数。即得到该图像的Hash指纹。想知道指纹图是什么样？只要设置值(根据各个位是1还是0使用+255和-255)并将32×32 DCT转换回32×32像素的图像。
+<img src=http://lh6.googleusercontent.com/-kxozFTZ1CSE/Td8I2HJeLoI/AAAAAAAAB4A/IeFNcx4lRQQ/s800/Alyson_Hannigan_200512-phash-dct.png alt=phash-dct> = 8a0303f6df3ec8cd</li></ol><p>乍看上去像是随机的点点。但是仔细看就会发现深色点围成的圈是人物的头发，右边的黑点是背景墙上的那道水平线。</p><h2 id=as30-的算法实现>AS3.0 的算法实现</h2><p>平均哈希的算法比较简单，所以简单地用ActionScript写了一下。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span><span style=color:#66d9ef>package</span>
+</span></span><span style=display:flex><span>{
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>flash</span>.<span style=color:#a6e22e>display</span>.Bitmap<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>flash</span>.<span style=color:#a6e22e>display</span>.BitmapData<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>flash</span>.<span style=color:#a6e22e>events</span>.Event<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>flash</span>.<span style=color:#a6e22e>events</span>.MouseEvent<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>flash</span>.<span style=color:#a6e22e>geom</span>.Matrix<span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>mx</span>.<span style=color:#a6e22e>controls</span>.<span style=color:#a6e22e>Alert</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>	
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>PHAImage</span>
+</span></span><span style=display:flex><span>	{
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>PHAImage</span>()
+</span></span><span style=display:flex><span>		{
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>process</span>(<span style=color:#a6e22e>bmpData</span><span style=color:#f92672>:</span>BitmapData)<span style=color:#f92672>:</span>String
+</span></span><span style=display:flex><span>		{
+</span></span><span style=display:flex><span>			<span style=color:#75715e>//processing the image
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#a6e22e>trace</span>(<span style=color:#e6db74>&#34;Start processing...n&#34;</span>);
+</span></span><span style=display:flex><span>			<span style=color:#75715e>//scaling and converting
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>resizedData</span><span style=color:#f92672>:</span>BitmapData <span style=color:#f92672>=</span> <span style=color:#a6e22e>reduceSize</span>(<span style=color:#a6e22e>bmpData</span><span style=color:#f92672>,</span><span style=color:#ae81ff>8</span><span style=color:#f92672>,</span><span style=color:#ae81ff>8</span>);
+</span></span><span style=display:flex><span>			<span style=color:#75715e>//转换为灰度
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>greyBmp</span><span style=color:#f92672>:</span>BitmapData <span style=color:#f92672>=</span> <span style=color:#a6e22e>reduceColor</span>(<span style=color:#a6e22e>resizedData</span>);
+</span></span><span style=display:flex><span>			<span style=color:#75715e>//计算灰度平均值
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>avgGrey</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> <span style=color:#a6e22e>calcAvgGrey</span>(<span style=color:#a6e22e>greyBmp</span>);
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>trace</span>(<span style=color:#e6db74>&#34;Average GreyScale：0x&#34;</span><span style=color:#f92672>+</span><span style=color:#a6e22e>avgGrey</span>.<span style=color:#a6e22e>toString</span>(<span style=color:#ae81ff>16</span>)<span style=color:#f92672>+</span><span style=color:#e6db74>&#34;n&#34;</span>);
+</span></span><span style=display:flex><span>			<span style=color:#75715e>//比较灰度值与平均值，建立哈希指纹
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>hashArr</span><span style=color:#f92672>:</span>Array <span style=color:#f92672>=</span> <span style=color:#a6e22e>calcAvgHash</span>(<span style=color:#a6e22e>greyBmp</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>avgGrey</span>);
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>trace</span>(<span style=color:#e6db74>&#34;hashArr: &#34;</span><span style=color:#f92672>,</span><span style=color:#a6e22e>hashArr</span>.<span style=color:#a6e22e>join</span>(<span style=color:#e6db74>&#34;&#34;</span>));
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>hashArr</span>.<span style=color:#a6e22e>join</span>(<span style=color:#e6db74>&#34;&#34;</span>);
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>private</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>reduceSize</span>(<span style=color:#a6e22e>source</span><span style=color:#f92672>:</span>BitmapData<span style=color:#f92672>,</span><span style=color:#a6e22e>width</span><span style=color:#f92672>:</span>Number <span style=color:#f92672>=</span> <span style=color:#ae81ff>8</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>height</span><span style=color:#f92672>:</span>Number<span style=color:#f92672>=</span><span style=color:#ae81ff>8</span>)<span style=color:#f92672>:</span>BitmapData
+</span></span><span style=display:flex><span>		{
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>newData</span><span style=color:#f92672>:</span>BitmapData <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> BitmapData(<span style=color:#a6e22e>width</span><span style=color:#f92672>,</span><span style=color:#a6e22e>height</span>);
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>matrix</span><span style=color:#f92672>:</span>Matrix <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Matrix();
+</span></span><span style=display:flex><span>			<span style=color:#75715e>//缩小至 8x8
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#a6e22e>matrix</span>.<span style=color:#a6e22e>scale</span>(<span style=color:#a6e22e>newData</span>.<span style=color:#a6e22e>width</span><span style=color:#e6db74>/source.width, newData.height/</span><span style=color:#a6e22e>source</span>.<span style=color:#a6e22e>height</span>);
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>newData</span>.<span style=color:#a6e22e>draw</span>(<span style=color:#a6e22e>source</span><span style=color:#f92672>,</span><span style=color:#a6e22e>matrix</span>);
+</span></span><span style=display:flex><span>			
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>newData</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>private</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>reduceColor</span>(<span style=color:#a6e22e>source</span><span style=color:#f92672>:</span>BitmapData)<span style=color:#f92672>:</span>BitmapData
+</span></span><span style=display:flex><span>		{
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>result</span><span style=color:#f92672>:</span>BitmapData <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> BitmapData(<span style=color:#a6e22e>source</span>.<span style=color:#a6e22e>width</span><span style=color:#f92672>,</span><span style=color:#a6e22e>source</span>.<span style=color:#a6e22e>height</span>);
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>for</span>(<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>i</span><span style=color:#f92672>:</span>int <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>;</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;</span> <span style=color:#a6e22e>source</span>.<span style=color:#a6e22e>height</span><span style=color:#f92672>;</span> <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>)
+</span></span><span style=display:flex><span>			{
+</span></span><span style=display:flex><span>				<span style=color:#66d9ef>for</span>(<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>j</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>;</span> <span style=color:#a6e22e>j</span> <span style=color:#f92672>&lt;</span> <span style=color:#a6e22e>source</span>.<span style=color:#a6e22e>width</span><span style=color:#f92672>;</span> <span style=color:#a6e22e>j</span><span style=color:#f92672>++</span>)
+</span></span><span style=display:flex><span>				{
+</span></span><span style=display:flex><span>					<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>color</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> <span style=color:#a6e22e>source</span>.<span style=color:#a6e22e>getPixel</span>(<span style=color:#a6e22e>i</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>j</span>);
+</span></span><span style=display:flex><span>					<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>red</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> (<span style=color:#a6e22e>color</span> <span style=color:#f92672>&amp;</span> <span style=color:#ae81ff>0</span><span style=color:#a6e22e>xFF0000</span>) <span style=color:#f92672>&gt;&gt;</span> <span style=color:#ae81ff>16</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>					<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>green</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> (<span style=color:#a6e22e>color</span> <span style=color:#f92672>&amp;</span> <span style=color:#ae81ff>0x00</span><span style=color:#a6e22e>FF00</span>) <span style=color:#f92672>&gt;&gt;</span> <span style=color:#ae81ff>8</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>					<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>blue</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> (<span style=color:#a6e22e>color</span> <span style=color:#f92672>&amp;</span> <span style=color:#ae81ff>0x0000</span><span style=color:#a6e22e>FF</span>) <span style=color:#f92672>&gt;&gt;</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>					<span style=color:#75715e>//var bwColor:uint = (red + green + blue) / 3;
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>					<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>bwColor</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> (<span style=color:#a6e22e>red</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>30</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>green</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>59</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>blue</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>11</span>) <span style=color:#f92672>/</span> <span style=color:#ae81ff>100</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>					<span style=color:#75715e>// puts the average in each channel
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>					<span style=color:#a6e22e>bwColor</span> <span style=color:#f92672>=</span> (<span style=color:#a6e22e>bwColor</span> <span style=color:#f92672>&lt;&lt;</span> <span style=color:#ae81ff>16</span>) <span style=color:#f92672>+</span> (<span style=color:#a6e22e>bwColor</span> <span style=color:#f92672>&lt;&lt;</span> <span style=color:#ae81ff>8</span>) <span style=color:#f92672>+</span> <span style=color:#a6e22e>bwColor</span><span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>					<span style=color:#a6e22e>result</span>.<span style=color:#a6e22e>setPixel</span>(<span style=color:#a6e22e>i</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>j</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>bwColor</span>);
+</span></span><span style=display:flex><span>				}
+</span></span><span style=display:flex><span>			}
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>result</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>private</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>calcAvgGrey</span>(<span style=color:#a6e22e>bmpData</span><span style=color:#f92672>:</span>BitmapData)<span style=color:#f92672>:</span>uint
+</span></span><span style=display:flex><span>		{
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>vecGrey</span><span style=color:#f92672>:</span><span style=color:#a6e22e>Vector</span>.<span style=color:#f92672>&lt;</span>uint<span style=color:#f92672>&gt;</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>bmpData</span>.<span style=color:#a6e22e>getVector</span>(<span style=color:#a6e22e>bmpData</span>.<span style=color:#a6e22e>rect</span>);
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>total</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>length</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> <span style=color:#a6e22e>vecGrey</span>.<span style=color:#a6e22e>length</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>for</span>(<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>i</span><span style=color:#f92672>:</span>int <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>;</span> <span style=color:#a6e22e>i</span><span style=color:#f92672>&lt;</span> <span style=color:#a6e22e>length</span><span style=color:#f92672>;</span><span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>)
+</span></span><span style=display:flex><span>			{
+</span></span><span style=display:flex><span>				<span style=color:#a6e22e>total</span> <span style=color:#f92672>+=</span> (<span style=color:#a6e22e>vecGrey</span>[<span style=color:#a6e22e>i</span>] <span style=color:#f92672>&amp;</span> <span style=color:#ae81ff>0x00</span><span style=color:#a6e22e>FFFFFF</span>);
+</span></span><span style=display:flex><span>			}
+</span></span><span style=display:flex><span>			
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>return</span> uint(<span style=color:#a6e22e>total</span><span style=color:#f92672>/</span><span style=color:#a6e22e>vecGrey</span>.<span style=color:#a6e22e>length</span>);
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>		
+</span></span><span style=display:flex><span>		<span style=color:#75715e>//计算哈希
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>		<span style=color:#66d9ef>private</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>calcAvgHash</span>(<span style=color:#a6e22e>bmpData</span><span style=color:#f92672>:</span>BitmapData<span style=color:#f92672>,</span> <span style=color:#a6e22e>avgValue</span><span style=color:#f92672>:</span>uint)<span style=color:#f92672>:</span>Array
+</span></span><span style=display:flex><span>		{
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>vecGrey</span><span style=color:#f92672>:</span><span style=color:#a6e22e>Vector</span>.<span style=color:#f92672>&lt;</span>uint<span style=color:#f92672>&gt;</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>bmpData</span>.<span style=color:#a6e22e>getVector</span>(<span style=color:#a6e22e>bmpData</span>.<span style=color:#a6e22e>rect</span>);
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>length</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> <span style=color:#a6e22e>vecGrey</span>.<span style=color:#a6e22e>length</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>hashArr</span><span style=color:#f92672>:</span>Array <span style=color:#f92672>=</span> [];
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>for</span>(<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>i</span><span style=color:#f92672>:</span>int <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>;</span> <span style=color:#a6e22e>i</span><span style=color:#f92672>&lt;</span> <span style=color:#a6e22e>length</span><span style=color:#f92672>;</span><span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>)
+</span></span><span style=display:flex><span>			{
+</span></span><span style=display:flex><span>				<span style=color:#75715e>//ARGB 32位数据,只取RGB
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>				<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>pxColor</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span> <span style=color:#a6e22e>vecGrey</span>[<span style=color:#a6e22e>i</span>] <span style=color:#f92672>&amp;</span> <span style=color:#ae81ff>0x00</span><span style=color:#a6e22e>FFFFFF</span><span style=color:#f92672>;</span>	
+</span></span><span style=display:flex><span>				<span style=color:#75715e>//是否小于灰度均值，小于记0，否则记0
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>				<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>value</span><span style=color:#f92672>:</span>uint <span style=color:#f92672>=</span>  <span style=color:#a6e22e>pxColor</span> <span style=color:#f92672>&lt;</span> <span style=color:#a6e22e>avgValue</span> <span style=color:#f92672>?</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>:</span><span style=color:#ae81ff>1</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>				<span style=color:#a6e22e>hashArr</span>.<span style=color:#a6e22e>push</span>(<span style=color:#a6e22e>value</span>);
+</span></span><span style=display:flex><span>			}
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>hashArr</span><span style=color:#f92672>;</span>
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}</span></span></code></pre></div><p>值得一提的几点：</p><ol><li>灰度的转换，可以采用(R+G+B)/3,也可以(R * 30 + G * 59 + B * 11) / 100；而且还有用移位取代除法以获得更高性能的方法；</li><li>ActionScript 没有64位整型，在获得最后hash，我输出成了字符串。如果想用64Int可以自己定义个数据结构，也可以使用 protoc-gen-as3 的Int64/UInt64。</li><li>图像相似度的比较：只需计算2个哈希值的汉明距离，距离越小，相似度越高。</li></ol><h2 id=实例演示>实例演示</h2><p>一般搜索要用到服务器，为了省事，直接写了个简单的AIR应用来测试算法。浏览文件目录，遍历并计算目录下所有图像文件(jpg,png,gif)的哈希值。然后上传一个图片，便会找出目录中与之汉明距离最短的图片。
+<img src=https://pjkm4w.bay.livefilestore.com/y1p8ZntIp9GlbC8AxGFhtTxfA9ToxuWossa6_MVtpU2hk7Otoc5rjJuhzJ58udppAQfPpXhMi7inKD-kMq9L29-TQk6AzXIpw4T/similar_img_air.PNG alt=demo></p><p>应用比较粗糙，包含了测试需要的基本功能，即使图像被缩小并且去除了色彩，依然可以匹配到。</p><h2 id=总结>总结</h2><p>简要介绍了用于图像相似度匹配的感知哈希算法，以及其简化版——平均哈希算法—— 的功能，特点以及实现步骤。使用ActionScript 3.0 实现了平均哈希算法并编写应用测试，验证了该算法的性能和可行性。</p><p>图像处理的算法也非常多，目前相似图片匹配的算法除了上述的还有pHash，SIFT等等。但是图像处理也是数字信号的处理，因此高等数学，信号处理的知识非常重要，也是我需要提高和学习的重点之一。</p><p>吐槽：看了Neal的几篇文章，里面都提到了 “his next wife, actress Alyson Hannigan”。
+<img src=http://lh5.googleusercontent.com/-0iu4m4njVmQ/S3YH3wwXuPI/AAAAAAAABeU/i8jX5uKGCFo/s800/Alyson_Hannigan_200512.jpg alt=alyson>
+以及这段:</p><blockquote><p>A couple of people at Reddit complained about my used of Alyson Hannigan as the example image. (She’s so cute that she is distracting.) However, it is actually part of my master plan. (Don’t tell Alyson!) I’m hoping that she’ll notice it one day and call me. Maybe she and I can double-date at Defcon this year… <em>sigh</em></p></blockquote><blockquote><p>有几个家伙在Reddit上抱怨我用Alyson Hannigan作为示例图片。（她太可爱太让我着迷啦）不管怎样，这确实是我宏伟计划的一个部分。（别告诉Alyson！）我盼着哪天她能注意到这个还打电话给我。那样或许我和她可以在今年的Defcon（DEF CON ，世界上规模最大的黑客大会之一）来个Double-date（双双约会，两对情侣约会）。。。唉</p></blockquote><p>略带Nerd气质的Geek风范尽显无遗啊~ 哈哈 😎</p><hr><p><strong>参考资料</strong></p><ol><li><a href=http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html>http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html</a></li><li><a href=http://www.ruanyifeng.com/blog/2011/07/principle_of_similar_image_search.html>http://www.ruanyifeng.com/blog/2011/07/principle_of_similar_image_search.html</a></li><li><a href=http://www.cnblogs.com/technology/archive/2012/07/12/Perceptual-Hash-Algorithm.html>http://www.cnblogs.com/technology/archive/2012/07/12/Perceptual-Hash-Algorithm.html</a></li><li><a href=http://www.hackerfactor.com/blog/index.php?/archives/355-How-I-Met-Your-Mother-Through-Photoshop.html>http://www.hackerfactor.com/blog/index.php?/archives/355-How-I-Met-Your-Mother-Through-Photoshop.html</a></li><li><a href=http://phash.org/>http://phash.org/</a></li><li><a href=http://zh.wikipedia.org/wiki/%E7%A6%BB%E6%95%A3%E4%BD%99%E5%BC%A6%E5%8F%98%E6%8D%A2>http://zh.wikipedia.org/wiki/%E7%A6%BB%E6%95%A3%E4%BD%99%E5%BC%A6%E5%8F%98%E6%8D%A2</a></li><li><a href=http://blog.csdn.net/lin_zyang/article/details/2603028>http://blog.csdn.net/lin_zyang/article/details/2603028</a></li><li><a href=http://blog.csdn.net/v_JULY_v/article/details/6186942>http://blog.csdn.net/v_JULY_v/article/details/6186942</a></li><li><a href=http://www.isnowfy.com/similar-image-search/>http://www.isnowfy.com/similar-image-search/</a></li><li><a href=http://blog.csdn.net/v_JULY_v/article/details/6186942>http://blog.csdn.net/v_JULY_v/article/details/6186942</a></li><li><a href=http://code.google.com/p/protoc-gen-as3/>http://code.google.com/p/protoc-gen-as3/</a></li></ol></main><script src=https://utteranc.es/client.js repo=anthonyhan/anthonyhan.github.io issue-term=title label=💬comment theme=github-light crossorigin=anonymous async></script><footer><hr>© 2005 - 2022 Anthony | <a href=https://github.com/anthonyhan>Github</a> | <a href=https://twitter.com/antonius_hq>Twitter</a></footer></body></html>

@@ -1,156 +1,96 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>flash on LimboNova</title>
-    <link>/tags/flash/</link>
-    <description>Recent content in flash on LimboNova</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Fri, 12 Jul 2013 19:48:33 +0800</lastBuildDate><atom:link href="/tags/flash/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>XML数据源的级联ComboBox</title>
-      <link>/posts/cascading-combobox-with-xml-dataprovider/</link>
-      <pubDate>Fri, 12 Jul 2013 19:48:33 +0800</pubDate>
-      
-      <guid>/posts/cascading-combobox-with-xml-dataprovider/</guid>
-      <description>&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
-&lt;p&gt;要做一个表单，其中自然少不了ComboBox，数据源不是从后台动态获取的，竟然是一个Excel表格文件！这个数据量很大，而且还有可能会修改，所以只能采用外部加载的方式。写一个解析Excel数据的库自然是不现实的，所以决定把Excel转换成XML格式，然后再加载。&lt;/p&gt;
-&lt;h2 id=&#34;excel转换成xml&#34;&gt;Excel转换成XML&lt;/h2&gt;
-&lt;p&gt;一般直接将Excel是不能导出成XML的，因为“不包含任何XML映射”，所以首先需要建立一个XML映射，其实就是设计一个XML结构，然后将Excel数据映射到对应的节点上。这一步其实很简单，但是颇具技巧性。&lt;/p&gt;
-&lt;h3 id=&#34;开发工具选项卡&#34;&gt;“开发工具”选项卡&lt;/h3&gt;
-&lt;p&gt;导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-&amp;ldquo;选项&amp;rdquo;-“自定义功能区”对话框，勾选“开发工具”。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性</title>
-      <link>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</link>
-      <pubDate>Thu, 27 Sep 2012 12:10:11 +0800</pubDate>
-      
-      <guid>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</guid>
-      <description>FP11.4发布没多长时间，很多新功能还没有用上，FP11.5 Beta就已经发布了。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>flash on LimboNova</title><link>/tags/flash/</link><description>Recent content in flash on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 12 Jul 2013 19:48:33 +0800</lastBuildDate><atom:link href="/tags/flash/index.xml" rel="self" type="application/rss+xml"/><item><title>XML数据源的级联ComboBox</title><link>/posts/cascading-combobox-with-xml-dataprovider/</link><pubDate>Fri, 12 Jul 2013 19:48:33 +0800</pubDate><guid>/posts/cascading-combobox-with-xml-dataprovider/</guid><description>&lt;h2 id="background">Background&lt;/h2>
+&lt;p>要做一个表单，其中自然少不了ComboBox，数据源不是从后台动态获取的，竟然是一个Excel表格文件！这个数据量很大，而且还有可能会修改，所以只能采用外部加载的方式。写一个解析Excel数据的库自然是不现实的，所以决定把Excel转换成XML格式，然后再加载。&lt;/p>
+&lt;h2 id="excel转换成xml">Excel转换成XML&lt;/h2>
+&lt;p>一般直接将Excel是不能导出成XML的，因为“不包含任何XML映射”，所以首先需要建立一个XML映射，其实就是设计一个XML结构，然后将Excel数据映射到对应的节点上。这一步其实很简单，但是颇具技巧性。&lt;/p>
+&lt;h3 id="开发工具选项卡">“开发工具”选项卡&lt;/h3>
+&lt;p>导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-&amp;ldquo;选项&amp;rdquo;-“自定义功能区”对话框，勾选“开发工具”。&lt;/p></description></item><item><title>Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性</title><link>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</link><pubDate>Thu, 27 Sep 2012 12:10:11 +0800</pubDate><guid>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</guid><description>FP11.4发布没多长时间，很多新功能还没有用上，FP11.5 Beta就已经发布了。
 主要特性及优点(不定期更新)：
 在Flash Player的relase build 的调试堆栈跟踪：允许开发者在release和debug build中都可以显示堆栈跟踪信息（以前只能在debug build下输出）； 支持多个二进制文件打包(AIR)：允许开发者一起打包ANE的第三方静态库、框架、包； ActionScript 多线程支持共享二进制数据：允许开发者在多个工作线程之间共享内存； 支持在iOS打包、加载多个SWF文件(AIR)：允许开发者在iOS加载多个包含ActionScript字节码的SWF文件。
- 参考资料
- http://labs.adobe.com/technologies/flashplatformruntimes/flashplayer11-5/ http://labs.adobe.com/technologies/flashplatformruntimes/air3-5/  </description>
-    </item>
-    
-    <item>
-      <title>在 Flash Player 中显示GIF动画</title>
-      <link>/posts/gif-animation-in-flash-player/</link>
-      <pubDate>Wed, 26 Sep 2012 18:31:46 +0800</pubDate>
-      
-      <guid>/posts/gif-animation-in-flash-player/</guid>
-      <description>&lt;p&gt;之前遇到这个需求，本人坚持”不重复发明轮子”的原则，弘扬”积极的偷懒不算偷懒”的精神，找到了两个解决方案。因为之前研究了GIF格式和LWZ算法，所以理解起来，没有太大的问题。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;方案一as3gif&#34;&gt;方案一：as3gif&lt;/h2&gt;
-&lt;p&gt;作者：Thibault Imbert
-项目地址：http://code.google.com/p/as3gif/&lt;/p&gt;
-&lt;p&gt;2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-actionscript&#34; data-lang=&#34;actionscript&#34;&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we create the GIFPlayer, it plays automatically by default
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt;();
-	&lt;span style=&#34;color:#75715e&#34;&gt;// we show it
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;addChild&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// we load a gif file
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;load&lt;/span&gt; ( &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; URLRequest (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;animation.gif&amp;#34;&lt;/span&gt;) );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// you can also load any valid GIF stream (ByteArray) with the loadBytes method (version 0.2)
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;loadBytes&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;gifStream&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the IOErrorEvent.IO_ERROR event, dispatched when the GIF fails to load
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( IOErrorEvent.&lt;span style=&#34;color:#a6e22e&#34;&gt;IO_ERROR&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onIOError&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the GIFPlayerEvent.COMPLETE event, dispatched when GIF is loaded
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayerEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;COMPLETE&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onCompleteGIFLoad&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the FrameEvent.FRAME_RENDERED event, dispatched when a GIF frame is rendered on screen
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;FrameEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;FRAME_RENDERED&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onFrameRendered&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the FileTypeEvent.INVALID event, dispatched when an invalid file is loaded
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;FileTypeEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;INVALID&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onInvalidFileLoaded&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// get total frames
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;totalFrames&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
-	&lt;span style=&#34;color:#75715e&#34;&gt;// standard methods
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;play&lt;/span&gt;();
-	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;stop&lt;/span&gt;();
-	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;gotoAndStop&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;);
-	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;gotoAndPlay&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。&lt;/p&gt;
-&lt;p&gt;缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</title>
-      <link>/posts/asc2-release-notes/</link>
-      <pubDate>Fri, 31 Aug 2012 17:50:12 +0800</pubDate>
-      
-      <guid>/posts/asc2-release-notes/</guid>
-      <description>&lt;p&gt;伴随着Flash Builder 4.7 beta的发布，正如Adobe所承诺的那样，新的编译器也浮出水面。全新的编译器到底有哪些改进和新特性，想必是大多数ActionScript开发比较关心的问题。简单翻译了下ASC2.0官方发布说明，希望能对同行们有一点帮助。&lt;/p&gt;
-&lt;p&gt;如果要了解Flash Builder 4.7，可以参看zrong的&lt;a href=&#34;http://zengrong.net/post/1676.htm&#34;&gt;这篇文章&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;** August 2012 – Adobe® ActionScript® Compiler 2.0 (Build 2.0.0.345083) **
-Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.&lt;/p&gt;
-&lt;p&gt;ASC 2.0 是一个新的ActionScript® 3.0 (AS3)编译器。相比之前版本更遵循AS3语言规范，编译性能方面有了很大改善。在内存压力下更稳定，并包含一些演示性的优化选项（内联，无用代码删除），这些选项可以有选择地启用。&lt;/p&gt;
-&lt;p&gt;这个编译器已经包含在刚发布的 Flash Builder® 4.7 预览版中。其单独版本已经同AIR SDK 3.4 一起打包发布。&lt;/p&gt;
-&lt;p&gt;注意：ASC 2.0支持编译AS3应用，虽然留有熟悉的mxmlc和compc命令行入口，但是不支持Flex应用的编译。&lt;/p&gt;
-&lt;p&gt;当有更多信息时，该文档可能会不定期更新。&lt;/p&gt;
-&lt;h2 id=&#34;版本说明--august-2012&#34;&gt;版本说明 – August 2012&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;这是新编译器ASC 2.0 的第一个公开预览版；&lt;/li&gt;
-&lt;li&gt;Flash Builder 4.7 and the ASC 2.0 command-line compiler now share the same code model. This avoids duplicate representations of a program and means the IDE has an accurate representation of the language – matching the compiler. （没看懂，不清楚code model，representation的定义）&lt;/li&gt;
-&lt;li&gt;全新多线程架构，支持多文件同时编译，减少编译时间；&lt;/li&gt;
-&lt;li&gt;更佳的常数合并和常数传播带来运行时更佳性能的代码；&lt;/li&gt;
-&lt;li&gt;通过移除不必要的活动记录减少函数开销；&lt;/li&gt;
-&lt;li&gt;包含内联和无用代码删除相关的字节码优化；&lt;/li&gt;
-&lt;li&gt;加入新关键字”goto”，实现AS3的非线性控制流；&lt;/li&gt;
-&lt;li&gt;现在支持SWF 13的LZMA压缩了。&lt;/li&gt;
-&lt;li&gt;新的符号管理系统，意味着包含Flash 和 AIR项目的Flash Builder 4.7 AS工作空间，编译起来应该会快多了；&lt;/li&gt;
-&lt;li&gt;fontswf, optimizer，swfdump和swcdepends ，基于ASC 2.0的新版本可以用了；&lt;/li&gt;
-&lt;li&gt;Asdoc，fdb的旧版本依然包括在内；&lt;/li&gt;
-&lt;li&gt;字体转码已经从[Embed]语法中移除，现在字体需要先预转码并作为SWF嵌入，可以通过工具（如fontswf或Flash Professional CS6）来完成。&lt;/li&gt;
-&lt;li&gt;源代码中的相对路径（[Embed] assets, includes, etc…）将从其包含文件相对解析。要指定一个相对于源文件根目录的路径，需要在你的路径前加”/”；&lt;/li&gt;
-&lt;li&gt;英文编译器错误信息已经翻译成法文，日文，中文，区域取决于JVM的设置，并可以通过 -tools-locale 设置项改写。&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    
-    <item>
-      <title>ActionScript 3.0 闭包及作用域</title>
-      <link>/posts/actionscript-3-0-closure/</link>
-      <pubDate>Sun, 05 Aug 2012 19:11:50 +0800</pubDate>
-      
-      <guid>/posts/actionscript-3-0-closure/</guid>
-      <description>&lt;p&gt;闭包作为动态语言的基石，在OO实现和框架构建上有着-十分重要的作用。但是闭包的定义比较抽象，不利于理解，闭包在各语言中的实现不尽相同，闭包的函数作用域也有区别。&lt;/p&gt;
-&lt;p&gt;参考整理了这篇文章(非原创),主要内容来自&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;IBM Thoughtworks 文档：&lt;a href=&#34;http://www.ibm.com/developerworks/cn/linux/l-cn-closure&#34;&gt;闭包的概念、形式与应用&lt;/a&gt;；&lt;/li&gt;
-&lt;li&gt;Adobe官方文档：&lt;a href=&#34;http://www.ibm.com/developerworks/cn/linux/l-cn-closure/&#34;&gt;Flash ActionScript 3.0 编程- 函数作用域&lt;/a&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;什么是闭包&#34;&gt;什么是闭包&lt;/h2&gt;
-&lt;p&gt;闭包的概念出现于60年代，最早实现闭包的程序语言是&lt;a href=&#34;http://zh.wikipedia.org/wiki/Scheme&#34;&gt;Scheme&lt;/a&gt;。关于闭包的定义，说法比较多。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;http://zh.wikipedia.org/wiki/Scheme&#34;&gt;Scheme&lt;/a&gt;语言设计者这样定义闭包：”we introduce the notion of a closure which is a data structure containing a lambda expression, and an environment to be used when that lambda expression is applied to arguments.”&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;英文Wikipedia 则是解释为：”a closure (also lexical closure or function closure) is a &lt;a href=&#34;http://en.wikipedia.org/wiki/Function_(computer_science)&#34;&gt;function&lt;/a&gt; together with a referencing environment for the &lt;a href=&#34;http://en.wikipedia.org/wiki/Non-local_variable&#34;&gt;non-local variables&lt;/a&gt; of that function. “。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;中文维基百科：”在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，是引用了&lt;a href=&#34;http://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%8F%98%E9%87%8F&#34;&gt;自由变量&lt;/a&gt;的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。”
-综合这些定义，可以认为闭包一种特殊的数据结构，不仅仅是函数，还包括与其相关的引用环境。闭包只是在形式和表现上像函数，但实际上不是函数。函数是一些可执行的代码，这些代码在函数被定义后就确定了，不会在执行时发生变化，所以一个函数只有一个实例。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。所谓引用环境是指在程序执行中的某个点所有处于活跃状态的约束所组成的集合。其中的约束是指一个变量的名字和其所代表的对象之间的联系。那么为什么要把引用环境与函数组合起来呢？这主要是因为在支持嵌套作用域的语言中，有时不能简单直接地确定函数的引用环境。这样的语言一般具有这样的特性：&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;函数是一阶值（First-class value），即函数可以作为另一个函数的返回值或参数，还可以作为一个变量的值。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;函数可以嵌套定义，即在一个函数内部可以定义另一个函数。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;闭包作用域&#34;&gt;闭包作用域&lt;/h2&gt;
-&lt;p&gt;函数的范围不但决定了可以在程序中的什么位置调用函数，而且还决定了函数可以访问哪些定义。适用于变量标识符的作用域规则同样也适用于函数标识符。在全局作用域中声明的函数在整个代码中都可用。例如，ActionScript 3.0 包含可在代码中的任意位置使用的全局函数，如 isNaN() 和 parseInt()。嵌套函数（即在另一个函数中声明的函数）可以在声明它的函数中的任意位置上使用。&lt;/p&gt;
-&lt;h3 id=&#34;作用域链the-scope-chain&#34;&gt;作用域链(The scope chain)&lt;/h3&gt;
-&lt;p&gt;无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Flash Player 11.4 ByteArray压缩算法初探</title>
-      <link>/posts/flash-player-11-4-bytearray-compression/</link>
-      <pubDate>Fri, 27 Jul 2012 18:31:25 +0800</pubDate>
-      
-      <guid>/posts/flash-player-11-4-bytearray-compression/</guid>
-      <description>Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。
+参考资料
+http://labs.adobe.com/technologies/flashplatformruntimes/flashplayer11-5/ http://labs.adobe.com/technologies/flashplatformruntimes/air3-5/</description></item><item><title>在 Flash Player 中显示GIF动画</title><link>/posts/gif-animation-in-flash-player/</link><pubDate>Wed, 26 Sep 2012 18:31:46 +0800</pubDate><guid>/posts/gif-animation-in-flash-player/</guid><description>&lt;p>之前遇到这个需求，本人坚持”不重复发明轮子”的原则，弘扬”积极的偷懒不算偷懒”的精神，找到了两个解决方案。因为之前研究了GIF格式和LWZ算法，所以理解起来，没有太大的问题。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="方案一as3gif">方案一：as3gif&lt;/h2>
+&lt;p>作者：Thibault Imbert
+项目地址：http://code.google.com/p/as3gif/&lt;/p>
+&lt;p>2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-actionscript" data-lang="actionscript">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we create the GIFPlayer, it plays automatically by default
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>&lt;span style="color:#f92672">:&lt;/span>&lt;span style="color:#a6e22e">GIFPlayer&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> &lt;span style="color:#a6e22e">GIFPlayer&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we show it
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">addChild&lt;/span> ( &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we load a gif file
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">load&lt;/span> ( &lt;span style="color:#66d9ef">new&lt;/span> URLRequest (&lt;span style="color:#e6db74">&amp;#34;animation.gif&amp;#34;&lt;/span>) );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// you can also load any valid GIF stream (ByteArray) with the loadBytes method (version 0.2)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">loadBytes&lt;/span> ( &lt;span style="color:#a6e22e">gifStream&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the IOErrorEvent.IO_ERROR event, dispatched when the GIF fails to load
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( IOErrorEvent.&lt;span style="color:#a6e22e">IO_ERROR&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onIOError&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the GIFPlayerEvent.COMPLETE event, dispatched when GIF is loaded
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">GIFPlayerEvent&lt;/span>.&lt;span style="color:#a6e22e">COMPLETE&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onCompleteGIFLoad&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the FrameEvent.FRAME_RENDERED event, dispatched when a GIF frame is rendered on screen
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">FrameEvent&lt;/span>.&lt;span style="color:#a6e22e">FRAME_RENDERED&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onFrameRendered&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the FileTypeEvent.INVALID event, dispatched when an invalid file is loaded
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">FileTypeEvent&lt;/span>.&lt;span style="color:#a6e22e">INVALID&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onInvalidFileLoaded&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// get total frames
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">totalFrames&lt;/span>&lt;span style="color:#f92672">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// standard methods
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">play&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">stop&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">gotoAndStop&lt;/span>(&lt;span style="color:#ae81ff">3&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">gotoAndPlay&lt;/span>(&lt;span style="color:#ae81ff">3&lt;/span>);&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。&lt;/p>
+&lt;p>缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。&lt;/p></description></item><item><title>Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</title><link>/posts/asc2-release-notes/</link><pubDate>Fri, 31 Aug 2012 17:50:12 +0800</pubDate><guid>/posts/asc2-release-notes/</guid><description>&lt;p>伴随着Flash Builder 4.7 beta的发布，正如Adobe所承诺的那样，新的编译器也浮出水面。全新的编译器到底有哪些改进和新特性，想必是大多数ActionScript开发比较关心的问题。简单翻译了下ASC2.0官方发布说明，希望能对同行们有一点帮助。&lt;/p>
+&lt;p>如果要了解Flash Builder 4.7，可以参看zrong的&lt;a href="http://zengrong.net/post/1676.htm">这篇文章&lt;/a>。&lt;/p>
+&lt;p>** August 2012 – Adobe® ActionScript® Compiler 2.0 (Build 2.0.0.345083) **
+Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.&lt;/p>
+&lt;p>ASC 2.0 是一个新的ActionScript® 3.0 (AS3)编译器。相比之前版本更遵循AS3语言规范，编译性能方面有了很大改善。在内存压力下更稳定，并包含一些演示性的优化选项（内联，无用代码删除），这些选项可以有选择地启用。&lt;/p>
+&lt;p>这个编译器已经包含在刚发布的 Flash Builder® 4.7 预览版中。其单独版本已经同AIR SDK 3.4 一起打包发布。&lt;/p>
+&lt;p>注意：ASC 2.0支持编译AS3应用，虽然留有熟悉的mxmlc和compc命令行入口，但是不支持Flex应用的编译。&lt;/p>
+&lt;p>当有更多信息时，该文档可能会不定期更新。&lt;/p>
+&lt;h2 id="版本说明--august-2012">版本说明 – August 2012&lt;/h2>
+&lt;ul>
+&lt;li>这是新编译器ASC 2.0 的第一个公开预览版；&lt;/li>
+&lt;li>Flash Builder 4.7 and the ASC 2.0 command-line compiler now share the same code model. This avoids duplicate representations of a program and means the IDE has an accurate representation of the language – matching the compiler. （没看懂，不清楚code model，representation的定义）&lt;/li>
+&lt;li>全新多线程架构，支持多文件同时编译，减少编译时间；&lt;/li>
+&lt;li>更佳的常数合并和常数传播带来运行时更佳性能的代码；&lt;/li>
+&lt;li>通过移除不必要的活动记录减少函数开销；&lt;/li>
+&lt;li>包含内联和无用代码删除相关的字节码优化；&lt;/li>
+&lt;li>加入新关键字”goto”，实现AS3的非线性控制流；&lt;/li>
+&lt;li>现在支持SWF 13的LZMA压缩了。&lt;/li>
+&lt;li>新的符号管理系统，意味着包含Flash 和 AIR项目的Flash Builder 4.7 AS工作空间，编译起来应该会快多了；&lt;/li>
+&lt;li>fontswf, optimizer，swfdump和swcdepends ，基于ASC 2.0的新版本可以用了；&lt;/li>
+&lt;li>Asdoc，fdb的旧版本依然包括在内；&lt;/li>
+&lt;li>字体转码已经从[Embed]语法中移除，现在字体需要先预转码并作为SWF嵌入，可以通过工具（如fontswf或Flash Professional CS6）来完成。&lt;/li>
+&lt;li>源代码中的相对路径（[Embed] assets, includes, etc…）将从其包含文件相对解析。要指定一个相对于源文件根目录的路径，需要在你的路径前加”/”；&lt;/li>
+&lt;li>英文编译器错误信息已经翻译成法文，日文，中文，区域取决于JVM的设置，并可以通过 -tools-locale 设置项改写。&lt;/li>
+&lt;/ul></description></item><item><title>ActionScript 3.0 闭包及作用域</title><link>/posts/actionscript-3-0-closure/</link><pubDate>Sun, 05 Aug 2012 19:11:50 +0800</pubDate><guid>/posts/actionscript-3-0-closure/</guid><description>&lt;p>闭包作为动态语言的基石，在OO实现和框架构建上有着-十分重要的作用。但是闭包的定义比较抽象，不利于理解，闭包在各语言中的实现不尽相同，闭包的函数作用域也有区别。&lt;/p>
+&lt;p>参考整理了这篇文章(非原创),主要内容来自&lt;/p>
+&lt;ul>
+&lt;li>IBM Thoughtworks 文档：&lt;a href="http://www.ibm.com/developerworks/cn/linux/l-cn-closure">闭包的概念、形式与应用&lt;/a>；&lt;/li>
+&lt;li>Adobe官方文档：&lt;a href="http://www.ibm.com/developerworks/cn/linux/l-cn-closure/">Flash ActionScript 3.0 编程- 函数作用域&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;h2 id="什么是闭包">什么是闭包&lt;/h2>
+&lt;p>闭包的概念出现于60年代，最早实现闭包的程序语言是&lt;a href="http://zh.wikipedia.org/wiki/Scheme">Scheme&lt;/a>。关于闭包的定义，说法比较多。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a href="http://zh.wikipedia.org/wiki/Scheme">Scheme&lt;/a>语言设计者这样定义闭包：”we introduce the notion of a closure which is a data structure containing a lambda expression, and an environment to be used when that lambda expression is applied to arguments.”&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>英文Wikipedia 则是解释为：”a closure (also lexical closure or function closure) is a &lt;a href="http://en.wikipedia.org/wiki/Function_(computer_science)">function&lt;/a> together with a referencing environment for the &lt;a href="http://en.wikipedia.org/wiki/Non-local_variable">non-local variables&lt;/a> of that function. “。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>中文维基百科：”在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，是引用了&lt;a href="http://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%8F%98%E9%87%8F">自由变量&lt;/a>的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。”
+综合这些定义，可以认为闭包一种特殊的数据结构，不仅仅是函数，还包括与其相关的引用环境。闭包只是在形式和表现上像函数，但实际上不是函数。函数是一些可执行的代码，这些代码在函数被定义后就确定了，不会在执行时发生变化，所以一个函数只有一个实例。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。所谓引用环境是指在程序执行中的某个点所有处于活跃状态的约束所组成的集合。其中的约束是指一个变量的名字和其所代表的对象之间的联系。那么为什么要把引用环境与函数组合起来呢？这主要是因为在支持嵌套作用域的语言中，有时不能简单直接地确定函数的引用环境。这样的语言一般具有这样的特性：&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>函数是一阶值（First-class value），即函数可以作为另一个函数的返回值或参数，还可以作为一个变量的值。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>函数可以嵌套定义，即在一个函数内部可以定义另一个函数。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="闭包作用域">闭包作用域&lt;/h2>
+&lt;p>函数的范围不但决定了可以在程序中的什么位置调用函数，而且还决定了函数可以访问哪些定义。适用于变量标识符的作用域规则同样也适用于函数标识符。在全局作用域中声明的函数在整个代码中都可用。例如，ActionScript 3.0 包含可在代码中的任意位置使用的全局函数，如 isNaN() 和 parseInt()。嵌套函数（即在另一个函数中声明的函数）可以在声明它的函数中的任意位置上使用。&lt;/p>
+&lt;h3 id="作用域链the-scope-chain">作用域链(The scope chain)&lt;/h3>
+&lt;p>无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。&lt;/p></description></item><item><title>Flash Player 11.4 ByteArray压缩算法初探</title><link>/posts/flash-player-11-4-bytearray-compression/</link><pubDate>Fri, 27 Jul 2012 18:31:25 +0800</pubDate><guid>/posts/flash-player-11-4-bytearray-compression/</guid><description>Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。
 ByteArray “ByteArray 类提供用于优化读取、写入以及处理二进制数据的方法和属性。内存中的数据是一个压缩字节数组（数据类型的最紧凑表示形式），但可以使用标准 []（数组访问）运算符来操作 ByteArray 类的实例。也可以使用与 URLStream 和 Socket 类中的方法相类似的方法将它作为内存中的文件进行读取和写入。”
 “此外，还支持 zlib 压缩和解压缩，以及 Action Message Format (AMF) 对象序列化。”
 目前压缩/解压缩支持三种算法：CompressionAlgorithm. DEFLATE, CompressionAlgorithm. ZLIB, CompressionAlgorithm.LZMA(Flash Player 11.4)。
@@ -158,57 +98,26 @@ ByteArray “ByteArray 类提供用于优化读取、写入以及处理二进制
 RFC：http://www.ietf.org/rfc/rfc1951.txt
 哈夫曼编码压缩算法的细节，可以参看这篇文章。
 ZLIB deflate 压缩算法用于多种压缩格式，如 zlib、gzip、一些 zip 实现等。在使用这些压缩格式之一压缩数据时，除了存储原始数据的压缩版本之外，压缩格式数据（例如 .zip 文件）还包括元数据信息。举例来说，各种文件格式中包括的元数据的类型有文件名、文件修改日期/时间、原始文件大小、可选的注释、校验和数据等。
-例如，在使用 zlib 算法压缩 ByteArray 时，将以特定的格式构建生成的 ByteArray。一些字节包含有关所压缩数据的元数据，而另一些字节包含原始 ByteArray 数据的实际压缩版本。根据 zlib 压缩数据格式规范的定义，这些字节（即包含原始数据的压缩版本的部分）使用 deflate 算法进行压缩。因此，这些字节与对原始 ByteArray 调用 compress( air. CompressionAlgorithm.DEFLATE) 所得的结果相同。但是，compress( air.CompressionAlgorithm.ZLIB) 生成的结果包括额外的元数据，而 compress(CompressionAlgorithm.DEFLATE) 生成的结果只包括原始 ByteArray 数据的压缩版本，没有任何其他内容。</description>
-    </item>
-    
-    <item>
-      <title>Flash Builder 插件</title>
-      <link>/posts/flash-builder-plugins/</link>
-      <pubDate>Mon, 23 Jul 2012 20:32:21 +0800</pubDate>
-      
-      <guid>/posts/flash-builder-plugins/</guid>
-      <description>&lt;p&gt;Eclipse IDE的插件十分丰富，适当地使用可以使开发效率大大提高。而Flash Builder是基于Eclipse 开发的，因此或多或少可以使用一些Eclipse的插件。介绍几个开发中常用的几个插件。&lt;/p&gt;
-&lt;h2 id=&#34;easy-explore&#34;&gt;Easy Explore&lt;/h2&gt;
-&lt;p&gt;这个小插件可以调用Window资源管理器，浏览”包资源管理器”里的包和文件。省去开发者在资源管理器里一级一级地找文件。使用时，只要右键单击包或者文件，在弹出的菜单中选择”Easy Explore…”。&lt;/p&gt;
-&lt;p&gt;Y.Boy 把这个插件中文化并更换了图标，比原版更赏心悦目了 🙂 。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://riaoo.com/wp-content/uploads/2012/06/easyexplore.jpg&#34; alt=&#34;easy explore&#34;&gt;&lt;/p&gt;
-&lt;p&gt;下载链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;原版：http://sourceforge.net/projects/easystruts/files/Easy%20Explorer%20for%20Eclipse/easy-explore-1.0.4/&lt;/li&gt;
-&lt;li&gt;中文版(Y.Boy)：http://riaoo.com/wp-content/uploads/2012/06/easyexplore_1.0.4.zip&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;todofixme-任务插件&#34;&gt;TODO/FIXME 任务插件&lt;/h2&gt;
-&lt;p&gt;Eclipse本来支持TODO/FIXME注释标记的，但是Flash Builder却不支持.as的TODO/FIXME标记。注释//TODO or //FIXME ，即可在任务视图(Task View)中显示任务。&lt;/p&gt;
-&lt;p&gt;打开任务视图：Flash Builder Menu: Window -&amp;gt; Show View -&amp;gt; Other-&amp;gt;Basic–&amp;gt;Tasks（任务）。
-&lt;img src=&#34;https://public.bay.livefilestore.com/y1p_8XUsluDOfrZSUTcmbR8tt7igd0EjRHAYM6Xd0Jl3Tk8ptAh30MkvxIozrwMsIeLChAN_4N2N9zRG8Sk5MVPBQ/todo.png&#34; alt=&#34;task plugins&#34;&gt;&lt;/p&gt;
-&lt;p&gt;下载链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.richinternet.de/blog/download/flexbuilderTask_1.0.0.zip&#34;&gt;http://www.richinternet.de/blog/download/flexbuilderTask_1.0.0.zip&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    
-    <item>
-      <title>Flash中使用原生鼠标指针</title>
-      <link>/posts/native-mouse-cursors-in-flash/</link>
-      <pubDate>Wed, 11 Jul 2012 17:06:52 +0800</pubDate>
-      
-      <guid>/posts/native-mouse-cursors-in-flash/</guid>
-      <description>Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过操作系统指针机制实现基于位图的原生鼠标指针，此方式比使用显示对象来显示自定义指针图像更有效。
+例如，在使用 zlib 算法压缩 ByteArray 时，将以特定的格式构建生成的 ByteArray。一些字节包含有关所压缩数据的元数据，而另一些字节包含原始 ByteArray 数据的实际压缩版本。根据 zlib 压缩数据格式规范的定义，这些字节（即包含原始数据的压缩版本的部分）使用 deflate 算法进行压缩。因此，这些字节与对原始 ByteArray 调用 compress( air. CompressionAlgorithm.DEFLATE) 所得的结果相同。但是，compress( air.CompressionAlgorithm.ZLIB) 生成的结果包括额外的元数据，而 compress(CompressionAlgorithm.DEFLATE) 生成的结果只包括原始 ByteArray 数据的压缩版本，没有任何其他内容。</description></item><item><title>Flash Builder 插件</title><link>/posts/flash-builder-plugins/</link><pubDate>Mon, 23 Jul 2012 20:32:21 +0800</pubDate><guid>/posts/flash-builder-plugins/</guid><description>&lt;p>Eclipse IDE的插件十分丰富，适当地使用可以使开发效率大大提高。而Flash Builder是基于Eclipse 开发的，因此或多或少可以使用一些Eclipse的插件。介绍几个开发中常用的几个插件。&lt;/p>
+&lt;h2 id="easy-explore">Easy Explore&lt;/h2>
+&lt;p>这个小插件可以调用Window资源管理器，浏览”包资源管理器”里的包和文件。省去开发者在资源管理器里一级一级地找文件。使用时，只要右键单击包或者文件，在弹出的菜单中选择”Easy Explore…”。&lt;/p>
+&lt;p>Y.Boy 把这个插件中文化并更换了图标，比原版更赏心悦目了 🙂 。&lt;/p>
+&lt;p>&lt;img src="http://riaoo.com/wp-content/uploads/2012/06/easyexplore.jpg" alt="easy explore">&lt;/p>
+&lt;p>下载链接：&lt;/p>
+&lt;ul>
+&lt;li>原版：http://sourceforge.net/projects/easystruts/files/Easy%20Explorer%20for%20Eclipse/easy-explore-1.0.4/&lt;/li>
+&lt;li>中文版(Y.Boy)：http://riaoo.com/wp-content/uploads/2012/06/easyexplore_1.0.4.zip&lt;/li>
+&lt;/ul>
+&lt;h2 id="todofixme-任务插件">TODO/FIXME 任务插件&lt;/h2>
+&lt;p>Eclipse本来支持TODO/FIXME注释标记的，但是Flash Builder却不支持.as的TODO/FIXME标记。注释//TODO or //FIXME ，即可在任务视图(Task View)中显示任务。&lt;/p>
+&lt;p>打开任务视图：Flash Builder Menu: Window -&amp;gt; Show View -&amp;gt; Other-&amp;gt;Basic–&amp;gt;Tasks（任务）。
+&lt;img src="https://public.bay.livefilestore.com/y1p_8XUsluDOfrZSUTcmbR8tt7igd0EjRHAYM6Xd0Jl3Tk8ptAh30MkvxIozrwMsIeLChAN_4N2N9zRG8Sk5MVPBQ/todo.png" alt="task plugins">&lt;/p>
+&lt;p>下载链接：&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="http://www.richinternet.de/blog/download/flexbuilderTask_1.0.0.zip">http://www.richinternet.de/blog/download/flexbuilderTask_1.0.0.zip&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Flash中使用原生鼠标指针</title><link>/posts/native-mouse-cursors-in-flash/</link><pubDate>Wed, 11 Jul 2012 17:06:52 +0800</pubDate><guid>/posts/native-mouse-cursors-in-flash/</guid><description>Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过操作系统指针机制实现基于位图的原生鼠标指针，此方式比使用显示对象来显示自定义指针图像更有效。
 理解原生位图指针 自Flash Player 5开始，一直使用 InteractiveObject.startDrag 和 Mouse.hide 来自定义光标外形。但是之前的这种实现有以下几个限制：
- 显示对象实现的光标受限于舞台的维度。当用户把光标在舞台边界处，自定义光标会显示不完全。 显示对象光标在Flash Player 渲染时非常消耗资源，因为整个舞台必须在很高的帧数下重新渲染。updateAfterEvent 方法的使用会导致高CPU占用。 如果SWF因为某些原因停顿了几毫秒，光标动画也会停顿，用户会误认为程序不响应了。 总体上看，相比原生光标，显示对象实现的光标比较迟缓，不够流畅，用户体验不好。  实现原生鼠标光标 实现原生鼠标光标只需要 MouseCursorData 类的几个属性，非常简洁高效。
+显示对象实现的光标受限于舞台的维度。当用户把光标在舞台边界处，自定义光标会显示不完全。 显示对象光标在Flash Player 渲染时非常消耗资源，因为整个舞台必须在很高的帧数下重新渲染。updateAfterEvent 方法的使用会导致高CPU占用。 如果SWF因为某些原因停顿了几毫秒，光标动画也会停顿，用户会误认为程序不响应了。 总体上看，相比原生光标，显示对象实现的光标比较迟缓，不够流畅，用户体验不好。 实现原生鼠标光标 实现原生鼠标光标只需要 MouseCursorData 类的几个属性，非常简洁高效。
 flash.ui.MouseCursorData 的三个属性：
- data：BitmapData 对象的 Vector 包含光标图像或图像。可提供多个图像，并将 frameRate 属性设置为使光标具有动画效果。但是位图大小有限制，最大光标大小为 32×32 像素。 frameRate：使光标具有动画效果的帧速率，在 data 属性中提供多个图像并将帧速率设置为大于 0 的值，以便为指针添加动画效果。光标帧速率可能不同于当前的 SWF 帧速率，就是说调整帧率后光标动画帧率不会变化。 hotSpot：以像素表示的光标热点，热点是指在光标上注册鼠标单击所在的点。默认情况下位于左上角 (0,0)。  代码示例 动态光标和静态光标的实现方式差不多，只需要在data中存入多个位图并设置frameRate。代码如下： private function createFakeCursor():void { this.fakeCursor = new Shape(); var bmp:BitmapData = this.generateCursorBmp(8); fakeCursor.graphics.beginBitmapFill(bmp); fakeCursor.graphics.drawRect(0,0,bmp.width,bmp.height); fakeCursor.graphics.endFill(); fakeCursor.visible = false; this.addChild(fakeCursor); } private function createStaticNativeCursor():void { var cursorData:MouseCursorData = new MouseCursorData(); cursorData.</description>
-    </item>
-    
-    <item>
-      <title>Apache Flex 4.8.0 近况及试用</title>
-      <link>/posts/apache-flex-4-8-0-news-trial/</link>
-      <pubDate>Mon, 09 Jul 2012 19:51:11 +0800</pubDate>
-      
-      <guid>/posts/apache-flex-4-8-0-news-trial/</guid>
-      <description>自从Apache接手Flex已经过去了半年。虽然已经有一年没有开发Flex应用，但是一直关注着对于这个框架的未来和发展。To be or not to be, that’s the question.
-Apache Flex 最新进展（2012/7） Apache Flex 工作  Apache Flex 团队目前正在测试一个Apache Flex 4.8.0的发行候选版本。Apache Flex 4.8.0 是Adobe Flex 4.6.0的等同版本。当前的主要工作是保证在新的Apache license下，能够继续使用Flex框架所有的特性；下个阶段会进行bug修复，新功能和新组件的实现工作。如果想自行build可以Check out 这个说明文档。 商标问题已经大量清除。 JIRA已经导入了Adobe bug tracker 所有问题。 问题附件涵盖直到2012年1月30日之前的SDK，DMV和Automation bug。 Mustella 测试框架已经捐献并做了一些测试。 对于那些想自己编译编译器，框架等代码的人，基于ANT的编译脚本已经重新设计并且非常易于使用。Check out 上面那个README文档和相关的env.properties 模板文件获取入门信息。  社区工作  一群热心的贡献者们正努力让Flex 更易于下载和编译，以便其能够在IDE中使用(包括 Flash Builder 和 ItelliJ)。他们制作了一个AIR/Flex应用来帮你下载所有必要组件，并放置在相应的目录。 点这里查看。 FlexUnit 正在捐献给Apache 的过程中。 关于Apache Flex 历史和发展，Justin Mclean 做了一个非常精彩的演讲。 360|Flex (现在叫 360|Stack) 宣布360|MIN，活动将于10月22-23日在拉斯维加斯举办。Adobe 2012 MAX大会将在同一周举办。360|MIN 是一个barcamp式的聚会活动，届时将会有许多Apache Flex 的贡献者在现场。  欲悉更多，请订阅 flex-dev 邮件列表！</description>
-    </item>
-    
-  </channel>
-</rss>
+data：BitmapData 对象的 Vector 包含光标图像或图像。可提供多个图像，并将 frameRate 属性设置为使光标具有动画效果。但是位图大小有限制，最大光标大小为 32×32 像素。 frameRate：使光标具有动画效果的帧速率，在 data 属性中提供多个图像并将帧速率设置为大于 0 的值，以便为指针添加动画效果。光标帧速率可能不同于当前的 SWF 帧速率，就是说调整帧率后光标动画帧率不会变化。 hotSpot：以像素表示的光标热点，热点是指在光标上注册鼠标单击所在的点。默认情况下位于左上角 (0,0)。 代码示例 动态光标和静态光标的实现方式差不多，只需要在data中存入多个位图并设置frameRate。代码如下： private function createFakeCursor():void { this.fakeCursor = new Shape(); var bmp:BitmapData = this.generateCursorBmp(8); fakeCursor.graphics.beginBitmapFill(bmp); fakeCursor.graphics.drawRect(0,0,bmp.width,bmp.height); fakeCursor.graphics.endFill(); fakeCursor.visible = false; this.</description></item><item><title>Apache Flex 4.8.0 近况及试用</title><link>/posts/apache-flex-4-8-0-news-trial/</link><pubDate>Mon, 09 Jul 2012 19:51:11 +0800</pubDate><guid>/posts/apache-flex-4-8-0-news-trial/</guid><description>自从Apache接手Flex已经过去了半年。虽然已经有一年没有开发Flex应用，但是一直关注着对于这个框架的未来和发展。To be or not to be, that’s the question.
+Apache Flex 最新进展（2012/7） Apache Flex 工作 Apache Flex 团队目前正在测试一个Apache Flex 4.8.0的发行候选版本。Apache Flex 4.8.0 是Adobe Flex 4.6.0的等同版本。当前的主要工作是保证在新的Apache license下，能够继续使用Flex框架所有的特性；下个阶段会进行bug修复，新功能和新组件的实现工作。如果想自行build可以Check out 这个说明文档。 商标问题已经大量清除。 JIRA已经导入了Adobe bug tracker 所有问题。 问题附件涵盖直到2012年1月30日之前的SDK，DMV和Automation bug。 Mustella 测试框架已经捐献并做了一些测试。 对于那些想自己编译编译器，框架等代码的人，基于ANT的编译脚本已经重新设计并且非常易于使用。Check out 上面那个README文档和相关的env.properties 模板文件获取入门信息。 社区工作 一群热心的贡献者们正努力让Flex 更易于下载和编译，以便其能够在IDE中使用(包括 Flash Builder 和 ItelliJ)。他们制作了一个AIR/Flex应用来帮你下载所有必要组件，并放置在相应的目录。 点这里查看。 FlexUnit 正在捐献给Apache 的过程中。 关于Apache Flex 历史和发展，Justin Mclean 做了一个非常精彩的演讲。 360|Flex (现在叫 360|Stack) 宣布360|MIN，活动将于10月22-23日在拉斯维加斯举办。Adobe 2012 MAX大会将在同一周举办。360|MIN 是一个barcamp式的聚会活动，届时将会有许多Apache Flex 的贡献者在现场。 欲悉更多，请订阅 flex-dev 邮件列表！</description></item></channel></rss>

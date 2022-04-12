@@ -1,94 +1,66 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>PixiJS on LimboNova</title>
-    <link>/tags/pixijs/</link>
-    <description>Recent content in PixiJS on LimboNova</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Thu, 21 Sep 2017 23:36:47 +0800</lastBuildDate><atom:link href="/tags/pixijs/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>基于TypeScript的PixiJS开发环境设置（webpack篇）</title>
-      <link>/posts/setup-pixijs-with-typescript-using-webpack/</link>
-      <pubDate>Thu, 21 Sep 2017 23:36:47 +0800</pubDate>
-      
-      <guid>/posts/setup-pixijs-with-typescript-using-webpack/</guid>
-      <description>&lt;p&gt;前几天写了一篇&lt;a href=&#34;http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify&#34;&gt;用&lt;code&gt;Browserify&lt;/code&gt;打包的 PixiJS 的开发环境配置流程&lt;/a&gt;，但是Web技术一日千里，开发工具也日新月异， Webpack 就是其中之一。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Webpack 作为模块打包工具的开发环境的配置过程，遵循简化易用的原则，省略了一些非必要模块的安装。&lt;/p&gt;
-&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
-&lt;h3 id=&#34;项目结构&#34;&gt;项目结构&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;创建项目目录&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;mkdir ts_pixi
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>PixiJS on LimboNova</title><link>/tags/pixijs/</link><description>Recent content in PixiJS on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 21 Sep 2017 23:36:47 +0800</lastBuildDate><atom:link href="/tags/pixijs/index.xml" rel="self" type="application/rss+xml"/><item><title>基于TypeScript的PixiJS开发环境设置（webpack篇）</title><link>/posts/setup-pixijs-with-typescript-using-webpack/</link><pubDate>Thu, 21 Sep 2017 23:36:47 +0800</pubDate><guid>/posts/setup-pixijs-with-typescript-using-webpack/</guid><description>&lt;p>前几天写了一篇&lt;a href="http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify">用&lt;code>Browserify&lt;/code>打包的 PixiJS 的开发环境配置流程&lt;/a>，但是Web技术一日千里，开发工具也日新月异， Webpack 就是其中之一。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Webpack 作为模块打包工具的开发环境的配置过程，遵循简化易用的原则，省略了一些非必要模块的安装。&lt;/p>
+&lt;h2 id="安装">安装&lt;/h2>
+&lt;h3 id="项目结构">项目结构&lt;/h3>
+&lt;ol>
+&lt;li>创建项目目录&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>mkdir ts_pixi
 cd ts_pixi
 mkdir assets src dist
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;新建项目文件&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;touch index.html
+&lt;/code>&lt;/pre>&lt;ol start="2">
+&lt;li>新建项目文件&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>touch index.html
 touch src/main.ts
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;初始化项目&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm init
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;PixiJS&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save-dev pixi.js
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应&lt;code&gt;@types&lt;/code&gt;文件，用于代码提示等功能。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save-dev typescript @types/pixi.js @types/node
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;其它&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save-dev ts-loader webpack webpack-dev-server
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>基于TypeScript的PixiJS开发环境设置（browserify篇）</title>
-      <link>/posts/setup-pixijs-with-typescript-using-browserify/</link>
-      <pubDate>Mon, 18 Sep 2017 21:28:22 +0800</pubDate>
-      
-      <guid>/posts/setup-pixijs-with-typescript-using-browserify/</guid>
-      <description>&lt;p&gt;PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。&lt;/p&gt;
-&lt;h2 id=&#34;前提&#34;&gt;前提&lt;/h2&gt;
-&lt;p&gt;不可或缺的当然是node。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;node --version
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
-&lt;h3 id=&#34;初始化项目&#34;&gt;初始化项目&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;创建项目目录&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;mkdir ts_pixi
+&lt;/code>&lt;/pre>&lt;ol start="3">
+&lt;li>初始化项目&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm init
+&lt;/code>&lt;/pre>&lt;h3 id="安装模块">安装模块&lt;/h3>
+&lt;ol>
+&lt;li>PixiJS&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save-dev pixi.js
+&lt;/code>&lt;/pre>&lt;ol start="2">
+&lt;li>TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应&lt;code>@types&lt;/code>文件，用于代码提示等功能。&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save-dev typescript @types/pixi.js @types/node
+&lt;/code>&lt;/pre>&lt;ol start="3">
+&lt;li>其它&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save-dev ts-loader webpack webpack-dev-server
+&lt;/code>&lt;/pre></description></item><item><title>基于TypeScript的PixiJS开发环境设置（browserify篇）</title><link>/posts/setup-pixijs-with-typescript-using-browserify/</link><pubDate>Mon, 18 Sep 2017 21:28:22 +0800</pubDate><guid>/posts/setup-pixijs-with-typescript-using-browserify/</guid><description>&lt;p>PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。&lt;/p>
+&lt;h2 id="前提">前提&lt;/h2>
+&lt;p>不可或缺的当然是node。&lt;/p>
+&lt;pre tabindex="0">&lt;code>node --version
+&lt;/code>&lt;/pre>&lt;h2 id="安装">安装&lt;/h2>
+&lt;h3 id="初始化项目">初始化项目&lt;/h3>
+&lt;ol>
+&lt;li>创建项目目录&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>mkdir ts_pixi
 cd ts_pixi
 mkdir assets src dist
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;新建项目文件&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;touch index.html
+&lt;/code>&lt;/pre>&lt;ol start="2">
+&lt;li>新建项目文件&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>touch index.html
 touch src/main.ts
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;初始化项目&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm init
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;PixiJS&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save pixi.js
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;TypeScript&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save-dev typescript
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;其它&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;npm install --save-dev browserify browserify-shim http-server tsify tslint
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;/code>&lt;/pre>&lt;ol start="3">
+&lt;li>初始化项目&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm init
+&lt;/code>&lt;/pre>&lt;h3 id="安装模块">安装模块&lt;/h3>
+&lt;ol>
+&lt;li>PixiJS&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save pixi.js
+&lt;/code>&lt;/pre>&lt;ol start="2">
+&lt;li>TypeScript&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save-dev typescript
+&lt;/code>&lt;/pre>&lt;ol start="3">
+&lt;li>其它&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save-dev browserify browserify-shim http-server tsify tslint
+&lt;/code>&lt;/pre></description></item></channel></rss>

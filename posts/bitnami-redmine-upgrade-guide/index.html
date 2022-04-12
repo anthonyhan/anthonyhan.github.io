@@ -1,164 +1,24 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bitnami Redmine 升级简易指南 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
-
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
-
-<div class="article-meta">
-<h1><span class="title">Bitnami Redmine 升级简易指南</span></h1>
-
-<h2 class="date">2016/09/27</h2>
-</div>
-
-<main>
-<p>顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。</p>
-<h2 id="系统需求">系统需求</h2>
-<p>适用于Windows平台的 Bitnami Redmine 2.x+ 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表</p>
-<table>
-<thead>
-<tr>
-<th>Redmine version</th>
-<th>Supported Ruby versions</th>
-<th>Rails version used</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>3.3, current trunk</td>
-<td>ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3</td>
-<td>Rails 4.2</td>
-</tr>
-<tr>
-<td>3.2, 3.1</td>
-<td>ruby 1.9.3, 2.0.0, 2.1, 2.21</td>
-<td>Rails 4.2</td>
-</tr>
-</tbody>
-</table>
-<p>Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Bitnami Redmine 升级简易指南 | LimboNova</title><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=/css/fonts.css></head><body><nav><ul class=menu><li><a href=/>Home</a></li><li><a href=/tags/>Tags</a></li><li><a href=/about/>About</a></li><li><a href=/index.xml>Subscribe</a></li></ul><hr></nav><div class=article-meta><h1><span class=title>Bitnami Redmine 升级简易指南</span></h1><h2 class=date>2016/09/27</h2></div><main><p>顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。</p><h2 id=系统需求>系统需求</h2><p>适用于Windows平台的 Bitnami Redmine 2.x+ 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表</p><table><thead><tr><th>Redmine version</th><th>Supported Ruby versions</th><th>Rails version used</th></tr></thead><tbody><tr><td>3.3, current trunk</td><td>ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3</td><td>Rails 4.2</td></tr><tr><td>3.2, 3.1</td><td>ruby 1.9.3, 2.0.0, 2.1, 2.21</td><td>Rails 4.2</td></tr></tbody></table><p>Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.
 Redmine does not support JRuby because some gems do not support Rails 4.2.
-细节参看 <a href="http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements">Requirements</a></p>
-<h2 id="备份数据">备份数据</h2>
-<h3 id="bitnami-stack">Bitnami Stack</h3>
-<p>若使用 Bitnami 集成包，可以直接备份整个目录即可。</p>
-<h3 id="redmine">Redmine</h3>
-<p>若只升级 Redmine 则先确认系统需求然后执行备份。</p>
-<h4 id="备份文件">备份文件</h4>
-<p>最好备份整个 redmine 目录，主要包括</p>
-<ul>
-<li>上传文件(apps\redmine\htdocs\files)</li>
-<li>插件(apps\redmine\htdocs\plugins)</li>
-<li>主题(apps\redmine\htdocs\themes)</li>
-<li>配置文件(apps\redmine\htdocs\config)</li>
-</ul>
-<h4 id="备份数据库">备份数据库</h4>
-<p><code>mysql -u root -p bitnami_redmine &gt; redmine_backup.sql</code></p>
-<h2 id="开始升级">开始升级</h2>
-<p>完成了数据备份，那么就可以开始着手升级 Redmine 了。</p>
-<h3 id="卸载旧版本">卸载旧版本</h3>
-<p>如果使用的 Bitnami 集成包，需要先停止并删除服务。
-以管理员身份运行 cmd；</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bat" data-lang="bat"><span style="color:#66d9ef">cd</span> bitnami_dir
-servicerun.bat STOP
-serviceinstall.bat REMOVE
-</code></pre></div><p>打开 manager-windows.exe 查看 Manage Servers 服务状态，确认所有服务已经被移除。</p>
-<h3 id="安装新版本">安装新版本</h3>
-<ol>
-<li>安装 bitnami-redmine-3.3.0-1-windows-installer.exe</li>
-<li>如果记得之前的配置参数，可以在安装时设置好。</li>
-</ol>
-<h3 id="更新文件">更新文件</h3>
-<h4 id="配置文件">配置文件</h4>
-<p>按照旧版本的配置，设置好新版本的参数。
+细节参看 <a href=http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements>Requirements</a></p><h2 id=备份数据>备份数据</h2><h3 id=bitnami-stack>Bitnami Stack</h3><p>若使用 Bitnami 集成包，可以直接备份整个目录即可。</p><h3 id=redmine>Redmine</h3><p>若只升级 Redmine 则先确认系统需求然后执行备份。</p><h4 id=备份文件>备份文件</h4><p>最好备份整个 redmine 目录，主要包括</p><ul><li>上传文件(apps\redmine\htdocs\files)</li><li>插件(apps\redmine\htdocs\plugins)</li><li>主题(apps\redmine\htdocs\themes)</li><li>配置文件(apps\redmine\htdocs\config)</li></ul><h4 id=备份数据库>备份数据库</h4><p><code>mysql -u root -p bitnami_redmine > redmine_backup.sql</code></p><h2 id=开始升级>开始升级</h2><p>完成了数据备份，那么就可以开始着手升级 Redmine 了。</p><h3 id=卸载旧版本>卸载旧版本</h3><p>如果使用的 Bitnami 集成包，需要先停止并删除服务。
+以管理员身份运行 cmd；</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bat data-lang=bat><span style=display:flex><span><span style=color:#66d9ef>cd</span> bitnami_dir
+</span></span><span style=display:flex><span>servicerun.bat STOP
+</span></span><span style=display:flex><span>serviceinstall.bat REMOVE
+</span></span></code></pre></div><p>打开 manager-windows.exe 查看 Manage Servers 服务状态，确认所有服务已经被移除。</p><h3 id=安装新版本>安装新版本</h3><ol><li>安装 bitnami-redmine-3.3.0-1-windows-installer.exe</li><li>如果记得之前的配置参数，可以在安装时设置好。</li></ol><h3 id=更新文件>更新文件</h3><h4 id=配置文件>配置文件</h4><p>按照旧版本的配置，设置好新版本的参数。
 <code>apps\redmine\htdocs\config\configuration.yml</code>
-<strong>注意：yml文件格式，配置项的冒号后一定要有空格</strong></p>
-<h4 id="上传文件">上传文件</h4>
-<p>复制备份文件到新版本的对应目录</p>
-<ul>
-<li>apps\redmine\htdocs\files</li>
-</ul>
-<h4 id="插件及主题">插件及主题</h4>
-<p>复制备份文件到新版本的对应目录</p>
-<ul>
-<li>apps\redmine\htdocs\plugins</li>
-<li>apps\redmine\htdocs\themes</li>
-</ul>
-<h3 id="更新数据库">更新数据库</h3>
-<ol>
-<li>运行 manager-windows.exe，停止数据库外的其它所有服务；</li>
-<li>登录数据库，如果数据库不在本地需要加 -h 参数指定主机名；</li>
-</ol>
-<pre><code>mysql -u root -p 
+<strong>注意：yml文件格式，配置项的冒号后一定要有空格</strong></p><h4 id=上传文件>上传文件</h4><p>复制备份文件到新版本的对应目录</p><ul><li>apps\redmine\htdocs\files</li></ul><h4 id=插件及主题>插件及主题</h4><p>复制备份文件到新版本的对应目录</p><ul><li>apps\redmine\htdocs\plugins</li><li>apps\redmine\htdocs\themes</li></ul><h3 id=更新数据库>更新数据库</h3><ol><li>运行 manager-windows.exe，停止数据库外的其它所有服务；</li><li>登录数据库，如果数据库不在本地需要加 -h 参数指定主机名；</li></ol><pre tabindex=0><code>mysql -u root -p 
 mysql&gt; drop database bitnami_redmine;
 mysql&gt; create database bitnami_redmine;
-mysql&gt; grant all privileges on bitnami_redmine.* to 'bn_redmine'@'localhost' identified by 'DATABASE_PASSWORD';
+mysql&gt; grant all privileges on bitnami_redmine.* to &#39;bn_redmine&#39;@&#39;localhost&#39; identified by &#39;DATABASE_PASSWORD&#39;;
 mysql&gt; quit
-</code></pre><ol start="3">
-<li>导入之前的备份数据</li>
-</ol>
-<pre><code>mysql -u root -p bitnami_redmine &lt; redmine_backup.sql
-</code></pre><ol start="4">
-<li>更新数据库用户名和密码，配置文件为 <code>apps/redmine/htdocs/config/database.yml</code>，如果安装时设置了，似乎不用再设置
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yml" data-lang="yml"><span style="color:#f92672">production</span>:
-  <span style="color:#f92672">adapter</span>: <span style="color:#ae81ff">mysql2</span>
-  <span style="color:#f92672">database</span>: <span style="color:#ae81ff">bitnami_redmine</span>
-  <span style="color:#f92672">host</span>: <span style="color:#ae81ff">localhost</span>
-  <span style="color:#f92672">username</span>: <span style="color:#ae81ff">bn_redmine</span>
-  <span style="color:#f92672">password</span>: <span style="color:#e6db74">&#34;DATABASE_PASSWORD&#34;</span>
-  <span style="color:#f92672">encoding</span>: <span style="color:#ae81ff">utf8</span></code></pre></div></li>
-<li>迁移数据库到最新版</li>
-</ol>
-<pre><code>cd apps/redmine/htdocs 
+</code></pre><ol start=3><li>导入之前的备份数据</li></ol><pre tabindex=0><code>mysql -u root -p bitnami_redmine &lt; redmine_backup.sql
+</code></pre><ol start=4><li>更新数据库用户名和密码，配置文件为 <code>apps/redmine/htdocs/config/database.yml</code>，如果安装时设置了，似乎不用再设置<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=display:flex><span><span style=color:#f92672>production</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>adapter</span>: <span style=color:#ae81ff>mysql2</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>database</span>: <span style=color:#ae81ff>bitnami_redmine</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>host</span>: <span style=color:#ae81ff>localhost</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>username</span>: <span style=color:#ae81ff>bn_redmine</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>password</span>: <span style=color:#e6db74>&#34;DATABASE_PASSWORD&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>encoding</span>: <span style=color:#ae81ff>utf8</span></span></span></code></pre></div></li><li>迁移数据库到最新版</li></ol><pre tabindex=0><code>cd apps/redmine/htdocs 
 bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-</code></pre><p>如果安装过插件，执行 <code>bundle exec rake redmine:plugins:migrate RAILS_ENV=production</code></p>
-<h3 id="清理">清理</h3>
-<ol>
-<li>清理缓存
-<code>bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production</code></li>
-<li>manager-windows.exe 重启所有服务；</li>
-<li>如果有新功能的话，登录Redmine到“角色和权限”里设置新功能的权限；</li>
-</ol>
-<h2 id="总结">总结</h2>
-<p>升级很简单，几乎没遇到问题。之前在将Redmine 2.5升级到3.1时，没有仔细看文档，结果没有升级成功，后来只好用了3.1版本，数据也没有迁移过来。这一次升级后考虑迁移2.5版本的数据，却已经发现用户表数据不一致，迁移复杂度大大增加，只好作罢，不过数据一直保留着。对于常规系统的运维，最重要的还是数据备份。使用rm，drop database 等命令之前要谨慎，否则真是要欲哭无泪。</p>
-<hr>
-<p><strong>参考资料</strong></p>
-<ol>
-<li><a href="https://docs.bitnami.com/installer/apps/redmine/#how-to-upgrade-redmine">https://docs.bitnami.com/installer/apps/redmine/#how-to-upgrade-redmine</a></li>
-<li><a href="http://www.redmine.org/projects/redmine/wiki/RedmineUpgrade">http://www.redmine.org/projects/redmine/wiki/RedmineUpgrade</a></li>
-<li><a href="https://docs.bitnami.com/installer/windows-faq/#how-to-upgrade-a-bitnami-stack">https://docs.bitnami.com/installer/windows-faq/#how-to-upgrade-a-bitnami-stack</a></li>
-<li><a href="http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements">http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements</a></li>
-</ol>
-</main>
-
-  <footer>
-  
-  
-  <hr/>
-  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
-
+</code></pre><p>如果安装过插件，执行 <code>bundle exec rake redmine:plugins:migrate RAILS_ENV=production</code></p><h3 id=清理>清理</h3><ol><li>清理缓存
+<code>bundle exec rake tmp:cache:clear tmp:sessions:clear RAILS_ENV=production</code></li><li>manager-windows.exe 重启所有服务；</li><li>如果有新功能的话，登录Redmine到“角色和权限”里设置新功能的权限；</li></ol><h2 id=总结>总结</h2><p>升级很简单，几乎没遇到问题。之前在将Redmine 2.5升级到3.1时，没有仔细看文档，结果没有升级成功，后来只好用了3.1版本，数据也没有迁移过来。这一次升级后考虑迁移2.5版本的数据，却已经发现用户表数据不一致，迁移复杂度大大增加，只好作罢，不过数据一直保留着。对于常规系统的运维，最重要的还是数据备份。使用rm，drop database 等命令之前要谨慎，否则真是要欲哭无泪。</p><hr><p><strong>参考资料</strong></p><ol><li><a href=https://docs.bitnami.com/installer/apps/redmine/#how-to-upgrade-redmine>https://docs.bitnami.com/installer/apps/redmine/#how-to-upgrade-redmine</a></li><li><a href=http://www.redmine.org/projects/redmine/wiki/RedmineUpgrade>http://www.redmine.org/projects/redmine/wiki/RedmineUpgrade</a></li><li><a href=https://docs.bitnami.com/installer/windows-faq/#how-to-upgrade-a-bitnami-stack>https://docs.bitnami.com/installer/windows-faq/#how-to-upgrade-a-bitnami-stack</a></li><li><a href=http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements>http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements</a></li></ol></main><script src=https://utteranc.es/client.js repo=anthonyhan/anthonyhan.github.io issue-term=title label=💬comment theme=github-light crossorigin=anonymous async></script><footer><hr>© 2005 - 2022 Anthony | <a href=https://github.com/anthonyhan>Github</a> | <a href=https://twitter.com/antonius_hq>Twitter</a></footer></body></html>
