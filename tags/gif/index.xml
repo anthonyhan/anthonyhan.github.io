@@ -1,136 +1,108 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>gif on LimboNova</title>
-    <link>/tags/gif/</link>
-    <description>Recent content in gif on LimboNova</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Wed, 26 Sep 2012 18:31:46 +0800</lastBuildDate><atom:link href="/tags/gif/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>在 Flash Player 中显示GIF动画</title>
-      <link>/posts/gif-animation-in-flash-player/</link>
-      <pubDate>Wed, 26 Sep 2012 18:31:46 +0800</pubDate>
-      
-      <guid>/posts/gif-animation-in-flash-player/</guid>
-      <description>&lt;p&gt;之前遇到这个需求，本人坚持”不重复发明轮子”的原则，弘扬”积极的偷懒不算偷懒”的精神，找到了两个解决方案。因为之前研究了GIF格式和LWZ算法，所以理解起来，没有太大的问题。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;方案一as3gif&#34;&gt;方案一：as3gif&lt;/h2&gt;
-&lt;p&gt;作者：Thibault Imbert
-项目地址：http://code.google.com/p/as3gif/&lt;/p&gt;
-&lt;p&gt;2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-actionscript&#34; data-lang=&#34;actionscript&#34;&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we create the GIFPlayer, it plays automatically by default
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt;();
-	&lt;span style=&#34;color:#75715e&#34;&gt;// we show it
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;addChild&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// we load a gif file
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;load&lt;/span&gt; ( &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; URLRequest (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;animation.gif&amp;#34;&lt;/span&gt;) );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// you can also load any valid GIF stream (ByteArray) with the loadBytes method (version 0.2)
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;loadBytes&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;gifStream&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the IOErrorEvent.IO_ERROR event, dispatched when the GIF fails to load
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( IOErrorEvent.&lt;span style=&#34;color:#a6e22e&#34;&gt;IO_ERROR&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onIOError&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the GIFPlayerEvent.COMPLETE event, dispatched when GIF is loaded
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayerEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;COMPLETE&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onCompleteGIFLoad&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the FrameEvent.FRAME_RENDERED event, dispatched when a GIF frame is rendered on screen
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;FrameEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;FRAME_RENDERED&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onFrameRendered&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the FileTypeEvent.INVALID event, dispatched when an invalid file is loaded
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;FileTypeEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;INVALID&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onInvalidFileLoaded&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// get total frames
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;totalFrames&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
-	&lt;span style=&#34;color:#75715e&#34;&gt;// standard methods
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;play&lt;/span&gt;();
-	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;stop&lt;/span&gt;();
-	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;gotoAndStop&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;);
-	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;gotoAndPlay&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。&lt;/p&gt;
-&lt;p&gt;缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>GIF 格式及LZW算法浅析</title>
-      <link>/posts/gif-format-and-lzw/</link>
-      <pubDate>Thu, 20 Sep 2012 18:20:14 +0800</pubDate>
-      
-      <guid>/posts/gif-format-and-lzw/</guid>
-      <description>&lt;p&gt;前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。&lt;/p&gt;
-&lt;p&gt;花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/images/diego.gif&#34; alt=&#34;gif sample&#34; title=&#34;GIF 多帧动画&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;gif概述&#34;&gt;GIF概述&lt;/h2&gt;
-&lt;p&gt;Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。&lt;/p&gt;
-&lt;p&gt;GIF主要分为两个版本，即GIF 87a和GIF 89a：&lt;/p&gt;
-&lt;p&gt;GIF 87a：是在1987年制定的版本；
-GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。&lt;/p&gt;
-&lt;h2 id=&#34;gif格式结构&#34;&gt;GIF格式结构&lt;/h2&gt;
-&lt;p&gt;GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。&lt;/p&gt;
-&lt;h3 id=&#34;结构组成&#34;&gt;结构组成&lt;/h3&gt;
-&lt;p&gt;结构如下表所示：&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Header&lt;/td&gt;
-&lt;td&gt;Header&lt;/td&gt;
-&lt;td&gt;Header&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Logical Screen Descriptor&lt;/td&gt;
-&lt;td&gt;Screen Descriptor Block&lt;/td&gt;
-&lt;td&gt;GIF Data Stream&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Global Color Table&lt;/td&gt;
-&lt;td&gt;Global Color Table(optional)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Application Extension&lt;/td&gt;
-&lt;td&gt;Extension Blocks(optional, repeated)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Graphic Control Extension*&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;…&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Image Descriptor&lt;/td&gt;
-&lt;td&gt;Image Blocks(repeated)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Local Color Table&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Table Based Image Data&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;…&lt;/td&gt;
-&lt;td&gt;Extension Blocks(optional, repeated)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Trailer&lt;/td&gt;
-&lt;td&gt;Trailer&lt;/td&gt;
-&lt;td&gt;Trailer&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>gif on LimboNova</title><link>/tags/gif/</link><description>Recent content in gif on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 26 Sep 2012 18:31:46 +0800</lastBuildDate><atom:link href="/tags/gif/index.xml" rel="self" type="application/rss+xml"/><item><title>在 Flash Player 中显示GIF动画</title><link>/posts/gif-animation-in-flash-player/</link><pubDate>Wed, 26 Sep 2012 18:31:46 +0800</pubDate><guid>/posts/gif-animation-in-flash-player/</guid><description>&lt;p>之前遇到这个需求，本人坚持”不重复发明轮子”的原则，弘扬”积极的偷懒不算偷懒”的精神，找到了两个解决方案。因为之前研究了GIF格式和LWZ算法，所以理解起来，没有太大的问题。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="方案一as3gif">方案一：as3gif&lt;/h2>
+&lt;p>作者：Thibault Imbert
+项目地址：http://code.google.com/p/as3gif/&lt;/p>
+&lt;p>2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-actionscript" data-lang="actionscript">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we create the GIFPlayer, it plays automatically by default
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>&lt;span style="color:#f92672">:&lt;/span>&lt;span style="color:#a6e22e">GIFPlayer&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> &lt;span style="color:#a6e22e">GIFPlayer&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we show it
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">addChild&lt;/span> ( &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we load a gif file
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">load&lt;/span> ( &lt;span style="color:#66d9ef">new&lt;/span> URLRequest (&lt;span style="color:#e6db74">&amp;#34;animation.gif&amp;#34;&lt;/span>) );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// you can also load any valid GIF stream (ByteArray) with the loadBytes method (version 0.2)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">loadBytes&lt;/span> ( &lt;span style="color:#a6e22e">gifStream&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the IOErrorEvent.IO_ERROR event, dispatched when the GIF fails to load
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( IOErrorEvent.&lt;span style="color:#a6e22e">IO_ERROR&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onIOError&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the GIFPlayerEvent.COMPLETE event, dispatched when GIF is loaded
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">GIFPlayerEvent&lt;/span>.&lt;span style="color:#a6e22e">COMPLETE&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onCompleteGIFLoad&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the FrameEvent.FRAME_RENDERED event, dispatched when a GIF frame is rendered on screen
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">FrameEvent&lt;/span>.&lt;span style="color:#a6e22e">FRAME_RENDERED&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onFrameRendered&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the FileTypeEvent.INVALID event, dispatched when an invalid file is loaded
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">FileTypeEvent&lt;/span>.&lt;span style="color:#a6e22e">INVALID&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onInvalidFileLoaded&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// get total frames
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">totalFrames&lt;/span>&lt;span style="color:#f92672">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// standard methods
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">play&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">stop&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">gotoAndStop&lt;/span>(&lt;span style="color:#ae81ff">3&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">gotoAndPlay&lt;/span>(&lt;span style="color:#ae81ff">3&lt;/span>);&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。&lt;/p>
+&lt;p>缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。&lt;/p></description></item><item><title>GIF 格式及LZW算法浅析</title><link>/posts/gif-format-and-lzw/</link><pubDate>Thu, 20 Sep 2012 18:20:14 +0800</pubDate><guid>/posts/gif-format-and-lzw/</guid><description>&lt;p>前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。&lt;/p>
+&lt;p>花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。&lt;/p>
+&lt;p>&lt;img src="/images/diego.gif" alt="gif sample" title="GIF 多帧动画">&lt;/p>
+&lt;h2 id="gif概述">GIF概述&lt;/h2>
+&lt;p>Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。&lt;/p>
+&lt;p>GIF主要分为两个版本，即GIF 87a和GIF 89a：&lt;/p>
+&lt;p>GIF 87a：是在1987年制定的版本；
+GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。&lt;/p>
+&lt;h2 id="gif格式结构">GIF格式结构&lt;/h2>
+&lt;p>GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。&lt;/p>
+&lt;h3 id="结构组成">结构组成&lt;/h3>
+&lt;p>结构如下表所示：&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;/th>
+&lt;th>&lt;/th>
+&lt;th>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Header&lt;/td>
+&lt;td>Header&lt;/td>
+&lt;td>Header&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Logical Screen Descriptor&lt;/td>
+&lt;td>Screen Descriptor Block&lt;/td>
+&lt;td>GIF Data Stream&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Global Color Table&lt;/td>
+&lt;td>Global Color Table(optional)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Application Extension&lt;/td>
+&lt;td>Extension Blocks(optional, repeated)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Graphic Control Extension*&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>…&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Image Descriptor&lt;/td>
+&lt;td>Image Blocks(repeated)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Local Color Table&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Table Based Image Data&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>…&lt;/td>
+&lt;td>Extension Blocks(optional, repeated)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Trailer&lt;/td>
+&lt;td>Trailer&lt;/td>
+&lt;td>Trailer&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table></description></item></channel></rss>

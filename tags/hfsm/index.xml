@@ -1,90 +1,53 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>HFSM on LimboNova</title>
-    <link>/tags/hfsm/</link>
-    <description>Recent content in HFSM on LimboNova</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Wed, 03 Apr 2019 00:36:28 +0000</lastBuildDate><atom:link href="/tags/hfsm/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>游戏AI入门指南(Part 3)</title>
-      <link>/posts/the-total-beginners-guide-to-game-ai-part-3/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
-      
-      <guid>/posts/the-total-beginners-guide-to-game-ai-part-3/</guid>
-      <description>学习能力和适应能力 我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>HFSM on LimboNova</title><link>/tags/hfsm/</link><description>Recent content in HFSM on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 03 Apr 2019 00:36:28 +0000</lastBuildDate><atom:link href="/tags/hfsm/index.xml" rel="self" type="application/rss+xml"/><item><title>游戏AI入门指南(Part 3)</title><link>/posts/the-total-beginners-guide-to-game-ai-part-3/</link><pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate><guid>/posts/the-total-beginners-guide-to-game-ai-part-3/</guid><description>学习能力和适应能力 我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。
 统计和概率 在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。
 但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的移动平均(windowed average)，如只考虑最后20个数据点。
 假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！
 另一个有趣的方法是使用朴素贝叶斯分类器(Naive Bayes Classifier)来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。
 使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。
 简单的基于权重的自适应 让我们更进一步讨论这个话题。不只是利用输入数据在不同的预编程策略之间选择，或许我们还想修改一系列影响决策的数值。充分了解我们的游戏世界和规则后，我们可以执行以下操作：
- 让AI在游戏过程中收集有关世界状态和关键事件的数据（如上所述）； 以收集的数据为基础，更改其中的值或其“权重”； 根据处理或评估这些权重来进行决策。  假设在一张FPS游戏地图上，AI代理有几个主要房间可供选择。每个房间都有一个权重，用来表示其进入该房间的意愿，并且一开始所有房间的权重都是相等的。当代理选择要去的地方时，先随机选择一个房间，但会基于权重而有所偏向。现在设想一下，当AI代理被杀死时，它会记下其所在的房间并减轻权重，因此它以后不太可能再回到这个房间。类似地，假如AI代理因为击杀敌人得分了，那么它可能会增加其所在房间的权重，从而将其优先级提高。如果开始的时候一个房间对AI特别致命，AI代理会在将来避开这里，但如果AI代理在其他房间击杀了很多敌人，那么它会回到那里。
+让AI在游戏过程中收集有关世界状态和关键事件的数据（如上所述）； 以收集的数据为基础，更改其中的值或其“权重”； 根据处理或评估这些权重来进行决策。 假设在一张FPS游戏地图上，AI代理有几个主要房间可供选择。每个房间都有一个权重，用来表示其进入该房间的意愿，并且一开始所有房间的权重都是相等的。当代理选择要去的地方时，先随机选择一个房间，但会基于权重而有所偏向。现在设想一下，当AI代理被杀死时，它会记下其所在的房间并减轻权重，因此它以后不太可能再回到这个房间。类似地，假如AI代理因为击杀敌人得分了，那么它可能会增加其所在房间的权重，从而将其优先级提高。如果开始的时候一个房间对AI特别致命，AI代理会在将来避开这里，但如果AI代理在其他房间击杀了很多敌人，那么它会回到那里。
 马尔可夫模型 如果我们想使用这样收集的数据进行预测，那该如何呢？例如玩家在玩游戏的过程中，我们记录下他们在一段时间内进入的每个房间，自然会期望用这些数据来预测玩家可能前往的下一个房间。通过跟踪玩家当前所在的房间和之前去过的房间，并将其记录为一对值，我们可以计算出前一种情况导致后一种情况的频率，并将其用于预测未来的情况。
 假设有3个房间，红色，绿色和蓝色，以下是我们在游戏中的观察结果：
-   首个房间 总次数 下个房间 次数 百分比     红色 10 红色 2 20%    10 绿色 7 70%    10 蓝色 1 10%   绿色 10 红色 3 30%    10 绿色 5 50%    10 蓝色 2 20%   蓝色 8 红色 6 75%    8 绿色 2 25%    8 蓝色 0 0%    每个房间的观测数据相当均匀，没法告诉我们哪里最适合打埋伏。玩家在地图上的均匀分布​对数据产生了影响，在这三个房间中出现有同样的可能性。但是他们进入的下个房间的数据是有用处的，可以帮我们预测玩家在地图上的移动。</description>
-    </item>
-    
-    <item>
-      <title>游戏AI入门指南(Part 2)</title>
-      <link>/posts/the-total-beginners-guide-to-game-ai-part-2/</link>
-      <pubDate>Mon, 25 Mar 2019 23:10:09 +0000</pubDate>
-      
-      <guid>/posts/the-total-beginners-guide-to-game-ai-part-2/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/&#34;&gt;The Total Beginner&amp;rsquo;s Guide to Game AI&lt;/a&gt;
-&lt;strong&gt;作者：&lt;/strong&gt; &lt;a href=&#34;https://www.gamedev.net/profile/2996-kylotan/&#34;&gt;Ben Sizer&lt;/a&gt;
-&lt;strong&gt;译者：&lt;/strong&gt; &lt;a href=&#34;https://www.limbonova.com/about/#blog-author&#34;&gt;Anthony Han&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;进阶决策&#34;&gt;进阶决策&lt;/h2&gt;
-&lt;p&gt;虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。&lt;/p&gt;
-&lt;h3 id=&#34;有限状态机&#34;&gt;有限状态机&lt;/h3&gt;
-&lt;p&gt;有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。&lt;/p&gt;
-&lt;p&gt;这非常适用于游戏中的NPC。一个警卫可能具有以下状态：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;巡逻&lt;/li&gt;
-&lt;li&gt;攻击&lt;/li&gt;
-&lt;li&gt;逃跑&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;当状态改变时，你可能会想到这些规则：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;如果警卫看到敌人，就立即攻击&lt;/li&gt;
-&lt;li&gt;如果警卫正在攻击但无法再看到敌人，那么返回巡逻&lt;/li&gt;
-&lt;li&gt;如果警卫正在攻击但受了重伤，那么开始逃跑&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;空闲（巡逻期间）&lt;/li&gt;
-&lt;li&gt;搜寻（刚才发现的敌人躲起来时）&lt;/li&gt;
-&lt;li&gt;求助（发现敌人，但因为敌人太强而无法独自作战时）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。&lt;/p&gt;
-&lt;p&gt;如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>游戏AI入门指南(Part 1)</title>
-      <link>/posts/the-total-beginners-guide-to-game-ai-part-1/</link>
-      <pubDate>Wed, 20 Mar 2019 20:30:43 +0000</pubDate>
-      
-      <guid>/posts/the-total-beginners-guide-to-game-ai-part-1/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/&#34;&gt;The Total Beginner&amp;rsquo;s Guide to Game AI&lt;/a&gt;
-&lt;strong&gt;作者：&lt;/strong&gt; &lt;a href=&#34;https://www.gamedev.net/profile/2996-kylotan/&#34;&gt;Ben Sizer&lt;/a&gt;
-&lt;strong&gt;译者：&lt;/strong&gt; &lt;a href=&#34;https://www.limbonova.com/about/#blog-author&#34;&gt;Anthony Han&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;这是一篇非常好的综述类文章，对当今的游戏AI常用技术和实现方法做了简单介绍，参考了近年来的 Game AI Pro 系列。虽然不及论文那样严谨，但全文条理清晰，通俗易懂。确实是一篇入门指南佳作。花了点业余时间翻译出来，为了分享，也希望能温故知新。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;引言&#34;&gt;引言&lt;/h2&gt;
-&lt;p&gt;本文将介绍游戏人工智能（或简称“游戏AI”）的入门概念，让读者了解使用哪些方法来处理AI问题，它们如何协同工作以及如何使用相应的语言或引擎来实现。&lt;/p&gt;
-&lt;p&gt;我们假设你具备电子游戏的基本知识，并掌握几何，三角函数等数学概念。大多数代码示例为伪代码，因此不需要特定的编程语言知识。&lt;/p&gt;
-&lt;h2 id=&#34;什么是游戏ai&#34;&gt;什么是游戏AI?&lt;/h2&gt;
-&lt;p&gt;游戏AI主要关注实体根据当前条件所采取的行动。这就是传统人工智能文献所指的控制“&lt;a href=&#34;https://en.wikipedia.org/wiki/Intelligent_agent&#34;&gt;智能代理&lt;/a&gt;”，代理通常是游戏中的角色，但也可以是车辆，机器人。或者更抽象的东西，例如一组实体，甚至一个国家或文明。智能代理需要在各种情况下观察周围环境，依此做出决策，并采取行动。这就是所谓的“感知/思考/行动(Sense/Think/Act)”循环：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;感知：代理侦测到或被告知环境中可能影响其行为的事物（例如：附近的威胁，要收集的物品，要调查的兴趣点）。&lt;/li&gt;
-&lt;li&gt;思考：代理决定采取的应对措施（例如：考虑是否足够安全来收集物品，或者决定应该先集中精力战斗还是躲藏）。&lt;/li&gt;
-&lt;li&gt;行动：代理将先前的决定付诸行动（例如：沿着通向敌人或物品等的路径移动）。由于代理做出了行动，形势已经改变，因此再次重复循环。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;现实世界中的AI，特别是成为新闻热点的那些，通常主要关注循环中的“感知”部分。例如，自动驾驶汽车拍摄道路的图像，结合其他数据（例如雷达和光达），并分析所看到的状况。这个过程一般是通过机器学习来完成，机器学习尤其擅长这方面，获取大量现实世界中有噪声的数据（如汽车前方的道路照片或视频）并加以分析理解，提取诸如“前方20码处有一辆汽车”这类的语义信息。这些被称为“&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%BB%9F%E8%AE%A1%E5%88%86%E7%B1%BB&#34;&gt;分类问题&lt;/a&gt;”。&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+首个房间 总次数 下个房间 次数 百分比 红色 10 红色 2 20% 10 绿色 7 70% 10 蓝色 1 10% 绿色 10 红色 3 30% 10 绿色 5 50% 10 蓝色 2 20% 蓝色 8 红色 6 75% 8 绿色 2 25% 8 蓝色 0 0% 每个房间的观测数据相当均匀，没法告诉我们哪里最适合打埋伏。玩家在地图上的均匀分布​对数据产生了影响，在这三个房间中出现有同样的可能性。但是他们进入的下个房间的数据是有用处的，可以帮我们预测玩家在地图上的移动。</description></item><item><title>游戏AI入门指南(Part 2)</title><link>/posts/the-total-beginners-guide-to-game-ai-part-2/</link><pubDate>Mon, 25 Mar 2019 23:10:09 +0000</pubDate><guid>/posts/the-total-beginners-guide-to-game-ai-part-2/</guid><description>&lt;p>&lt;strong>原文：&lt;/strong> &lt;a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&amp;rsquo;s Guide to Game AI&lt;/a>
+&lt;strong>作者：&lt;/strong> &lt;a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer&lt;/a>
+&lt;strong>译者：&lt;/strong> &lt;a href="https://www.limbonova.com/about/#blog-author">Anthony Han&lt;/a>&lt;/p>
+&lt;h2 id="进阶决策">进阶决策&lt;/h2>
+&lt;p>虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。&lt;/p>
+&lt;h3 id="有限状态机">有限状态机&lt;/h3>
+&lt;p>有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。&lt;/p>
+&lt;p>这非常适用于游戏中的NPC。一个警卫可能具有以下状态：&lt;/p>
+&lt;ul>
+&lt;li>巡逻&lt;/li>
+&lt;li>攻击&lt;/li>
+&lt;li>逃跑&lt;/li>
+&lt;/ul>
+&lt;p>当状态改变时，你可能会想到这些规则：&lt;/p>
+&lt;ul>
+&lt;li>如果警卫看到敌人，就立即攻击&lt;/li>
+&lt;li>如果警卫正在攻击但无法再看到敌人，那么返回巡逻&lt;/li>
+&lt;li>如果警卫正在攻击但受了重伤，那么开始逃跑&lt;/li>
+&lt;/ul>
+&lt;p>这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：&lt;/p>
+&lt;ul>
+&lt;li>空闲（巡逻期间）&lt;/li>
+&lt;li>搜寻（刚才发现的敌人躲起来时）&lt;/li>
+&lt;li>求助（发现敌人，但因为敌人太强而无法独自作战时）&lt;/li>
+&lt;/ul>
+&lt;p>通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。&lt;/p>
+&lt;p>如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。&lt;/p></description></item><item><title>游戏AI入门指南(Part 1)</title><link>/posts/the-total-beginners-guide-to-game-ai-part-1/</link><pubDate>Wed, 20 Mar 2019 20:30:43 +0000</pubDate><guid>/posts/the-total-beginners-guide-to-game-ai-part-1/</guid><description>&lt;p>&lt;strong>原文：&lt;/strong> &lt;a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&amp;rsquo;s Guide to Game AI&lt;/a>
+&lt;strong>作者：&lt;/strong> &lt;a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer&lt;/a>
+&lt;strong>译者：&lt;/strong> &lt;a href="https://www.limbonova.com/about/#blog-author">Anthony Han&lt;/a>&lt;/p>
+&lt;blockquote>
+&lt;p>这是一篇非常好的综述类文章，对当今的游戏AI常用技术和实现方法做了简单介绍，参考了近年来的 Game AI Pro 系列。虽然不及论文那样严谨，但全文条理清晰，通俗易懂。确实是一篇入门指南佳作。花了点业余时间翻译出来，为了分享，也希望能温故知新。&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="引言">引言&lt;/h2>
+&lt;p>本文将介绍游戏人工智能（或简称“游戏AI”）的入门概念，让读者了解使用哪些方法来处理AI问题，它们如何协同工作以及如何使用相应的语言或引擎来实现。&lt;/p>
+&lt;p>我们假设你具备电子游戏的基本知识，并掌握几何，三角函数等数学概念。大多数代码示例为伪代码，因此不需要特定的编程语言知识。&lt;/p>
+&lt;h2 id="什么是游戏ai">什么是游戏AI?&lt;/h2>
+&lt;p>游戏AI主要关注实体根据当前条件所采取的行动。这就是传统人工智能文献所指的控制“&lt;a href="https://en.wikipedia.org/wiki/Intelligent_agent">智能代理&lt;/a>”，代理通常是游戏中的角色，但也可以是车辆，机器人。或者更抽象的东西，例如一组实体，甚至一个国家或文明。智能代理需要在各种情况下观察周围环境，依此做出决策，并采取行动。这就是所谓的“感知/思考/行动(Sense/Think/Act)”循环：&lt;/p>
+&lt;ul>
+&lt;li>感知：代理侦测到或被告知环境中可能影响其行为的事物（例如：附近的威胁，要收集的物品，要调查的兴趣点）。&lt;/li>
+&lt;li>思考：代理决定采取的应对措施（例如：考虑是否足够安全来收集物品，或者决定应该先集中精力战斗还是躲藏）。&lt;/li>
+&lt;li>行动：代理将先前的决定付诸行动（例如：沿着通向敌人或物品等的路径移动）。由于代理做出了行动，形势已经改变，因此再次重复循环。&lt;/li>
+&lt;/ul>
+&lt;p>现实世界中的AI，特别是成为新闻热点的那些，通常主要关注循环中的“感知”部分。例如，自动驾驶汽车拍摄道路的图像，结合其他数据（例如雷达和光达），并分析所看到的状况。这个过程一般是通过机器学习来完成，机器学习尤其擅长这方面，获取大量现实世界中有噪声的数据（如汽车前方的道路照片或视频）并加以分析理解，提取诸如“前方20码处有一辆汽车”这类的语义信息。这些被称为“&lt;a href="https://zh.wikipedia.org/wiki/%E7%BB%9F%E8%AE%A1%E5%88%86%E7%B1%BB">分类问题&lt;/a>”。&lt;/p></description></item></channel></rss>

@@ -1,928 +1,625 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Posts on LimboNova</title>
-    <link>/posts/</link>
-    <description>Recent content in Posts on LimboNova</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Sun, 23 Jan 2022 22:36:28 +0000</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Debian Redmine 备份与恢复</title>
-      <link>/posts/debian-redmine-backup-and-restore/</link>
-      <pubDate>Sun, 23 Jan 2022 22:36:28 +0000</pubDate>
-      
-      <guid>/posts/debian-redmine-backup-and-restore/</guid>
-      <description>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。
-系统需求  Redmine 3.3 installed with apt on Debian 9 (stretch). Database: PostgreSQL  备份 配置文件 配置文件包含路径：/etc/redmine/{instance}
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on LimboNova</title><link>/posts/</link><description>Recent content in Posts on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 02 Apr 2022 15:46:59 +0800</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Behavior Trees in Gigantic</title><link>/posts/behavior-trees-in-gigantic/</link><pubDate>Sat, 02 Apr 2022 15:46:59 +0800</pubDate><guid>/posts/behavior-trees-in-gigantic/</guid><description>偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
+背景 Gigantic是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。
+作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。
+有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。
+实现 一般执行逻辑 关于行为树的基本介绍以及工作原理，不予赘述。参看 AI行为树的工作原理
+一般来说，行为树的执行顺序采用深度优先，父节点根据子节点执行并返回的状态作为输入，执行自身节点的逻辑，并返回其处理结果。
+在子节点返回成功/失败状态之前，行为树会从子节点继续执行，直到其返回成功/失败。然后执行其父节点，直到行为树根节点返回成功/失败。因此 Gigantic 采用栈来实现行为树的执行逻辑。子节点返回结果后从栈顶弹出，继续执行栈顶的节点。若该节点为Select，Sequence之类的复合节点，需要继续处理剩余的子节点，则将子节点压入栈继续执行。
+使用栈来实现，有以下几个优点：
+栈中只包含当前执行的路径，易于调试； 使用享元模式可实现树结构的共享，与 Agent 关联的行为树任务实例分离，占用内存更少。 实现轮询更简单：有些特殊的节点会在子节点每次执行前，自身也会执行。从而来实现任务及时中断退出，一般叫监测节点。如果有这种功能的节点，那么需要从栈底部向上依次执行该节点。（个人觉得这个理由有些牵强，不符合栈的使用场景，若使用C++标准库的栈则无法实现这个需求。） 注：作者没有指出这种实现的缺点，但需要注意的是：行为树每次执行时伴随着频繁的入栈出栈操作，如果处理不当可能造成大量的内存碎片。
+并行处理 动作游戏里NPC经常会同时执行多个动作，比如一边移动一边攻击，其行为树如下图所示：
+针对这个需求，一般行为树都会提供并行节点（Parallel）。Gigantic 也使用栈来实现并行节点。为并行节点的每个分支创建新栈。并行节点执行时会依次切换至其分支对应的栈，从而实现并行处理，类似于有些语言的协程（Coroutine）。
+注：这个方法可以扩展成真正的并发实现。线程足够的情况下，让每个分支执行在不同的线程上。
+难点 事件处理 为了维持行为树的执行和便于理解，Gigantic 将事件处理和行为树分离，事件的响应结果作为状态保存，便于行为树轮询时查询。
+注：将状态与决策分离，可以更好地实现组件的模块化，不仅行为树，其它如GOAP，HTN为主要框架的架构也可以这样处理。
+具体可参考 Humphreys. 2016. Modular AI System
+重用 随着游戏中 AI 的行为逐步丰富，行为树的复杂度也随之上升。如果树节点不具备重用的特性，那么不论是编写 AI 逻辑，还是调试功能都会带来很多不便。
+因此 Gigantic 引入“子树”这一概念。在主树中加入“Subtree Proxy”类型的节点，并设置指定的子树，执行时就会跳转到对应的子树。子树的结构也采用栈，因为它本质上也是一棵行为树。需要注意的是，要避免子树滥用造成的循环。如果有必要，在编辑行为树时加入循环检查，提醒设计师注意这一问题。
+注：子树不是新鲜概念了，但循环检测还是有必要的，即使有时是刻意为之。
+优化 通常 AI 代理的行为都是类似的，很多NPC共用同一个行为树。因此利用享元模式，可以将行为树的结构与代理的状态数据分开。行为树的结构数据应当是不互斥的，静态且无状态的。即使代理的数量激增，其所占用的行为树的静态数据也始终保持不变。</description></item><item><title>Debian Redmine 备份与恢复</title><link>/posts/debian-redmine-backup-and-restore/</link><pubDate>Sun, 23 Jan 2022 22:36:28 +0000</pubDate><guid>/posts/debian-redmine-backup-and-restore/</guid><description>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。
+系统需求 Redmine 3.3 installed with apt on Debian 9 (stretch). Database: PostgreSQL 备份 配置文件 配置文件包含路径：/etc/redmine/{instance}
 例如，默认实例名称为default，则配置文件路径为/etc/redmine/{default}。包含以下配置文件：
- configuration.yml database.xml secret_key.txt  数据库 在备份脚本执行用户的主目录创建 .pgpass 文件，加入连接数据库的用户名密码等连接信息。
+configuration.yml database.xml secret_key.txt 数据库 在备份脚本执行用户的主目录创建 .pgpass 文件，加入连接数据库的用户名密码等连接信息。
 echo &amp;#34;HOST:PORT:DB_NAME:USERNAME:PASSWORD&amp;#34; &amp;gt; ~/.pgpass 例如：
 echo &amp;#34;localhost:5432:redmine_default:redmine/instances/default:PASSWORD&amp;#34; &amp;gt; ~/.pgpass # 赋予权限 chmod 600 ~/.pgpass 使用 pg_dump 导出数据：
 pg_dump -U redmine/instances/default -d redmine_default -h localhost -Fc --file=/home/redmine/redmine_backup/db_dumps/redmine_`date +%Y-%m-%d`.sqlc 附件 路径：/var/lib/redmine/${instance}/files
 rsync -a /var/lib/redmine/default/files /home/redmine/redmine_backup/ 插件 路径：/usr/share/redmine/plugins
-主题 路径：/usr/share/redmine/public/themes</description>
-    </item>
-    
-    <item>
-      <title>游戏AI入门指南(Part 3)</title>
-      <link>/posts/the-total-beginners-guide-to-game-ai-part-3/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
-      
-      <guid>/posts/the-total-beginners-guide-to-game-ai-part-3/</guid>
-      <description>学习能力和适应能力 我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。
+主题 路径：/usr/share/redmine/public/themes</description></item><item><title>游戏AI入门指南(Part 3)</title><link>/posts/the-total-beginners-guide-to-game-ai-part-3/</link><pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate><guid>/posts/the-total-beginners-guide-to-game-ai-part-3/</guid><description>学习能力和适应能力 我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。
 统计和概率 在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。
 但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的移动平均(windowed average)，如只考虑最后20个数据点。
 假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！
 另一个有趣的方法是使用朴素贝叶斯分类器(Naive Bayes Classifier)来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。
 使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。
 简单的基于权重的自适应 让我们更进一步讨论这个话题。不只是利用输入数据在不同的预编程策略之间选择，或许我们还想修改一系列影响决策的数值。充分了解我们的游戏世界和规则后，我们可以执行以下操作：
- 让AI在游戏过程中收集有关世界状态和关键事件的数据（如上所述）； 以收集的数据为基础，更改其中的值或其“权重”； 根据处理或评估这些权重来进行决策。  假设在一张FPS游戏地图上，AI代理有几个主要房间可供选择。每个房间都有一个权重，用来表示其进入该房间的意愿，并且一开始所有房间的权重都是相等的。当代理选择要去的地方时，先随机选择一个房间，但会基于权重而有所偏向。现在设想一下，当AI代理被杀死时，它会记下其所在的房间并减轻权重，因此它以后不太可能再回到这个房间。类似地，假如AI代理因为击杀敌人得分了，那么它可能会增加其所在房间的权重，从而将其优先级提高。如果开始的时候一个房间对AI特别致命，AI代理会在将来避开这里，但如果AI代理在其他房间击杀了很多敌人，那么它会回到那里。
+让AI在游戏过程中收集有关世界状态和关键事件的数据（如上所述）； 以收集的数据为基础，更改其中的值或其“权重”； 根据处理或评估这些权重来进行决策。 假设在一张FPS游戏地图上，AI代理有几个主要房间可供选择。每个房间都有一个权重，用来表示其进入该房间的意愿，并且一开始所有房间的权重都是相等的。当代理选择要去的地方时，先随机选择一个房间，但会基于权重而有所偏向。现在设想一下，当AI代理被杀死时，它会记下其所在的房间并减轻权重，因此它以后不太可能再回到这个房间。类似地，假如AI代理因为击杀敌人得分了，那么它可能会增加其所在房间的权重，从而将其优先级提高。如果开始的时候一个房间对AI特别致命，AI代理会在将来避开这里，但如果AI代理在其他房间击杀了很多敌人，那么它会回到那里。
 马尔可夫模型 如果我们想使用这样收集的数据进行预测，那该如何呢？例如玩家在玩游戏的过程中，我们记录下他们在一段时间内进入的每个房间，自然会期望用这些数据来预测玩家可能前往的下一个房间。通过跟踪玩家当前所在的房间和之前去过的房间，并将其记录为一对值，我们可以计算出前一种情况导致后一种情况的频率，并将其用于预测未来的情况。
 假设有3个房间，红色，绿色和蓝色，以下是我们在游戏中的观察结果：
-   首个房间 总次数 下个房间 次数 百分比     红色 10 红色 2 20%    10 绿色 7 70%    10 蓝色 1 10%   绿色 10 红色 3 30%    10 绿色 5 50%    10 蓝色 2 20%   蓝色 8 红色 6 75%    8 绿色 2 25%    8 蓝色 0 0%    每个房间的观测数据相当均匀，没法告诉我们哪里最适合打埋伏。玩家在地图上的均匀分布​对数据产生了影响，在这三个房间中出现有同样的可能性。但是他们进入的下个房间的数据是有用处的，可以帮我们预测玩家在地图上的移动。</description>
-    </item>
-    
-    <item>
-      <title>游戏AI入门指南(Part 2)</title>
-      <link>/posts/the-total-beginners-guide-to-game-ai-part-2/</link>
-      <pubDate>Mon, 25 Mar 2019 23:10:09 +0000</pubDate>
-      
-      <guid>/posts/the-total-beginners-guide-to-game-ai-part-2/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/&#34;&gt;The Total Beginner&amp;rsquo;s Guide to Game AI&lt;/a&gt;
-&lt;strong&gt;作者：&lt;/strong&gt; &lt;a href=&#34;https://www.gamedev.net/profile/2996-kylotan/&#34;&gt;Ben Sizer&lt;/a&gt;
-&lt;strong&gt;译者：&lt;/strong&gt; &lt;a href=&#34;https://www.limbonova.com/about/#blog-author&#34;&gt;Anthony Han&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;进阶决策&#34;&gt;进阶决策&lt;/h2&gt;
-&lt;p&gt;虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。&lt;/p&gt;
-&lt;h3 id=&#34;有限状态机&#34;&gt;有限状态机&lt;/h3&gt;
-&lt;p&gt;有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。&lt;/p&gt;
-&lt;p&gt;这非常适用于游戏中的NPC。一个警卫可能具有以下状态：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;巡逻&lt;/li&gt;
-&lt;li&gt;攻击&lt;/li&gt;
-&lt;li&gt;逃跑&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;当状态改变时，你可能会想到这些规则：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;如果警卫看到敌人，就立即攻击&lt;/li&gt;
-&lt;li&gt;如果警卫正在攻击但无法再看到敌人，那么返回巡逻&lt;/li&gt;
-&lt;li&gt;如果警卫正在攻击但受了重伤，那么开始逃跑&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;空闲（巡逻期间）&lt;/li&gt;
-&lt;li&gt;搜寻（刚才发现的敌人躲起来时）&lt;/li&gt;
-&lt;li&gt;求助（发现敌人，但因为敌人太强而无法独自作战时）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。&lt;/p&gt;
-&lt;p&gt;如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>游戏AI入门指南(Part 1)</title>
-      <link>/posts/the-total-beginners-guide-to-game-ai-part-1/</link>
-      <pubDate>Wed, 20 Mar 2019 20:30:43 +0000</pubDate>
-      
-      <guid>/posts/the-total-beginners-guide-to-game-ai-part-1/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/&#34;&gt;The Total Beginner&amp;rsquo;s Guide to Game AI&lt;/a&gt;
-&lt;strong&gt;作者：&lt;/strong&gt; &lt;a href=&#34;https://www.gamedev.net/profile/2996-kylotan/&#34;&gt;Ben Sizer&lt;/a&gt;
-&lt;strong&gt;译者：&lt;/strong&gt; &lt;a href=&#34;https://www.limbonova.com/about/#blog-author&#34;&gt;Anthony Han&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;这是一篇非常好的综述类文章，对当今的游戏AI常用技术和实现方法做了简单介绍，参考了近年来的 Game AI Pro 系列。虽然不及论文那样严谨，但全文条理清晰，通俗易懂。确实是一篇入门指南佳作。花了点业余时间翻译出来，为了分享，也希望能温故知新。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;引言&#34;&gt;引言&lt;/h2&gt;
-&lt;p&gt;本文将介绍游戏人工智能（或简称“游戏AI”）的入门概念，让读者了解使用哪些方法来处理AI问题，它们如何协同工作以及如何使用相应的语言或引擎来实现。&lt;/p&gt;
-&lt;p&gt;我们假设你具备电子游戏的基本知识，并掌握几何，三角函数等数学概念。大多数代码示例为伪代码，因此不需要特定的编程语言知识。&lt;/p&gt;
-&lt;h2 id=&#34;什么是游戏ai&#34;&gt;什么是游戏AI?&lt;/h2&gt;
-&lt;p&gt;游戏AI主要关注实体根据当前条件所采取的行动。这就是传统人工智能文献所指的控制“&lt;a href=&#34;https://en.wikipedia.org/wiki/Intelligent_agent&#34;&gt;智能代理&lt;/a&gt;”，代理通常是游戏中的角色，但也可以是车辆，机器人。或者更抽象的东西，例如一组实体，甚至一个国家或文明。智能代理需要在各种情况下观察周围环境，依此做出决策，并采取行动。这就是所谓的“感知/思考/行动(Sense/Think/Act)”循环：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;感知：代理侦测到或被告知环境中可能影响其行为的事物（例如：附近的威胁，要收集的物品，要调查的兴趣点）。&lt;/li&gt;
-&lt;li&gt;思考：代理决定采取的应对措施（例如：考虑是否足够安全来收集物品，或者决定应该先集中精力战斗还是躲藏）。&lt;/li&gt;
-&lt;li&gt;行动：代理将先前的决定付诸行动（例如：沿着通向敌人或物品等的路径移动）。由于代理做出了行动，形势已经改变，因此再次重复循环。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;现实世界中的AI，特别是成为新闻热点的那些，通常主要关注循环中的“感知”部分。例如，自动驾驶汽车拍摄道路的图像，结合其他数据（例如雷达和光达），并分析所看到的状况。这个过程一般是通过机器学习来完成，机器学习尤其擅长这方面，获取大量现实世界中有噪声的数据（如汽车前方的道路照片或视频）并加以分析理解，提取诸如“前方20码处有一辆汽车”这类的语义信息。这些被称为“&lt;a href=&#34;https://zh.wikipedia.org/wiki/%E7%BB%9F%E8%AE%A1%E5%88%86%E7%B1%BB&#34;&gt;分类问题&lt;/a&gt;”。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>晶体管：献给赛博朋克的十四行诗</title>
-      <link>/posts/transistor-a-sonnet-to-cyberpunk/</link>
-      <pubDate>Thu, 26 Apr 2018 22:54:34 +0800</pubDate>
-      
-      <guid>/posts/transistor-a-sonnet-to-cyberpunk/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;When I first saw you up on that stage back there.
+首个房间 总次数 下个房间 次数 百分比 红色 10 红色 2 20% 10 绿色 7 70% 10 蓝色 1 10% 绿色 10 红色 3 30% 10 绿色 5 50% 10 蓝色 2 20% 蓝色 8 红色 6 75% 8 绿色 2 25% 8 蓝色 0 0% 每个房间的观测数据相当均匀，没法告诉我们哪里最适合打埋伏。玩家在地图上的均匀分布​对数据产生了影响，在这三个房间中出现有同样的可能性。但是他们进入的下个房间的数据是有用处的，可以帮我们预测玩家在地图上的移动。</description></item><item><title>游戏AI入门指南(Part 2)</title><link>/posts/the-total-beginners-guide-to-game-ai-part-2/</link><pubDate>Mon, 25 Mar 2019 23:10:09 +0000</pubDate><guid>/posts/the-total-beginners-guide-to-game-ai-part-2/</guid><description>&lt;p>&lt;strong>原文：&lt;/strong> &lt;a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&amp;rsquo;s Guide to Game AI&lt;/a>
+&lt;strong>作者：&lt;/strong> &lt;a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer&lt;/a>
+&lt;strong>译者：&lt;/strong> &lt;a href="https://www.limbonova.com/about/#blog-author">Anthony Han&lt;/a>&lt;/p>
+&lt;h2 id="进阶决策">进阶决策&lt;/h2>
+&lt;p>虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。&lt;/p>
+&lt;h3 id="有限状态机">有限状态机&lt;/h3>
+&lt;p>有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。&lt;/p>
+&lt;p>这非常适用于游戏中的NPC。一个警卫可能具有以下状态：&lt;/p>
+&lt;ul>
+&lt;li>巡逻&lt;/li>
+&lt;li>攻击&lt;/li>
+&lt;li>逃跑&lt;/li>
+&lt;/ul>
+&lt;p>当状态改变时，你可能会想到这些规则：&lt;/p>
+&lt;ul>
+&lt;li>如果警卫看到敌人，就立即攻击&lt;/li>
+&lt;li>如果警卫正在攻击但无法再看到敌人，那么返回巡逻&lt;/li>
+&lt;li>如果警卫正在攻击但受了重伤，那么开始逃跑&lt;/li>
+&lt;/ul>
+&lt;p>这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：&lt;/p>
+&lt;ul>
+&lt;li>空闲（巡逻期间）&lt;/li>
+&lt;li>搜寻（刚才发现的敌人躲起来时）&lt;/li>
+&lt;li>求助（发现敌人，但因为敌人太强而无法独自作战时）&lt;/li>
+&lt;/ul>
+&lt;p>通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。&lt;/p>
+&lt;p>如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。&lt;/p></description></item><item><title>游戏AI入门指南(Part 1)</title><link>/posts/the-total-beginners-guide-to-game-ai-part-1/</link><pubDate>Wed, 20 Mar 2019 20:30:43 +0000</pubDate><guid>/posts/the-total-beginners-guide-to-game-ai-part-1/</guid><description>&lt;p>&lt;strong>原文：&lt;/strong> &lt;a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&amp;rsquo;s Guide to Game AI&lt;/a>
+&lt;strong>作者：&lt;/strong> &lt;a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer&lt;/a>
+&lt;strong>译者：&lt;/strong> &lt;a href="https://www.limbonova.com/about/#blog-author">Anthony Han&lt;/a>&lt;/p>
+&lt;blockquote>
+&lt;p>这是一篇非常好的综述类文章，对当今的游戏AI常用技术和实现方法做了简单介绍，参考了近年来的 Game AI Pro 系列。虽然不及论文那样严谨，但全文条理清晰，通俗易懂。确实是一篇入门指南佳作。花了点业余时间翻译出来，为了分享，也希望能温故知新。&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="引言">引言&lt;/h2>
+&lt;p>本文将介绍游戏人工智能（或简称“游戏AI”）的入门概念，让读者了解使用哪些方法来处理AI问题，它们如何协同工作以及如何使用相应的语言或引擎来实现。&lt;/p>
+&lt;p>我们假设你具备电子游戏的基本知识，并掌握几何，三角函数等数学概念。大多数代码示例为伪代码，因此不需要特定的编程语言知识。&lt;/p>
+&lt;h2 id="什么是游戏ai">什么是游戏AI?&lt;/h2>
+&lt;p>游戏AI主要关注实体根据当前条件所采取的行动。这就是传统人工智能文献所指的控制“&lt;a href="https://en.wikipedia.org/wiki/Intelligent_agent">智能代理&lt;/a>”，代理通常是游戏中的角色，但也可以是车辆，机器人。或者更抽象的东西，例如一组实体，甚至一个国家或文明。智能代理需要在各种情况下观察周围环境，依此做出决策，并采取行动。这就是所谓的“感知/思考/行动(Sense/Think/Act)”循环：&lt;/p>
+&lt;ul>
+&lt;li>感知：代理侦测到或被告知环境中可能影响其行为的事物（例如：附近的威胁，要收集的物品，要调查的兴趣点）。&lt;/li>
+&lt;li>思考：代理决定采取的应对措施（例如：考虑是否足够安全来收集物品，或者决定应该先集中精力战斗还是躲藏）。&lt;/li>
+&lt;li>行动：代理将先前的决定付诸行动（例如：沿着通向敌人或物品等的路径移动）。由于代理做出了行动，形势已经改变，因此再次重复循环。&lt;/li>
+&lt;/ul>
+&lt;p>现实世界中的AI，特别是成为新闻热点的那些，通常主要关注循环中的“感知”部分。例如，自动驾驶汽车拍摄道路的图像，结合其他数据（例如雷达和光达），并分析所看到的状况。这个过程一般是通过机器学习来完成，机器学习尤其擅长这方面，获取大量现实世界中有噪声的数据（如汽车前方的道路照片或视频）并加以分析理解，提取诸如“前方20码处有一辆汽车”这类的语义信息。这些被称为“&lt;a href="https://zh.wikipedia.org/wiki/%E7%BB%9F%E8%AE%A1%E5%88%86%E7%B1%BB">分类问题&lt;/a>”。&lt;/p></description></item><item><title>晶体管：献给赛博朋克的十四行诗</title><link>/posts/transistor-a-sonnet-to-cyberpunk/</link><pubDate>Thu, 26 Apr 2018 22:54:34 +0800</pubDate><guid>/posts/transistor-a-sonnet-to-cyberpunk/</guid><description>&lt;blockquote>
+&lt;p>When I first saw you up on that stage back there.
 It was like&amp;hellip;
 everyone loved you.
-Everyone except for them.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;《晶体管》(Transistor) 是一款由《堡垒》(Bastion)开发商 &lt;a href=&#34;https://www.supergiantgames.com/&#34;&gt;Supergiant Games&lt;/a&gt; 所开发的科幻题材作品。游戏讲述了主角——云堤城 (Cloudbank) 歌星红伶 (Red)，躲过卡梅拉塔组织 (The Camerata) 刺杀后，意外获得了一件名叫“晶体管” (Transistor) 的武器，并以此复仇的故事。&lt;/p&gt;
-&lt;p&gt;虽然《晶体管》被官方定义为 ARPG ，但确切地说，它更应该被称作为一款 TRPG (Tactical RPG)。类似 XCOM 或者 神界：原罪 (Divinity: Original Sin) 的战斗规则 但又有所不同。首先，在行动规划阶段没有移动的次序和限制，玩家可以移动多次，并且在发动技能前后都可以移动，行动规划如同施放“时间暂停”一般。其次，个别技能会影响敌人位置，如拉近/击飞等效果。而在行动规划期间，受到此类效果影响的敌人并不会实时改变其位置，因为是规划嘛，所以需要一定的预判，游戏中会给出相应的提示。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/images/screenshots/20180426140854_1.jpg&#34; alt=&#34;transistor&#34;&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>基于TypeScript的PixiJS开发环境设置（webpack篇）</title>
-      <link>/posts/setup-pixijs-with-typescript-using-webpack/</link>
-      <pubDate>Thu, 21 Sep 2017 23:36:47 +0800</pubDate>
-      
-      <guid>/posts/setup-pixijs-with-typescript-using-webpack/</guid>
-      <description>&lt;p&gt;前几天写了一篇&lt;a href=&#34;http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify&#34;&gt;用&lt;code&gt;Browserify&lt;/code&gt;打包的 PixiJS 的开发环境配置流程&lt;/a&gt;，但是Web技术一日千里，开发工具也日新月异， Webpack 就是其中之一。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Webpack 作为模块打包工具的开发环境的配置过程，遵循简化易用的原则，省略了一些非必要模块的安装。&lt;/p&gt;
-&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
-&lt;h3 id=&#34;项目结构&#34;&gt;项目结构&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;创建项目目录&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;mkdir ts_pixi
+Everyone except for them.&lt;/p>
+&lt;/blockquote>
+&lt;p>《晶体管》(Transistor) 是一款由《堡垒》(Bastion)开发商 &lt;a href="https://www.supergiantgames.com/">Supergiant Games&lt;/a> 所开发的科幻题材作品。游戏讲述了主角——云堤城 (Cloudbank) 歌星红伶 (Red)，躲过卡梅拉塔组织 (The Camerata) 刺杀后，意外获得了一件名叫“晶体管” (Transistor) 的武器，并以此复仇的故事。&lt;/p>
+&lt;p>虽然《晶体管》被官方定义为 ARPG ，但确切地说，它更应该被称作为一款 TRPG (Tactical RPG)。类似 XCOM 或者 神界：原罪 (Divinity: Original Sin) 的战斗规则 但又有所不同。首先，在行动规划阶段没有移动的次序和限制，玩家可以移动多次，并且在发动技能前后都可以移动，行动规划如同施放“时间暂停”一般。其次，个别技能会影响敌人位置，如拉近/击飞等效果。而在行动规划期间，受到此类效果影响的敌人并不会实时改变其位置，因为是规划嘛，所以需要一定的预判，游戏中会给出相应的提示。&lt;/p>
+&lt;p>&lt;img src="/images/screenshots/20180426140854_1.jpg" alt="transistor">&lt;/p></description></item><item><title>基于TypeScript的PixiJS开发环境设置（webpack篇）</title><link>/posts/setup-pixijs-with-typescript-using-webpack/</link><pubDate>Thu, 21 Sep 2017 23:36:47 +0800</pubDate><guid>/posts/setup-pixijs-with-typescript-using-webpack/</guid><description>&lt;p>前几天写了一篇&lt;a href="http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify">用&lt;code>Browserify&lt;/code>打包的 PixiJS 的开发环境配置流程&lt;/a>，但是Web技术一日千里，开发工具也日新月异， Webpack 就是其中之一。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Webpack 作为模块打包工具的开发环境的配置过程，遵循简化易用的原则，省略了一些非必要模块的安装。&lt;/p>
+&lt;h2 id="安装">安装&lt;/h2>
+&lt;h3 id="项目结构">项目结构&lt;/h3>
+&lt;ol>
+&lt;li>创建项目目录&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>mkdir ts_pixi
 cd ts_pixi
 mkdir assets src dist
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;新建项目文件&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;touch index.html
+&lt;/code>&lt;/pre>&lt;ol start="2">
+&lt;li>新建项目文件&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>touch index.html
 touch src/main.ts
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;初始化项目&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm init
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;PixiJS&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev pixi.js
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应&lt;code&gt;@types&lt;/code&gt;文件，用于代码提示等功能。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev typescript @types/pixi.js @types/node
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;其它&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev ts-loader webpack webpack-dev-server
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>基于TypeScript的PixiJS开发环境设置（browserify篇）</title>
-      <link>/posts/setup-pixijs-with-typescript-using-browserify/</link>
-      <pubDate>Mon, 18 Sep 2017 21:28:22 +0800</pubDate>
-      
-      <guid>/posts/setup-pixijs-with-typescript-using-browserify/</guid>
-      <description>&lt;p&gt;PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。&lt;/p&gt;
-&lt;h2 id=&#34;前提&#34;&gt;前提&lt;/h2&gt;
-&lt;p&gt;不可或缺的当然是node。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;node --version
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
-&lt;h3 id=&#34;初始化项目&#34;&gt;初始化项目&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;创建项目目录&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;mkdir ts_pixi
+&lt;/code>&lt;/pre>&lt;ol start="3">
+&lt;li>初始化项目&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm init
+&lt;/code>&lt;/pre>&lt;h3 id="安装模块">安装模块&lt;/h3>
+&lt;ol>
+&lt;li>PixiJS&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save-dev pixi.js
+&lt;/code>&lt;/pre>&lt;ol start="2">
+&lt;li>TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应&lt;code>@types&lt;/code>文件，用于代码提示等功能。&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save-dev typescript @types/pixi.js @types/node
+&lt;/code>&lt;/pre>&lt;ol start="3">
+&lt;li>其它&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save-dev ts-loader webpack webpack-dev-server
+&lt;/code>&lt;/pre></description></item><item><title>基于TypeScript的PixiJS开发环境设置（browserify篇）</title><link>/posts/setup-pixijs-with-typescript-using-browserify/</link><pubDate>Mon, 18 Sep 2017 21:28:22 +0800</pubDate><guid>/posts/setup-pixijs-with-typescript-using-browserify/</guid><description>&lt;p>PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。&lt;/p>
+&lt;h2 id="前提">前提&lt;/h2>
+&lt;p>不可或缺的当然是node。&lt;/p>
+&lt;pre tabindex="0">&lt;code>node --version
+&lt;/code>&lt;/pre>&lt;h2 id="安装">安装&lt;/h2>
+&lt;h3 id="初始化项目">初始化项目&lt;/h3>
+&lt;ol>
+&lt;li>创建项目目录&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>mkdir ts_pixi
 cd ts_pixi
 mkdir assets src dist
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;新建项目文件&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;touch index.html
+&lt;/code>&lt;/pre>&lt;ol start="2">
+&lt;li>新建项目文件&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>touch index.html
 touch src/main.ts
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;初始化项目&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm init
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;PixiJS&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save pixi.js
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;TypeScript&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev typescript
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;其它&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev browserify browserify-shim http-server tsify tslint
-&lt;/code&gt;&lt;/pre&gt;</description>
-    </item>
-    
-    <item>
-      <title>AI行为树的工作原理</title>
-      <link>/posts/behavior-trees-for-ai-how-they-work/</link>
-      <pubDate>Wed, 13 Sep 2017 20:19:48 +0800</pubDate>
-      
-      <guid>/posts/behavior-trees-for-ai-how-they-work/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php&#34;&gt;Behavior trees for AI: How they work&lt;/a&gt;
-&lt;strong&gt;作者：&lt;/strong&gt; Chris Simpson
-&lt;strong&gt;译者：&lt;/strong&gt; Anthony Han&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;最近在研究行为树相关的内容，看了不少很好的文章。不同于其它文章阐述行为树的原理和实现，这篇文章着重于实践使用，介绍了行为树一般用法，还有一些开阔眼界的特别技巧。为加深印象，我利用业余时间翻译了一下，也希望对他人也有帮助。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;引言&#34;&gt;引言&lt;/h2&gt;
-&lt;p&gt;虽然网上有很多行为树的教程和指南，但是在研究能不能用在 &lt;a href=&#34;http://store.steampowered.com/app/108600&#34;&gt;Project Zomboid&lt;/a&gt; 中时，我总是遇到同样的问题。许多教程把重点放在行为树的代码实现上，或者仅仅专注在无上下文的流程图上，而没有任何真正适用的示例，其图表就像这样：
-&lt;img src=&#34;/images/bt_for_ai_image_01.png&#34; alt=&#34;image&#34;&gt;&lt;/p&gt;
-&lt;p&gt;虽然在帮助我理解行为树的核心原则方面，这些教程是非常有价值的。但我发现自己处于一种情况：即使知道行为树的运作机制，我也不知道我应该为游戏创建什么样的节点，或者一个真正的完全成型的行为树是什么样子。&lt;/p&gt;
-&lt;p&gt;我花了大量的时间进行实验（由于Zomboid项目是用Java写的，我一直在用很棒的JBT —— Java行为树（ &lt;a href=&#34;http://sourceforge.net/projects/jbt/&#34;&gt;http://sourceforge.net/projects/jbt/&lt;/a&gt; ），所以我没有必要关心自己的实际代码实现。尽管有很多教程的重点在这方面，还有许多常用的游戏引擎中的实现。&lt;/p&gt;
-&lt;p&gt;我在这篇文章提到的某些特定装饰器的节点类型，可能来自于 JBT 而不是一般的行为树概念，但是我发现它们是行为树系统中不可或缺的一部分。如果你的行为树不支持的话，你可以考虑实现一下。&lt;/p&gt;
-&lt;p&gt;我不会自称是这个方面的专家，但是经过 Project Zomboid 游戏中NPC的开发工作，我觉得我还是有点本事的，所以我想我要爆料一些东西。如果我早点知道会让我的第一次尝试更顺利，或者至少打开了我的眼界，让我了解通过行为树可以做到什么。我不打算深入进行实现，但会给出一些在 Zomboid 项目中使用的抽象示例。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>建筑师谈《监狱建筑师》</title>
-      <link>/posts/asked-an-architect-about-the-game-prison-architect/</link>
-      <pubDate>Tue, 08 Aug 2017 16:28:00 +0800</pubDate>
-      
-      <guid>/posts/asked-an-architect-about-the-game-prison-architect/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;https://motherboard.vice.com/en_us/article/gvyzm4/we-asked-an-architect-about-the-game-prison-architect&#34;&gt;We Asked an Architect About the Game &amp;lsquo;Prison Architect&amp;rsquo;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;作者：&lt;/strong&gt; EMANUEL MAIBERG&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;译者：&lt;/strong&gt; Anthony Han&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;这是一篇我自己翻译的文章，主要动力源于几个月前玩的《监狱建筑师》这款游戏。因琐事所累，当时没有写下自己的体验感受。只留下书签栏中的这篇文章，或许可以从另一个角度来看这款游戏并审视其独特题材的社会意义。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://www.introversion.co.uk/prisonarchitect/images/screenshots/large/prison-architect-12.jpg&#34; alt=&#34;prison architect&#34;&gt;&lt;/p&gt;
-&lt;p&gt;《监狱建筑师》，一款类似模拟城市的监狱模拟经营游戏，恰到好处地探究到了其主题的骇人之处。&lt;/p&gt;
-&lt;p&gt;玩家作为《监狱建筑师》的首要任务是用电椅处死一个囚犯，但在你按那个死亡开关前，你还得弄清楚很多细节。你需要建一个单独的建筑，带有一个执行室和拘留室。如果你心肠好的话，可以加一个窗和书架。每个房间需要一定的大小，并使用不同类型的地板。每个房间还需要连接到监狱的电网，电椅会消耗很多电力，所以你要为你的发电机增加一些电容器。&lt;/p&gt;
-&lt;p&gt;当你处死囚犯的时候，这个事只是众多的待办事项中的一项：建更多的牢房，扩大食堂，建一个实施戒毒方案的公共房间，修复淋浴管道。还有，哦，处死这个囚犯。&lt;/p&gt;
-&lt;p&gt;游戏开发商 Introversion Software 的创意总监克里斯·迪莱（Chris Delay）说，他们特意挑选了监狱生活中最黑暗的部分作为游戏的第一章节。他说：“如果把它当成建造酒店或者其它东西的游戏就会非常轻松。”“但从一开始，我们就认识到，必须让玩家知道这是不一样的体验，他必须要有不一样的思路。”&lt;/p&gt;
-&lt;p&gt;游戏的最基本的建筑单元就是那些构成地图的方块。如何解决问题就看你如何有效使用分配给你的空间，经过足够长的时间后，你就会得到自己看待世界的方式（以自己的想法来构建世界），这就是模拟经营游戏的乐趣。这是一个关于最优化的练习。如果你像我一样，看到整齐有序的书架或者清洁干净的桌面感到莫名的享受时，玩模拟经营游戏尤其满足。&lt;/p&gt;
-&lt;p&gt;但是，我依然会记得这个游戏的主题，尤其知道现实生活中这一切都是真实存在的之后，我意识到，原来我在游戏里干得很棒的工作竟然如此可怕。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型</title>
-      <link>/posts/a-conversation-with-anders-hejlsberg/</link>
-      <pubDate>Fri, 02 Dec 2016 18:12:31 +0800</pubDate>
-      
-      <guid>/posts/a-conversation-with-anders-hejlsberg/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;标题：&lt;/strong&gt; &lt;a href=&#34;http://www.cstc.net.cn/docs/docs.php?id=258&#34;&gt;Anders Hejlsberg谈C#、Java和C++中的泛型&lt;/a&gt;
-&lt;strong&gt;译者：&lt;/strong&gt; lover_P&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;http://www.artima.com/intv/generics.html&#34;&gt;Generics in C#, Java, and C++: A Conversation with Anders Hejlsberg, Part VII&lt;/a&gt;
-&lt;strong&gt;作者：&lt;/strong&gt; Bill Venners、Bruce Eckel&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;人物介绍&lt;/strong&gt;
-Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读作：C-Sharp）程序设计语言。Hejlsberg第一次登上软件界历史舞台是在80年代早期，因为他为MS-DOS和CP/M设计了Pascal编译器。当时，还是一个小公司的Borland很快雇用了他，并买下了他的编译器，改称Turbo Pascal。在Borland，Hejlsberg继续开发Turbo Pascal，并最终带领他的小组设计了Turbo Pascal的替代品：Delphi。1996年，在进入Borland 13年后，Hejlsberg加入了微软。最初，他做Visual J++和Windows Fundatioin Classes（WFC）的架构师。随后，Hejlsberg成为C#的首席设计师和.NET Framework的关键参与者。目前，Anders Hejlsberg还在领导着C#程序设计语言的继续开发。&lt;/p&gt;
-&lt;p&gt;Bruce Eckel，Think in C++（C++编程思想）和Think in Java（Java编程思想）的作者。&lt;/p&gt;
-&lt;p&gt;Bill Venners，Artima.com的主编。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;内容&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;泛型概述&lt;/li&gt;
-&lt;li&gt;C#中的泛型&lt;/li&gt;
-&lt;li&gt;C#泛型和java泛型的比较&lt;/li&gt;
-&lt;li&gt;C#泛型和C++模板的比较&lt;/li&gt;
-&lt;li&gt;C#泛型中的约束&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    
-    <item>
-      <title>Bitnami Redmine 升级简易指南</title>
-      <link>/posts/bitnami-redmine-upgrade-guide/</link>
-      <pubDate>Tue, 27 Sep 2016 11:00:54 +0800</pubDate>
-      
-      <guid>/posts/bitnami-redmine-upgrade-guide/</guid>
-      <description>&lt;p&gt;顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。&lt;/p&gt;
-&lt;h2 id=&#34;系统需求&#34;&gt;系统需求&lt;/h2&gt;
-&lt;p&gt;适用于Windows平台的 Bitnami Redmine 2.x+ 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Redmine version&lt;/th&gt;
-&lt;th&gt;Supported Ruby versions&lt;/th&gt;
-&lt;th&gt;Rails version used&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;3.3, current trunk&lt;/td&gt;
-&lt;td&gt;ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3&lt;/td&gt;
-&lt;td&gt;Rails 4.2&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;3.2, 3.1&lt;/td&gt;
-&lt;td&gt;ruby 1.9.3, 2.0.0, 2.1, 2.21&lt;/td&gt;
-&lt;td&gt;Rails 4.2&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.
+&lt;/code>&lt;/pre>&lt;ol start="3">
+&lt;li>初始化项目&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm init
+&lt;/code>&lt;/pre>&lt;h3 id="安装模块">安装模块&lt;/h3>
+&lt;ol>
+&lt;li>PixiJS&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save pixi.js
+&lt;/code>&lt;/pre>&lt;ol start="2">
+&lt;li>TypeScript&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save-dev typescript
+&lt;/code>&lt;/pre>&lt;ol start="3">
+&lt;li>其它&lt;/li>
+&lt;/ol>
+&lt;pre tabindex="0">&lt;code>npm install --save-dev browserify browserify-shim http-server tsify tslint
+&lt;/code>&lt;/pre></description></item><item><title>AI行为树的工作原理</title><link>/posts/behavior-trees-for-ai-how-they-work/</link><pubDate>Wed, 13 Sep 2017 20:19:48 +0800</pubDate><guid>/posts/behavior-trees-for-ai-how-they-work/</guid><description>&lt;p>&lt;strong>原文：&lt;/strong> &lt;a href="https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php">Behavior trees for AI: How they work&lt;/a>
+&lt;strong>作者：&lt;/strong> Chris Simpson
+&lt;strong>译者：&lt;/strong> Anthony Han&lt;/p>
+&lt;blockquote>
+&lt;p>最近在研究行为树相关的内容，看了不少很好的文章。不同于其它文章阐述行为树的原理和实现，这篇文章着重于实践使用，介绍了行为树一般用法，还有一些开阔眼界的特别技巧。为加深印象，我利用业余时间翻译了一下，也希望对他人也有帮助。&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="引言">引言&lt;/h2>
+&lt;p>虽然网上有很多行为树的教程和指南，但是在研究能不能用在 &lt;a href="http://store.steampowered.com/app/108600">Project Zomboid&lt;/a> 中时，我总是遇到同样的问题。许多教程把重点放在行为树的代码实现上，或者仅仅专注在无上下文的流程图上，而没有任何真正适用的示例，其图表就像这样：
+&lt;img src="/images/bt_for_ai_image_01.png" alt="image">&lt;/p>
+&lt;p>虽然在帮助我理解行为树的核心原则方面，这些教程是非常有价值的。但我发现自己处于一种情况：即使知道行为树的运作机制，我也不知道我应该为游戏创建什么样的节点，或者一个真正的完全成型的行为树是什么样子。&lt;/p>
+&lt;p>我花了大量的时间进行实验（由于Zomboid项目是用Java写的，我一直在用很棒的JBT —— Java行为树（ &lt;a href="http://sourceforge.net/projects/jbt/">http://sourceforge.net/projects/jbt/&lt;/a> ），所以我没有必要关心自己的实际代码实现。尽管有很多教程的重点在这方面，还有许多常用的游戏引擎中的实现。&lt;/p>
+&lt;p>我在这篇文章提到的某些特定装饰器的节点类型，可能来自于 JBT 而不是一般的行为树概念，但是我发现它们是行为树系统中不可或缺的一部分。如果你的行为树不支持的话，你可以考虑实现一下。&lt;/p>
+&lt;p>我不会自称是这个方面的专家，但是经过 Project Zomboid 游戏中NPC的开发工作，我觉得我还是有点本事的，所以我想我要爆料一些东西。如果我早点知道会让我的第一次尝试更顺利，或者至少打开了我的眼界，让我了解通过行为树可以做到什么。我不打算深入进行实现，但会给出一些在 Zomboid 项目中使用的抽象示例。&lt;/p></description></item><item><title>建筑师谈《监狱建筑师》</title><link>/posts/asked-an-architect-about-the-game-prison-architect/</link><pubDate>Tue, 08 Aug 2017 16:28:00 +0800</pubDate><guid>/posts/asked-an-architect-about-the-game-prison-architect/</guid><description>&lt;p>&lt;strong>原文：&lt;/strong> &lt;a href="https://motherboard.vice.com/en_us/article/gvyzm4/we-asked-an-architect-about-the-game-prison-architect">We Asked an Architect About the Game &amp;lsquo;Prison Architect&amp;rsquo;&lt;/a>&lt;/p>
+&lt;p>&lt;strong>作者：&lt;/strong> EMANUEL MAIBERG&lt;/p>
+&lt;p>&lt;strong>译者：&lt;/strong> Anthony Han&lt;/p>
+&lt;blockquote>
+&lt;p>这是一篇我自己翻译的文章，主要动力源于几个月前玩的《监狱建筑师》这款游戏。因琐事所累，当时没有写下自己的体验感受。只留下书签栏中的这篇文章，或许可以从另一个角度来看这款游戏并审视其独特题材的社会意义。&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;img src="https://www.introversion.co.uk/prisonarchitect/images/screenshots/large/prison-architect-12.jpg" alt="prison architect">&lt;/p>
+&lt;p>《监狱建筑师》，一款类似模拟城市的监狱模拟经营游戏，恰到好处地探究到了其主题的骇人之处。&lt;/p>
+&lt;p>玩家作为《监狱建筑师》的首要任务是用电椅处死一个囚犯，但在你按那个死亡开关前，你还得弄清楚很多细节。你需要建一个单独的建筑，带有一个执行室和拘留室。如果你心肠好的话，可以加一个窗和书架。每个房间需要一定的大小，并使用不同类型的地板。每个房间还需要连接到监狱的电网，电椅会消耗很多电力，所以你要为你的发电机增加一些电容器。&lt;/p>
+&lt;p>当你处死囚犯的时候，这个事只是众多的待办事项中的一项：建更多的牢房，扩大食堂，建一个实施戒毒方案的公共房间，修复淋浴管道。还有，哦，处死这个囚犯。&lt;/p>
+&lt;p>游戏开发商 Introversion Software 的创意总监克里斯·迪莱（Chris Delay）说，他们特意挑选了监狱生活中最黑暗的部分作为游戏的第一章节。他说：“如果把它当成建造酒店或者其它东西的游戏就会非常轻松。”“但从一开始，我们就认识到，必须让玩家知道这是不一样的体验，他必须要有不一样的思路。”&lt;/p>
+&lt;p>游戏的最基本的建筑单元就是那些构成地图的方块。如何解决问题就看你如何有效使用分配给你的空间，经过足够长的时间后，你就会得到自己看待世界的方式（以自己的想法来构建世界），这就是模拟经营游戏的乐趣。这是一个关于最优化的练习。如果你像我一样，看到整齐有序的书架或者清洁干净的桌面感到莫名的享受时，玩模拟经营游戏尤其满足。&lt;/p>
+&lt;p>但是，我依然会记得这个游戏的主题，尤其知道现实生活中这一切都是真实存在的之后，我意识到，原来我在游戏里干得很棒的工作竟然如此可怕。&lt;/p></description></item><item><title>Anders Hejlsberg谈C#、Java和C++中的泛型</title><link>/posts/a-conversation-with-anders-hejlsberg/</link><pubDate>Fri, 02 Dec 2016 18:12:31 +0800</pubDate><guid>/posts/a-conversation-with-anders-hejlsberg/</guid><description>&lt;p>&lt;strong>标题：&lt;/strong> &lt;a href="http://www.cstc.net.cn/docs/docs.php?id=258">Anders Hejlsberg谈C#、Java和C++中的泛型&lt;/a>
+&lt;strong>译者：&lt;/strong> lover_P&lt;/p>
+&lt;p>&lt;strong>原文：&lt;/strong> &lt;a href="http://www.artima.com/intv/generics.html">Generics in C#, Java, and C++: A Conversation with Anders Hejlsberg, Part VII&lt;/a>
+&lt;strong>作者：&lt;/strong> Bill Venners、Bruce Eckel&lt;/p>
+&lt;p>&lt;strong>人物介绍&lt;/strong>
+Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读作：C-Sharp）程序设计语言。Hejlsberg第一次登上软件界历史舞台是在80年代早期，因为他为MS-DOS和CP/M设计了Pascal编译器。当时，还是一个小公司的Borland很快雇用了他，并买下了他的编译器，改称Turbo Pascal。在Borland，Hejlsberg继续开发Turbo Pascal，并最终带领他的小组设计了Turbo Pascal的替代品：Delphi。1996年，在进入Borland 13年后，Hejlsberg加入了微软。最初，他做Visual J++和Windows Fundatioin Classes（WFC）的架构师。随后，Hejlsberg成为C#的首席设计师和.NET Framework的关键参与者。目前，Anders Hejlsberg还在领导着C#程序设计语言的继续开发。&lt;/p>
+&lt;p>Bruce Eckel，Think in C++（C++编程思想）和Think in Java（Java编程思想）的作者。&lt;/p>
+&lt;p>Bill Venners，Artima.com的主编。&lt;/p>
+&lt;p>&lt;strong>内容&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>泛型概述&lt;/li>
+&lt;li>C#中的泛型&lt;/li>
+&lt;li>C#泛型和java泛型的比较&lt;/li>
+&lt;li>C#泛型和C++模板的比较&lt;/li>
+&lt;li>C#泛型中的约束&lt;/li>
+&lt;/ul></description></item><item><title>Bitnami Redmine 升级简易指南</title><link>/posts/bitnami-redmine-upgrade-guide/</link><pubDate>Tue, 27 Sep 2016 11:00:54 +0800</pubDate><guid>/posts/bitnami-redmine-upgrade-guide/</guid><description>&lt;p>顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。&lt;/p>
+&lt;h2 id="系统需求">系统需求&lt;/h2>
+&lt;p>适用于Windows平台的 Bitnami Redmine 2.x+ 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>Redmine version&lt;/th>
+&lt;th>Supported Ruby versions&lt;/th>
+&lt;th>Rails version used&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>3.3, current trunk&lt;/td>
+&lt;td>ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3&lt;/td>
+&lt;td>Rails 4.2&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>3.2, 3.1&lt;/td>
+&lt;td>ruby 1.9.3, 2.0.0, 2.1, 2.21&lt;/td>
+&lt;td>Rails 4.2&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.
 Redmine does not support JRuby because some gems do not support Rails 4.2.
-细节参看 &lt;a href=&#34;http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements&#34;&gt;Requirements&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;备份数据&#34;&gt;备份数据&lt;/h2&gt;
-&lt;h3 id=&#34;bitnami-stack&#34;&gt;Bitnami Stack&lt;/h3&gt;
-&lt;p&gt;若使用 Bitnami 集成包，可以直接备份整个目录即可。&lt;/p&gt;
-&lt;h3 id=&#34;redmine&#34;&gt;Redmine&lt;/h3&gt;
-&lt;p&gt;若只升级 Redmine 则先确认系统需求然后执行备份。&lt;/p&gt;
-&lt;h4 id=&#34;备份文件&#34;&gt;备份文件&lt;/h4&gt;
-&lt;p&gt;最好备份整个 redmine 目录，主要包括&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;上传文件(apps\redmine\htdocs\files)&lt;/li&gt;
-&lt;li&gt;插件(apps\redmine\htdocs\plugins)&lt;/li&gt;
-&lt;li&gt;主题(apps\redmine\htdocs\themes)&lt;/li&gt;
-&lt;li&gt;配置文件(apps\redmine\htdocs\config)&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    
-    <item>
-      <title>Markdown Syntax zhTW</title>
-      <link>/posts/markdown-syntax-zhtw/</link>
-      <pubDate>Thu, 18 Aug 2016 14:12:40 +0800</pubDate>
-      
-      <guid>/posts/markdown-syntax-zhtw/</guid>
-      <description>NOTE: This is Traditional Chinese Edition Document of Markdown Syntax. If you are seeking for English Edition Document. Please refer to Markdown: Syntax.
-Markdown: Syntax  概述  哲學 行內 HTML 特殊字元自動轉換   區塊元素  段落和換行 標題 區塊引言 清單 程式碼區塊 分隔線   區段元素  連結 強調 程式碼 圖片   其它  跳脫字元 自動連結   感謝  **注意：**這份文件是用 Markdown 寫的，你可以看看它的原始檔 。
- Markdown 的目標是實現「易讀易寫」。
-不過最需要強調的便是它的可讀性。一份使用 Markdown 格式撰寫的文件應該可以直接以純文字發佈，並且看起來不會像是由許多標籤或是格式指令所構成。Markdown 語法受到一些既有 text-to-HTML 格式的影響，包括 [Setext] 1、[atx] 2、[Textile] 3、[reStructuredText] 4、[Grutatext] 5 和 [EtText] 6，然而最大靈感來源其實是純文字的電子郵件格式。</description>
-    </item>
-    
-    <item>
-      <title>XML数据源的级联ComboBox</title>
-      <link>/posts/cascading-combobox-with-xml-dataprovider/</link>
-      <pubDate>Fri, 12 Jul 2013 19:48:33 +0800</pubDate>
-      
-      <guid>/posts/cascading-combobox-with-xml-dataprovider/</guid>
-      <description>&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
-&lt;p&gt;要做一个表单，其中自然少不了ComboBox，数据源不是从后台动态获取的，竟然是一个Excel表格文件！这个数据量很大，而且还有可能会修改，所以只能采用外部加载的方式。写一个解析Excel数据的库自然是不现实的，所以决定把Excel转换成XML格式，然后再加载。&lt;/p&gt;
-&lt;h2 id=&#34;excel转换成xml&#34;&gt;Excel转换成XML&lt;/h2&gt;
-&lt;p&gt;一般直接将Excel是不能导出成XML的，因为“不包含任何XML映射”，所以首先需要建立一个XML映射，其实就是设计一个XML结构，然后将Excel数据映射到对应的节点上。这一步其实很简单，但是颇具技巧性。&lt;/p&gt;
-&lt;h3 id=&#34;开发工具选项卡&#34;&gt;“开发工具”选项卡&lt;/h3&gt;
-&lt;p&gt;导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-&amp;ldquo;选项&amp;rdquo;-“自定义功能区”对话框，勾选“开发工具”。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Tour of Taihu Lake Day 3</title>
-      <link>/posts/tour-of-taihu-lake-day-3/</link>
-      <pubDate>Sat, 01 Jun 2013 21:15:19 +0800</pubDate>
-      
-      <guid>/posts/tour-of-taihu-lake-day-3/</guid>
-      <description>&lt;h2 id=&#34;概况&#34;&gt;概况&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;目标：&lt;/strong&gt; 无锡市区 - 苏州园区
-&lt;strong&gt;日期：&lt;/strong&gt; 2013年5月27日
-&lt;strong&gt;天气：&lt;/strong&gt; 阴转多云
-&lt;strong&gt;路线：&lt;/strong&gt; 清宁大桥 → 运河西路 → S230省道 → 舟山路 → 望湖大道 → X204县道（环太湖大道） → 太湖大桥 → 太湖公园 → X206（胥香路） → X206（孙武路） → X206（中山东路） → 苏福路 → 南环路 → 通园路&lt;/p&gt;
-&lt;h2 id=&#34;行程&#34;&gt;行程&lt;/h2&gt;
-&lt;p&gt;晚上和同学聊到一点多，早上醒来已经九点半，他已经去上班了，我便收拾好行李就离开了。去了他昨天介绍的早点店吃早饭，店家比较谦虚，写着一两4只的小笼包，我要了二两，端上来一看，恐怕一只就有一两了。酸辣汤勾芡稠度正好，味道也不错，喝了满满一大碗。可惜没吃到无锡的开洋馄饨，等下次有机会了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://lh3.googleusercontent.com/-JI2hwC_99oE/UayEPItuwaI/AAAAAAAAAMo/ZAyiRgsU0J0/s800/IMGP0782.jpg&#34; alt=&#34;Alt text&#34;&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Tour of Taihu Lake: Day 2</title>
-      <link>/posts/tour-of-taihu-lake-day-2/</link>
-      <pubDate>Fri, 31 May 2013 20:26:35 +0800</pubDate>
-      
-      <guid>/posts/tour-of-taihu-lake-day-2/</guid>
-      <description>&lt;h2 id=&#34;概况&#34;&gt;概况&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;目标：&lt;/strong&gt; 宜兴丁山 - 无锡市区
-&lt;strong&gt;日期：&lt;/strong&gt; 2013年5月26日
-&lt;strong&gt;天气：&lt;/strong&gt; 阵雨，大风
-&lt;strong&gt;路线：&lt;/strong&gt; 公园东路 → 汤蜀路 → 方溪路 → S230省道 → 分百路 → 环湖线 → 雪马路 → 梅梁路 → 连峰路 → 环山西路 → 龙头渚自然公园 → 七里风光堤 → 环山东路 → 十里明珠堤 → 湖山路（神骏桥） → S230省道（环太湖公路） → 梅园 → 运河西路 → 清宁大桥&lt;/p&gt;
-&lt;h2 id=&#34;行程&#34;&gt;行程&lt;/h2&gt;
-&lt;p&gt;因为密切关注天气情况，知道今天要下雨。七点一刻起床时发现还没有下雨，喜出望外，赶紧吃了早饭收拾好行李。结果没骑200米就下起小雨来，好在车包和背包都有防雨罩。但是我没带雨衣，路上也没找到卖的，只好一路冒雨前行。从丁山龙溪公园出发，一路沿着方溪路向东骑行。逆风又淋雨的滋味真是不好受，但是一旦自己决定开始这段旅程，就不能抱怨这路上的苦。相比昨天，至少今天不用担心烈日造成的高温和晒伤了。大约15分钟后上了S230省道，逆风转为侧风，雨也停了，此时窃喜，觉得今天是最佳的骑行时间，真是太幸福了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://lh4.googleusercontent.com/-bcOmjbf5GZo/UayD-be639I/AAAAAAAAAKM/ARmI3AwmKXs/s800/IMGP0746.jpg&#34; alt=&#34;补胎大桥&#34;&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Tour of Taihu Lake: Day 1</title>
-      <link>/posts/tour-of-taihu-lake-day-1/</link>
-      <pubDate>Thu, 30 May 2013 19:53:44 +0800</pubDate>
-      
-      <guid>/posts/tour-of-taihu-lake-day-1/</guid>
-      <description>&lt;h2 id=&#34;概况&#34;&gt;概况&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;目标：&lt;/strong&gt; 苏州园区 - 宜兴丁山
-&lt;strong&gt;日期：&lt;/strong&gt; 2013年5月25日
-&lt;strong&gt;天气：&lt;/strong&gt; 晴
-&lt;strong&gt;路线：&lt;/strong&gt; 通园路 → 南环高架 → 友新路 → 吴江太湖大桥 → S230省道 → 庙港大桥 →莘七线（沿湖东路） → 莘七线（沿湖西路）→ 莘七线（国富大道）→ 环太湖路 → 滨湖大桥 → 小梅大桥 → 太湖路 → 湖州太湖度假区（太湖乐园） → 滨湖大道 → 夹浦镇（夹浦派出所） → G104国道（发展大道） → 龙溪公园&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;装备&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;衣：骑行衣裤×2（身上穿1套），头盔×1（装上帽檐），手套×2，袜子×3，骑行雨衣（忘带了，夏天问题不大）；&lt;/li&gt;
-&lt;li&gt;食：士力架×2，压缩饼干×2，饮用水×2；&lt;/li&gt;
-&lt;li&gt;住：旅馆投宿，只需带基本洗漱用品即可，防晒霜；&lt;/li&gt;
-&lt;li&gt;行：单车一辆（这不是废话么），备胎2条，补胎工具，撬胎棒，六角扳手，打气筒，瑞士军刀，骑行背包/驮包，车前包，车管包，码表；&lt;/li&gt;
-&lt;li&gt;用：钱包，钥匙，手机，相机，Kindle，备用电池，各种充电器，笔记本，笔，打印好的路书；&lt;/li&gt;
-&lt;li&gt;药：创可贴，消炎药，感冒药，清凉油，龙虎人丹。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;** 默念三遍：遵守交通，出入平安 **&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Ruby on Rails 入门体验</title>
-      <link>/posts/ror-tutorial-review/</link>
-      <pubDate>Fri, 12 Apr 2013 12:16:03 +0800</pubDate>
-      
-      <guid>/posts/ror-tutorial-review/</guid>
-      <description>&lt;p&gt;今年年初时决定学习一下 Web 开发方面的知识，因为对 Ruby 早有耳闻，所以很自然地就选择了 Ruby on Rails 作为目标。在网上看到 Ruby on Rails Tutorial的教程，于是就跟着教程，边学边做地把这本书看完了。对 RoR 有了一个大概的了解，包括框架结构和开发流程，还有一些常用的Gems，确实是一本不错的实践入门书。&lt;/p&gt;
-&lt;h2 id=&#34;关于教程&#34;&gt;关于教程&lt;/h2&gt;
-&lt;p&gt;一开始时看的是英文原版，阅读速度缓慢，而我对实践充满热情，迫切希望早点学完自己动手做。恰好发现 Andor Chen 已经翻译了大部分章节，遇到有疑问的地方，就对照英文检查语句和代码。顺便修正一些译文里的错误，然后发送 pull request 让作者合并。&lt;/p&gt;
-&lt;p&gt;这本书和以前看的 Flex 入门书——《Flex 3 权威指南》类似，都是以构建一个应用为主线，由浅入深地介绍 RoR 开发的基本知识，从最开始的静态页面到模型生成，控制器，路由，数据库，Ajax，还有贯彻整个开发过程的测试。教程里开发的是一个微博站点，而 Twitter 以前就是使用 RoR 开发的，做起来也饶有趣味。&lt;/p&gt;
-&lt;p&gt;花了差不多两个月的业余时间看完了这个教程，并最终完成了那个微博网站，包括大部分练习题的功能。总的来说，还是有点挑战的。由于书中大部分都是编写步骤，注重手把手的教学实践。在原理的介绍上篇幅很少，而 RoR 这样“约定优于配置”的理念让我有点不适应，书中并无约定方面的解释，很多方法像变戏法一般地已经实现好了，而我却想一探究竟，搞清楚其幕后的动作。但毕竟这是一本入门书，或许是我要求太高了。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>基于AS3.0的图像抖动实现</title>
-      <link>/posts/image-dithering-algorithm-as3/</link>
-      <pubDate>Tue, 02 Apr 2013 20:21:09 +0800</pubDate>
-      
-      <guid>/posts/image-dithering-algorithm-as3/</guid>
-      <description>&lt;p&gt;不知当初自己出于什么目的，OneNote 里留了一条关于 Floyd–Steinberg dithering 的笔记。好奇之余，打开链接看了一下，方才想起这个当初让我觉得新奇的古老算法。&lt;/p&gt;
-&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
-&lt;p&gt;余忆童稚时，能张目对日，明察秋毫……”如果你对过去黑白报纸的图片仔细观察过的话，一定会发现，那些黑白照片由很多圆形或方形的图形组成。是的，那就是半色调（Halftone）和抖动（Dither ）技术。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://pixy.org/src/405/thumbs350/4057896.jpg&#34; alt=&#34;Halftone&#34;&gt;&lt;/p&gt;
-&lt;p&gt;半色调（Halftone）是指为了模拟出连续调影像（色阶）的视觉感觉，一般用墨点（半色调网点）的大小或频率的改变，来模拟明暗的变化。半色调广泛应用于报刊出版等领域，当年那些黑白出版物上尤其常见，现在的牛奶包装上也能看出来。&lt;/p&gt;
-&lt;h2 id=&#34;阈值法thresholding&#34;&gt;阈值法（Thresholding）&lt;/h2&gt;
-&lt;p&gt;当像素值大于设定阈值时，输出为亮点，否则输出为暗点，从而实现二值化。经过处理的图像往往失去细节，缺乏层次感。下图所示的就是二值化的图像。
-&lt;img src=&#34;http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg&#34; alt=&#34;lena_binary&#34;&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>HSV/HSL转换到RGB色彩空间</title>
-      <link>/posts/convert-hsv-hsl-to-rgb/</link>
-      <pubDate>Fri, 08 Mar 2013 18:08:17 +0800</pubDate>
-      
-      <guid>/posts/convert-hsv-hsl-to-rgb/</guid>
-      <description>&lt;p&gt;处理图像时，有时候会遇到不同色彩空间转换的情况。比较常见的是HSV/HSL到RGB的转换。&lt;/p&gt;
-&lt;h2 id=&#34;hsvhsbhsl简介&#34;&gt;HSV(HSB)/HSL简介&lt;/h2&gt;
-&lt;p&gt;不同于RGB/CYMK，HSV和HSL是两种比较常见的基于圆柱坐标系的色彩表示方法。这种方法对颜色的表达,对人来说更直观，更易于感受。因此艺术家有时偏好使用 HSL或HSV 而不选择 三原色光模式（即RGB模型） 或 印刷四分色模式（即CMYK模型），因为它类似于人类感觉颜色的方式，具有较强的感知度。RGB 和 CMYK 分别是加法原色和减法原色模型，以原色组合的方式定义颜色，而 HSV 以人类更熟悉的方式封装了关于颜色的信息：“这是什么颜色？深浅如何？明暗如何？”。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/500px-Hsl-hsv_models.svg.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;色彩定义&#34;&gt;色彩定义&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;H ：Hue(色相)，色彩的基本属性，就是平常所说的颜色名称，如红色、黄色等。&lt;/li&gt;
-&lt;li&gt;S ：saturation(饱和度)，色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值。&lt;/li&gt;
-&lt;li&gt;V ：value(色调)，取0-100%。&lt;/li&gt;
-&lt;li&gt;B ：brightness(明度)，取0-100%。&lt;/li&gt;
-&lt;li&gt;L ：lightness(亮度)，取0-100%。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;HSL 和 HSV 二者都把颜色描述在圆柱坐标系内的点，这个圆柱的中心轴取值为自底部的黑色到顶部的白色而在它们中间是的灰色，绕这个轴的角度对应于“色相”，到这个轴的距离对应于“饱和度”，而沿着这个轴的高度对应于“亮度”，“色调”或“明度”。&lt;/p&gt;
-&lt;p&gt;这两种表示在用目的上类似，但在方法上有区别。二者在数学上都是圆柱，但 HSV（色相，饱和度，色调）在概念上可以被认为是颜色的倒圆锥体（黑点在下顶点，白色在上底面圆心），HSL 在概念上表示了一个双圆锥体和圆球体（白色在上顶点，黑色在下顶点，最大横切面的圆心是半程灰色）。注意尽管在 HSL 和 HSV 中“色相”指称相同的性质，它们的“饱和度”的定义是明显不同的。&lt;/p&gt;
-&lt;p&gt;因为 HSL 和 HSV 是设备依赖的 RGB 的简单变换，(h, s, l) 或 (h, s, v) 三元组定义的颜色依赖于所使用的特定红色、绿色和蓝色“加法原色”。每个独特的 RGB 设备都伴随着一个独特的 HSL 和 HSV 空间。但是 (h, s, l) 或 (h, s, v) 三元组在被约束于特定 RGB 空间比如 sRGB 的时候就变成明确的了。&lt;/p&gt;
-&lt;p&gt;HSV 模型在 1978 年由计算机图形学先驱 Alvy Ray Smith 创立，它是三原色光模式的一种非线性变换。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>重元寺骑行</title>
-      <link>/posts/cycling-log-chongyuan-temple/</link>
-      <pubDate>Sun, 24 Feb 2013 22:19:53 +0800</pubDate>
-      
-      <guid>/posts/cycling-log-chongyuan-temple/</guid>
-      <description>&lt;p&gt;正月过半，乍暖还寒，然而阳光明媚，正是外出郊游的好时节。苏州是典型的江南水乡，不仅有周庄，甪直，同里千年古镇，水系也颇为发达，湖泊更是星罗棋布。而此时环湖骑行则是再合适不过的好主意了。&lt;/p&gt;
-&lt;p&gt;小西湖，是著名的大闸蟹产区——阳澄湖的内湖，隶属阳澄湖半岛度假区。这个度假区还在开发当中，目前主要有重元寺，莲池湖公园，小西湖这几个地方值得一去。湖边有一片很大的草地，绿茵葱葱，非常开阔。在距离市区这么近还有这么一处好地方，这里简直是世外桃源。每逢周末便能看到很多人自驾驱车前往，在草坪上搭帐篷，放风筝，这次还看到航模爱好者在试飞。沿湖修建了环湖自行车道，总长18公里，值得一提的是，还有一段3.5公里的水上赛道，让人一览湖光水色。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://bn1files.storage.live.com/y1pxBk3iGmaOs39yRQQ-A40uXJOG0QqfqfeZXSsEaog5xtUE_kr7xos-kskw_qvUDCZIY2tQ0wVb9wH7nC_0fwBqQ/IMGP0248.jpg&#34; alt=&#34;野营帐篷&#34;&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>观潮与弄潮</title>
-      <link>/posts/book-review-on-top-of-tides/</link>
-      <pubDate>Wed, 20 Feb 2013 20:00:58 +0800</pubDate>
-      
-      <guid>/posts/book-review-on-top-of-tides/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://img3.doubanio.com/lpic/s6807265.jpg&#34; alt=&#34;cover&#34;&gt;&lt;/p&gt;
-&lt;p&gt;春节期间看完了这本书，收获颇多。一开始看到介绍，我以为这是一本记述IT简史的书，看到后面，越发现远远不止这些。&lt;/p&gt;
-&lt;h2 id=&#34;观潮时代的浪潮&#34;&gt;观潮：时代的浪潮&lt;/h2&gt;
-&lt;p&gt;IT技术人员，特别是作者这样的计算机科学家，历来对贝尔实验室有着无比的崇敬和向往。故事从贝尔实验室的东家 —— AT&amp;amp;T 公司开始，悉数介绍了 AT&amp;amp;T，IBM，Apple，Intel，Microsoft，Cisco，Yahoo，HP，Motorola，Google 等科技浪潮中各领风骚的著名企业，还有 Sun，Novell，Netscape，RealNetworks 这些“与机会失之交臂的公司”。回顾科技工业一百多年来的发展历程，分析了这些公司成功失败的原因。&lt;/p&gt;
-&lt;p&gt;在谈到微软时，吴军描述比尔·盖茨在起家时，包括微软成立后的十几年里，一直惯用冒险的空手套白狼手法抢占先机。当年操作系统领域的专家 Jim Allchin 对微软的技术根本瞧不上，他说，你们微软的东西是最烂的。而盖茨做到了保守和冒险的平衡，打动了 Allchin等一批技术大牛，完成研发上的布局。对于市场的策略则是：薄利多销和来者不拒。这个可以从早期的微软广告中窥见一斑，比如史蒂夫·鲍尔默做的DOS广告等等。&lt;/p&gt;
-&lt;p&gt;Cisco，我只知道这是一家卖路由器等网络设备的公司，还参与过GFW这样为虎作伥的项目。没想到思科的历史这么久远，尤其是善待离职创业的员工，以及对其创业公司的扶持和收购，真是十分高明的手法。&lt;/p&gt;
-&lt;p&gt;作者形容摩托罗拉是一家贵族式的公司，这个在模拟通信领域的佼佼者，在数字通信时代显得力不从心，依然孤傲地以技术为重心，却眼睁睁地看着木工厂起家的诺基亚超越了自己。在商业竞争中，光有技术显然是不行的。正如作者所言，“从技术角度看，铱星移动通信系统是非常成功的。这是真正的科技精品。我常常想，我们这些被成为高科技公司的互联网公司做到的东西和铱星系统相比，简直就像是玩具。” 君子之泽，五世而斩，虽然贵族式的摩托罗拉被Google收购，即便Google看中的是它若干的通信专利，但是至少它的技术创造依然造福于人。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>3.7.7内核的nVidia驱动安装</title>
-      <link>/posts/fix-nvidia-driver-on-kernel-3-7-7/</link>
-      <pubDate>Sun, 17 Feb 2013 18:23:39 +0800</pubDate>
-      
-      <guid>/posts/fix-nvidia-driver-on-kernel-3-7-7/</guid>
-      <description>&lt;p&gt;更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。&lt;/p&gt;
-&lt;h2 id=&#34;问题分析&#34;&gt;问题分析&lt;/h2&gt;
-&lt;p&gt;根据报错的信息，可以打开日志文件查看详细的原因：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;    less /var/log/nvidia-installer.log&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;日志信息如下：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;-&amp;gt; Kernel source path: &amp;lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&amp;rsquo;
+细节参看 &lt;a href="http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements">Requirements&lt;/a>&lt;/p>
+&lt;h2 id="备份数据">备份数据&lt;/h2>
+&lt;h3 id="bitnami-stack">Bitnami Stack&lt;/h3>
+&lt;p>若使用 Bitnami 集成包，可以直接备份整个目录即可。&lt;/p>
+&lt;h3 id="redmine">Redmine&lt;/h3>
+&lt;p>若只升级 Redmine 则先确认系统需求然后执行备份。&lt;/p>
+&lt;h4 id="备份文件">备份文件&lt;/h4>
+&lt;p>最好备份整个 redmine 目录，主要包括&lt;/p>
+&lt;ul>
+&lt;li>上传文件(apps\redmine\htdocs\files)&lt;/li>
+&lt;li>插件(apps\redmine\htdocs\plugins)&lt;/li>
+&lt;li>主题(apps\redmine\htdocs\themes)&lt;/li>
+&lt;li>配置文件(apps\redmine\htdocs\config)&lt;/li>
+&lt;/ul></description></item><item><title>Markdown Syntax zhTW</title><link>/posts/markdown-syntax-zhtw/</link><pubDate>Thu, 18 Aug 2016 14:12:40 +0800</pubDate><guid>/posts/markdown-syntax-zhtw/</guid><description>NOTE: This is Traditional Chinese Edition Document of Markdown Syntax. If you are seeking for English Edition Document. Please refer to Markdown: Syntax.
+Markdown: Syntax 概述 哲學 行內 HTML 特殊字元自動轉換 區塊元素 段落和換行 標題 區塊引言 清單 程式碼區塊 分隔線 區段元素 連結 強調 程式碼 圖片 其它 跳脫字元 自動連結 感謝 **注意：**這份文件是用 Markdown 寫的，你可以看看它的原始檔 。
+Markdown 的目標是實現「易讀易寫」。
+不過最需要強調的便是它的可讀性。一份使用 Markdown 格式撰寫的文件應該可以直接以純文字發佈，並且看起來不會像是由許多標籤或是格式指令所構成。Markdown 語法受到一些既有 text-to-HTML 格式的影響，包括 [Setext] 1、[atx] 2、[Textile] 3、[reStructuredText] 4、[Grutatext] 5 和 [EtText] 6，然而最大靈感來源其實是純文字的電子郵件格式。</description></item><item><title>XML数据源的级联ComboBox</title><link>/posts/cascading-combobox-with-xml-dataprovider/</link><pubDate>Fri, 12 Jul 2013 19:48:33 +0800</pubDate><guid>/posts/cascading-combobox-with-xml-dataprovider/</guid><description>&lt;h2 id="background">Background&lt;/h2>
+&lt;p>要做一个表单，其中自然少不了ComboBox，数据源不是从后台动态获取的，竟然是一个Excel表格文件！这个数据量很大，而且还有可能会修改，所以只能采用外部加载的方式。写一个解析Excel数据的库自然是不现实的，所以决定把Excel转换成XML格式，然后再加载。&lt;/p>
+&lt;h2 id="excel转换成xml">Excel转换成XML&lt;/h2>
+&lt;p>一般直接将Excel是不能导出成XML的，因为“不包含任何XML映射”，所以首先需要建立一个XML映射，其实就是设计一个XML结构，然后将Excel数据映射到对应的节点上。这一步其实很简单，但是颇具技巧性。&lt;/p>
+&lt;h3 id="开发工具选项卡">“开发工具”选项卡&lt;/h3>
+&lt;p>导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-&amp;ldquo;选项&amp;rdquo;-“自定义功能区”对话框，勾选“开发工具”。&lt;/p></description></item><item><title>Tour of Taihu Lake Day 3</title><link>/posts/tour-of-taihu-lake-day-3/</link><pubDate>Sat, 01 Jun 2013 21:15:19 +0800</pubDate><guid>/posts/tour-of-taihu-lake-day-3/</guid><description>&lt;h2 id="概况">概况&lt;/h2>
+&lt;p>&lt;strong>目标：&lt;/strong> 无锡市区 - 苏州园区
+&lt;strong>日期：&lt;/strong> 2013年5月27日
+&lt;strong>天气：&lt;/strong> 阴转多云
+&lt;strong>路线：&lt;/strong> 清宁大桥 → 运河西路 → S230省道 → 舟山路 → 望湖大道 → X204县道（环太湖大道） → 太湖大桥 → 太湖公园 → X206（胥香路） → X206（孙武路） → X206（中山东路） → 苏福路 → 南环路 → 通园路&lt;/p>
+&lt;h2 id="行程">行程&lt;/h2>
+&lt;p>晚上和同学聊到一点多，早上醒来已经九点半，他已经去上班了，我便收拾好行李就离开了。去了他昨天介绍的早点店吃早饭，店家比较谦虚，写着一两4只的小笼包，我要了二两，端上来一看，恐怕一只就有一两了。酸辣汤勾芡稠度正好，味道也不错，喝了满满一大碗。可惜没吃到无锡的开洋馄饨，等下次有机会了。&lt;/p>
+&lt;p>&lt;img src="https://lh3.googleusercontent.com/-JI2hwC_99oE/UayEPItuwaI/AAAAAAAAAMo/ZAyiRgsU0J0/s800/IMGP0782.jpg" alt="Alt text">&lt;/p></description></item><item><title>Tour of Taihu Lake: Day 2</title><link>/posts/tour-of-taihu-lake-day-2/</link><pubDate>Fri, 31 May 2013 20:26:35 +0800</pubDate><guid>/posts/tour-of-taihu-lake-day-2/</guid><description>&lt;h2 id="概况">概况&lt;/h2>
+&lt;p>&lt;strong>目标：&lt;/strong> 宜兴丁山 - 无锡市区
+&lt;strong>日期：&lt;/strong> 2013年5月26日
+&lt;strong>天气：&lt;/strong> 阵雨，大风
+&lt;strong>路线：&lt;/strong> 公园东路 → 汤蜀路 → 方溪路 → S230省道 → 分百路 → 环湖线 → 雪马路 → 梅梁路 → 连峰路 → 环山西路 → 龙头渚自然公园 → 七里风光堤 → 环山东路 → 十里明珠堤 → 湖山路（神骏桥） → S230省道（环太湖公路） → 梅园 → 运河西路 → 清宁大桥&lt;/p>
+&lt;h2 id="行程">行程&lt;/h2>
+&lt;p>因为密切关注天气情况，知道今天要下雨。七点一刻起床时发现还没有下雨，喜出望外，赶紧吃了早饭收拾好行李。结果没骑200米就下起小雨来，好在车包和背包都有防雨罩。但是我没带雨衣，路上也没找到卖的，只好一路冒雨前行。从丁山龙溪公园出发，一路沿着方溪路向东骑行。逆风又淋雨的滋味真是不好受，但是一旦自己决定开始这段旅程，就不能抱怨这路上的苦。相比昨天，至少今天不用担心烈日造成的高温和晒伤了。大约15分钟后上了S230省道，逆风转为侧风，雨也停了，此时窃喜，觉得今天是最佳的骑行时间，真是太幸福了。&lt;/p>
+&lt;p>&lt;img src="https://lh4.googleusercontent.com/-bcOmjbf5GZo/UayD-be639I/AAAAAAAAAKM/ARmI3AwmKXs/s800/IMGP0746.jpg" alt="补胎大桥">&lt;/p></description></item><item><title>Tour of Taihu Lake: Day 1</title><link>/posts/tour-of-taihu-lake-day-1/</link><pubDate>Thu, 30 May 2013 19:53:44 +0800</pubDate><guid>/posts/tour-of-taihu-lake-day-1/</guid><description>&lt;h2 id="概况">概况&lt;/h2>
+&lt;p>&lt;strong>目标：&lt;/strong> 苏州园区 - 宜兴丁山
+&lt;strong>日期：&lt;/strong> 2013年5月25日
+&lt;strong>天气：&lt;/strong> 晴
+&lt;strong>路线：&lt;/strong> 通园路 → 南环高架 → 友新路 → 吴江太湖大桥 → S230省道 → 庙港大桥 →莘七线（沿湖东路） → 莘七线（沿湖西路）→ 莘七线（国富大道）→ 环太湖路 → 滨湖大桥 → 小梅大桥 → 太湖路 → 湖州太湖度假区（太湖乐园） → 滨湖大道 → 夹浦镇（夹浦派出所） → G104国道（发展大道） → 龙溪公园&lt;/p>
+&lt;p>&lt;strong>装备&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>衣：骑行衣裤×2（身上穿1套），头盔×1（装上帽檐），手套×2，袜子×3，骑行雨衣（忘带了，夏天问题不大）；&lt;/li>
+&lt;li>食：士力架×2，压缩饼干×2，饮用水×2；&lt;/li>
+&lt;li>住：旅馆投宿，只需带基本洗漱用品即可，防晒霜；&lt;/li>
+&lt;li>行：单车一辆（这不是废话么），备胎2条，补胎工具，撬胎棒，六角扳手，打气筒，瑞士军刀，骑行背包/驮包，车前包，车管包，码表；&lt;/li>
+&lt;li>用：钱包，钥匙，手机，相机，Kindle，备用电池，各种充电器，笔记本，笔，打印好的路书；&lt;/li>
+&lt;li>药：创可贴，消炎药，感冒药，清凉油，龙虎人丹。&lt;/li>
+&lt;/ul>
+&lt;p>** 默念三遍：遵守交通，出入平安 **&lt;/p></description></item><item><title>Ruby on Rails 入门体验</title><link>/posts/ror-tutorial-review/</link><pubDate>Fri, 12 Apr 2013 12:16:03 +0800</pubDate><guid>/posts/ror-tutorial-review/</guid><description>&lt;p>今年年初时决定学习一下 Web 开发方面的知识，因为对 Ruby 早有耳闻，所以很自然地就选择了 Ruby on Rails 作为目标。在网上看到 Ruby on Rails Tutorial的教程，于是就跟着教程，边学边做地把这本书看完了。对 RoR 有了一个大概的了解，包括框架结构和开发流程，还有一些常用的Gems，确实是一本不错的实践入门书。&lt;/p>
+&lt;h2 id="关于教程">关于教程&lt;/h2>
+&lt;p>一开始时看的是英文原版，阅读速度缓慢，而我对实践充满热情，迫切希望早点学完自己动手做。恰好发现 Andor Chen 已经翻译了大部分章节，遇到有疑问的地方，就对照英文检查语句和代码。顺便修正一些译文里的错误，然后发送 pull request 让作者合并。&lt;/p>
+&lt;p>这本书和以前看的 Flex 入门书——《Flex 3 权威指南》类似，都是以构建一个应用为主线，由浅入深地介绍 RoR 开发的基本知识，从最开始的静态页面到模型生成，控制器，路由，数据库，Ajax，还有贯彻整个开发过程的测试。教程里开发的是一个微博站点，而 Twitter 以前就是使用 RoR 开发的，做起来也饶有趣味。&lt;/p>
+&lt;p>花了差不多两个月的业余时间看完了这个教程，并最终完成了那个微博网站，包括大部分练习题的功能。总的来说，还是有点挑战的。由于书中大部分都是编写步骤，注重手把手的教学实践。在原理的介绍上篇幅很少，而 RoR 这样“约定优于配置”的理念让我有点不适应，书中并无约定方面的解释，很多方法像变戏法一般地已经实现好了，而我却想一探究竟，搞清楚其幕后的动作。但毕竟这是一本入门书，或许是我要求太高了。&lt;/p></description></item><item><title>基于AS3.0的图像抖动实现</title><link>/posts/image-dithering-algorithm-as3/</link><pubDate>Tue, 02 Apr 2013 20:21:09 +0800</pubDate><guid>/posts/image-dithering-algorithm-as3/</guid><description>&lt;p>不知当初自己出于什么目的，OneNote 里留了一条关于 Floyd–Steinberg dithering 的笔记。好奇之余，打开链接看了一下，方才想起这个当初让我觉得新奇的古老算法。&lt;/p>
+&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>余忆童稚时，能张目对日，明察秋毫……”如果你对过去黑白报纸的图片仔细观察过的话，一定会发现，那些黑白照片由很多圆形或方形的图形组成。是的，那就是半色调（Halftone）和抖动（Dither ）技术。&lt;/p>
+&lt;p>&lt;img src="https://pixy.org/src/405/thumbs350/4057896.jpg" alt="Halftone">&lt;/p>
+&lt;p>半色调（Halftone）是指为了模拟出连续调影像（色阶）的视觉感觉，一般用墨点（半色调网点）的大小或频率的改变，来模拟明暗的变化。半色调广泛应用于报刊出版等领域，当年那些黑白出版物上尤其常见，现在的牛奶包装上也能看出来。&lt;/p>
+&lt;h2 id="阈值法thresholding">阈值法（Thresholding）&lt;/h2>
+&lt;p>当像素值大于设定阈值时，输出为亮点，否则输出为暗点，从而实现二值化。经过处理的图像往往失去细节，缺乏层次感。下图所示的就是二值化的图像。
+&lt;img src="http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg" alt="lena_binary">&lt;/p></description></item><item><title>HSV/HSL转换到RGB色彩空间</title><link>/posts/convert-hsv-hsl-to-rgb/</link><pubDate>Fri, 08 Mar 2013 18:08:17 +0800</pubDate><guid>/posts/convert-hsv-hsl-to-rgb/</guid><description>&lt;p>处理图像时，有时候会遇到不同色彩空间转换的情况。比较常见的是HSV/HSL到RGB的转换。&lt;/p>
+&lt;h2 id="hsvhsbhsl简介">HSV(HSB)/HSL简介&lt;/h2>
+&lt;p>不同于RGB/CYMK，HSV和HSL是两种比较常见的基于圆柱坐标系的色彩表示方法。这种方法对颜色的表达,对人来说更直观，更易于感受。因此艺术家有时偏好使用 HSL或HSV 而不选择 三原色光模式（即RGB模型） 或 印刷四分色模式（即CMYK模型），因为它类似于人类感觉颜色的方式，具有较强的感知度。RGB 和 CMYK 分别是加法原色和减法原色模型，以原色组合的方式定义颜色，而 HSV 以人类更熟悉的方式封装了关于颜色的信息：“这是什么颜色？深浅如何？明暗如何？”。&lt;/p>
+&lt;p>&lt;img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/500px-Hsl-hsv_models.svg.png" alt="">&lt;/p>
+&lt;h3 id="色彩定义">色彩定义&lt;/h3>
+&lt;ul>
+&lt;li>H ：Hue(色相)，色彩的基本属性，就是平常所说的颜色名称，如红色、黄色等。&lt;/li>
+&lt;li>S ：saturation(饱和度)，色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值。&lt;/li>
+&lt;li>V ：value(色调)，取0-100%。&lt;/li>
+&lt;li>B ：brightness(明度)，取0-100%。&lt;/li>
+&lt;li>L ：lightness(亮度)，取0-100%。&lt;/li>
+&lt;/ul>
+&lt;p>HSL 和 HSV 二者都把颜色描述在圆柱坐标系内的点，这个圆柱的中心轴取值为自底部的黑色到顶部的白色而在它们中间是的灰色，绕这个轴的角度对应于“色相”，到这个轴的距离对应于“饱和度”，而沿着这个轴的高度对应于“亮度”，“色调”或“明度”。&lt;/p>
+&lt;p>这两种表示在用目的上类似，但在方法上有区别。二者在数学上都是圆柱，但 HSV（色相，饱和度，色调）在概念上可以被认为是颜色的倒圆锥体（黑点在下顶点，白色在上底面圆心），HSL 在概念上表示了一个双圆锥体和圆球体（白色在上顶点，黑色在下顶点，最大横切面的圆心是半程灰色）。注意尽管在 HSL 和 HSV 中“色相”指称相同的性质，它们的“饱和度”的定义是明显不同的。&lt;/p>
+&lt;p>因为 HSL 和 HSV 是设备依赖的 RGB 的简单变换，(h, s, l) 或 (h, s, v) 三元组定义的颜色依赖于所使用的特定红色、绿色和蓝色“加法原色”。每个独特的 RGB 设备都伴随着一个独特的 HSL 和 HSV 空间。但是 (h, s, l) 或 (h, s, v) 三元组在被约束于特定 RGB 空间比如 sRGB 的时候就变成明确的了。&lt;/p>
+&lt;p>HSV 模型在 1978 年由计算机图形学先驱 Alvy Ray Smith 创立，它是三原色光模式的一种非线性变换。&lt;/p></description></item><item><title>重元寺骑行</title><link>/posts/cycling-log-chongyuan-temple/</link><pubDate>Sun, 24 Feb 2013 22:19:53 +0800</pubDate><guid>/posts/cycling-log-chongyuan-temple/</guid><description>&lt;p>正月过半，乍暖还寒，然而阳光明媚，正是外出郊游的好时节。苏州是典型的江南水乡，不仅有周庄，甪直，同里千年古镇，水系也颇为发达，湖泊更是星罗棋布。而此时环湖骑行则是再合适不过的好主意了。&lt;/p>
+&lt;p>小西湖，是著名的大闸蟹产区——阳澄湖的内湖，隶属阳澄湖半岛度假区。这个度假区还在开发当中，目前主要有重元寺，莲池湖公园，小西湖这几个地方值得一去。湖边有一片很大的草地，绿茵葱葱，非常开阔。在距离市区这么近还有这么一处好地方，这里简直是世外桃源。每逢周末便能看到很多人自驾驱车前往，在草坪上搭帐篷，放风筝，这次还看到航模爱好者在试飞。沿湖修建了环湖自行车道，总长18公里，值得一提的是，还有一段3.5公里的水上赛道，让人一览湖光水色。&lt;/p>
+&lt;p>&lt;img src="http://bn1files.storage.live.com/y1pxBk3iGmaOs39yRQQ-A40uXJOG0QqfqfeZXSsEaog5xtUE_kr7xos-kskw_qvUDCZIY2tQ0wVb9wH7nC_0fwBqQ/IMGP0248.jpg" alt="野营帐篷">&lt;/p></description></item><item><title>观潮与弄潮</title><link>/posts/book-review-on-top-of-tides/</link><pubDate>Wed, 20 Feb 2013 20:00:58 +0800</pubDate><guid>/posts/book-review-on-top-of-tides/</guid><description>&lt;p>&lt;img src="https://img3.doubanio.com/lpic/s6807265.jpg" alt="cover">&lt;/p>
+&lt;p>春节期间看完了这本书，收获颇多。一开始看到介绍，我以为这是一本记述IT简史的书，看到后面，越发现远远不止这些。&lt;/p>
+&lt;h2 id="观潮时代的浪潮">观潮：时代的浪潮&lt;/h2>
+&lt;p>IT技术人员，特别是作者这样的计算机科学家，历来对贝尔实验室有着无比的崇敬和向往。故事从贝尔实验室的东家 —— AT&amp;amp;T 公司开始，悉数介绍了 AT&amp;amp;T，IBM，Apple，Intel，Microsoft，Cisco，Yahoo，HP，Motorola，Google 等科技浪潮中各领风骚的著名企业，还有 Sun，Novell，Netscape，RealNetworks 这些“与机会失之交臂的公司”。回顾科技工业一百多年来的发展历程，分析了这些公司成功失败的原因。&lt;/p>
+&lt;p>在谈到微软时，吴军描述比尔·盖茨在起家时，包括微软成立后的十几年里，一直惯用冒险的空手套白狼手法抢占先机。当年操作系统领域的专家 Jim Allchin 对微软的技术根本瞧不上，他说，你们微软的东西是最烂的。而盖茨做到了保守和冒险的平衡，打动了 Allchin等一批技术大牛，完成研发上的布局。对于市场的策略则是：薄利多销和来者不拒。这个可以从早期的微软广告中窥见一斑，比如史蒂夫·鲍尔默做的DOS广告等等。&lt;/p>
+&lt;p>Cisco，我只知道这是一家卖路由器等网络设备的公司，还参与过GFW这样为虎作伥的项目。没想到思科的历史这么久远，尤其是善待离职创业的员工，以及对其创业公司的扶持和收购，真是十分高明的手法。&lt;/p>
+&lt;p>作者形容摩托罗拉是一家贵族式的公司，这个在模拟通信领域的佼佼者，在数字通信时代显得力不从心，依然孤傲地以技术为重心，却眼睁睁地看着木工厂起家的诺基亚超越了自己。在商业竞争中，光有技术显然是不行的。正如作者所言，“从技术角度看，铱星移动通信系统是非常成功的。这是真正的科技精品。我常常想，我们这些被成为高科技公司的互联网公司做到的东西和铱星系统相比，简直就像是玩具。” 君子之泽，五世而斩，虽然贵族式的摩托罗拉被Google收购，即便Google看中的是它若干的通信专利，但是至少它的技术创造依然造福于人。&lt;/p></description></item><item><title>3.7.7内核的nVidia驱动安装</title><link>/posts/fix-nvidia-driver-on-kernel-3-7-7/</link><pubDate>Sun, 17 Feb 2013 18:23:39 +0800</pubDate><guid>/posts/fix-nvidia-driver-on-kernel-3-7-7/</guid><description>&lt;p>更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。&lt;/p>
+&lt;h2 id="问题分析">问题分析&lt;/h2>
+&lt;p>根据报错的信息，可以打开日志文件查看详细的原因：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span> less /var/log/nvidia-installer.log&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>日志信息如下：&lt;/p>
+&lt;blockquote>
+&lt;p>-&amp;gt; Kernel source path: &amp;lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&amp;rsquo;
 -&amp;gt; Kernel output path: &amp;lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/build&amp;rsquo;
 ERROR: If you are using a Linux 2.4 kernel, please make sure
 you either have configured kernel sources matching your
 kernel or the correct set of kernel headers installed
-on your system.&lt;/p&gt;
-&lt;p&gt;If you are using a Linux 2.6 kernel, please make sure
+on your system.&lt;/p>
+&lt;p>If you are using a Linux 2.6 kernel, please make sure
 you have configured kernel sources matching your kernel
 installed on your system. If you specified a separate
 output directory using either the &amp;ldquo;KBUILD_OUTPUT&amp;rdquo; or
 the &amp;ldquo;O&amp;rdquo; KBUILD parameter, make sure to specify this
 directory with the SYSOUT environment variable or with
-the equivalent nvidia-installer command line option.&lt;/p&gt;
-&lt;p&gt;Depending on where and how the kernel sources (or the
+the equivalent nvidia-installer command line option.&lt;/p>
+&lt;p>Depending on where and how the kernel sources (or the
 kernel headers) were installed, you may need to specify
 their location with the SYSSRC environment variable or
 the equivalent nvidia-installer command line option.
 ERROR: Installation has failed. Please see the file
 &amp;lsquo;/var/log/nvidia-installer.log&amp;rsquo; for details. You may find suggestions
 on fixing installation problems in the README available on the Linux
-driver download page at &lt;a href=&#34;http://www.nvidia.com&#34;&gt;www.nvidia.com&lt;/a&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>在Fedora上安装nVidia显卡驱动程序</title>
-      <link>/posts/install-nvidia-driver-on-fedora/</link>
-      <pubDate>Thu, 24 Jan 2013 01:33:13 +0800</pubDate>
-      
-      <guid>/posts/install-nvidia-driver-on-fedora/</guid>
-      <description>&lt;p&gt;自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。&lt;/p&gt;
-&lt;h2 id=&#34;系统需求&#34;&gt;系统需求&lt;/h2&gt;
-&lt;h3 id=&#34;软件需求&#34;&gt;软件需求&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;Software Element&lt;/em&gt;  &lt;em&gt;Supported versions&lt;/em&gt;    &lt;em&gt;Check With&amp;hellip;&lt;/em&gt;
-Linux kernel        2.4.22 and newer        cat /proc/version
-XFree86*            4.0.1 and newer         XFree86 -version
-X.Org*              1.0 - 1.13              Xorg -version
-Kernel modutils     2.1.121 and newer       insmod &amp;ndash;version
-glibc               2.0                     ls /lib/libc.so.* &amp;gt; 6&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;硬件需求&#34;&gt;硬件需求&lt;/h3&gt;
-&lt;p&gt;当然是你的显卡要在驱动的支持列表内；&lt;/p&gt;
-&lt;p&gt;参见 &lt;a href=&#34;http://us.download.nvidia.com/XFree86/Linux-x86/310.19/README/supportedchips.html&#34;&gt;Supported NVIDIA GPU Products&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;安装步骤&#34;&gt;安装步骤&lt;/h2&gt;
-&lt;h3 id=&#34;禁用nouveau&#34;&gt;禁用nouveau&lt;/h3&gt;
-&lt;h4 id=&#34;blacklist&#34;&gt;blacklist&lt;/h4&gt;
-&lt;ol&gt;
-&lt;li&gt;操作前保证有足够的权限，打开文件&lt;/li&gt;
-&lt;/ol&gt;
-&lt;blockquote&gt;
-&lt;p&gt;vi /etc/modprobe.d/balcklist.conf&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;找到 nvidiafb这一行，注释掉&lt;/li&gt;
-&lt;/ol&gt;
-&lt;blockquote&gt;
-&lt;p&gt;#blacklist nvidiafb&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;(可跳过，驱动会自动创建)新建文件 vi /etc/modprobe.d/disable-nouveau.conf,添加以下：&lt;/li&gt;
-&lt;/ol&gt;
-&lt;blockquote&gt;
-&lt;p&gt;blacklist nouveau
-options nouveau modeset=0&lt;/p&gt;
-&lt;/blockquote&gt;</description>
-    </item>
-    
-    <item>
-      <title>在Fedora上安装Ruby on Rails</title>
-      <link>/posts/install-ruby-on-rails-on-fedora/</link>
-      <pubDate>Sun, 20 Jan 2013 20:20:12 +0800</pubDate>
-      
-      <guid>/posts/install-ruby-on-rails-on-fedora/</guid>
-      <description>&lt;blockquote&gt;
-&lt;p&gt;Practically all the software in the world is either broken or very difficult to use. So users dread software. They’ve been trained that whenever they try to install something, or even fill out a form online, it’s not going to work. I dread installing stuff, and I have a Ph.D. in computer science.
-Paul Graham, Founders at Work&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;这几年一直在用AS3.0做开发，已经很久没有接触Linux了。博客上挂着Fedora的倒计时牌子，每次看到新版本倒计时一个接一个地陆续发布，这个周末重新装上了Fedora，学习一些其他的Web开发知识。虽说Ruby on Rails这几年不是很流行了，而且近期Twitter改用java引起了不小的震动，有些人认为RoR过时了,Ruby日薄西山了。我倒是觉得技术人员与其关注这些，不如去专注学习技术。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/9/9c/Ruby_on_Rails_logo.jpg&#34; alt=&#34;ror_logo&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;安装步骤&#34;&gt;安装步骤&lt;/h2&gt;
-&lt;p&gt;Fedora更新非常快，我用的是目前最新的Fedora 18。虽然按照文档和教程一步一步安装的，但还是遇到了很多问题。安装的方法有很多种，这个和Ruby语言的特性也很相似 😉 。考虑到环境配置和开发工作，使用RVM安装比较好，RVM可以管理多个Ruby版本和RubyGem，在开发时可以根据需要切换版本，配置环境也很方便。使用yum安装ruby，管理比较麻烦，不适合开发工作。&lt;/p&gt;
-&lt;h3 id=&#34;安装git和curl&#34;&gt;安装git和cURL&lt;/h3&gt;
-&lt;p&gt;可以考虑先更新所有包&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;yum update&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;安装git&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;yum install git-core&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;安装curl&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;yum install curl&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;安装rvm&#34;&gt;安装RVM&lt;/h3&gt;
-&lt;p&gt;RVM，即Ruby Version Manager，可以管理多个版本Ruby，RubyGem，Rails，对开发来说非常有用。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;curl -L get.rvm.io | bash -s stable
-source ~/.rvm/scripts/rvm&lt;/p&gt;
-&lt;/blockquote&gt;</description>
-    </item>
-    
-    <item>
-      <title>从《Dear Esther》和《Journey》看当今游戏发展</title>
-      <link>/posts/visioning-games-from-dear-esther-and-journey/</link>
-      <pubDate>Thu, 03 Jan 2013 22:02:16 +0800</pubDate>
-      
-      <guid>/posts/visioning-games-from-dear-esther-and-journey/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;标题：&lt;/strong&gt; 从《Dear Esther》和《Journey》看当今游戏发展
-&lt;strong&gt;译者：&lt;/strong&gt; &lt;a href=&#34;http://gamerboom.com/archives/53084&#34;&gt;游戏邦&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; Visioning games – what we can learn from games like Dear Esther and Journey
-&lt;strong&gt;作者：&lt;/strong&gt; &lt;a href=&#34;http://krillbite.com/blog/05/visioning-games-what-we-can-learn-from-games-like-dear-esther-and-journey/&#34;&gt;Adrian Tingstad Husby&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;这是一篇转载的文章，已获得译者许可。原文发表于2012年5月8日，前段时间体验完Dear Esther，无意中看到了这篇译文，恰巧 Journey被评为IGN 2012年度最佳游戏。文章讲得很有道理，“除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。”&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;游戏所具有的程序，互动和（潜在的）非线型属性让它们能够更好地处理一些人类心智问题（比起其它静态且线型媒体来说）。但是通常情况下，因为游戏总是会受到一些条条框框和人们无尽期望的束缚，所以很难体现出同等艺术媒体所具有的情感或故事。&lt;/p&gt;
-&lt;p&gt;我既是一名游戏玩家也是游戏开发者，但是纵观今天的游戏，我们看到的却只是一些“有趣的”骗人玩意儿。除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。引用Scott Brodie的话来说就是“比起其它受欢迎的艺术形式，游戏产业从整体来看显得更加平庸与幼稚。”尽管觉得遗憾，但是我真的非常同意Scott的说法。&lt;/p&gt;
-&lt;p&gt;我认为我们有必要在此讨论一些重要的问题。即是否能够创造一款不是通过进度条或高分而推动奖励的电子游戏？这是一种与趣味情感相互协调的机制，但是它们是否能够与其它复杂且相对严肃的情感结合在一起？是否正是因为玩家对于外部奖励的狂热追求才促使游戏区别于浪漫的戏剧和纪录片？&lt;/p&gt;
-&lt;p&gt;最近我到gameosphere网站玩了《Journey》和新版的《Dear Esther》，并发现这两款游戏在设计方面有许多共同点。这些共同点都遵循着一种发展趋势——尽管都是基于独立场景而言。我个人认为这类型的游戏不仅能够让我对未来的游戏媒体发展充满期待，同时它们也完美地体现出我对于游戏的一些想法。&lt;/p&gt;
-&lt;p&gt;真心希望当前的游戏领域现状能够发生改变。而我们也同时在当前的游戏身上找到了许多值得讨论和学习之处。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://gamerboom.com/wp-content/uploads/2012/05/Journeyfrom-tmeink.com%EF%BC%89.jpg&#34; alt=&#34;journey&#34; title=&#34;Journey&#34;&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Less is more : Dear Esther 简评</title>
-      <link>/posts/less-is-more-dear-esther-review/</link>
-      <pubDate>Mon, 31 Dec 2012 21:03:40 +0800</pubDate>
-      
-      <guid>/posts/less-is-more-dear-esther-review/</guid>
-      <description>&lt;p&gt;Less is more，是现代主义建筑大师路德维希·密斯·凡德罗提倡简单，反对过度装饰的设计理念，也是极简主义的经典表述。在AAA级游戏制作成本及规模不断攀升的同时，一些独立游戏开发者则朝着这个方向发展，简约的风格带来一种与众不同的清新和震撼。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://caad5q.bay.livefilestore.com/y1pASxJ__z-L7UIlgez3qwETURyMwHukRsphU-hwYx0pdCMHwRxTZt2qpGys17GfaAfXpGEQUxSqvt1OTQL-ajueqprGIkTuPpw/dearesther%202013-01-03%2022-18-18-05.jpg&#34; alt=&#34;dear esther&#34;&gt;&lt;/p&gt;
-&lt;p&gt;Dear Esther 由独立游戏工作室 &lt;a href=&#34;http://www.thechineseroom.co.uk/&#34;&gt;The Chinese Room [室] &lt;/a&gt; 制作， 起初是作为Source引擎的Mod作品在2008年发布，2012年在Steam平台发售商业版。游戏没有复杂的操作，玩家所能做的只有前后左右(WSAD) 和放大(Zoom)，采用Source引擎，游戏画面渲染的很不错，诸如水面的反射，水流的折射等物理效果让人印象深刻。简单的操作，极少的交互凸显了叙事的重要性，让整个游戏的情节成为了该游戏的核心。&lt;/p&gt;
-&lt;p&gt;游戏以一个废弃的海岛为场景，玩家可自由探索地区，并在途中某些地点触发画外音。叙述者自称“我”，即主角，也可指代为玩家自己。言语多以 “Dear Esther”开始，很像书信的开头，内容都是主角写给Esther的信件节选。玩家通过不断地探索来获得更多的叙述，以及结合游戏场景中的物件，从而获得零星的故事片段。随着探索区域的逐渐深入，获得的线索也越来越多，原本散乱的记忆拼图最终成为了一个整体。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性</title>
-      <link>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</link>
-      <pubDate>Thu, 27 Sep 2012 12:10:11 +0800</pubDate>
-      
-      <guid>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</guid>
-      <description>FP11.4发布没多长时间，很多新功能还没有用上，FP11.5 Beta就已经发布了。
+driver download page at &lt;a href="https://www.nvidia.com">www.nvidia.com&lt;/a>.&lt;/p>
+&lt;/blockquote>
+&lt;p>大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。&lt;/p></description></item><item><title>在Fedora上安装nVidia显卡驱动程序</title><link>/posts/install-nvidia-driver-on-fedora/</link><pubDate>Thu, 24 Jan 2013 01:33:13 +0800</pubDate><guid>/posts/install-nvidia-driver-on-fedora/</guid><description>&lt;p>自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。&lt;/p>
+&lt;h2 id="系统需求">系统需求&lt;/h2>
+&lt;h3 id="软件需求">软件需求&lt;/h3>
+&lt;blockquote>
+&lt;p>&lt;em>Software Element&lt;/em> &lt;em>Supported versions&lt;/em> &lt;em>Check With&amp;hellip;&lt;/em>
+Linux kernel 2.4.22 and newer cat /proc/version
+XFree86* 4.0.1 and newer XFree86 -version
+X.Org* 1.0 - 1.13 Xorg -version
+Kernel modutils 2.1.121 and newer insmod &amp;ndash;version
+glibc 2.0 ls /lib/libc.so.* &amp;gt; 6&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="硬件需求">硬件需求&lt;/h3>
+&lt;p>当然是你的显卡要在驱动的支持列表内；&lt;/p>
+&lt;p>参见 &lt;a href="http://us.download.nvidia.com/XFree86/Linux-x86/310.19/README/supportedchips.html">Supported NVIDIA GPU Products&lt;/a>&lt;/p>
+&lt;h2 id="安装步骤">安装步骤&lt;/h2>
+&lt;h3 id="禁用nouveau">禁用nouveau&lt;/h3>
+&lt;h4 id="blacklist">blacklist&lt;/h4>
+&lt;ol>
+&lt;li>操作前保证有足够的权限，打开文件&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>vi /etc/modprobe.d/balcklist.conf&lt;/p>
+&lt;/blockquote>
+&lt;ol start="2">
+&lt;li>找到 nvidiafb这一行，注释掉&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>#blacklist nvidiafb&lt;/p>
+&lt;/blockquote>
+&lt;ol start="3">
+&lt;li>(可跳过，驱动会自动创建)新建文件 vi /etc/modprobe.d/disable-nouveau.conf,添加以下：&lt;/li>
+&lt;/ol>
+&lt;blockquote>
+&lt;p>blacklist nouveau
+options nouveau modeset=0&lt;/p>
+&lt;/blockquote></description></item><item><title>在Fedora上安装Ruby on Rails</title><link>/posts/install-ruby-on-rails-on-fedora/</link><pubDate>Sun, 20 Jan 2013 20:20:12 +0800</pubDate><guid>/posts/install-ruby-on-rails-on-fedora/</guid><description>&lt;blockquote>
+&lt;p>Practically all the software in the world is either broken or very difficult to use. So users dread software. They’ve been trained that whenever they try to install something, or even fill out a form online, it’s not going to work. I dread installing stuff, and I have a Ph.D. in computer science.
+Paul Graham, Founders at Work&lt;/p>
+&lt;/blockquote>
+&lt;p>这几年一直在用AS3.0做开发，已经很久没有接触Linux了。博客上挂着Fedora的倒计时牌子，每次看到新版本倒计时一个接一个地陆续发布，这个周末重新装上了Fedora，学习一些其他的Web开发知识。虽说Ruby on Rails这几年不是很流行了，而且近期Twitter改用java引起了不小的震动，有些人认为RoR过时了,Ruby日薄西山了。我倒是觉得技术人员与其关注这些，不如去专注学习技术。&lt;/p>
+&lt;p>&lt;img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Ruby_on_Rails_logo.jpg" alt="ror_logo">&lt;/p>
+&lt;h2 id="安装步骤">安装步骤&lt;/h2>
+&lt;p>Fedora更新非常快，我用的是目前最新的Fedora 18。虽然按照文档和教程一步一步安装的，但还是遇到了很多问题。安装的方法有很多种，这个和Ruby语言的特性也很相似 😉 。考虑到环境配置和开发工作，使用RVM安装比较好，RVM可以管理多个Ruby版本和RubyGem，在开发时可以根据需要切换版本，配置环境也很方便。使用yum安装ruby，管理比较麻烦，不适合开发工作。&lt;/p>
+&lt;h3 id="安装git和curl">安装git和cURL&lt;/h3>
+&lt;p>可以考虑先更新所有包&lt;/p>
+&lt;blockquote>
+&lt;p>yum update&lt;/p>
+&lt;/blockquote>
+&lt;p>安装git&lt;/p>
+&lt;blockquote>
+&lt;p>yum install git-core&lt;/p>
+&lt;/blockquote>
+&lt;p>安装curl&lt;/p>
+&lt;blockquote>
+&lt;p>yum install curl&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="安装rvm">安装RVM&lt;/h3>
+&lt;p>RVM，即Ruby Version Manager，可以管理多个版本Ruby，RubyGem，Rails，对开发来说非常有用。&lt;/p>
+&lt;blockquote>
+&lt;p>curl -L get.rvm.io | bash -s stable
+source ~/.rvm/scripts/rvm&lt;/p>
+&lt;/blockquote></description></item><item><title>从《Dear Esther》和《Journey》看当今游戏发展</title><link>/posts/visioning-games-from-dear-esther-and-journey/</link><pubDate>Thu, 03 Jan 2013 22:02:16 +0800</pubDate><guid>/posts/visioning-games-from-dear-esther-and-journey/</guid><description>&lt;p>&lt;strong>标题：&lt;/strong> 从《Dear Esther》和《Journey》看当今游戏发展
+&lt;strong>译者：&lt;/strong> &lt;a href="http://gamerboom.com/archives/53084">游戏邦&lt;/a>&lt;/p>
+&lt;p>&lt;strong>原文：&lt;/strong> Visioning games – what we can learn from games like Dear Esther and Journey
+&lt;strong>作者：&lt;/strong> &lt;a href="http://krillbite.com/blog/05/visioning-games-what-we-can-learn-from-games-like-dear-esther-and-journey/">Adrian Tingstad Husby&lt;/a>&lt;/p>
+&lt;blockquote>
+&lt;p>这是一篇转载的文章，已获得译者许可。原文发表于2012年5月8日，前段时间体验完Dear Esther，无意中看到了这篇译文，恰巧 Journey被评为IGN 2012年度最佳游戏。文章讲得很有道理，“除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。”&lt;/p>
+&lt;/blockquote>
+&lt;p>游戏所具有的程序，互动和（潜在的）非线型属性让它们能够更好地处理一些人类心智问题（比起其它静态且线型媒体来说）。但是通常情况下，因为游戏总是会受到一些条条框框和人们无尽期望的束缚，所以很难体现出同等艺术媒体所具有的情感或故事。&lt;/p>
+&lt;p>我既是一名游戏玩家也是游戏开发者，但是纵观今天的游戏，我们看到的却只是一些“有趣的”骗人玩意儿。除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。引用Scott Brodie的话来说就是“比起其它受欢迎的艺术形式，游戏产业从整体来看显得更加平庸与幼稚。”尽管觉得遗憾，但是我真的非常同意Scott的说法。&lt;/p>
+&lt;p>我认为我们有必要在此讨论一些重要的问题。即是否能够创造一款不是通过进度条或高分而推动奖励的电子游戏？这是一种与趣味情感相互协调的机制，但是它们是否能够与其它复杂且相对严肃的情感结合在一起？是否正是因为玩家对于外部奖励的狂热追求才促使游戏区别于浪漫的戏剧和纪录片？&lt;/p>
+&lt;p>最近我到gameosphere网站玩了《Journey》和新版的《Dear Esther》，并发现这两款游戏在设计方面有许多共同点。这些共同点都遵循着一种发展趋势——尽管都是基于独立场景而言。我个人认为这类型的游戏不仅能够让我对未来的游戏媒体发展充满期待，同时它们也完美地体现出我对于游戏的一些想法。&lt;/p>
+&lt;p>真心希望当前的游戏领域现状能够发生改变。而我们也同时在当前的游戏身上找到了许多值得讨论和学习之处。&lt;/p>
+&lt;p>&lt;img src="http://gamerboom.com/wp-content/uploads/2012/05/Journeyfrom-tmeink.com%EF%BC%89.jpg" alt="journey" title="Journey">&lt;/p></description></item><item><title>Less is more : Dear Esther 简评</title><link>/posts/less-is-more-dear-esther-review/</link><pubDate>Mon, 31 Dec 2012 21:03:40 +0800</pubDate><guid>/posts/less-is-more-dear-esther-review/</guid><description>&lt;p>Less is more，是现代主义建筑大师路德维希·密斯·凡德罗提倡简单，反对过度装饰的设计理念，也是极简主义的经典表述。在AAA级游戏制作成本及规模不断攀升的同时，一些独立游戏开发者则朝着这个方向发展，简约的风格带来一种与众不同的清新和震撼。&lt;/p>
+&lt;p>&lt;img src="https://caad5q.bay.livefilestore.com/y1pASxJ__z-L7UIlgez3qwETURyMwHukRsphU-hwYx0pdCMHwRxTZt2qpGys17GfaAfXpGEQUxSqvt1OTQL-ajueqprGIkTuPpw/dearesther%202013-01-03%2022-18-18-05.jpg" alt="dear esther">&lt;/p>
+&lt;p>Dear Esther 由独立游戏工作室 &lt;a href="http://www.thechineseroom.co.uk/">The Chinese Room [室] &lt;/a> 制作， 起初是作为Source引擎的Mod作品在2008年发布，2012年在Steam平台发售商业版。游戏没有复杂的操作，玩家所能做的只有前后左右(WSAD) 和放大(Zoom)，采用Source引擎，游戏画面渲染的很不错，诸如水面的反射，水流的折射等物理效果让人印象深刻。简单的操作，极少的交互凸显了叙事的重要性，让整个游戏的情节成为了该游戏的核心。&lt;/p>
+&lt;p>游戏以一个废弃的海岛为场景，玩家可自由探索地区，并在途中某些地点触发画外音。叙述者自称“我”，即主角，也可指代为玩家自己。言语多以 “Dear Esther”开始，很像书信的开头，内容都是主角写给Esther的信件节选。玩家通过不断地探索来获得更多的叙述，以及结合游戏场景中的物件，从而获得零星的故事片段。随着探索区域的逐渐深入，获得的线索也越来越多，原本散乱的记忆拼图最终成为了一个整体。&lt;/p></description></item><item><title>Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性</title><link>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</link><pubDate>Thu, 27 Sep 2012 12:10:11 +0800</pubDate><guid>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</guid><description>FP11.4发布没多长时间，很多新功能还没有用上，FP11.5 Beta就已经发布了。
 主要特性及优点(不定期更新)：
 在Flash Player的relase build 的调试堆栈跟踪：允许开发者在release和debug build中都可以显示堆栈跟踪信息（以前只能在debug build下输出）； 支持多个二进制文件打包(AIR)：允许开发者一起打包ANE的第三方静态库、框架、包； ActionScript 多线程支持共享二进制数据：允许开发者在多个工作线程之间共享内存； 支持在iOS打包、加载多个SWF文件(AIR)：允许开发者在iOS加载多个包含ActionScript字节码的SWF文件。
- 参考资料
- http://labs.adobe.com/technologies/flashplatformruntimes/flashplayer11-5/ http://labs.adobe.com/technologies/flashplatformruntimes/air3-5/  </description>
-    </item>
-    
-    <item>
-      <title>在 Flash Player 中显示GIF动画</title>
-      <link>/posts/gif-animation-in-flash-player/</link>
-      <pubDate>Wed, 26 Sep 2012 18:31:46 +0800</pubDate>
-      
-      <guid>/posts/gif-animation-in-flash-player/</guid>
-      <description>&lt;p&gt;之前遇到这个需求，本人坚持”不重复发明轮子”的原则，弘扬”积极的偷懒不算偷懒”的精神，找到了两个解决方案。因为之前研究了GIF格式和LWZ算法，所以理解起来，没有太大的问题。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;方案一as3gif&#34;&gt;方案一：as3gif&lt;/h2&gt;
-&lt;p&gt;作者：Thibault Imbert
-项目地址：http://code.google.com/p/as3gif/&lt;/p&gt;
-&lt;p&gt;2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-actionscript&#34; data-lang=&#34;actionscript&#34;&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we create the GIFPlayer, it plays automatically by default
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt;();
-	&lt;span style=&#34;color:#75715e&#34;&gt;// we show it
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;addChild&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// we load a gif file
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;load&lt;/span&gt; ( &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; URLRequest (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;animation.gif&amp;#34;&lt;/span&gt;) );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// you can also load any valid GIF stream (ByteArray) with the loadBytes method (version 0.2)
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;loadBytes&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;gifStream&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the IOErrorEvent.IO_ERROR event, dispatched when the GIF fails to load
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( IOErrorEvent.&lt;span style=&#34;color:#a6e22e&#34;&gt;IO_ERROR&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onIOError&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the GIFPlayerEvent.COMPLETE event, dispatched when GIF is loaded
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayerEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;COMPLETE&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onCompleteGIFLoad&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the FrameEvent.FRAME_RENDERED event, dispatched when a GIF frame is rendered on screen
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;FrameEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;FRAME_RENDERED&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onFrameRendered&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the FileTypeEvent.INVALID event, dispatched when an invalid file is loaded
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;FileTypeEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;INVALID&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onInvalidFileLoaded&lt;/span&gt; );
-	&lt;span style=&#34;color:#75715e&#34;&gt;// get total frames
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;totalFrames&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
-	&lt;span style=&#34;color:#75715e&#34;&gt;// standard methods
-&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;play&lt;/span&gt;();
-	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;stop&lt;/span&gt;();
-	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;gotoAndStop&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;);
-	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;gotoAndPlay&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。&lt;/p&gt;
-&lt;p&gt;缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>GIF 格式及LZW算法浅析</title>
-      <link>/posts/gif-format-and-lzw/</link>
-      <pubDate>Thu, 20 Sep 2012 18:20:14 +0800</pubDate>
-      
-      <guid>/posts/gif-format-and-lzw/</guid>
-      <description>&lt;p&gt;前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。&lt;/p&gt;
-&lt;p&gt;花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;/images/diego.gif&#34; alt=&#34;gif sample&#34; title=&#34;GIF 多帧动画&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;gif概述&#34;&gt;GIF概述&lt;/h2&gt;
-&lt;p&gt;Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。&lt;/p&gt;
-&lt;p&gt;GIF主要分为两个版本，即GIF 87a和GIF 89a：&lt;/p&gt;
-&lt;p&gt;GIF 87a：是在1987年制定的版本；
-GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。&lt;/p&gt;
-&lt;h2 id=&#34;gif格式结构&#34;&gt;GIF格式结构&lt;/h2&gt;
-&lt;p&gt;GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。&lt;/p&gt;
-&lt;h3 id=&#34;结构组成&#34;&gt;结构组成&lt;/h3&gt;
-&lt;p&gt;结构如下表所示：&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Header&lt;/td&gt;
-&lt;td&gt;Header&lt;/td&gt;
-&lt;td&gt;Header&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Logical Screen Descriptor&lt;/td&gt;
-&lt;td&gt;Screen Descriptor Block&lt;/td&gt;
-&lt;td&gt;GIF Data Stream&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Global Color Table&lt;/td&gt;
-&lt;td&gt;Global Color Table(optional)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Application Extension&lt;/td&gt;
-&lt;td&gt;Extension Blocks(optional, repeated)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Graphic Control Extension*&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;…&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Image Descriptor&lt;/td&gt;
-&lt;td&gt;Image Blocks(repeated)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Local Color Table&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Table Based Image Data&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;…&lt;/td&gt;
-&lt;td&gt;Extension Blocks(optional, repeated)&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Trailer&lt;/td&gt;
-&lt;td&gt;Trailer&lt;/td&gt;
-&lt;td&gt;Trailer&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;</description>
-    </item>
-    
-    <item>
-      <title>Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</title>
-      <link>/posts/asc2-release-notes/</link>
-      <pubDate>Fri, 31 Aug 2012 17:50:12 +0800</pubDate>
-      
-      <guid>/posts/asc2-release-notes/</guid>
-      <description>&lt;p&gt;伴随着Flash Builder 4.7 beta的发布，正如Adobe所承诺的那样，新的编译器也浮出水面。全新的编译器到底有哪些改进和新特性，想必是大多数ActionScript开发比较关心的问题。简单翻译了下ASC2.0官方发布说明，希望能对同行们有一点帮助。&lt;/p&gt;
-&lt;p&gt;如果要了解Flash Builder 4.7，可以参看zrong的&lt;a href=&#34;http://zengrong.net/post/1676.htm&#34;&gt;这篇文章&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;** August 2012 – Adobe® ActionScript® Compiler 2.0 (Build 2.0.0.345083) **
-Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.&lt;/p&gt;
-&lt;p&gt;ASC 2.0 是一个新的ActionScript® 3.0 (AS3)编译器。相比之前版本更遵循AS3语言规范，编译性能方面有了很大改善。在内存压力下更稳定，并包含一些演示性的优化选项（内联，无用代码删除），这些选项可以有选择地启用。&lt;/p&gt;
-&lt;p&gt;这个编译器已经包含在刚发布的 Flash Builder® 4.7 预览版中。其单独版本已经同AIR SDK 3.4 一起打包发布。&lt;/p&gt;
-&lt;p&gt;注意：ASC 2.0支持编译AS3应用，虽然留有熟悉的mxmlc和compc命令行入口，但是不支持Flex应用的编译。&lt;/p&gt;
-&lt;p&gt;当有更多信息时，该文档可能会不定期更新。&lt;/p&gt;
-&lt;h2 id=&#34;版本说明--august-2012&#34;&gt;版本说明 – August 2012&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;这是新编译器ASC 2.0 的第一个公开预览版；&lt;/li&gt;
-&lt;li&gt;Flash Builder 4.7 and the ASC 2.0 command-line compiler now share the same code model. This avoids duplicate representations of a program and means the IDE has an accurate representation of the language – matching the compiler. （没看懂，不清楚code model，representation的定义）&lt;/li&gt;
-&lt;li&gt;全新多线程架构，支持多文件同时编译，减少编译时间；&lt;/li&gt;
-&lt;li&gt;更佳的常数合并和常数传播带来运行时更佳性能的代码；&lt;/li&gt;
-&lt;li&gt;通过移除不必要的活动记录减少函数开销；&lt;/li&gt;
-&lt;li&gt;包含内联和无用代码删除相关的字节码优化；&lt;/li&gt;
-&lt;li&gt;加入新关键字”goto”，实现AS3的非线性控制流；&lt;/li&gt;
-&lt;li&gt;现在支持SWF 13的LZMA压缩了。&lt;/li&gt;
-&lt;li&gt;新的符号管理系统，意味着包含Flash 和 AIR项目的Flash Builder 4.7 AS工作空间，编译起来应该会快多了；&lt;/li&gt;
-&lt;li&gt;fontswf, optimizer，swfdump和swcdepends ，基于ASC 2.0的新版本可以用了；&lt;/li&gt;
-&lt;li&gt;Asdoc，fdb的旧版本依然包括在内；&lt;/li&gt;
-&lt;li&gt;字体转码已经从[Embed]语法中移除，现在字体需要先预转码并作为SWF嵌入，可以通过工具（如fontswf或Flash Professional CS6）来完成。&lt;/li&gt;
-&lt;li&gt;源代码中的相对路径（[Embed] assets, includes, etc…）将从其包含文件相对解析。要指定一个相对于源文件根目录的路径，需要在你的路径前加”/”；&lt;/li&gt;
-&lt;li&gt;英文编译器错误信息已经翻译成法文，日文，中文，区域取决于JVM的设置，并可以通过 -tools-locale 设置项改写。&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    
-    <item>
-      <title>连接Kindle Fire到ADB(实体机调试)</title>
-      <link>/posts/connecting-your-kindle-fire-to-adb/</link>
-      <pubDate>Sun, 19 Aug 2012 11:30:08 +0800</pubDate>
-      
-      <guid>/posts/connecting-your-kindle-fire-to-adb/</guid>
-      <description>&lt;h2 id=&#34;前提条件&#34;&gt;前提条件&lt;/h2&gt;
-&lt;p&gt;为开发环境下载安装下列包:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.oracle.com/technetwork/java/javase/downloads/index.html&#34;&gt;Java JDK&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://developer.android.com/sdk/index.html&#34;&gt;Android SDK&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;使用 Android SDK Manager 下载安装下列SDK包：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Android 2.3.3 (API10) =&amp;gt; SDK Platform&lt;/li&gt;
-&lt;li&gt;Tools =&amp;gt; Android SDK Tools&lt;/li&gt;
-&lt;li&gt;Tools =&amp;gt; Android SDK Platform-tools&lt;/li&gt;
-&lt;li&gt;Extras =&amp;gt; Google USB Driver package&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;osx设置&#34;&gt;OSX设置&lt;/h2&gt;
-&lt;p&gt;修改 adb_usb.ini&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;打开文件： ~/.android/adb_usb.ini&lt;/li&gt;
-&lt;li&gt;添加一行： 0x1949&lt;/li&gt;
-&lt;li&gt;添加一行： 0x0006&lt;/li&gt;
-&lt;li&gt;保存文件&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>基于AS3.0的相似图像搜索算法实现</title>
-      <link>/posts/similar-image-searching-algorithm-as3/</link>
-      <pubDate>Tue, 14 Aug 2012 19:59:25 +0800</pubDate>
-      
-      <guid>/posts/similar-image-searching-algorithm-as3/</guid>
-      <description>&lt;p&gt;Google的图像搜索，可以根据用户上传或者网络上的图片找到与此最相似的图片(百度也有类似功能)。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://pjkm4w.bay.livefilestore.com/y1pOjCa3mvtvwKjegr_UmRLkNG9nUpMQU-uMfHod4eqmrtsEsIHz4jI_4yyhi7oe7xURPx9ZOu-lMQsUi8FbN4reRvqjqVlik3i/google_image_search.png&#34; alt=&#34;google image search&#34; title=&#34;Google Image Search&#34;&gt;&lt;/p&gt;
-&lt;p&gt;阮一峰的博客曾经提到过 “感知哈希算法(Perceptual hash algorithm)”，主要介绍了 Dr. Neal Krawetz基于感知哈希算法的”平均哈希算法(Average Hash algorithm)”。相比其他算法，这种算法简单快速，很容易实现。&lt;/p&gt;
-&lt;p&gt;对于图像来说，高频信息体现图像的细节，低频信息体现图像的边缘和轮廓。一幅大而清晰的图像不仅包含低频，而且会包含很多高频分量。而小图片因为缺乏细节部分，往往只有低频信息。因此用只包含低频分量的图像来做图像相似度匹配是非常合适的。&lt;/p&gt;
-&lt;p&gt;感知哈希算法的基本原理是根据图像特征生成一个特定(但非唯一)的指纹，根据指纹来比较图像的相似度。其特点是，即使图像放大缩小，调整高宽，或者有少许色彩变化（对比度，亮度等等），仍然可以匹配到相似的图像。&lt;/p&gt;
-&lt;h2 id=&#34;平均哈希算法average-hash-algorithm&#34;&gt;平均哈希算法(Average Hash algorithm)&lt;/h2&gt;
-&lt;p&gt;实现步骤如下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;缩小尺寸：移除高频部分，将图像缩小至8×8像素,不考虑高宽比；
-{% img &lt;a href=&#34;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg&#34;&gt;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg&lt;/a&gt; 64 64 %}&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;减少颜色：转为灰度图，将64像素的RGB 64×3个颜色值简化为 64个色值；
-{% img &lt;a href=&#34;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg&#34;&gt;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg&lt;/a&gt; 64 64 %}&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;计算平均值：计算64个颜色的均值；&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;比较灰度值：将每个像素的颜色值与平均值比较，小于均值记0，否则记1；&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;计算哈希值：将上述的比较结果拼起来构成一个64位的整数。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;</description>
-    </item>
-    
-    <item>
-      <title>ActionScript 3.0 闭包及作用域</title>
-      <link>/posts/actionscript-3-0-closure/</link>
-      <pubDate>Sun, 05 Aug 2012 19:11:50 +0800</pubDate>
-      
-      <guid>/posts/actionscript-3-0-closure/</guid>
-      <description>&lt;p&gt;闭包作为动态语言的基石，在OO实现和框架构建上有着-十分重要的作用。但是闭包的定义比较抽象，不利于理解，闭包在各语言中的实现不尽相同，闭包的函数作用域也有区别。&lt;/p&gt;
-&lt;p&gt;参考整理了这篇文章(非原创),主要内容来自&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;IBM Thoughtworks 文档：&lt;a href=&#34;http://www.ibm.com/developerworks/cn/linux/l-cn-closure&#34;&gt;闭包的概念、形式与应用&lt;/a&gt;；&lt;/li&gt;
-&lt;li&gt;Adobe官方文档：&lt;a href=&#34;http://www.ibm.com/developerworks/cn/linux/l-cn-closure/&#34;&gt;Flash ActionScript 3.0 编程- 函数作用域&lt;/a&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;什么是闭包&#34;&gt;什么是闭包&lt;/h2&gt;
-&lt;p&gt;闭包的概念出现于60年代，最早实现闭包的程序语言是&lt;a href=&#34;http://zh.wikipedia.org/wiki/Scheme&#34;&gt;Scheme&lt;/a&gt;。关于闭包的定义，说法比较多。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;http://zh.wikipedia.org/wiki/Scheme&#34;&gt;Scheme&lt;/a&gt;语言设计者这样定义闭包：”we introduce the notion of a closure which is a data structure containing a lambda expression, and an environment to be used when that lambda expression is applied to arguments.”&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;英文Wikipedia 则是解释为：”a closure (also lexical closure or function closure) is a &lt;a href=&#34;http://en.wikipedia.org/wiki/Function_(computer_science)&#34;&gt;function&lt;/a&gt; together with a referencing environment for the &lt;a href=&#34;http://en.wikipedia.org/wiki/Non-local_variable&#34;&gt;non-local variables&lt;/a&gt; of that function. “。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;中文维基百科：”在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，是引用了&lt;a href=&#34;http://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%8F%98%E9%87%8F&#34;&gt;自由变量&lt;/a&gt;的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。”
-综合这些定义，可以认为闭包一种特殊的数据结构，不仅仅是函数，还包括与其相关的引用环境。闭包只是在形式和表现上像函数，但实际上不是函数。函数是一些可执行的代码，这些代码在函数被定义后就确定了，不会在执行时发生变化，所以一个函数只有一个实例。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。所谓引用环境是指在程序执行中的某个点所有处于活跃状态的约束所组成的集合。其中的约束是指一个变量的名字和其所代表的对象之间的联系。那么为什么要把引用环境与函数组合起来呢？这主要是因为在支持嵌套作用域的语言中，有时不能简单直接地确定函数的引用环境。这样的语言一般具有这样的特性：&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;函数是一阶值（First-class value），即函数可以作为另一个函数的返回值或参数，还可以作为一个变量的值。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;函数可以嵌套定义，即在一个函数内部可以定义另一个函数。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;闭包作用域&#34;&gt;闭包作用域&lt;/h2&gt;
-&lt;p&gt;函数的范围不但决定了可以在程序中的什么位置调用函数，而且还决定了函数可以访问哪些定义。适用于变量标识符的作用域规则同样也适用于函数标识符。在全局作用域中声明的函数在整个代码中都可用。例如，ActionScript 3.0 包含可在代码中的任意位置使用的全局函数，如 isNaN() 和 parseInt()。嵌套函数（即在另一个函数中声明的函数）可以在声明它的函数中的任意位置上使用。&lt;/p&gt;
-&lt;h3 id=&#34;作用域链the-scope-chain&#34;&gt;作用域链(The scope chain)&lt;/h3&gt;
-&lt;p&gt;无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>ActionScript3的继承机制</title>
-      <link>/posts/actionscript3-inheritance-mechanism/</link>
-      <pubDate>Tue, 31 Jul 2012 18:25:09 +0800</pubDate>
-      
-      <guid>/posts/actionscript3-inheritance-mechanism/</guid>
-      <description>&lt;p&gt;因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循&lt;a href=&#34;http://zh.wikipedia.org/zh/ECMAScript&#34;&gt;ECMAScript&lt;/a&gt; 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。&lt;/p&gt;
-&lt;p&gt;本文主要内容源自Adobe官方教程：&lt;a href=&#34;http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html&#34;&gt;ActionScript 中面向对象的编程-高级主题&lt;/a&gt; ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。&lt;/p&gt;
-&lt;p&gt;本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。&lt;/p&gt;
-&lt;h2 id=&#34;actionscript-oop-支持的历史&#34;&gt;ActionScript OOP 支持的历史&lt;/h2&gt;
-&lt;p&gt;由于 ActionScript 3.0 是在以前版本的 ActionScript 基础上构建的，了解 ActionScript 对象模型的发展过程可能有所帮助。ActionScript 最初作为早期版本的 Flash 创作工具的简单编写脚本机制。后来，程序员开始使用 ActionScript 建立更加复杂的应用程序。为了迎合这些程序员的需要，每个后续版本都添加了一些语言功能以帮助创建复杂的应用程序。&lt;/p&gt;
-&lt;h3 id=&#34;actionscript-10&#34;&gt;ActionScript 1.0&lt;/h3&gt;
-&lt;p&gt;ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本。即使在这个早期开发阶段，ActionScript 对象模型也是建立在基础数据类型对象的概念的基础上。ActionScript 对象是由一组属性 构成的复合数据类型。讨论对象模型时，术语属性 包括附加到对象的所有内容，如变量、函数或方法。&lt;/p&gt;
-&lt;p&gt;尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C++ 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。&lt;/p&gt;
-&lt;p&gt;要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Flash Player 11.4 ByteArray压缩算法初探</title>
-      <link>/posts/flash-player-11-4-bytearray-compression/</link>
-      <pubDate>Fri, 27 Jul 2012 18:31:25 +0800</pubDate>
-      
-      <guid>/posts/flash-player-11-4-bytearray-compression/</guid>
-      <description>Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。
+参考资料
+http://labs.adobe.com/technologies/flashplatformruntimes/flashplayer11-5/ http://labs.adobe.com/technologies/flashplatformruntimes/air3-5/</description></item><item><title>在 Flash Player 中显示GIF动画</title><link>/posts/gif-animation-in-flash-player/</link><pubDate>Wed, 26 Sep 2012 18:31:46 +0800</pubDate><guid>/posts/gif-animation-in-flash-player/</guid><description>&lt;p>之前遇到这个需求，本人坚持”不重复发明轮子”的原则，弘扬”积极的偷懒不算偷懒”的精神，找到了两个解决方案。因为之前研究了GIF格式和LWZ算法，所以理解起来，没有太大的问题。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="方案一as3gif">方案一：as3gif&lt;/h2>
+&lt;p>作者：Thibault Imbert
+项目地址：http://code.google.com/p/as3gif/&lt;/p>
+&lt;p>2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-actionscript" data-lang="actionscript">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we create the GIFPlayer, it plays automatically by default
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>&lt;span style="color:#f92672">:&lt;/span>&lt;span style="color:#a6e22e">GIFPlayer&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> &lt;span style="color:#a6e22e">GIFPlayer&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we show it
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">addChild&lt;/span> ( &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we load a gif file
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">load&lt;/span> ( &lt;span style="color:#66d9ef">new&lt;/span> URLRequest (&lt;span style="color:#e6db74">&amp;#34;animation.gif&amp;#34;&lt;/span>) );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// you can also load any valid GIF stream (ByteArray) with the loadBytes method (version 0.2)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">loadBytes&lt;/span> ( &lt;span style="color:#a6e22e">gifStream&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the IOErrorEvent.IO_ERROR event, dispatched when the GIF fails to load
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( IOErrorEvent.&lt;span style="color:#a6e22e">IO_ERROR&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onIOError&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the GIFPlayerEvent.COMPLETE event, dispatched when GIF is loaded
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">GIFPlayerEvent&lt;/span>.&lt;span style="color:#a6e22e">COMPLETE&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onCompleteGIFLoad&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the FrameEvent.FRAME_RENDERED event, dispatched when a GIF frame is rendered on screen
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">FrameEvent&lt;/span>.&lt;span style="color:#a6e22e">FRAME_RENDERED&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onFrameRendered&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the FileTypeEvent.INVALID event, dispatched when an invalid file is loaded
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">FileTypeEvent&lt;/span>.&lt;span style="color:#a6e22e">INVALID&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onInvalidFileLoaded&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// get total frames
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">totalFrames&lt;/span>&lt;span style="color:#f92672">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// standard methods
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">play&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">stop&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">gotoAndStop&lt;/span>(&lt;span style="color:#ae81ff">3&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">gotoAndPlay&lt;/span>(&lt;span style="color:#ae81ff">3&lt;/span>);&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
+&lt;p>优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。&lt;/p>
+&lt;p>缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。&lt;/p></description></item><item><title>GIF 格式及LZW算法浅析</title><link>/posts/gif-format-and-lzw/</link><pubDate>Thu, 20 Sep 2012 18:20:14 +0800</pubDate><guid>/posts/gif-format-and-lzw/</guid><description>&lt;p>前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。&lt;/p>
+&lt;p>花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。&lt;/p>
+&lt;p>&lt;img src="/images/diego.gif" alt="gif sample" title="GIF 多帧动画">&lt;/p>
+&lt;h2 id="gif概述">GIF概述&lt;/h2>
+&lt;p>Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。&lt;/p>
+&lt;p>GIF主要分为两个版本，即GIF 87a和GIF 89a：&lt;/p>
+&lt;p>GIF 87a：是在1987年制定的版本；
+GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。&lt;/p>
+&lt;h2 id="gif格式结构">GIF格式结构&lt;/h2>
+&lt;p>GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。&lt;/p>
+&lt;h3 id="结构组成">结构组成&lt;/h3>
+&lt;p>结构如下表所示：&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>&lt;/th>
+&lt;th>&lt;/th>
+&lt;th>&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Header&lt;/td>
+&lt;td>Header&lt;/td>
+&lt;td>Header&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Logical Screen Descriptor&lt;/td>
+&lt;td>Screen Descriptor Block&lt;/td>
+&lt;td>GIF Data Stream&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Global Color Table&lt;/td>
+&lt;td>Global Color Table(optional)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Application Extension&lt;/td>
+&lt;td>Extension Blocks(optional, repeated)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Graphic Control Extension*&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>…&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Image Descriptor&lt;/td>
+&lt;td>Image Blocks(repeated)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Local Color Table&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Table Based Image Data&lt;/td>
+&lt;td>&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>…&lt;/td>
+&lt;td>Extension Blocks(optional, repeated)&lt;/td>
+&lt;td>&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Trailer&lt;/td>
+&lt;td>Trailer&lt;/td>
+&lt;td>Trailer&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table></description></item><item><title>Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</title><link>/posts/asc2-release-notes/</link><pubDate>Fri, 31 Aug 2012 17:50:12 +0800</pubDate><guid>/posts/asc2-release-notes/</guid><description>&lt;p>伴随着Flash Builder 4.7 beta的发布，正如Adobe所承诺的那样，新的编译器也浮出水面。全新的编译器到底有哪些改进和新特性，想必是大多数ActionScript开发比较关心的问题。简单翻译了下ASC2.0官方发布说明，希望能对同行们有一点帮助。&lt;/p>
+&lt;p>如果要了解Flash Builder 4.7，可以参看zrong的&lt;a href="http://zengrong.net/post/1676.htm">这篇文章&lt;/a>。&lt;/p>
+&lt;p>** August 2012 – Adobe® ActionScript® Compiler 2.0 (Build 2.0.0.345083) **
+Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.&lt;/p>
+&lt;p>ASC 2.0 是一个新的ActionScript® 3.0 (AS3)编译器。相比之前版本更遵循AS3语言规范，编译性能方面有了很大改善。在内存压力下更稳定，并包含一些演示性的优化选项（内联，无用代码删除），这些选项可以有选择地启用。&lt;/p>
+&lt;p>这个编译器已经包含在刚发布的 Flash Builder® 4.7 预览版中。其单独版本已经同AIR SDK 3.4 一起打包发布。&lt;/p>
+&lt;p>注意：ASC 2.0支持编译AS3应用，虽然留有熟悉的mxmlc和compc命令行入口，但是不支持Flex应用的编译。&lt;/p>
+&lt;p>当有更多信息时，该文档可能会不定期更新。&lt;/p>
+&lt;h2 id="版本说明--august-2012">版本说明 – August 2012&lt;/h2>
+&lt;ul>
+&lt;li>这是新编译器ASC 2.0 的第一个公开预览版；&lt;/li>
+&lt;li>Flash Builder 4.7 and the ASC 2.0 command-line compiler now share the same code model. This avoids duplicate representations of a program and means the IDE has an accurate representation of the language – matching the compiler. （没看懂，不清楚code model，representation的定义）&lt;/li>
+&lt;li>全新多线程架构，支持多文件同时编译，减少编译时间；&lt;/li>
+&lt;li>更佳的常数合并和常数传播带来运行时更佳性能的代码；&lt;/li>
+&lt;li>通过移除不必要的活动记录减少函数开销；&lt;/li>
+&lt;li>包含内联和无用代码删除相关的字节码优化；&lt;/li>
+&lt;li>加入新关键字”goto”，实现AS3的非线性控制流；&lt;/li>
+&lt;li>现在支持SWF 13的LZMA压缩了。&lt;/li>
+&lt;li>新的符号管理系统，意味着包含Flash 和 AIR项目的Flash Builder 4.7 AS工作空间，编译起来应该会快多了；&lt;/li>
+&lt;li>fontswf, optimizer，swfdump和swcdepends ，基于ASC 2.0的新版本可以用了；&lt;/li>
+&lt;li>Asdoc，fdb的旧版本依然包括在内；&lt;/li>
+&lt;li>字体转码已经从[Embed]语法中移除，现在字体需要先预转码并作为SWF嵌入，可以通过工具（如fontswf或Flash Professional CS6）来完成。&lt;/li>
+&lt;li>源代码中的相对路径（[Embed] assets, includes, etc…）将从其包含文件相对解析。要指定一个相对于源文件根目录的路径，需要在你的路径前加”/”；&lt;/li>
+&lt;li>英文编译器错误信息已经翻译成法文，日文，中文，区域取决于JVM的设置，并可以通过 -tools-locale 设置项改写。&lt;/li>
+&lt;/ul></description></item><item><title>连接Kindle Fire到ADB(实体机调试)</title><link>/posts/connecting-your-kindle-fire-to-adb/</link><pubDate>Sun, 19 Aug 2012 11:30:08 +0800</pubDate><guid>/posts/connecting-your-kindle-fire-to-adb/</guid><description>&lt;h2 id="前提条件">前提条件&lt;/h2>
+&lt;p>为开发环境下载安装下列包:&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java JDK&lt;/a>&lt;/li>
+&lt;li>&lt;a href="http://developer.android.com/sdk/index.html">Android SDK&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>使用 Android SDK Manager 下载安装下列SDK包：&lt;/p>
+&lt;ul>
+&lt;li>Android 2.3.3 (API10) =&amp;gt; SDK Platform&lt;/li>
+&lt;li>Tools =&amp;gt; Android SDK Tools&lt;/li>
+&lt;li>Tools =&amp;gt; Android SDK Platform-tools&lt;/li>
+&lt;li>Extras =&amp;gt; Google USB Driver package&lt;/li>
+&lt;/ul>
+&lt;h2 id="osx设置">OSX设置&lt;/h2>
+&lt;p>修改 adb_usb.ini&lt;/p>
+&lt;ol>
+&lt;li>打开文件： ~/.android/adb_usb.ini&lt;/li>
+&lt;li>添加一行： 0x1949&lt;/li>
+&lt;li>添加一行： 0x0006&lt;/li>
+&lt;li>保存文件&lt;/li>
+&lt;/ol>
+&lt;p>注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。&lt;/p></description></item><item><title>基于AS3.0的相似图像搜索算法实现</title><link>/posts/similar-image-searching-algorithm-as3/</link><pubDate>Tue, 14 Aug 2012 19:59:25 +0800</pubDate><guid>/posts/similar-image-searching-algorithm-as3/</guid><description>&lt;p>Google的图像搜索，可以根据用户上传或者网络上的图片找到与此最相似的图片(百度也有类似功能)。&lt;/p>
+&lt;p>&lt;img src="https://pjkm4w.bay.livefilestore.com/y1pOjCa3mvtvwKjegr_UmRLkNG9nUpMQU-uMfHod4eqmrtsEsIHz4jI_4yyhi7oe7xURPx9ZOu-lMQsUi8FbN4reRvqjqVlik3i/google_image_search.png" alt="google image search" title="Google Image Search">&lt;/p>
+&lt;p>阮一峰的博客曾经提到过 “感知哈希算法(Perceptual hash algorithm)”，主要介绍了 Dr. Neal Krawetz基于感知哈希算法的”平均哈希算法(Average Hash algorithm)”。相比其他算法，这种算法简单快速，很容易实现。&lt;/p>
+&lt;p>对于图像来说，高频信息体现图像的细节，低频信息体现图像的边缘和轮廓。一幅大而清晰的图像不仅包含低频，而且会包含很多高频分量。而小图片因为缺乏细节部分，往往只有低频信息。因此用只包含低频分量的图像来做图像相似度匹配是非常合适的。&lt;/p>
+&lt;p>感知哈希算法的基本原理是根据图像特征生成一个特定(但非唯一)的指纹，根据指纹来比较图像的相似度。其特点是，即使图像放大缩小，调整高宽，或者有少许色彩变化（对比度，亮度等等），仍然可以匹配到相似的图像。&lt;/p>
+&lt;h2 id="平均哈希算法average-hash-algorithm">平均哈希算法(Average Hash algorithm)&lt;/h2>
+&lt;p>实现步骤如下：&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>缩小尺寸：移除高频部分，将图像缩小至8×8像素,不考虑高宽比；
+{% img &lt;a href="https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg">https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg&lt;/a> 64 64 %}&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>减少颜色：转为灰度图，将64像素的RGB 64×3个颜色值简化为 64个色值；
+{% img &lt;a href="https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg">https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg&lt;/a> 64 64 %}&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>计算平均值：计算64个颜色的均值；&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>比较灰度值：将每个像素的颜色值与平均值比较，小于均值记0，否则记1；&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>计算哈希值：将上述的比较结果拼起来构成一个64位的整数。&lt;/p>
+&lt;/li>
+&lt;/ol></description></item><item><title>ActionScript 3.0 闭包及作用域</title><link>/posts/actionscript-3-0-closure/</link><pubDate>Sun, 05 Aug 2012 19:11:50 +0800</pubDate><guid>/posts/actionscript-3-0-closure/</guid><description>&lt;p>闭包作为动态语言的基石，在OO实现和框架构建上有着-十分重要的作用。但是闭包的定义比较抽象，不利于理解，闭包在各语言中的实现不尽相同，闭包的函数作用域也有区别。&lt;/p>
+&lt;p>参考整理了这篇文章(非原创),主要内容来自&lt;/p>
+&lt;ul>
+&lt;li>IBM Thoughtworks 文档：&lt;a href="http://www.ibm.com/developerworks/cn/linux/l-cn-closure">闭包的概念、形式与应用&lt;/a>；&lt;/li>
+&lt;li>Adobe官方文档：&lt;a href="http://www.ibm.com/developerworks/cn/linux/l-cn-closure/">Flash ActionScript 3.0 编程- 函数作用域&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;h2 id="什么是闭包">什么是闭包&lt;/h2>
+&lt;p>闭包的概念出现于60年代，最早实现闭包的程序语言是&lt;a href="http://zh.wikipedia.org/wiki/Scheme">Scheme&lt;/a>。关于闭包的定义，说法比较多。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a href="http://zh.wikipedia.org/wiki/Scheme">Scheme&lt;/a>语言设计者这样定义闭包：”we introduce the notion of a closure which is a data structure containing a lambda expression, and an environment to be used when that lambda expression is applied to arguments.”&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>英文Wikipedia 则是解释为：”a closure (also lexical closure or function closure) is a &lt;a href="http://en.wikipedia.org/wiki/Function_(computer_science)">function&lt;/a> together with a referencing environment for the &lt;a href="http://en.wikipedia.org/wiki/Non-local_variable">non-local variables&lt;/a> of that function. “。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>中文维基百科：”在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，是引用了&lt;a href="http://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%8F%98%E9%87%8F">自由变量&lt;/a>的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。”
+综合这些定义，可以认为闭包一种特殊的数据结构，不仅仅是函数，还包括与其相关的引用环境。闭包只是在形式和表现上像函数，但实际上不是函数。函数是一些可执行的代码，这些代码在函数被定义后就确定了，不会在执行时发生变化，所以一个函数只有一个实例。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。所谓引用环境是指在程序执行中的某个点所有处于活跃状态的约束所组成的集合。其中的约束是指一个变量的名字和其所代表的对象之间的联系。那么为什么要把引用环境与函数组合起来呢？这主要是因为在支持嵌套作用域的语言中，有时不能简单直接地确定函数的引用环境。这样的语言一般具有这样的特性：&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>函数是一阶值（First-class value），即函数可以作为另一个函数的返回值或参数，还可以作为一个变量的值。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>函数可以嵌套定义，即在一个函数内部可以定义另一个函数。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="闭包作用域">闭包作用域&lt;/h2>
+&lt;p>函数的范围不但决定了可以在程序中的什么位置调用函数，而且还决定了函数可以访问哪些定义。适用于变量标识符的作用域规则同样也适用于函数标识符。在全局作用域中声明的函数在整个代码中都可用。例如，ActionScript 3.0 包含可在代码中的任意位置使用的全局函数，如 isNaN() 和 parseInt()。嵌套函数（即在另一个函数中声明的函数）可以在声明它的函数中的任意位置上使用。&lt;/p>
+&lt;h3 id="作用域链the-scope-chain">作用域链(The scope chain)&lt;/h3>
+&lt;p>无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。&lt;/p></description></item><item><title>ActionScript3的继承机制</title><link>/posts/actionscript3-inheritance-mechanism/</link><pubDate>Tue, 31 Jul 2012 18:25:09 +0800</pubDate><guid>/posts/actionscript3-inheritance-mechanism/</guid><description>&lt;p>因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循&lt;a href="http://zh.wikipedia.org/zh/ECMAScript">ECMAScript&lt;/a> 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。&lt;/p>
+&lt;p>本文主要内容源自Adobe官方教程：&lt;a href="http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html">ActionScript 中面向对象的编程-高级主题&lt;/a> ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。&lt;/p>
+&lt;p>本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。&lt;/p>
+&lt;h2 id="actionscript-oop-支持的历史">ActionScript OOP 支持的历史&lt;/h2>
+&lt;p>由于 ActionScript 3.0 是在以前版本的 ActionScript 基础上构建的，了解 ActionScript 对象模型的发展过程可能有所帮助。ActionScript 最初作为早期版本的 Flash 创作工具的简单编写脚本机制。后来，程序员开始使用 ActionScript 建立更加复杂的应用程序。为了迎合这些程序员的需要，每个后续版本都添加了一些语言功能以帮助创建复杂的应用程序。&lt;/p>
+&lt;h3 id="actionscript-10">ActionScript 1.0&lt;/h3>
+&lt;p>ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本。即使在这个早期开发阶段，ActionScript 对象模型也是建立在基础数据类型对象的概念的基础上。ActionScript 对象是由一组属性 构成的复合数据类型。讨论对象模型时，术语属性 包括附加到对象的所有内容，如变量、函数或方法。&lt;/p>
+&lt;p>尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C++ 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。&lt;/p>
+&lt;p>要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：&lt;/p></description></item><item><title>Flash Player 11.4 ByteArray压缩算法初探</title><link>/posts/flash-player-11-4-bytearray-compression/</link><pubDate>Fri, 27 Jul 2012 18:31:25 +0800</pubDate><guid>/posts/flash-player-11-4-bytearray-compression/</guid><description>Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。
 ByteArray “ByteArray 类提供用于优化读取、写入以及处理二进制数据的方法和属性。内存中的数据是一个压缩字节数组（数据类型的最紧凑表示形式），但可以使用标准 []（数组访问）运算符来操作 ByteArray 类的实例。也可以使用与 URLStream 和 Socket 类中的方法相类似的方法将它作为内存中的文件进行读取和写入。”
 “此外，还支持 zlib 压缩和解压缩，以及 Action Message Format (AMF) 对象序列化。”
 目前压缩/解压缩支持三种算法：CompressionAlgorithm. DEFLATE, CompressionAlgorithm. ZLIB, CompressionAlgorithm.LZMA(Flash Player 11.4)。
@@ -930,214 +627,80 @@ ByteArray “ByteArray 类提供用于优化读取、写入以及处理二进制
 RFC：http://www.ietf.org/rfc/rfc1951.txt
 哈夫曼编码压缩算法的细节，可以参看这篇文章。
 ZLIB deflate 压缩算法用于多种压缩格式，如 zlib、gzip、一些 zip 实现等。在使用这些压缩格式之一压缩数据时，除了存储原始数据的压缩版本之外，压缩格式数据（例如 .zip 文件）还包括元数据信息。举例来说，各种文件格式中包括的元数据的类型有文件名、文件修改日期/时间、原始文件大小、可选的注释、校验和数据等。
-例如，在使用 zlib 算法压缩 ByteArray 时，将以特定的格式构建生成的 ByteArray。一些字节包含有关所压缩数据的元数据，而另一些字节包含原始 ByteArray 数据的实际压缩版本。根据 zlib 压缩数据格式规范的定义，这些字节（即包含原始数据的压缩版本的部分）使用 deflate 算法进行压缩。因此，这些字节与对原始 ByteArray 调用 compress( air. CompressionAlgorithm.DEFLATE) 所得的结果相同。但是，compress( air.CompressionAlgorithm.ZLIB) 生成的结果包括额外的元数据，而 compress(CompressionAlgorithm.DEFLATE) 生成的结果只包括原始 ByteArray 数据的压缩版本，没有任何其他内容。</description>
-    </item>
-    
-    <item>
-      <title>Flash Builder 插件</title>
-      <link>/posts/flash-builder-plugins/</link>
-      <pubDate>Mon, 23 Jul 2012 20:32:21 +0800</pubDate>
-      
-      <guid>/posts/flash-builder-plugins/</guid>
-      <description>&lt;p&gt;Eclipse IDE的插件十分丰富，适当地使用可以使开发效率大大提高。而Flash Builder是基于Eclipse 开发的，因此或多或少可以使用一些Eclipse的插件。介绍几个开发中常用的几个插件。&lt;/p&gt;
-&lt;h2 id=&#34;easy-explore&#34;&gt;Easy Explore&lt;/h2&gt;
-&lt;p&gt;这个小插件可以调用Window资源管理器，浏览”包资源管理器”里的包和文件。省去开发者在资源管理器里一级一级地找文件。使用时，只要右键单击包或者文件，在弹出的菜单中选择”Easy Explore…”。&lt;/p&gt;
-&lt;p&gt;Y.Boy 把这个插件中文化并更换了图标，比原版更赏心悦目了 🙂 。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;http://riaoo.com/wp-content/uploads/2012/06/easyexplore.jpg&#34; alt=&#34;easy explore&#34;&gt;&lt;/p&gt;
-&lt;p&gt;下载链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;原版：http://sourceforge.net/projects/easystruts/files/Easy%20Explorer%20for%20Eclipse/easy-explore-1.0.4/&lt;/li&gt;
-&lt;li&gt;中文版(Y.Boy)：http://riaoo.com/wp-content/uploads/2012/06/easyexplore_1.0.4.zip&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;todofixme-任务插件&#34;&gt;TODO/FIXME 任务插件&lt;/h2&gt;
-&lt;p&gt;Eclipse本来支持TODO/FIXME注释标记的，但是Flash Builder却不支持.as的TODO/FIXME标记。注释//TODO or //FIXME ，即可在任务视图(Task View)中显示任务。&lt;/p&gt;
-&lt;p&gt;打开任务视图：Flash Builder Menu: Window -&amp;gt; Show View -&amp;gt; Other-&amp;gt;Basic–&amp;gt;Tasks（任务）。
-&lt;img src=&#34;https://public.bay.livefilestore.com/y1p_8XUsluDOfrZSUTcmbR8tt7igd0EjRHAYM6Xd0Jl3Tk8ptAh30MkvxIozrwMsIeLChAN_4N2N9zRG8Sk5MVPBQ/todo.png&#34; alt=&#34;task plugins&#34;&gt;&lt;/p&gt;
-&lt;p&gt;下载链接：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.richinternet.de/blog/download/flexbuilderTask_1.0.0.zip&#34;&gt;http://www.richinternet.de/blog/download/flexbuilderTask_1.0.0.zip&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
-    </item>
-    
-    <item>
-      <title>Flash中使用原生鼠标指针</title>
-      <link>/posts/native-mouse-cursors-in-flash/</link>
-      <pubDate>Wed, 11 Jul 2012 17:06:52 +0800</pubDate>
-      
-      <guid>/posts/native-mouse-cursors-in-flash/</guid>
-      <description>Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过操作系统指针机制实现基于位图的原生鼠标指针，此方式比使用显示对象来显示自定义指针图像更有效。
+例如，在使用 zlib 算法压缩 ByteArray 时，将以特定的格式构建生成的 ByteArray。一些字节包含有关所压缩数据的元数据，而另一些字节包含原始 ByteArray 数据的实际压缩版本。根据 zlib 压缩数据格式规范的定义，这些字节（即包含原始数据的压缩版本的部分）使用 deflate 算法进行压缩。因此，这些字节与对原始 ByteArray 调用 compress( air. CompressionAlgorithm.DEFLATE) 所得的结果相同。但是，compress( air.CompressionAlgorithm.ZLIB) 生成的结果包括额外的元数据，而 compress(CompressionAlgorithm.DEFLATE) 生成的结果只包括原始 ByteArray 数据的压缩版本，没有任何其他内容。</description></item><item><title>Flash Builder 插件</title><link>/posts/flash-builder-plugins/</link><pubDate>Mon, 23 Jul 2012 20:32:21 +0800</pubDate><guid>/posts/flash-builder-plugins/</guid><description>&lt;p>Eclipse IDE的插件十分丰富，适当地使用可以使开发效率大大提高。而Flash Builder是基于Eclipse 开发的，因此或多或少可以使用一些Eclipse的插件。介绍几个开发中常用的几个插件。&lt;/p>
+&lt;h2 id="easy-explore">Easy Explore&lt;/h2>
+&lt;p>这个小插件可以调用Window资源管理器，浏览”包资源管理器”里的包和文件。省去开发者在资源管理器里一级一级地找文件。使用时，只要右键单击包或者文件，在弹出的菜单中选择”Easy Explore…”。&lt;/p>
+&lt;p>Y.Boy 把这个插件中文化并更换了图标，比原版更赏心悦目了 🙂 。&lt;/p>
+&lt;p>&lt;img src="http://riaoo.com/wp-content/uploads/2012/06/easyexplore.jpg" alt="easy explore">&lt;/p>
+&lt;p>下载链接：&lt;/p>
+&lt;ul>
+&lt;li>原版：http://sourceforge.net/projects/easystruts/files/Easy%20Explorer%20for%20Eclipse/easy-explore-1.0.4/&lt;/li>
+&lt;li>中文版(Y.Boy)：http://riaoo.com/wp-content/uploads/2012/06/easyexplore_1.0.4.zip&lt;/li>
+&lt;/ul>
+&lt;h2 id="todofixme-任务插件">TODO/FIXME 任务插件&lt;/h2>
+&lt;p>Eclipse本来支持TODO/FIXME注释标记的，但是Flash Builder却不支持.as的TODO/FIXME标记。注释//TODO or //FIXME ，即可在任务视图(Task View)中显示任务。&lt;/p>
+&lt;p>打开任务视图：Flash Builder Menu: Window -&amp;gt; Show View -&amp;gt; Other-&amp;gt;Basic–&amp;gt;Tasks（任务）。
+&lt;img src="https://public.bay.livefilestore.com/y1p_8XUsluDOfrZSUTcmbR8tt7igd0EjRHAYM6Xd0Jl3Tk8ptAh30MkvxIozrwMsIeLChAN_4N2N9zRG8Sk5MVPBQ/todo.png" alt="task plugins">&lt;/p>
+&lt;p>下载链接：&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="http://www.richinternet.de/blog/download/flexbuilderTask_1.0.0.zip">http://www.richinternet.de/blog/download/flexbuilderTask_1.0.0.zip&lt;/a>&lt;/li>
+&lt;/ul></description></item><item><title>Flash中使用原生鼠标指针</title><link>/posts/native-mouse-cursors-in-flash/</link><pubDate>Wed, 11 Jul 2012 17:06:52 +0800</pubDate><guid>/posts/native-mouse-cursors-in-flash/</guid><description>Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过操作系统指针机制实现基于位图的原生鼠标指针，此方式比使用显示对象来显示自定义指针图像更有效。
 理解原生位图指针 自Flash Player 5开始，一直使用 InteractiveObject.startDrag 和 Mouse.hide 来自定义光标外形。但是之前的这种实现有以下几个限制：
- 显示对象实现的光标受限于舞台的维度。当用户把光标在舞台边界处，自定义光标会显示不完全。 显示对象光标在Flash Player 渲染时非常消耗资源，因为整个舞台必须在很高的帧数下重新渲染。updateAfterEvent 方法的使用会导致高CPU占用。 如果SWF因为某些原因停顿了几毫秒，光标动画也会停顿，用户会误认为程序不响应了。 总体上看，相比原生光标，显示对象实现的光标比较迟缓，不够流畅，用户体验不好。  实现原生鼠标光标 实现原生鼠标光标只需要 MouseCursorData 类的几个属性，非常简洁高效。
+显示对象实现的光标受限于舞台的维度。当用户把光标在舞台边界处，自定义光标会显示不完全。 显示对象光标在Flash Player 渲染时非常消耗资源，因为整个舞台必须在很高的帧数下重新渲染。updateAfterEvent 方法的使用会导致高CPU占用。 如果SWF因为某些原因停顿了几毫秒，光标动画也会停顿，用户会误认为程序不响应了。 总体上看，相比原生光标，显示对象实现的光标比较迟缓，不够流畅，用户体验不好。 实现原生鼠标光标 实现原生鼠标光标只需要 MouseCursorData 类的几个属性，非常简洁高效。
 flash.ui.MouseCursorData 的三个属性：
- data：BitmapData 对象的 Vector 包含光标图像或图像。可提供多个图像，并将 frameRate 属性设置为使光标具有动画效果。但是位图大小有限制，最大光标大小为 32×32 像素。 frameRate：使光标具有动画效果的帧速率，在 data 属性中提供多个图像并将帧速率设置为大于 0 的值，以便为指针添加动画效果。光标帧速率可能不同于当前的 SWF 帧速率，就是说调整帧率后光标动画帧率不会变化。 hotSpot：以像素表示的光标热点，热点是指在光标上注册鼠标单击所在的点。默认情况下位于左上角 (0,0)。  代码示例 动态光标和静态光标的实现方式差不多，只需要在data中存入多个位图并设置frameRate。代码如下： private function createFakeCursor():void { this.fakeCursor = new Shape(); var bmp:BitmapData = this.generateCursorBmp(8); fakeCursor.graphics.beginBitmapFill(bmp); fakeCursor.graphics.drawRect(0,0,bmp.width,bmp.height); fakeCursor.graphics.endFill(); fakeCursor.visible = false; this.addChild(fakeCursor); } private function createStaticNativeCursor():void { var cursorData:MouseCursorData = new MouseCursorData(); cursorData.</description>
-    </item>
-    
-    <item>
-      <title>Apache Flex 4.8.0 近况及试用</title>
-      <link>/posts/apache-flex-4-8-0-news-trial/</link>
-      <pubDate>Mon, 09 Jul 2012 19:51:11 +0800</pubDate>
-      
-      <guid>/posts/apache-flex-4-8-0-news-trial/</guid>
-      <description>自从Apache接手Flex已经过去了半年。虽然已经有一年没有开发Flex应用，但是一直关注着对于这个框架的未来和发展。To be or not to be, that’s the question.
-Apache Flex 最新进展（2012/7） Apache Flex 工作  Apache Flex 团队目前正在测试一个Apache Flex 4.8.0的发行候选版本。Apache Flex 4.8.0 是Adobe Flex 4.6.0的等同版本。当前的主要工作是保证在新的Apache license下，能够继续使用Flex框架所有的特性；下个阶段会进行bug修复，新功能和新组件的实现工作。如果想自行build可以Check out 这个说明文档。 商标问题已经大量清除。 JIRA已经导入了Adobe bug tracker 所有问题。 问题附件涵盖直到2012年1月30日之前的SDK，DMV和Automation bug。 Mustella 测试框架已经捐献并做了一些测试。 对于那些想自己编译编译器，框架等代码的人，基于ANT的编译脚本已经重新设计并且非常易于使用。Check out 上面那个README文档和相关的env.properties 模板文件获取入门信息。  社区工作  一群热心的贡献者们正努力让Flex 更易于下载和编译，以便其能够在IDE中使用(包括 Flash Builder 和 ItelliJ)。他们制作了一个AIR/Flex应用来帮你下载所有必要组件，并放置在相应的目录。 点这里查看。 FlexUnit 正在捐献给Apache 的过程中。 关于Apache Flex 历史和发展，Justin Mclean 做了一个非常精彩的演讲。 360|Flex (现在叫 360|Stack) 宣布360|MIN，活动将于10月22-23日在拉斯维加斯举办。Adobe 2012 MAX大会将在同一周举办。360|MIN 是一个barcamp式的聚会活动，届时将会有许多Apache Flex 的贡献者在现场。  欲悉更多，请订阅 flex-dev 邮件列表！</description>
-    </item>
-    
-    <item>
-      <title>Flex 4 Fun Reading Notes</title>
-      <link>/posts/flex-4-fun-reading-notes/</link>
-      <pubDate>Mon, 01 Aug 2011 20:51:36 +0800</pubDate>
-      
-      <guid>/posts/flex-4-fun-reading-notes/</guid>
-      <description>You are about to embark on a great journey with the best possible companions:the solid Flash engine, the versatile Flex framework and a very good &amp;gt; teacher.You will seldom enjoy a programming book as much as you will this one.
+data：BitmapData 对象的 Vector 包含光标图像或图像。可提供多个图像，并将 frameRate 属性设置为使光标具有动画效果。但是位图大小有限制，最大光标大小为 32×32 像素。 frameRate：使光标具有动画效果的帧速率，在 data 属性中提供多个图像并将帧速率设置为大于 0 的值，以便为指针添加动画效果。光标帧速率可能不同于当前的 SWF 帧速率，就是说调整帧率后光标动画帧率不会变化。 hotSpot：以像素表示的光标热点，热点是指在光标上注册鼠标单击所在的点。默认情况下位于左上角 (0,0)。 代码示例 动态光标和静态光标的实现方式差不多，只需要在data中存入多个位图并设置frameRate。代码如下： private function createFakeCursor():void { this.fakeCursor = new Shape(); var bmp:BitmapData = this.generateCursorBmp(8); fakeCursor.graphics.beginBitmapFill(bmp); fakeCursor.graphics.drawRect(0,0,bmp.width,bmp.height); fakeCursor.graphics.endFill(); fakeCursor.visible = false; this.</description></item><item><title>Apache Flex 4.8.0 近况及试用</title><link>/posts/apache-flex-4-8-0-news-trial/</link><pubDate>Mon, 09 Jul 2012 19:51:11 +0800</pubDate><guid>/posts/apache-flex-4-8-0-news-trial/</guid><description>自从Apache接手Flex已经过去了半年。虽然已经有一年没有开发Flex应用，但是一直关注着对于这个框架的未来和发展。To be or not to be, that’s the question.
+Apache Flex 最新进展（2012/7） Apache Flex 工作 Apache Flex 团队目前正在测试一个Apache Flex 4.8.0的发行候选版本。Apache Flex 4.8.0 是Adobe Flex 4.6.0的等同版本。当前的主要工作是保证在新的Apache license下，能够继续使用Flex框架所有的特性；下个阶段会进行bug修复，新功能和新组件的实现工作。如果想自行build可以Check out 这个说明文档。 商标问题已经大量清除。 JIRA已经导入了Adobe bug tracker 所有问题。 问题附件涵盖直到2012年1月30日之前的SDK，DMV和Automation bug。 Mustella 测试框架已经捐献并做了一些测试。 对于那些想自己编译编译器，框架等代码的人，基于ANT的编译脚本已经重新设计并且非常易于使用。Check out 上面那个README文档和相关的env.properties 模板文件获取入门信息。 社区工作 一群热心的贡献者们正努力让Flex 更易于下载和编译，以便其能够在IDE中使用(包括 Flash Builder 和 ItelliJ)。他们制作了一个AIR/Flex应用来帮你下载所有必要组件，并放置在相应的目录。 点这里查看。 FlexUnit 正在捐献给Apache 的过程中。 关于Apache Flex 历史和发展，Justin Mclean 做了一个非常精彩的演讲。 360|Flex (现在叫 360|Stack) 宣布360|MIN，活动将于10月22-23日在拉斯维加斯举办。Adobe 2012 MAX大会将在同一周举办。360|MIN 是一个barcamp式的聚会活动，届时将会有许多Apache Flex 的贡献者在现场。 欲悉更多，请订阅 flex-dev 邮件列表！</description></item><item><title>Flex 4 Fun Reading Notes</title><link>/posts/flex-4-fun-reading-notes/</link><pubDate>Mon, 01 Aug 2011 20:51:36 +0800</pubDate><guid>/posts/flex-4-fun-reading-notes/</guid><description>You are about to embark on a great journey with the best possible companions:the solid Flash engine, the versatile Flex framework and a very good &amp;gt; teacher.You will seldom enjoy a programming book as much as you will this one.
 Romain Guy
- About the Book 从N神的 RIABook.cn 找到的一本介绍Flex 4 开发的书，还不到300页。重点发掘 Flex 4 SDK 的绘图和动画功能，详细地介绍了 Flex 4 的这些新特性，并提供了很多例子。所以很适合像我这样从Flex 3 起步的开发者。恰当的绘图和动画能带来更好的用户体验，而这也是Flex 4 中很酷很有趣的地方，书名正由此而来(Flex For Fun)。
-About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK Team 研究图形动画。曾是 Adobe Flex SDK Team 的资深计算机科学家 (senior computer scientist)，负责 Flex effects 和 Flex 4 中新效果的架构。在此之前，他在 Sun Java client team 工作了几年，合著了一本关于使用Java 客户端平台开发丰富用户体验应用的书 Filthy Rich Clients 。 个人博客：http://chetchat.</description>
-    </item>
-    
-    <item>
-      <title>《Flex3权威指南》阅读总结</title>
-      <link>/posts/flex3-tfs-reading-summary/</link>
-      <pubDate>Mon, 25 Jul 2011 12:31:00 +0800</pubDate>
-      
-      <guid>/posts/flex3-tfs-reading-summary/</guid>
-      <description>这本书比较全面地介绍了Flex 3 SDK的各项组件和功能。这是一个基于web前端技术的框架。作者从Flex组件开始讲解，以flexGrocer为实践项目，将每课教授的内容切实地运用到项目中。
+About the Book 从N神的 RIABook.cn 找到的一本介绍Flex 4 开发的书，还不到300页。重点发掘 Flex 4 SDK 的绘图和动画功能，详细地介绍了 Flex 4 的这些新特性，并提供了很多例子。所以很适合像我这样从Flex 3 起步的开发者。恰当的绘图和动画能带来更好的用户体验，而这也是Flex 4 中很酷很有趣的地方，书名正由此而来(Flex For Fun)。
+About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK Team 研究图形动画。曾是 Adobe Flex SDK Team 的资深计算机科学家 (senior computer scientist)，负责 Flex effects 和 Flex 4 中新效果的架构。在此之前，他在 Sun Java client team 工作了几年，合著了一本关于使用Java 客户端平台开发丰富用户体验应用的书 Filthy Rich Clients 。 个人博客：http://chetchat.</description></item><item><title>《Flex3权威指南》阅读总结</title><link>/posts/flex3-tfs-reading-summary/</link><pubDate>Mon, 25 Jul 2011 12:31:00 +0800</pubDate><guid>/posts/flex3-tfs-reading-summary/</guid><description>这本书比较全面地介绍了Flex 3 SDK的各项组件和功能。这是一个基于web前端技术的框架。作者从Flex组件开始讲解，以flexGrocer为实践项目，将每课教授的内容切实地运用到项目中。
 主要内容有：
- 组件：flex组件分类及如何自定义组件； 事件：如何监听事件，捕获事件，以及如何自定义事件，如何发布事件。事件是如何冒泡的？ 外观：如何自定义控件的外观，使用skin或者css的方法； 拖拽功能：如何使用拖放代理，如何自定义，拖放时对象的赋值等等； 深度链接和历史管理：可以使用浏览器的前进后退功能； 打印功能：FlexPrintJob，PrintDataGrid，功能比较弱； 格式器，验证器：formatter，validator，非常有用！ 后台联系紧密的RemoteObject，还有几种远程交互的方式：httpService，SOAP,blazeDS,LCDS&amp;hellip; AIR：使用AIR开发桌面应用；  最后介绍了非常重要的Flash Player 的GC策略，以及如何防止内存泄漏。如何使用Flash Builder 的profiling功能对应用进行memory profiling, performance profiling。
+组件：flex组件分类及如何自定义组件； 事件：如何监听事件，捕获事件，以及如何自定义事件，如何发布事件。事件是如何冒泡的？ 外观：如何自定义控件的外观，使用skin或者css的方法； 拖拽功能：如何使用拖放代理，如何自定义，拖放时对象的赋值等等； 深度链接和历史管理：可以使用浏览器的前进后退功能； 打印功能：FlexPrintJob，PrintDataGrid，功能比较弱； 格式器，验证器：formatter，validator，非常有用！ 后台联系紧密的RemoteObject，还有几种远程交互的方式：httpService，SOAP,blazeDS,LCDS&amp;hellip; AIR：使用AIR开发桌面应用； 最后介绍了非常重要的Flash Player 的GC策略，以及如何防止内存泄漏。如何使用Flash Builder 的profiling功能对应用进行memory profiling, performance profiling。
 全书通过一个flexGrocer项目，让读者逐步在实践中学习flex的各项特性和功能，但不足的是，操作步骤充斥全书，很少讲解系统的架构，原理，以及操作的理由。与其叫“权威指南”，不如称之为“使用指南”，该书的英文原名则十分贴切——&amp;ldquo;training from the source&amp;rdquo;。
-由于方方面面都介绍到了，因此十分适合想对flex 作进一步了解的开发者。没有ActionScript语法解释，没有架构设计讲解，是一大遗憾，不过这本书的定位就这样了，看来要看别的书籍来填补了。</description>
-    </item>
-    
-    <item>
-      <title>《Flex3权威指南》学习笔记 04</title>
-      <link>/posts/flex3-tfs-notes-04/</link>
-      <pubDate>Mon, 18 Jul 2011 22:23:56 +0800</pubDate>
-      
-      <guid>/posts/flex3-tfs-notes-04/</guid>
-      <description>Lesson 21：部署Flex应用程序  AIR: Adobe Integrated Runtime AIR 特点：  直接访问文件系统； 可以从操作系统拖拽文件到AIR应用中； 使用窗口API，可实现自定义应用外观； 提供API部署不完全连接Internet的应用； 脱离浏览器，可设置快捷键(hotkey); 提供嵌入式数据库，具有更强更完备的客户端数据存储能力。    Lesson 22：创建过渡和行为  行为和效果：  淡入淡出 向内溶解，向外溶解 移动或重新调整组件 旋转组件 缩放 从左、右、上、下显示 光亮，光圈 音效等等    Lesson 23：Flex的打印功能  Flex提供的打印功能比较简单，可以满足基本的应用，但是复杂一点的就有些吃不消。不知道SDK4.0+有没有改善，我自己暂时还没有使用过SDK4.0+的打印功能。 FlexPrintJob：打印对象( 容器，组件等) PrintDataGrid：适用于打印的DataGrid，就是针对打印做过优化的，利于显示和具备更好的打印效果。 FlexPrintJob流程：  new FlexPrintJob() start() addObject() send() 清理工作   FlexPrintJobScaleType : 打印缩放比例，提供几种打印内容与纸张之间的比例关系；  MATCH_WIDTH 适合宽度，缩放对象以填充可用页面宽度。 MATCH_HEIGHT 适合高度，缩放对象以填充可用页面高度。 SHOW_ALL 显示全部，缩放对象以适合在单个页面中填充一个尺寸；也就是说，选择 MATCH_WIDTH 或 MATCH_HEIGHT 缩放类型中较小的值。 FILL_PAGE 填充页面，将对象缩放到至少一整页那么大；也就是说，选择较大的 MATCH_WIDTH 或 MATCH_HEIGHT 缩放类型。 NONE 不设置，不要缩放输出。    Lesson 24 ：使用共享对象  使用SharedObject类保存特定的用户信息，看了下在线文档，写的很清楚而且详细。“SharedObject * 类用于在用户计算机或服务器上读取和存储有限的数据量。使用共享对象，可在永久贮存在本地计算机或远程服务器上的多个客户端 SWF 文件和对象之间实现实时数据共享。本地共享对象类似于浏览器 Cookie，远程共享对象类似于实时数据传输设备。为了使用远程共享对象，您需要 Adobe Flash Media Server。” 使用SharedObject可以执行以下操作：  保持本地永久性； 在Flash Media Server 上存储并共享数据； 实时共享数据。（这个功能总是被演示一次又一次…）   ShardObject 特性：  保存在客户端上 扩展名为 .</description>
-    </item>
-    
-    <item>
-      <title>《Flex3权威指南》学习笔记 03</title>
-      <link>/posts/flex3-tfs-notes-03/</link>
-      <pubDate>Wed, 06 Jul 2011 22:40:49 +0800</pubDate>
-      
-      <guid>/posts/flex3-tfs-notes-03/</guid>
-      <description>Lesson 16：自定义Flex应用程序的外观   样式和皮肤；
-  使用标签属性设置样式：如 color，disabledColor，fontSize，fontStyle，fontWeight，fontFamily … ; 也可使用 ActionScript 设置：mybButton.setStyle(“color”,”#00FF00”);
-  样式继承： ASDoc中，每个样式有个 “CSS继承”(CSS Inheritance) 的属性。表示该样式是否可以从其父容器出继承；
-  &amp;lt;mx:Style&amp;gt; 设置样式约定：
- 样式名小写，单词之间使用连字符隔开：background-color: #FFFFFF; 也可使用大小写混合的方式： backgroundColor: #00FF00;    类选择符：将一组样式属性定义为一个样式类。 .CustomCombo { color: #00FF00; selectedColor: #EA800C; } 组件可使用 styleName 调用：
- &amp;lt;mx:ComboBox styleName=”customCombo”/&amp;gt;   类型选择符 ComboBox { color: #FF0000; selectedColor: #EA800C; } 这样设置，将影响所有叫 “ComboBox”类的样式；
-  使用 Flash Builder 编写 CSS，只要打开CSS文件编辑即可；
-  使用CSS文件设置样式，将文件编译到应用程序中，就必须重新编译应用程序；</description>
-    </item>
-    
-    <item>
-      <title>《Flex3权威指南》学习笔记 02</title>
-      <link>/posts/flex3-tfs-notes-02/</link>
-      <pubDate>Tue, 05 Jul 2011 22:28:42 +0800</pubDate>
-      
-      <guid>/posts/flex3-tfs-notes-02/</guid>
-      <description>Lesson 9：使用自定义事件  松耦合架构：可以使用自定义事件，将更改通知其他组件，不要求组件知道应用程序其余部分的信息； View 通过 事件 与 Controller 建立联系； 无论何时触发事件，Flash Player 都会发布事件。事件流描述了事件对象在应用程序中传递的过程，当事件被触发时，事件对象穿过层层容器，在根应用程序与负责事件处理的组件之间往返传递； Flex事件冒泡过程：  捕获期：事件发出后，按照容器由外到内找到事件的目标，即与用户交互的目标组件； 目标期：调用事件目标对象的事件处理函数； 冒泡期：由内向外发送事件，检查其他监听器，重复上述步骤2；   Event 类所有实例都具有 bubbles * 属性，用来指定事件对象是否会参与事件流的冒泡期。如果事件的bubbles属性为true，则发布事件的组件，其每一层父容器都能够捕获事件。若为false，则只有事件源可以捕获。缺省值为false；  Lesson 10：用ActionScript 3.0创建自定义组件  在MXML中创建组件，可以使用 MXML标签向组件添加元素，而在 ActionScript 中则需要重写(override) createChildren() 方法。Flex组件在初始化中，会调用 createChildren()* 。其调用顺序为：  构造函数( Constructor ); createChildren(); //需要重写 commitProperties(); measure(); updateDisplayList(); //需要重写   Flex容器：  布局区域：绘制子元素的地方； 边饰部分：  边框 背景 滚动条 页边距 标题 脚注 ……     measure()：计算组件的默认大小和（可选）默认最小大小； updateDisplayList()：通过设置此容器子项的位置和大小来响应大小更改； getExplicitOrMeasuredHeight()：确定是使用显式高度还是测量高度的一种简便方法； getExplicitOrMeasuredWidth()：确定是使用显式宽度还是测量宽度的一种简便方法； setActualSize()：设置此对象的实际大小。 控件的描述及功能介绍，多用用toolTip属性；  Lesson 11：使用DataGrid与项目呈现器  DataGrid：能为用户与数据交互提供最多的选项，但也会带来额外的开销； Flex 表示月份时， 0 代表一月，11代表12月。Date(2010,3,1) 即初始化为 “2010年4月1日”； DataGrid 默认支持数据排序； 可使用 set/get 函数 设置/获取对象属性值，在函数中亦可作其它相关的操作，保证组件数据的及时更新。getter/setter不能太复杂，否则可能无效； AdvancedDataGrid 属性：  sortExpertMode：默认情况下，sortExpertMode 属性设置为 false，这意味着在某列的标题区域单击，将按该列对 AdvancedDataGrid 控件的行进行排序； styleFunction：呈现每个单元格时调用的回调函数；   要掌握使用renderer呈现器在DataGrid中的使用；  Lesson 12：使用拖放  概念  拖拽初始器：(源控件) –&amp;gt; dragEnabled； 拖拽代理：(拖拽过程中紧随指针显示的内容); 释放目标：(目标控件) –&amp;gt; dropEnabled； 拖拽源：(拖拽数据；   非增强型组件上的隐藏拖放机制：  把数据赋值给 DragSource对象（DragSource.</description>
-    </item>
-    
-    <item>
-      <title>《Flex3权威指南》学习笔记 01</title>
-      <link>/posts/flex3-tfs-notes-01/</link>
-      <pubDate>Mon, 04 Jul 2011 22:03:38 +0800</pubDate>
-      
-      <guid>/posts/flex3-tfs-notes-01/</guid>
-      <description>很久以前看的书，也是很久以前写的笔记。再回顾一遍，算是温故知新吧。
- Lesson 1-5：基础知识  Flex 并非从上到下创建组件，而可以看成是由内到外创建。只有应用程序的所有元素都已创建后，此时才是向外部资源请求并使用数据的适当时机； 直接在 ActionScript 中建立as类，可以创建自定义的事件类，建立值对象(value object)等； as元标签(Metadata)：[Bindable] 被指定在 class 关键字前，表示该类的每一个属性都可以用来绑定，可以被绑定到空间或其它数据结构； 使用自定义类时，可以使用 import 关键字类导入需要的类，在Flash Builder中，一般会被自动导入； 所有MXML文件最终会被编译为一个 ActionScript 类，在创建 MXML 文件时必须遵守与创建 ActionScript 类时相同的约定； ActionScript 中，uint 数据类型表示无符号整数，非负数； 使用 httpService返回数据的2种方法：  直接在绑定中使用数据； 使用 resultEvent事件处理函数；   若要将数据填入空间或者过滤，排序等手段操作数据，应选择 ArrayCollection 数据结构； 支持 dataProvider 的控件有三个优点：  可将相同数据填入多个控件； 可在运行时断开dataProvider； 当修改 dataProvider 时，更改会反映到所有使用它的控件上；    Lesson 6：为控件使用远程XML数据   RPC,HttpService调用过程：
- &amp;lt;mx:Application 设置RPC &amp;gt;； &amp;lt;mx:HttpService 设置结果处理函数dataHandler(event)&amp;gt;； &amp;lt;mx: script &amp;gt; dataHandler将获取的数据赋予变量或控件；    XML结构：</description>
-    </item>
-    
-    <item>
-      <title>绽放的青春，灿烂的人生</title>
-      <link>/posts/the-best-of-youth/</link>
-      <pubDate>Tue, 28 Jun 2011 21:41:59 +0800</pubDate>
-      
-      <guid>/posts/the-best-of-youth/</guid>
-      <description>这不是“一部充满激情的史诗式电影”，这是一段充满复杂感情的平凡人生故事。
- 周末花时间看完了意大利电影《灿烂人生》(La meglio gioventù)。影片讲述了1966至2003年间，一个普通的意大利六口之家 —— 卡拉蒂(Carati) 家族的历史变迁。着重叙述家中感情深厚的两兄弟：马泰奥(Matteo, Alessio Boni 饰) 和尼古拉( Nicola, Luigi Lo Cascio 饰) 从小在罗马长大，年少轻狂的他们有着共同的人生目标与梦想。他们相约暑假后一起去旅行，却在旅途开始时遇上精神病少女佐珍(Giorgia, Jasmine Trinca 饰 )。在了解佐珍的不幸遭遇并试图帮助其逃离精神病院后，兄弟俩的人生观产生了分歧，从此分道扬镳。尼古拉成为了精神病医生，为众多像佐珍一样被虐待的精神病人争取福利和自由。而马泰奥却弃笔从戎，成为了一名警察……
+由于方方面面都介绍到了，因此十分适合想对flex 作进一步了解的开发者。没有ActionScript语法解释，没有架构设计讲解，是一大遗憾，不过这本书的定位就这样了，看来要看别的书籍来填补了。</description></item><item><title>《Flex3权威指南》学习笔记 04</title><link>/posts/flex3-tfs-notes-04/</link><pubDate>Mon, 18 Jul 2011 22:23:56 +0800</pubDate><guid>/posts/flex3-tfs-notes-04/</guid><description>Lesson 21：部署Flex应用程序 AIR: Adobe Integrated Runtime AIR 特点： 直接访问文件系统； 可以从操作系统拖拽文件到AIR应用中； 使用窗口API，可实现自定义应用外观； 提供API部署不完全连接Internet的应用； 脱离浏览器，可设置快捷键(hotkey); 提供嵌入式数据库，具有更强更完备的客户端数据存储能力。 Lesson 22：创建过渡和行为 行为和效果： 淡入淡出 向内溶解，向外溶解 移动或重新调整组件 旋转组件 缩放 从左、右、上、下显示 光亮，光圈 音效等等 Lesson 23：Flex的打印功能 Flex提供的打印功能比较简单，可以满足基本的应用，但是复杂一点的就有些吃不消。不知道SDK4.0+有没有改善，我自己暂时还没有使用过SDK4.0+的打印功能。 FlexPrintJob：打印对象( 容器，组件等) PrintDataGrid：适用于打印的DataGrid，就是针对打印做过优化的，利于显示和具备更好的打印效果。 FlexPrintJob流程： new FlexPrintJob() start() addObject() send() 清理工作 FlexPrintJobScaleType : 打印缩放比例，提供几种打印内容与纸张之间的比例关系； MATCH_WIDTH 适合宽度，缩放对象以填充可用页面宽度。 MATCH_HEIGHT 适合高度，缩放对象以填充可用页面高度。 SHOW_ALL 显示全部，缩放对象以适合在单个页面中填充一个尺寸；也就是说，选择 MATCH_WIDTH 或 MATCH_HEIGHT 缩放类型中较小的值。 FILL_PAGE 填充页面，将对象缩放到至少一整页那么大；也就是说，选择较大的 MATCH_WIDTH 或 MATCH_HEIGHT 缩放类型。 NONE 不设置，不要缩放输出。 Lesson 24 ：使用共享对象 使用SharedObject类保存特定的用户信息，看了下在线文档，写的很清楚而且详细。“SharedObject * 类用于在用户计算机或服务器上读取和存储有限的数据量。使用共享对象，可在永久贮存在本地计算机或远程服务器上的多个客户端 SWF 文件和对象之间实现实时数据共享。本地共享对象类似于浏览器 Cookie，远程共享对象类似于实时数据传输设备。为了使用远程共享对象，您需要 Adobe Flash Media Server。” 使用SharedObject可以执行以下操作： 保持本地永久性； 在Flash Media Server 上存储并共享数据； 实时共享数据。（这个功能总是被演示一次又一次…） ShardObject 特性： 保存在客户端上 扩展名为 .</description></item><item><title>《Flex3权威指南》学习笔记 03</title><link>/posts/flex3-tfs-notes-03/</link><pubDate>Wed, 06 Jul 2011 22:40:49 +0800</pubDate><guid>/posts/flex3-tfs-notes-03/</guid><description>Lesson 16：自定义Flex应用程序的外观 样式和皮肤；
+使用标签属性设置样式：如 color，disabledColor，fontSize，fontStyle，fontWeight，fontFamily … ; 也可使用 ActionScript 设置：mybButton.setStyle(“color”,”#00FF00”);
+样式继承： ASDoc中，每个样式有个 “CSS继承”(CSS Inheritance) 的属性。表示该样式是否可以从其父容器出继承；
+&amp;lt;mx:Style&amp;gt; 设置样式约定：
+样式名小写，单词之间使用连字符隔开：background-color: #FFFFFF; 也可使用大小写混合的方式： backgroundColor: #00FF00; 类选择符：将一组样式属性定义为一个样式类。 .CustomCombo { color: #00FF00; selectedColor: #EA800C; } 组件可使用 styleName 调用：
+&amp;lt;mx:ComboBox styleName=”customCombo”/&amp;gt;
+类型选择符 ComboBox { color: #FF0000; selectedColor: #EA800C; } 这样设置，将影响所有叫 “ComboBox”类的样式；
+使用 Flash Builder 编写 CSS，只要打开CSS文件编辑即可；
+使用CSS文件设置样式，将文件编译到应用程序中，就必须重新编译应用程序；</description></item><item><title>《Flex3权威指南》学习笔记 02</title><link>/posts/flex3-tfs-notes-02/</link><pubDate>Tue, 05 Jul 2011 22:28:42 +0800</pubDate><guid>/posts/flex3-tfs-notes-02/</guid><description>Lesson 9：使用自定义事件 松耦合架构：可以使用自定义事件，将更改通知其他组件，不要求组件知道应用程序其余部分的信息； View 通过 事件 与 Controller 建立联系； 无论何时触发事件，Flash Player 都会发布事件。事件流描述了事件对象在应用程序中传递的过程，当事件被触发时，事件对象穿过层层容器，在根应用程序与负责事件处理的组件之间往返传递； Flex事件冒泡过程： 捕获期：事件发出后，按照容器由外到内找到事件的目标，即与用户交互的目标组件； 目标期：调用事件目标对象的事件处理函数； 冒泡期：由内向外发送事件，检查其他监听器，重复上述步骤2； Event 类所有实例都具有 bubbles * 属性，用来指定事件对象是否会参与事件流的冒泡期。如果事件的bubbles属性为true，则发布事件的组件，其每一层父容器都能够捕获事件。若为false，则只有事件源可以捕获。缺省值为false； Lesson 10：用ActionScript 3.0创建自定义组件 在MXML中创建组件，可以使用 MXML标签向组件添加元素，而在 ActionScript 中则需要重写(override) createChildren() 方法。Flex组件在初始化中，会调用 createChildren()* 。其调用顺序为： 构造函数( Constructor ); createChildren(); //需要重写 commitProperties(); measure(); updateDisplayList(); //需要重写 Flex容器： 布局区域：绘制子元素的地方； 边饰部分： 边框 背景 滚动条 页边距 标题 脚注 …… measure()：计算组件的默认大小和（可选）默认最小大小； updateDisplayList()：通过设置此容器子项的位置和大小来响应大小更改； getExplicitOrMeasuredHeight()：确定是使用显式高度还是测量高度的一种简便方法； getExplicitOrMeasuredWidth()：确定是使用显式宽度还是测量宽度的一种简便方法； setActualSize()：设置此对象的实际大小。 控件的描述及功能介绍，多用用toolTip属性； Lesson 11：使用DataGrid与项目呈现器 DataGrid：能为用户与数据交互提供最多的选项，但也会带来额外的开销； Flex 表示月份时， 0 代表一月，11代表12月。Date(2010,3,1) 即初始化为 “2010年4月1日”； DataGrid 默认支持数据排序； 可使用 set/get 函数 设置/获取对象属性值，在函数中亦可作其它相关的操作，保证组件数据的及时更新。getter/setter不能太复杂，否则可能无效； AdvancedDataGrid 属性： sortExpertMode：默认情况下，sortExpertMode 属性设置为 false，这意味着在某列的标题区域单击，将按该列对 AdvancedDataGrid 控件的行进行排序； styleFunction：呈现每个单元格时调用的回调函数； 要掌握使用renderer呈现器在DataGrid中的使用； Lesson 12：使用拖放 概念 拖拽初始器：(源控件) –&amp;gt; dragEnabled； 拖拽代理：(拖拽过程中紧随指针显示的内容); 释放目标：(目标控件) –&amp;gt; dropEnabled； 拖拽源：(拖拽数据； 非增强型组件上的隐藏拖放机制： 把数据赋值给 DragSource对象（DragSource.</description></item><item><title>《Flex3权威指南》学习笔记 01</title><link>/posts/flex3-tfs-notes-01/</link><pubDate>Mon, 04 Jul 2011 22:03:38 +0800</pubDate><guid>/posts/flex3-tfs-notes-01/</guid><description>很久以前看的书，也是很久以前写的笔记。再回顾一遍，算是温故知新吧。
+Lesson 1-5：基础知识 Flex 并非从上到下创建组件，而可以看成是由内到外创建。只有应用程序的所有元素都已创建后，此时才是向外部资源请求并使用数据的适当时机； 直接在 ActionScript 中建立as类，可以创建自定义的事件类，建立值对象(value object)等； as元标签(Metadata)：[Bindable] 被指定在 class 关键字前，表示该类的每一个属性都可以用来绑定，可以被绑定到空间或其它数据结构； 使用自定义类时，可以使用 import 关键字类导入需要的类，在Flash Builder中，一般会被自动导入； 所有MXML文件最终会被编译为一个 ActionScript 类，在创建 MXML 文件时必须遵守与创建 ActionScript 类时相同的约定； ActionScript 中，uint 数据类型表示无符号整数，非负数； 使用 httpService返回数据的2种方法： 直接在绑定中使用数据； 使用 resultEvent事件处理函数； 若要将数据填入空间或者过滤，排序等手段操作数据，应选择 ArrayCollection 数据结构； 支持 dataProvider 的控件有三个优点： 可将相同数据填入多个控件； 可在运行时断开dataProvider； 当修改 dataProvider 时，更改会反映到所有使用它的控件上； Lesson 6：为控件使用远程XML数据 RPC,HttpService调用过程：
+&amp;lt;mx:Application 设置RPC &amp;gt;； &amp;lt;mx:HttpService 设置结果处理函数dataHandler(event)&amp;gt;； &amp;lt;mx: script &amp;gt; dataHandler将获取的数据赋予变量或控件； XML结构：</description></item><item><title>绽放的青春，灿烂的人生</title><link>/posts/the-best-of-youth/</link><pubDate>Tue, 28 Jun 2011 21:41:59 +0800</pubDate><guid>/posts/the-best-of-youth/</guid><description>这不是“一部充满激情的史诗式电影”，这是一段充满复杂感情的平凡人生故事。
+周末花时间看完了意大利电影《灿烂人生》(La meglio gioventù)。影片讲述了1966至2003年间，一个普通的意大利六口之家 —— 卡拉蒂(Carati) 家族的历史变迁。着重叙述家中感情深厚的两兄弟：马泰奥(Matteo, Alessio Boni 饰) 和尼古拉( Nicola, Luigi Lo Cascio 饰) 从小在罗马长大，年少轻狂的他们有着共同的人生目标与梦想。他们相约暑假后一起去旅行，却在旅途开始时遇上精神病少女佐珍(Giorgia, Jasmine Trinca 饰 )。在了解佐珍的不幸遭遇并试图帮助其逃离精神病院后，兄弟俩的人生观产生了分歧，从此分道扬镳。尼古拉成为了精神病医生，为众多像佐珍一样被虐待的精神病人争取福利和自由。而马泰奥却弃笔从戎，成为了一名警察……
 毫无疑问，这部长达六小时的意大利家族巨片，并不是别人所说的“一部充满激情的史诗式电影”，而是一段充满复杂感情的平凡人生故事。
 1966年夏，卡拉蒂家的两个儿子正为期末考试做最后的准备。性格忧郁，沉默寡言的马泰奥在期末考试中，因推崇一位辱骂父辈的边缘诗人，遭到老师的责难，他无法忍受遂而弃考离去。他的兄长尼古拉天性活泼，为人开朗，在医学考试中，因其身怀仁爱之心受到老师的赞扬和青睐。考试结束后，他们原本计划和朋友一同到北欧旅行。马泰奥在精神病院做护工认识了名叫佐珍的精神病少女，发现她曾被过度电击虐待，出于同情偷偷将其带出精神病院，并与尼古拉一起帮助佐珍找到她的父亲，然而佐珍的父亲和继母并不愿意收留她，而是希望佐珍能够继续留在精神病院治疗。脾气暴烈的马泰奥为此和佐珍的父亲打了起来，尼古拉因此就更没有希望说服佐珍的老爹了。在途中佐珍因无法提供证件被警察盘问，由于带走精神病人已经违法，兄弟俩爱莫能助，只能眼睁睁地看着佐珍被带走。那一晚，兄弟二人在人生道路上从此各奔东西，马泰奥放弃攻读文学，返回罗马加入了军队。尼古拉按原计划远足北欧……
 1983年，新年除夕，卡拉蒂家团圆聚会，马泰奥匆匆告别了母亲回到自己的寓所，伴随着电视机里嘈杂的广告，窗外不断绽放的礼花，&amp;ldquo;Happy New Year……&amp;quot;,马泰奥纵身一跃，跳下了阳台。
 一般情况下，个人在做出重要抉择时，往往会使某个小事件被放大成为一个关键的转折点，影片想要表现的正是这种事件和个人，政治等因素之间的相互影响，并由此催生各个角色的性格、观念的变化及其各自人生道路的不同。如果佐珍不被警察带走，或许马泰奥会和哥哥继续旅行，或许他不会从军……如果尼古拉鼓励她的妻子继续弹钢琴，或许茱莉亚(Giulia)不会成为激进分子而加入红色旅，或许她也不会遭受十七年的牢狱之灾。可是人生并不允许有过多的假设，即使马泰奥不弃笔从戎，他忧郁纯真的性格最终也会导致他的自我毁灭。加入军队的他想去拯救一切，却发现自己无力改变任何事情。在西西里为了调查黑手党的种种罪行，与案发现场的围观群众发生冲突却被停职；返回罗马后重逢米蕾拉(Mirella)却瞻前顾后抽身离去。马泰奥发现自己唯有结束自己的生命， 生活才不会那么痛苦。
 人生是平凡的，绽放了才精彩。
- 电影主题曲：House Of The Rising Sun - The Animals</description>
-    </item>
-    
-    <item>
-      <title>Balsamiq Mockups 的幕后故事</title>
-      <link>/posts/story-behind-balsamiq-mockups/</link>
-      <pubDate>Sat, 05 Mar 2011 22:45:53 +0800</pubDate>
-      
-      <guid>/posts/story-behind-balsamiq-mockups/</guid>
-      <description>Balsamiq is a small group of passionate individuals who believe work should be fun and that life is too short for bad software.
- Balsamiq Mockups, 现在已经不用多作介绍了，相信大家都了解。那我就说点不为人知的，这是一段相当激励人心的创业故事。
-怀揣梦想 Balsamiq, 源自著名的意大利甜醋 —— Balsamic vinegar (Italian: aceto balsamico)， Balsamiq Studios 的创始人 Peldi  是意大利人，在博罗尼亚大学取得计算机科学硕士学位之后，2001年他带着他的“五年计划”去了美国 —— 在大公司里尽可能地学习汲取知识，然后回意大利做自己的想做的事。他花了六年半实现了自己的计划。
+电影主题曲：House Of The Rising Sun - The Animals</description></item><item><title>Balsamiq Mockups 的幕后故事</title><link>/posts/story-behind-balsamiq-mockups/</link><pubDate>Sat, 05 Mar 2011 22:45:53 +0800</pubDate><guid>/posts/story-behind-balsamiq-mockups/</guid><description>Balsamiq is a small group of passionate individuals who believe work should be fun and that life is too short for bad software.
+Balsamiq Mockups, 现在已经不用多作介绍了，相信大家都了解。那我就说点不为人知的，这是一段相当激励人心的创业故事。
+怀揣梦想 Balsamiq, 源自著名的意大利甜醋 —— Balsamic vinegar (Italian: aceto balsamico)， Balsamiq Studios 的创始人 Peldi 是意大利人，在博罗尼亚大学取得计算机科学硕士学位之后，2001年他带着他的“五年计划”去了美国 —— 在大公司里尽可能地学习汲取知识，然后回意大利做自己的想做的事。他花了六年半实现了自己的计划。
 峥嵘岁月 2006年，身在Adobe的Peldi 在公司里引领了一波部署 Atlassian Confluence 的风潮，各部门竞相采用Confluence来构建自己的wiki系统，连HR部门也来凑热闹。(呃，这个我前年研究过，曾经建议Leader搭建小组的wiki系统，未被采纳) 星星之火，可以燎原。完全可以这么形容。
 凤鸣朝阳 此时机遇正悄悄接近：Peldi接替了辞职的上司接管了团队，他的房东要卖房，他父母想见孙子，再加上听闻小孩在旧金山上学前班居然要2.2万美元，他的确不想夫妻俩无依无靠地在旧金山过这样的日子。有一天，一个产品经理来给他讲设计方案，但是这位姐姐没用过画草图的工具(- -,这产品经理也太…)。于是Peldi就找个Confluence的类似visio的插件 —— Gliffy ， 使用Flash实现的，而且据说这款插件是旧金山的一个2个家伙团队做的，而且财务状况相当好。这时候Peldi自己盘算着，这个东西我一个人就能做，不仅可以作为Confluence的插件，还可以作为独立的web应用。
 2007年8月左右，成立Balsamiq 的想法逐渐在Peldi的脑海里形成，而他在Adobe接手的项目要在2008年春季出货，因此如果要辞职成立公司，那么 他就必须在2008年春季之前做出一个可以卖得出去的Balsamiq Mockups。而且成立公司之后能否盈利还是个未知数。
 就这样，每天晚上哄宝宝睡觉之后，Peldi都要在厨房继续写代码，从晚8点写到12点。周末也写写代码。就这样2008年他回意大利办了手续，6月15日结束了在Adobe的工作。4天之后，他开始运作Balsamiq。
-Balsamiq Time !! 仅用了三周的时间，Balsamiq 就实现了盈利 ，5个月之后，收入已经达到 10万美元 ，这些他都明确地写在了自己的blog里，纽约时报也曾报道过。</description>
-    </item>
-    
-    <item>
-      <title>原型设计工具 Balsamiq Mockups</title>
-      <link>/posts/balsamiq-mockups/</link>
-      <pubDate>Mon, 28 Feb 2011 22:45:32 +0800</pubDate>
-      
-      <guid>/posts/balsamiq-mockups/</guid>
-      <description>Mockups is bitchin’. Pure and simple. It’s rare to find a tool that both devs and non-devs enjoy using, and use productively together. Huge fan!”
+Balsamiq Time !! 仅用了三周的时间，Balsamiq 就实现了盈利 ，5个月之后，收入已经达到 10万美元 ，这些他都明确地写在了自己的blog里，纽约时报也曾报道过。</description></item><item><title>原型设计工具 Balsamiq Mockups</title><link>/posts/balsamiq-mockups/</link><pubDate>Mon, 28 Feb 2011 22:45:32 +0800</pubDate><guid>/posts/balsamiq-mockups/</guid><description>Mockups is bitchin’. Pure and simple. It’s rare to find a tool that both devs and non-devs enjoy using, and use productively together. Huge fan!”
 Jay Simons, VP of Marketing,Atlassian
- 这是一位 Balsamiq 的客户对 Balsamiq Mockups 的评价，像这样的褒奖还有很多。这款让 Balsamiq Studio 3周内实现盈利，5个月入账10万美元的软件，用销量进一步证明了用户的赞誉。的确，Balsamiq Mockups is “So freaking good”。
+这是一位 Balsamiq 的客户对 Balsamiq Mockups 的评价，像这样的褒奖还有很多。这款让 Balsamiq Studio 3周内实现盈利，5个月入账10万美元的软件，用销量进一步证明了用户的赞誉。的确，Balsamiq Mockups is “So freaking good”。
 简介 Balsamiq Mockups ，顾名思义，就是用于绘制 mockup 的工具。在早期的产品设计的需求阶段，人们习惯用笔和白板/纸来画草图，但是这样的草图一般只是为了沟通时便于表达和理解，很难将有价值的原型保存下来。Mockups 解决了这些问题。无论是绘制草图还是会议讨论，都可以使用Mockups来设计或者展示原型图。
-特点 简单易用：几乎不用学习怎么使用，很容易上手，而且支持中文，只需勾选“Use System Fonts”即可。 低保真图：简单明了的线框图设计，让设计师专注于功能，而非界面的样式，颜色等细节。 控件丰富：内置75种控件和187个图标，还可以从Balsamiq社区下载网友制作的控件。此外还有个比较好用的功能，就是的“重用组件库”，用户可以将自己制作的组件放入控件库中，便于在其它地方使用。 多种格式：采用 XML 格式保存原型图，也可以导出为多种格式，包括 PNG，XML，PDF等，XML 最有用，可以导入到其它的设计工具中生成相应的文件，如actionscript，MXML，MAML，HTML等等。 平台广泛：Mockups 起初是作为 Confluence 的插件开发出来的，而随后又诞生了 Mockups for Desktop，Mockups for JIRA 4.</description>
-    </item>
-    
-    <item>
-      <title>使用思维导图工具 PersonalBrain 进行需求分析</title>
-      <link>/posts/do-requirement-analysis-using-personalbrain/</link>
-      <pubDate>Sat, 26 Feb 2011 16:16:18 +0800</pubDate>
-      
-      <guid>/posts/do-requirement-analysis-using-personalbrain/</guid>
-      <description> TheBrain 的真正价值之所在——与其他信息和文件建立链接。这种链接被称作“跳跃”(jump)，因为你在这之前看不到这种联系。 —— 《华尔街日报》
- 很久以前用大英百科全书2008软件时，接触到其附带的一款思维导图软件——TheBrain，发展至今，它从众多Mind Map软件中脱颖而出，独树一帜 —— PersonalBrain。这款软件的使用者广泛，其中不乏黑客、科学家、警察、军人以及商界精英等等，他们用它来对自己的各种想法、所从事的项目甚至是收集到的犯罪数据进行处理。意大利警察顾问罗伯托•卡波迪耶奇(Roberto Capodieci)使用这款软件来寻找犯罪团伙成员之间的联系，而英国科学历史学家詹姆斯•伯克(James Burke)利用它来研究历史上伟大发明家之间的关联。这是一款非常奇特非常酷的应用程序，一旦你掌握如何使用它，我想你的后半辈子就离不了它了。
+特点 简单易用：几乎不用学习怎么使用，很容易上手，而且支持中文，只需勾选“Use System Fonts”即可。 低保真图：简单明了的线框图设计，让设计师专注于功能，而非界面的样式，颜色等细节。 控件丰富：内置75种控件和187个图标，还可以从Balsamiq社区下载网友制作的控件。此外还有个比较好用的功能，就是的“重用组件库”，用户可以将自己制作的组件放入控件库中，便于在其它地方使用。 多种格式：采用 XML 格式保存原型图，也可以导出为多种格式，包括 PNG，XML，PDF等，XML 最有用，可以导入到其它的设计工具中生成相应的文件，如actionscript，MXML，MAML，HTML等等。 平台广泛：Mockups 起初是作为 Confluence 的插件开发出来的，而随后又诞生了 Mockups for Desktop，Mockups for JIRA 4.</description></item><item><title>使用思维导图工具 PersonalBrain 进行需求分析</title><link>/posts/do-requirement-analysis-using-personalbrain/</link><pubDate>Sat, 26 Feb 2011 16:16:18 +0800</pubDate><guid>/posts/do-requirement-analysis-using-personalbrain/</guid><description> TheBrain 的真正价值之所在——与其他信息和文件建立链接。这种链接被称作“跳跃”(jump)，因为你在这之前看不到这种联系。 —— 《华尔街日报》
+很久以前用大英百科全书2008软件时，接触到其附带的一款思维导图软件——TheBrain，发展至今，它从众多Mind Map软件中脱颖而出，独树一帜 —— PersonalBrain。这款软件的使用者广泛，其中不乏黑客、科学家、警察、军人以及商界精英等等，他们用它来对自己的各种想法、所从事的项目甚至是收集到的犯罪数据进行处理。意大利警察顾问罗伯托•卡波迪耶奇(Roberto Capodieci)使用这款软件来寻找犯罪团伙成员之间的联系，而英国科学历史学家詹姆斯•伯克(James Burke)利用它来研究历史上伟大发明家之间的关联。这是一款非常奇特非常酷的应用程序，一旦你掌握如何使用它，我想你的后半辈子就离不了它了。
 特色 PersonalBrain不同与一般的思维导图软件，它有着自己的特色。
-  一般的Mind Map 只允许由中心思想向四周辐射，且每个节点只有一个父节点，这是一个树形结构，而PersonalBrain则没有这些限制，一个节点被称为”想法(thought)”，每个想法可以有若干个“父想法”，若干个”子想法”，若干个“跳跃想法(jump thought)”。这是模仿人脑的思维方式，多点辐射关联，最后完成的思维图就会是一张看似极其复杂的蛛网图。
-  在PersonalBrain的视图中，如果你点击一个想法，与之相关的其他想法会理解展开并围绕在其周围，这让你可以更专注地集中精力考虑这一个想法。
-  TheBrain 的真正价值在于一个想法与其他非直接相关的想法建立的链接 ——“跳跃想法”(jump thought)。
-  使用 刚刚学习使用PersonalBrain，还没入门，只做了一张树形结构的思维导图，本人暂时还没学会如何合理地使用 jump thoughts。一般先建立好主要树形结构，然后想到什么就把想法添加到相应的节点上，这样建立起一个个链接。虽然整体是树形的，没有凸显PersonalBrain的优势，但也可以从图上很容易地看出，目前思想体系中的重心，它们关系到整个AstroLog需求思路。
+一般的Mind Map 只允许由中心思想向四周辐射，且每个节点只有一个父节点，这是一个树形结构，而PersonalBrain则没有这些限制，一个节点被称为”想法(thought)”，每个想法可以有若干个“父想法”，若干个”子想法”，若干个“跳跃想法(jump thought)”。这是模仿人脑的思维方式，多点辐射关联，最后完成的思维图就会是一张看似极其复杂的蛛网图。
+在PersonalBrain的视图中，如果你点击一个想法，与之相关的其他想法会理解展开并围绕在其周围，这让你可以更专注地集中精力考虑这一个想法。
+TheBrain 的真正价值在于一个想法与其他非直接相关的想法建立的链接 ——“跳跃想法”(jump thought)。
+使用 刚刚学习使用PersonalBrain，还没入门，只做了一张树形结构的思维导图，本人暂时还没学会如何合理地使用 jump thoughts。一般先建立好主要树形结构，然后想到什么就把想法添加到相应的节点上，这样建立起一个个链接。虽然整体是树形的，没有凸显PersonalBrain的优势，但也可以从图上很容易地看出，目前思想体系中的重心，它们关系到整个AstroLog需求思路。
 进阶使用 展示下高手制作的MindMap，善用Jump thoughts，错综复杂。让人眼花缭乱。
 总结及感想 PersonalBrain用来做资料整理和项目分析，相比MindManager要逊色一点，但是其强大的功能是毋庸置疑的。但也比较难入门，我自己不太了解“jump thoughts”的具体的用法。而且习惯了使用树状结构，很难改适应其他方式，使用的时候努力将所有的想法按照一定的规则整理起来，但是随着想法的增多，这样的做法逐渐就行不通了，经常纠结某个thought是不是应该在某个节点上。查找了众多资料，发现很多有和我相同的问题，有个网友指出：“这样做根本无法体现PersonalBrain的优势。 要想用好PersonalBrain，可以看一下两个参数：Thoughts数量、Links数量/Thoughts数量（File-Utilities-Statistics）。因为网状结构适合解决复杂问题，少数量的Thoughts无法发挥这种优势，因此在平时应该把自己所有的想法一股脑投进去，并把能想到的有关系的Thoughts都连接起来，不要怕会乱成一团。这样当Thoughts数达到一定程度后，你所有的知识就会自动组合布局，变成一个有趣的复杂网络，当你查看这个网络的时候，会有一种检视一个小型秩序社会的感觉。 不管一个人的记忆力再好，也不可能把脑子里所有想法间的联系都发现并记住，而使用PersonalBrain则可以帮助你发现一些平时根本不会想起的联系，它可以代替你做到‘灵光一闪’”。所以，这是一款很Cool的应用程序，一旦学会就再也离不开它了。
- 参考资料
- http://www.douban.com/group/topic/1725222/ http://hi.baidu.com/jinhuali1980/blog/item/90a536f9eba3e2829f51467a.html http://www.360doc.com/content/10/0921/23/3297062_55475807.shtml http://blog.csdn.net/ThinkInChaos/archive/2008/08/03/2762543.aspx http://blog.thebrain.com/megabrain/  </description>
-    </item>
-    
-    <item>
-      <title>Grizzly Man</title>
-      <link>/posts/grizzly-man/</link>
-      <pubDate>Wed, 16 Jul 2008 19:52:43 +0800</pubDate>
-      
-      <guid>/posts/grizzly-man/</guid>
-      <description>蒂莫西·崔德威尔(Timothy Treadwell)，十三年来的每个夏季，他都会前往阿拉斯加的灰熊栖息地，尝试了解和保护这些远离人类的动物。2003年10月，崔德威尔和女友艾米·胡格纳德的遗体在卡特迈国家公园及自然保护区宿营地附近被人发现。种种迹象表明，他们遭到灰熊的攻击，肢体已经残缺不全。一个和灰熊相处了十三个夏秋的孤独男人将他的一生献给了他至爱的熊。
+参考资料
+http://www.douban.com/group/topic/1725222/ http://hi.baidu.com/jinhuali1980/blog/item/90a536f9eba3e2829f51467a.html http://www.360doc.com/content/10/0921/23/3297062_55475807.shtml http://blog.csdn.net/ThinkInChaos/archive/2008/08/03/2762543.aspx http://blog.thebrain.com/megabrain/</description></item><item><title>Grizzly Man</title><link>/posts/grizzly-man/</link><pubDate>Wed, 16 Jul 2008 19:52:43 +0800</pubDate><guid>/posts/grizzly-man/</guid><description>蒂莫西·崔德威尔(Timothy Treadwell)，十三年来的每个夏季，他都会前往阿拉斯加的灰熊栖息地，尝试了解和保护这些远离人类的动物。2003年10月，崔德威尔和女友艾米·胡格纳德的遗体在卡特迈国家公园及自然保护区宿营地附近被人发现。种种迹象表明，他们遭到灰熊的攻击，肢体已经残缺不全。一个和灰熊相处了十三个夏秋的孤独男人将他的一生献给了他至爱的熊。
 他的作为引起了很激烈的讨论。有人说，崔德威尔的出发点是很好，想做点帮助野生灰熊的事。但是熊就是熊，它们天生就可以吃了你，杀了你。然而崔德威尔却将它们当作穿成熊一样的人而不是野生动物，他的死也许就是他自己想要的结果。他的朋友们不这么认为，据说他总有一种想成为熊的渴望，所以他不顾一切地保护它们，热爱它们。他选择了他热爱的生活，他无怨无悔。
 在我看来，无论崔德威尔对灰熊做了什么，都表明了他对人类社会的厌倦，究其根源，是他对现实生活的逃避。曾几何时，我也觉得自己应该是一个德鲁伊教徒，崇敬自然，隐居森林，而不是囚禁在这钢筋牢笼里。可是当我们在现实生活中困难重重时，难免会想到逃避。他出生于佛罗里达一个中产阶级家庭，学业优秀，中学时赢得游泳比赛，凭借跳水奖学金进入大学。然后也就是在他关键的青年时期，他开始酗酒，交了些狐朋狗友，大学辍学之后生活依然混乱而潦倒。他混乱的心理状态，在他开始保护灰熊之后依然影响着他。我觉得这样的生活不让你感到难受，那真是不可能的事。因此他选择了他的不同常人的逃避方式，用他“自己的方式”去爱熊。
 他在最后的几年里，遭遇了不少“入侵者”：“国家公园里不时会有访客，但是在他看来，那些人不过是入侵者，侵犯了他眼中的伊甸园。因为诸多的规定，连公园服务中心本身也变成了敌人”，因此，他不惜以违反法律为代价来换取他‘自己’对熊的保护。转而语言攻击十三年来和他一起保护动物的服务中心。但是很显然，国家公园服务中心并不是他真正的敌人，他所挑战是人类的世界和文明。”
 最后，用片尾的歌词来结束吧，它很好地诠释了崔德威尔这个与众不同的 Grizzly man ……
- Was a cowboy I knew in south Texas His face was burnt deep by the sun Part history, part sage, part mesquit He was there when Poncho Villa was young
-And he&amp;rsquo;d tell you a tale of the old days When the country was wild all around Sit out under the stars of the Milky Way And listen while the coyotes howl</description>
-    </item>
-    
-    <item>
-      <title>行进中的中国</title>
-      <link>/posts/progressive-china/</link>
-      <pubDate>Fri, 23 May 2008 10:33:49 +0800</pubDate>
-      
-      <guid>/posts/progressive-china/</guid>
-      <description>在整理电脑里的文件时，我又看到大二时在维基百科下载的“六四事件”的资料。话说上次在实验室用百度检索很多关键词都能是搜索的，当然六四也不例外。大概是老共遵守诺言，在奥运会期间稍稍开放互联网的原因吧。不过那个暂行规定也终究是暂时的，过了十月份就失效了，那时就一切如往昔了。
+Was a cowboy I knew in south Texas His face was burnt deep by the sun Part history, part sage, part mesquit He was there when Poncho Villa was young
+And he&amp;rsquo;d tell you a tale of the old days When the country was wild all around Sit out under the stars of the Milky Way And listen while the coyotes howl</description></item><item><title>行进中的中国</title><link>/posts/progressive-china/</link><pubDate>Fri, 23 May 2008 10:33:49 +0800</pubDate><guid>/posts/progressive-china/</guid><description>在整理电脑里的文件时，我又看到大二时在维基百科下载的“六四事件”的资料。话说上次在实验室用百度检索很多关键词都能是搜索的，当然六四也不例外。大概是老共遵守诺言，在奥运会期间稍稍开放互联网的原因吧。不过那个暂行规定也终究是暂时的，过了十月份就失效了，那时就一切如往昔了。
 总体上，“六四”这个词条的内容还是比较客观的，既没有一味地倒向学生，也没有倾向政府。主观言论很少，字里行间都是没有流露个人感情色彩。不像张戎的《毛泽东鲜为人知的故事》，从头到尾没说什么好话，感觉很不公正。不过也没办法，毕竟人家有证据，书后那好几页参考资料可不是摆设，算是她和她丈夫秉承清代发达的考据学的传统，呕心沥血数十年间用扫描隧道电子显微镜找到的吧。难怪叫做“鲜为人知”的故事呢！
 这件事……不，这事件过去快九年了，想想有些后怕，谁也无法估计另外一个结局，是好是坏？我不想去关心，至少现在我们是在前进。好不容易夺取政权，但是国家一穷二白。领导者难得糊涂，发动文化大革命。战后的日本同我们一样贫穷，却利用这段黄金时间飞速发展。文革没被打倒的邓小平深谋远虑，把发展科技、建设经济放在首要位置，准备复苏经济，然而又发生了“六四事件”。导致这场风波的原因是多方面的。正像邓小平后来指出的，“这场风波迟早要来。这是国际的大气候和中国自己的小气候所决定了的，是一定要来的，是不以人们的意志为转移的。”无法评判谁对谁错，也许双方都有责任吧。
 20世纪80年代，由于国内外一系列的复杂因素（如共产党缺乏改革经验，左倾路线的残余，僵化的计划经济的束缚，贫富差距拉大，腐败横行，西方国家的遏制破坏等），中国刚刚起步的改革进程遭遇了重大挫折，六四事件便是国内长期积累的各种社会矛盾的总爆发。连续两任力主推进改革的中共中央总书记都因为对待自由化政策而半途下台，以邓小平为首的中共中央之后选择有学术背景的江泽民作为继任者。
@@ -1148,16 +711,7 @@ And he&amp;rsquo;d tell you a tale of the old days When the country was wild all
 三月的藏“独”，国家的和平统一好像向来是针对台湾问题的，但是似乎“沉寂”多年的达兰萨拉集团却给我们提了个醒。由于达赖在西方社会中的和平者的形象，以及在藏传佛教里的活佛地位，让我们的政府可怜的公关能力受到了前所未有的打击。
 四月，奥运火炬传递受阻，我们的国人或许很惊讶，外面的世界居然这么不友好？！我看到了很多的爱国青年，msn上“红心China”，当然还有遭到抵制的家乐福。总有那么一小撮整天抵制日货、抵制法货的蠢货，既然他们说是LVMH的前老总资助达赖，那怎么不直接去抵制LV？怕是他们对有钱人没辙，转而煽动我们老百姓去抵制谁都能去的家乐福？这倒让我想到了一个故事：从前，有几个乞丐在墙根下打赌，看谁先和旁边大宅子里的富翁说上话。有一天，终于有个乞丐喜传捷报：“哎，哎！那个富翁和我说话了！”“他跟你说了什么？”众人好奇地问。那个乞丐答道：“他对我说：‘滚！’”……除此之外，我还知道“圣火”广州之行后，羊城一片狼藉……
 “5·12”，终生难忘，亲民爱民的温总理，不惧艰险的子弟兵，还有来自其他国家和地区的专业救援队。但是无法挽回的是那些不幸罹难的人们，特别是那些尚在课堂的孩子们。路透网站的专题每天都更新很多的照片，我看到最多的还是孩子们的……和他们悲痛欲绝的亲人……我不想去质疑新闻记者的素质，公共设施的质量，机关部门的腐败，慈善基金的去向……尽自己的力量帮助别人，这才是目前该做的。
-时间不会停止，中国也不停滞不前 ……</description>
-    </item>
-    
-    <item>
-      <title>南方周末：《系统》[转载]</title>
-      <link>/posts/southern-weekly-the-system/</link>
-      <pubDate>Sun, 06 Jan 2008 06:06:29 +0800</pubDate>
-      
-      <guid>/posts/southern-weekly-the-system/</guid>
-      <description>来源: 南方周末 作者: 曹筠武　张春蔚　王轶庶
+时间不会停止，中国也不停滞不前 ……</description></item><item><title>南方周末：《系统》[转载]</title><link>/posts/southern-weekly-the-system/</link><pubDate>Sun, 06 Jan 2008 06:06:29 +0800</pubDate><guid>/posts/southern-weekly-the-system/</guid><description>来源: 南方周末 作者: 曹筠武　张春蔚　王轶庶
 ■编者按：
 在一款同时在线人数超过百万、全部玩家加起来可以组成一个超级城市的网络游戏中，它的游戏精神是指向乐趣，还是指向权力和金钱？它的社会规则是新世界的开放自由，还是率土之滨莫非王臣？这不只是对某一款游戏的追问，甚至也不只是对韩式网游的价值观的追问，而是对人与游戏、人与人的关系的追问。虚拟世界是现实世界的一部分，也有着人们必须捍卫的准则。
 在当下中国最火的一款网络游戏中，玩家们遭遇到一个“系统”，它正在施行一种充满诱惑力的统治。这个“系统”隐匿无踪，却无处不在。它是一位虚拟却真实的垄断者。“如果没有我的允许，这个国家的一片叶子也不能动。”这是智利前独裁者皮诺切特的声音，悄然回响在这个虚拟世界之中。
@@ -1215,16 +769,7 @@ And he&amp;rsquo;d tell you a tale of the old days When the country was wild all
 玩家在不懈地开着箱子，他们有时好运地得到一点好东西，绝大部分时间几无所获，但越是没有收获，他们越是迫不及待地打开下一个箱子。他们每点击一下，就代表一块钱，又一块钱……就像一个永不停歇的沙漏，金钱涓滴成河一般随着每一次点击汇成巨流，流向看不见的系统。
 吕洋自认为运气还比较好，“平均开1000个箱子，好运的话能有十几次拿到好东西。”
 由此吕洋成为了她现在所鄙夷的“人民币玩家”，上万的人民币被迅速而几乎不被察觉地花了出去。在游戏中。“女王”拥有了可怕的威力，她为自己，也为朋友报仇；她接受请求，为本国的商队护镖；同时她也会和英雄们一起侵入别国。她声誉日隆，跻身英雄之列，在游戏里，她甚至和威猛的帮主“狼烟”喜结连理。当然，也由于她在现实中是一个那么可爱的姑娘，她被推举为楚国的国王。“国王万岁！”人们向她俯首称臣。那是吕洋在征途中的最高点，也惟有在那转瞬即逝的一刻，吕洋觉得自己付出的时间和金钱是值得的。
-国王累了 “系统”是最为勤奋的——女王觉得自己像驴子——花钱买你生气——快感只在一刹那 吕洋心里清楚，王位是真金白银买来的。一套转生150级左右的顶级装备，平均要开5000个宝箱。按照系统繁复的装备打造设置，要给一套装备镶上14颗星星，打开“灵魂锁链”，镶嵌补天神石，花费又在5000元左右。随着等级的提高，原有的装备又必须相应替换或升级。平均每升5级，装备就要更新一套。</description>
-    </item>
-    
-    <item>
-      <title>PlaneScape:Torment的故事[转载]</title>
-      <link>/posts/story-of-planescape-torment/</link>
-      <pubDate>Tue, 06 Nov 2007 15:12:47 +0800</pubDate>
-      
-      <guid>/posts/story-of-planescape-torment/</guid>
-      <description>现在，让我们了解一下，无名氏——游戏中是这样称呼这名不死人的，他是如何度过他那漫长的一生的。
+国王累了 “系统”是最为勤奋的——女王觉得自己像驴子——花钱买你生气——快感只在一刹那 吕洋心里清楚，王位是真金白银买来的。一套转生150级左右的顶级装备，平均要开5000个宝箱。按照系统繁复的装备打造设置，要给一套装备镶上14颗星星，打开“灵魂锁链”，镶嵌补天神石，花费又在5000元左右。随着等级的提高，原有的装备又必须相应替换或升级。平均每升5级，装备就要更新一套。</description></item><item><title>PlaneScape:Torment的故事[转载]</title><link>/posts/story-of-planescape-torment/</link><pubDate>Tue, 06 Nov 2007 15:12:47 +0800</pubDate><guid>/posts/story-of-planescape-torment/</guid><description>现在，让我们了解一下，无名氏——游戏中是这样称呼这名不死人的，他是如何度过他那漫长的一生的。
 在行星之间旅行是非常有趣的事，有时候你会遇到一些意想不到的东西。上次在书记区大肆采购的时候我们就在一堆乱七八糟的坎吉人手稿中找到了一张令人惊讶不已的羊皮纸信笺。有很多人会对此感兴趣的，因为上面记载的是一个在法印城非常有名的人的传奇经历，这个人虽然有很多个名字，但是最为人所知的还是“无名氏”。最初的无名氏应该是一个为别人提供建议的指导人，然而他的建议却导致了背叛。我们看到信笺里提到了一份契约，这直接证实了无名氏最原始的分身所犯下的不可饶恕的罪过，这可怕的罪行是他永远也无法补救的。然而，信笺里并没有提及这项罪行的具体内容，只是隐隐约约的暗示这个世界慢慢老化的事实与之有关。
 他向暗夜魔女解谜者寻求帮助，想借她之手变为不死之身以逃避对自己的惩罚并能有机会补偿自己所犯的罪过。面对自己所爱的人，解谜者完成了他的请求，将无名氏与他的死亡化身剥离。但是这样做要付出一个可怕的代价，虽然每次死亡只会让无名氏昏睡一段时间，但是这样同时也会对他的思想造成伤害，使他失去记忆。由此而来在无名氏的一生中就产生了无数的分身，每一个分身都仅仅保留了对过去的一点点的残缺的记忆。
 对于以后的许多分身仅有一些片断的纪录。伟大的将军、强大魔法师的门徒、沾满鲜血被执法者追杀的凶手、试图在法印城昏暗的街道里躲闪的盗贼。他在行星上流浪，残忍与善良，混乱与公正。他扮演过很多角色，行事变化多端，在漫长的生涯中唯一不变的就是深入他肌肤的折磨的纹身，这个图纹同时也吸引了其他深受折磨的灵魂围聚在他身边。毫无疑问的，这些灵魂的大多数都被抹煞了。
@@ -1271,96 +816,29 @@ And he&amp;rsquo;d tell you a tale of the old days When the country was wild all
 他一直在试图搞清他是谁，属于世界上哪个地方。
 维勒： 维勒是个不停歇的灵魂，他拒绝死亡。即使当他死亡时，他也保留下了他的盔甲和巨斧以便能够继续消除全宇宙不公平事件的事业。他没有物质上的身体，除了盔甲，他是完全透明的。他总是把面罩放下来，所以他发出的任何声音都像是从一个巨大的空容器中传出来的。
 这个永不停息的灵魂是主张公平的一派，他们的存在就是为了惩罚罪恶，并且对他们所追缉的罪犯毫不留情。如果他发现你或你同伴中之一犯了罪，他同样会寻求“判决”。
-  原文出自NTRPG，已佚 润色版本源自 《PS:T》無名氏的故事  </description>
-    </item>
-    
-    <item>
-      <title>取消中医中药，革新还是闹剧？</title>
-      <link>/posts/cancel-tcm-innovation-or-farce/</link>
-      <pubDate>Wed, 11 Oct 2006 21:31:01 +0800</pubDate>
-      
-      <guid>/posts/cancel-tcm-innovation-or-farce/</guid>
-      <description>今天看到sohu上关于 鼓吹取消中医中药 的事情之后，我觉得一次变革或者一场闹剧确实在身边发生了。不是什么巴以冲突，伊拉克战争之类在遥远地方的事件。它就在我身边！
+原文出自NTRPG，已佚 润色版本源自 《PS:T》無名氏的故事</description></item><item><title>取消中医中药，革新还是闹剧？</title><link>/posts/cancel-tcm-innovation-or-farce/</link><pubDate>Wed, 11 Oct 2006 21:31:01 +0800</pubDate><guid>/posts/cancel-tcm-innovation-or-farce/</guid><description>今天看到sohu上关于 鼓吹取消中医中药 的事情之后，我觉得一次变革或者一场闹剧确实在身边发生了。不是什么巴以冲突，伊拉克战争之类在遥远地方的事件。它就在我身边！
 我们现在离得开中医么，我们更离得开中药么？（我不知道他们是否把中成药也算上了）方舟子的话有道理，但是媒体一宣传，简化之后，我想他的观点就成了取消中医中药了。也正是因为中医药在国民的生活中占有一席之地，才会引起轩然大波。 中医的确有其不科学的地方，为什么？发展缓慢。近代以来，西方科学技术传入中国，同时以西方科学为基础的西方医学进入中国。随着西方医学的不断进步，其影响力也越来越大，但是中医……不谈了，不谈了，利用中医的骗子到时越来越多了。想必一般人对中药也不会了解多少，一根野草也是药，谁又知道怎么区分呢？
 那位张功耀先生，据说是“中南大学科学技术与社会发展研究所教授”。真不愧是研究科学技术与社会发展的人才，他不仅大胆鼓吹“告别中医中药”，还大肆宣扬“废除阴历”，采用什么新历法。吹响了科学变革 新时代的号角，堪称中国科技革命的先锋！ 不过，方舟子先生等人的观点还是比较理性的，他们认为并不是要全盘否定中医，因为中医本身就是一个大杂烩，以经验为主，动用五行、四气等不符合现代科学的理论来解释病因，再加上许多中药没有临床试验，毒副作用也不明，具有一定的危害，必须加以验证。
 中医的毛病的确很多，越积越多，事到如今，也是量变引起质变的结果。国家如果光是 卫生部痛斥取消中医传言 ，而不动手解决关键问题所在，那以后就十分麻烦啦。
- 新语丝的网址：
- http://xys.3322.org http://www.chinaxys.net http://xys.dxiong.com  </description>
-    </item>
-    
-    <item>
-      <title>看罢电影《寂静岭》</title>
-      <link>/posts/silent-hill-the-movie-review/</link>
-      <pubDate>Sat, 02 Sep 2006 02:29:14 +0800</pubDate>
-      
-      <guid>/posts/silent-hill-the-movie-review/</guid>
-      <description>寂静岭的电影上映有相当一段时间了，国内还没有上映，估计也上映不了，电影局的那帮家伙就知道删片子，还有CCTV-6 。 到现在才看到DVD版本的碟子，比起以前看的那个TS版好不少。情节连贯了，看起来也轻松不少。情节不用多说，想必大多数影迷都知道的。其实喜爱《寂静岭》游戏的fans肯定会关注这部片子。
+新语丝的网址：
+http://xys.3322.org http://www.chinaxys.net http://xys.dxiong.com</description></item><item><title>看罢电影《寂静岭》</title><link>/posts/silent-hill-the-movie-review/</link><pubDate>Sat, 02 Sep 2006 02:29:14 +0800</pubDate><guid>/posts/silent-hill-the-movie-review/</guid><description>寂静岭的电影上映有相当一段时间了，国内还没有上映，估计也上映不了，电影局的那帮家伙就知道删片子，还有CCTV-6 。 到现在才看到DVD版本的碟子，比起以前看的那个TS版好不少。情节连贯了，看起来也轻松不少。情节不用多说，想必大多数影迷都知道的。其实喜爱《寂静岭》游戏的fans肯定会关注这部片子。
 这部片子的剧情主要还是以game-Silent Hill 1 为主。人物稍加改动。原来是父亲Harry找孩子，现在改成母亲Rose找孩子，可能女性的反应更能引起观众的注意吧~ 寂静岭在北美的票房可是相当的好哇！fans们一定会看，而喜爱恐怖片的人也会去看，再说游戏寂静岭也有着良好的口碑，群众基础不错。 说说我的感触：
 情节： 整个过程仍然有一种RPG的方式，玩过寂静岭的人都会从中看到影子，比如看到那张画就去寻找学校，在储物柜里看到画，查看放画的格子的号码111，然后去找对应的111房间。可是111找不到，这时候又想到画，对！房间就在一幅画的后面，用刀子划开，果然进了屋子。另外发现物品，丢掉物品的动作和方式，简直就是个真人版的日式RPG。
 悬念：影片最后女主角Rose始终没有和他的丈夫Chris相见，这似乎是Alessa造成的，最后的Sharon就是Alessa所有的体现。已经all in one了。她能力非凡，所以制造了一个新的位面，让Rose困于其中而无法与其丈夫见面。（以上为D&amp;amp;D说法，^_^）而且末尾处还留有悬念，似乎还要续？ 也许吧，我们几个笑称，下面再拍应该要Chris寻找他老婆了，这样一来就顺应了游戏《寂静岭》二代的故事情节，而且影片开头似乎说明了他和妻子Rose关系不好，他们打电话互相总是不接。哦？二代游戏里面的主人公James不就是受不了他老婆Mary得绝症的处境，而闷死她了吗？可是他并不认为是他杀掉Mary的，他一直觉得这是在减轻Mary的痛苦。直到纯洁和天真的小女孩Laura揭穿他的谎言以及他的自我发现，这才拨开重重迷雾，给了一个完美的结局。二代很纯真，很完美。值得一玩，非常值得体验！《寂静岭》系列本来就是挖掘和揭露人性的丑陋面的，不仅仅是恐怖。 咳咳……嗯，貌似扯远了。。。。
 CG 不错！布景也不错，很有寂静岭的应有的样子，各种特征物品也都出现了，什么铁丝网啊，风扇啊，电梯啦，但是没有4S教的图标，只有一个“改装了的十字架”，可能他们领导人还没有设计4S教图标，游戏里面也是3代才出现的。
 怪物，暂且用Game里面的叫法。主要用的是2代的。护士啦，那个第一个出场的没胳膊的啦，三角铁头怪啦，但是红衣护士Lisa不是，她是1代的，不过说起也很牵强，Lisa在游戏里面成了怪物小boss，但是影片里面，她只是个受害者，很惨的受害者！T_T
-结局，最后Alessa大开杀戒，带刺的如同荆棘般的铁丝杀死了教主和所有疯狂的教徒。这个其实很不符合寂静岭的风格，不过没办法了，事情到这，也只能这样收场了，否则又能怎么办呢？</description>
-    </item>
-    
-    <item>
-      <title>黑帮暴徒的救赎</title>
-      <link>/posts/redemption-of-a-gangster/</link>
-      <pubDate>Fri, 01 Sep 2006 13:09:56 +0800</pubDate>
-      
-      <guid>/posts/redemption-of-a-gangster/</guid>
-      <description>昨天晚上看了《黑帮暴徒》(Tsotsi)，就是那个在国内上映改名字叫《救赎》的片子。之前也不了解关于这部影片。只是看到宣传海报上有个Winner，看上去似乎是oscar，但是我不知道具体是什么奖项，甚至不知道是什么年代的片子。就搞下来了。
+结局，最后Alessa大开杀戒，带刺的如同荆棘般的铁丝杀死了教主和所有疯狂的教徒。这个其实很不符合寂静岭的风格，不过没办法了，事情到这，也只能这样收场了，否则又能怎么办呢？</description></item><item><title>黑帮暴徒的救赎</title><link>/posts/redemption-of-a-gangster/</link><pubDate>Fri, 01 Sep 2006 13:09:56 +0800</pubDate><guid>/posts/redemption-of-a-gangster/</guid><description>昨天晚上看了《黑帮暴徒》(Tsotsi)，就是那个在国内上映改名字叫《救赎》的片子。之前也不了解关于这部影片。只是看到宣传海报上有个Winner，看上去似乎是oscar，但是我不知道具体是什么奖项，甚至不知道是什么年代的片子。就搞下来了。
 塔提斯是个4人小帮派的头头，由于一次列车上杀人抢劫，致使他的同伴波斯顿责问他玩过火了，问他什么是尊严。塔提斯怒不可遏，痛打了波斯顿一通，他的另外2个伙计也开始倒戈，准备为别人卖命。塔提斯一起之下跑去抢劫，打伤了一位女士，并抢走了汽车，在他逃窜之后正准备离开，却发现车里有个尚在襁褓里的婴儿。他开慢慢地变了慢慢地开始了自我的救赎
 该片被评为R级，但在我看来似乎没什么暴力镜头，就是列车杀人和抢劫的一段有点儿，我看还没有国内的功夫片暴力呢！就这样，据说电影局的那帮老家伙还要求删减……实在是没道理。至于改片名，这个影片本来就是根据南非著名小说改编的，Tsotsi意为“黑帮里的暴徒，恶棍”相当于香港的“古惑仔”，片名与片中人物有着强烈的对比，当你记住这个片名开始看电影时，你总是认为这是“黑帮暴徒”，然而到最后，他——塔提斯，还是吗？ 看完之后我就去搜索影评，发现该片获得了oscar最佳外语片，竟然击败《天堂此时》（讲述中东人肉炸弹的故事）最终夺魁。有人给予好评的，也有人表示不满的，说这个部片子“假模假式”，李少红还说“我对记者撒了谎”，“这部片子不怎么好”。我不敢苟同。 对于所谓的“假模假式”，我只能说：
 电影是多样化，它既是一种商业形式，也可以是一种艺术形式。按照那位仁兄的观点，难道说无冕之王《肖申克的救赎》就不“假模假式”了？
 影片只有90分钟，你是否企图把人性转变的过程完整地记录下来？显然不可能。。。李导演在新浪Blog上说这部片子太温情了，楼下有人反驳道李导的片子就越少那种温情，哪怕是一点点地温情~
-&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;不写了，还有事……</description>
-    </item>
-    
-    <item>
-      <title>About V</title>
-      <link>/posts/about-v/</link>
-      <pubDate>Wed, 09 Nov 2005 12:53:32 +0800</pubDate>
-      
-      <guid>/posts/about-v/</guid>
-      <description>What does &amp;quot; V&amp;quot; stand for?
+&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;不写了，还有事……</description></item><item><title>About V</title><link>/posts/about-v/</link><pubDate>Wed, 09 Nov 2005 12:53:32 +0800</pubDate><guid>/posts/about-v/</guid><description>What does &amp;quot; V&amp;quot; stand for?
 Once V standed for Victory
 Yesterday V standed for Versus
 Today V stands for Valley
 Tomorrow V stands for Void?
-Maybe, or maybe not</description>
-    </item>
-    
-    <item>
-      <title>Final Fantasy VII - Advent Children</title>
-      <link>/posts/final-fantasy-vii-advent-children/</link>
-      <pubDate>Tue, 08 Nov 2005 13:24:43 +0800</pubDate>
-      
-      <guid>/posts/final-fantasy-vii-advent-children/</guid>
-      <description>FF7-AC 已经不算是个新片了， 偶尔也翻出来看几段欣赏，赞叹Janpanese的CG技术的确很先进，从几年前的那部Final Fantasy上就能看出来。但是从几年前的片子上也能看出当年叫好不叫座的一些原因——不知所云。也不知道是真的深奥，还是故作深沉。
+Maybe, or maybe not</description></item><item><title>Final Fantasy VII - Advent Children</title><link>/posts/final-fantasy-vii-advent-children/</link><pubDate>Tue, 08 Nov 2005 13:24:43 +0800</pubDate><guid>/posts/final-fantasy-vii-advent-children/</guid><description>FF7-AC 已经不算是个新片了， 偶尔也翻出来看几段欣赏，赞叹Janpanese的CG技术的确很先进，从几年前的那部Final Fantasy上就能看出来。但是从几年前的片子上也能看出当年叫好不叫座的一些原因——不知所云。也不知道是真的深奥，还是故作深沉。
 从这种题材看，科幻电影比较受年轻人的喜爱，大部分也是面向青年人的，若是再加上“高深”的哲学见解，说不定会再增加其他年龄段的观众。但是搞不好便弄巧成拙了。 这次的影片倒算没有重蹈覆辙，而是接着FF7的剧情发展了，而且即使没有玩过当年FF7的游戏，影片开篇也介绍了之前发生的事情，第一次看也到能知晓一二。（世界观挺独特的）。
-虽说内涵稍显不足，但是相对于这样的Fashion一类，还算是不错了。 不过里面还是有一些show off的成分。比如开始时的那个小男孩从箱子上跳下来落到水洼里的那一幕，基本上没什么意义的一跳，却被刻画得…… 然而瑕不掩瑜啊，还是挺耐看的，尤其是崇尚技术的人。</description>
-    </item>
-    
-    <item>
-      <title>Something</title>
-      <link>/posts/about-something/</link>
-      <pubDate>Mon, 07 Nov 2005 19:32:27 +0800</pubDate>
-      
-      <guid>/posts/about-something/</guid>
-      <description>Once You did do Then You used to do Now You are used to do
-Life is a garden We are all gardeners</description>
-    </item>
-    
-    <item>
-      <title>A Very Long Engagement</title>
-      <link>/posts/a-very-long-engagement/</link>
-      <pubDate>Sat, 15 Oct 2005 22:43:02 +0800</pubDate>
-      
-      <guid>/posts/a-very-long-engagement/</guid>
-      <description>今天下午花了2个小时看完了《漫长的婚约》，也算是不新的片子了，网上的诸多评论也有很多，然而我并不知道，也不知道这部影片的来头。 这一切似乎才公平，这样才能从我的观点看，这部影片怎么样，而不会受别人观点所左右。
-二战片这几年泛滥了~可是影片的故事却不是在那个时代……，不走大众路线，呵呵 爱情与战争一直是近年来大众艺术表现的焦点，要么是爱情中的战争，要不就是战争中的爱情，纯粹的爱情片，纯粹的战争片貌似好莱坞也不会再做了，马奈与玛蒂尔德在战争下的爱情并没有因为残酷的战争和渺无的音讯而完结……相反却反衬出玛蒂尔德的执着和坚定不移的意志。扑朔迷离，一波三折的剧情和特有的法国式的Romantic,以及影片技术上的柔和光线的处理，都是值得回味的。</description>
-    </item>
-    
-  </channel>
-</rss>
+虽说内涵稍显不足，但是相对于这样的Fashion一类，还算是不错了。 不过里面还是有一些show off的成分。比如开始时的那个小男孩从箱子上跳下来落到水洼里的那一幕，基本上没什么意义的一跳，却被刻画得…… 然而瑕不掩瑜啊，还是挺耐看的，尤其是崇尚技术的人。</description></item><item><title>Something</title><link>/posts/about-something/</link><pubDate>Mon, 07 Nov 2005 19:32:27 +0800</pubDate><guid>/posts/about-something/</guid><description>Once You did do Then You used to do Now You are used to do
+Life is a garden We are all gardeners</description></item><item><title>A Very Long Engagement</title><link>/posts/a-very-long-engagement/</link><pubDate>Sat, 15 Oct 2005 22:43:02 +0800</pubDate><guid>/posts/a-very-long-engagement/</guid><description>今天下午花了2个小时看完了《漫长的婚约》，也算是不新的片子了，网上的诸多评论也有很多，然而我并不知道，也不知道这部影片的来头。 这一切似乎才公平，这样才能从我的观点看，这部影片怎么样，而不会受别人观点所左右。
+二战片这几年泛滥了~可是影片的故事却不是在那个时代……，不走大众路线，呵呵 爱情与战争一直是近年来大众艺术表现的焦点，要么是爱情中的战争，要不就是战争中的爱情，纯粹的爱情片，纯粹的战争片貌似好莱坞也不会再做了，马奈与玛蒂尔德在战争下的爱情并没有因为残酷的战争和渺无的音讯而完结……相反却反衬出玛蒂尔德的执着和坚定不移的意志。扑朔迷离，一波三折的剧情和特有的法国式的Romantic,以及影片技术上的柔和光线的处理，都是值得回味的。</description></item></channel></rss>

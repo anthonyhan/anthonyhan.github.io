@@ -1,122 +1,36 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>3.7.7内核的nVidia驱动安装 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
-
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
-
-<div class="article-meta">
-<h1><span class="title">3.7.7内核的nVidia驱动安装</span></h1>
-
-<h2 class="date">2013/02/17</h2>
-</div>
-
-<main>
-<p>更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。</p>
-<h2 id="问题分析">问题分析</h2>
-<p>根据报错的信息，可以打开日志文件查看详细的原因：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    less /var/log/nvidia-installer.log</code></pre></div>
-<p>日志信息如下：</p>
-<blockquote>
-<p>-&gt; Kernel source path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&rsquo;
--&gt; Kernel output path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/build&rsquo;
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>3.7.7内核的nVidia驱动安装 | LimboNova</title><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=/css/fonts.css></head><body><nav><ul class=menu><li><a href=/>Home</a></li><li><a href=/tags/>Tags</a></li><li><a href=/about/>About</a></li><li><a href=/index.xml>Subscribe</a></li></ul><hr></nav><div class=article-meta><h1><span class=title>3.7.7内核的nVidia驱动安装</span></h1><h2 class=date>2013/02/17</h2></div><main><p>更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。</p><h2 id=问题分析>问题分析</h2><p>根据报错的信息，可以打开日志文件查看详细的原因：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>    less /var/log/nvidia-installer.log</span></span></code></pre></div><p>日志信息如下：</p><blockquote><p>-> Kernel source path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&rsquo;
+-> Kernel output path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/build&rsquo;
 ERROR: If you are using a Linux 2.4 kernel, please make sure
 you either have configured kernel sources matching your
 kernel or the correct set of kernel headers installed
-on your system.</p>
-<p>If you are using a Linux 2.6 kernel, please make sure
+on your system.</p><p>If you are using a Linux 2.6 kernel, please make sure
 you have configured kernel sources matching your kernel
 installed on your system. If you specified a separate
 output directory using either the &ldquo;KBUILD_OUTPUT&rdquo; or
 the &ldquo;O&rdquo; KBUILD parameter, make sure to specify this
 directory with the SYSOUT environment variable or with
-the equivalent nvidia-installer command line option.</p>
-<p>Depending on where and how the kernel sources (or the
+the equivalent nvidia-installer command line option.</p><p>Depending on where and how the kernel sources (or the
 kernel headers) were installed, you may need to specify
 their location with the SYSSRC environment variable or
 the equivalent nvidia-installer command line option.
 ERROR: Installation has failed. Please see the file
 &lsquo;/var/log/nvidia-installer.log&rsquo; for details. You may find suggestions
 on fixing installation problems in the README available on the Linux
-driver download page at <a href="http://www.nvidia.com">www.nvidia.com</a>.</p>
-</blockquote>
-<p>大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。</p>
-<h2 id="解决方案">解决方案</h2>
-<p>因为需要对驱动的安装脚本作修改，因此需要解压缩安装包
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    ./NVIDIA-Linux-x86-310.19.run -x</code></pre></div></p>
-<p>修改文件 contest.sh</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    cd NVIDIA-Linux-x86-310.19/
-    vi kernel/conftest.sh</code></pre></div>
-<p>修改:1697行附近的代码，如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e"># kernel older than 2.6.6, that&#39;s all we require to</span>
-<span style="color:#75715e"># build the module.</span>
-<span style="color:#75715e">#</span>
-VERSION<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>grep <span style="color:#e6db74">&#34;^VERSION =&#34;</span> $MAKEFILE | cut -d <span style="color:#e6db74">&#34; &#34;</span> -f 3<span style="color:#66d9ef">)</span>
-PATCHLEVEL<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>grep <span style="color:#e6db74">&#34;^PATCHLEVEL =&#34;</span> $MAKEFILE | cut -d <span style="color:#e6db74">&#34; &#34;</span> -f 3<span style="color:#66d9ef">)</span>
-SUBLEVEL<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>grep <span style="color:#e6db74">&#34;^SUBLEVEL =&#34;</span> $MAKEFILE | cut -d <span style="color:#e6db74">&#34; &#34;</span> -f 3<span style="color:#66d9ef">)</span>
-
-<span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -n <span style="color:#e6db74">&#34;</span>$VERSION<span style="color:#e6db74">&#34;</span> -a $VERSION -ge <span style="color:#ae81ff">3</span> <span style="color:#f92672">]</span> <span style="color:#f92672">||</span> 
-   <span style="color:#f92672">[</span> -n <span style="color:#e6db74">&#34;</span>$PATCHLEVEL<span style="color:#e6db74">&#34;</span> -a $PATCHLEVEL -ge <span style="color:#ae81ff">6</span> 
-		 -a -n <span style="color:#e6db74">&#34;</span>$SUBLEVEL<span style="color:#e6db74">&#34;</span> -a $SUBLEVEL -le <span style="color:#ae81ff">5</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
-	 SELECTED_MAKEFILE<span style="color:#f92672">=</span>Makefile.kbuild
-	 RET<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
-<span style="color:#66d9ef">fi</span></code></pre></div>
-<p>修改:160行附近的代码，如下：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;</span>$ARCH<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;i386&#34;</span> -o <span style="color:#e6db74">&#34;</span>$ARCH<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;x86_64&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
-  CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$CFLAGS<span style="color:#e6db74"> -I</span>$SOURCES<span style="color:#e6db74">/arch/x86/include&#34;</span>
-  CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$CFLAGS<span style="color:#e6db74"> -I</span>$SOURCES<span style="color:#e6db74">/arch/x86/include/uapi&#34;</span>
-  CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$CFLAGS<span style="color:#e6db74"> -I</span>$OUTPUT<span style="color:#e6db74">/arch/x86/include/generated&#34;</span>
-  CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$CFLAGS<span style="color:#e6db74"> -I</span>$OUTPUT<span style="color:#e6db74">/arch/x86/include/generated/uapi&#34;</span></code></pre></div>
-保存文件并运行安装：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">	./nvidia-installer</code></pre></div>
-<p>现在应该可以通过正常安装了。</p>
-<hr>
-<p>参考资料</p>
-<ol>
-<li><a href="https://bugs.archlinux.org/task/33827">https://bugs.archlinux.org/task/33827</a></li>
-<li><a href="http://forums.fedoraforum.org/showthread.php?t=288869">http://forums.fedoraforum.org/showthread.php?t=288869</a></li>
-<li><a href="http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/nvidia-drivers/files/nvidia-drivers-313.18-linux-3.7%2B.patch?revision=1.1">http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/nvidia-drivers/files/nvidia-drivers-313.18-linux-3.7%2B.patch?revision=1.1</a></li>
-</ol>
-</main>
-
-<script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
-        issue-term="title"
-        label="💬comment"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-</script>
-
-
-<footer>
-  
-  
-  <hr/>
-  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
-
+driver download page at <a href=https://www.nvidia.com>www.nvidia.com</a>.</p></blockquote><p>大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。</p><h2 id=解决方案>解决方案</h2><p>因为需要对驱动的安装脚本作修改，因此需要解压缩安装包<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>    ./NVIDIA-Linux-x86-310.19.run -x</span></span></code></pre></div></p><p>修改文件 contest.sh</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>    cd NVIDIA-Linux-x86-310.19/
+</span></span><span style=display:flex><span>    vi kernel/conftest.sh</span></span></code></pre></div><p>修改:1697行附近的代码，如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># kernel older than 2.6.6, that&#39;s all we require to</span>
+</span></span><span style=display:flex><span><span style=color:#75715e># build the module.</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>#</span>
+</span></span><span style=display:flex><span>VERSION<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>grep <span style=color:#e6db74>&#34;^VERSION =&#34;</span> $MAKEFILE | cut -d <span style=color:#e6db74>&#34; &#34;</span> -f 3<span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>PATCHLEVEL<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>grep <span style=color:#e6db74>&#34;^PATCHLEVEL =&#34;</span> $MAKEFILE | cut -d <span style=color:#e6db74>&#34; &#34;</span> -f 3<span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>SUBLEVEL<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>grep <span style=color:#e6db74>&#34;^SUBLEVEL =&#34;</span> $MAKEFILE | cut -d <span style=color:#e6db74>&#34; &#34;</span> -f 3<span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> -n <span style=color:#e6db74>&#34;</span>$VERSION<span style=color:#e6db74>&#34;</span> -a $VERSION -ge <span style=color:#ae81ff>3</span> <span style=color:#f92672>]</span> <span style=color:#f92672>||</span> 
+</span></span><span style=display:flex><span>   <span style=color:#f92672>[</span> -n <span style=color:#e6db74>&#34;</span>$PATCHLEVEL<span style=color:#e6db74>&#34;</span> -a $PATCHLEVEL -ge <span style=color:#ae81ff>6</span> 
+</span></span><span style=display:flex><span>		 -a -n <span style=color:#e6db74>&#34;</span>$SUBLEVEL<span style=color:#e6db74>&#34;</span> -a $SUBLEVEL -le <span style=color:#ae81ff>5</span> <span style=color:#f92672>]</span>; <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>	 SELECTED_MAKEFILE<span style=color:#f92672>=</span>Makefile.kbuild
+</span></span><span style=display:flex><span>	 RET<span style=color:#f92672>=</span><span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>fi</span></span></span></code></pre></div><p>修改:160行附近的代码，如下：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#66d9ef>if</span> <span style=color:#f92672>[</span> <span style=color:#e6db74>&#34;</span>$ARCH<span style=color:#e6db74>&#34;</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;i386&#34;</span> -o <span style=color:#e6db74>&#34;</span>$ARCH<span style=color:#e6db74>&#34;</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;x86_64&#34;</span> <span style=color:#f92672>]</span>; <span style=color:#66d9ef>then</span>
+</span></span><span style=display:flex><span>  CFLAGS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span>$CFLAGS<span style=color:#e6db74> -I</span>$SOURCES<span style=color:#e6db74>/arch/x86/include&#34;</span>
+</span></span><span style=display:flex><span>  CFLAGS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span>$CFLAGS<span style=color:#e6db74> -I</span>$SOURCES<span style=color:#e6db74>/arch/x86/include/uapi&#34;</span>
+</span></span><span style=display:flex><span>  CFLAGS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span>$CFLAGS<span style=color:#e6db74> -I</span>$OUTPUT<span style=color:#e6db74>/arch/x86/include/generated&#34;</span>
+</span></span><span style=display:flex><span>  CFLAGS<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;</span>$CFLAGS<span style=color:#e6db74> -I</span>$OUTPUT<span style=color:#e6db74>/arch/x86/include/generated/uapi&#34;</span></span></span></code></pre></div>保存文件并运行安装：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>	./nvidia-installer</span></span></code></pre></div><p>现在应该可以通过正常安装了。</p><hr><p>参考资料</p><ol><li><a href=https://bugs.archlinux.org/task/33827>https://bugs.archlinux.org/task/33827</a></li><li><a href="http://forums.fedoraforum.org/showthread.php?t=288869">http://forums.fedoraforum.org/showthread.php?t=288869</a></li><li><a href="http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/nvidia-drivers/files/nvidia-drivers-313.18-linux-3.7%2B.patch?revision=1.1">http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/nvidia-drivers/files/nvidia-drivers-313.18-linux-3.7%2B.patch?revision=1.1</a></li></ol></main><script src=https://utteranc.es/client.js repo=anthonyhan/anthonyhan.github.io issue-term=title label=💬comment theme=github-light crossorigin=anonymous async></script><footer><hr>© 2005 - 2022 Anthony | <a href=https://github.com/anthonyhan>Github</a> | <a href=https://twitter.com/antonius_hq>Twitter</a></footer></body></html>

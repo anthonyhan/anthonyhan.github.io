@@ -1,196 +1,61 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ActionScript3的继承机制 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
-
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
-
-<div class="article-meta">
-<h1><span class="title">ActionScript3的继承机制</span></h1>
-
-<h2 class="date">2012/07/31</h2>
-</div>
-
-<main>
-<p>因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循<a href="http://zh.wikipedia.org/zh/ECMAScript">ECMAScript</a> 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。</p>
-<p>本文主要内容源自Adobe官方教程：<a href="http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html">ActionScript 中面向对象的编程-高级主题</a> ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。</p>
-<p>本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。</p>
-<h2 id="actionscript-oop-支持的历史">ActionScript OOP 支持的历史</h2>
-<p>由于 ActionScript 3.0 是在以前版本的 ActionScript 基础上构建的，了解 ActionScript 对象模型的发展过程可能有所帮助。ActionScript 最初作为早期版本的 Flash 创作工具的简单编写脚本机制。后来，程序员开始使用 ActionScript 建立更加复杂的应用程序。为了迎合这些程序员的需要，每个后续版本都添加了一些语言功能以帮助创建复杂的应用程序。</p>
-<h3 id="actionscript-10">ActionScript 1.0</h3>
-<p>ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本。即使在这个早期开发阶段，ActionScript 对象模型也是建立在基础数据类型对象的概念的基础上。ActionScript 对象是由一组属性 构成的复合数据类型。讨论对象模型时，术语属性 包括附加到对象的所有内容，如变量、函数或方法。</p>
-<p>尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C++ 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。</p>
-<p>要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#75715e">// base class 
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">function</span> Shape() {} 
-	<span style="color:#75715e">// Create a property named visible. 
-</span><span style="color:#75715e"></span>	Shape.<span style="color:#a6e22e">prototype</span>.<span style="color:#a6e22e">visible</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span></code></pre></div>
-<p>此构造函数定义可以使用 new 运算符实例化的 Shape 类，如下所示：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#a6e22e">myShape</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Shape();</code></pre></div></p>
-<p>就像 Shape() 构造函数对象用作 Shape 类实例的原型一样，它还可以用作 Shape 的子类（即扩展 Shape 类的其它类）的原型。</p>
-<p>创建作为 Shape 类的子类的类的过程分两个步骤。首先，通过定义类的构造函数创建该类，如下所示：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#75715e">// child class 
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">function</span> <span style="color:#a6e22e">Circle</span>(<span style="color:#a6e22e">id</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">radius</span>) 
-	{ 
-	<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">id</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">;</span> 
-	<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">radius</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">radius</span><span style="color:#f92672">;</span> 
-	}</code></pre></div></p>
-<p>然后，使用 new 运算符将 Shape 类声明为 Circle 类的原型。默认情况下，创建的所有类都使用 Object 类作为其原型，这意味着 Circle.prototype 当前包含一个通用对象（Object 类的实例）。要指定 Circle 的原型是 Shape 而不是 Object，请使用以下代码更改 Circle.prototype 的值，使其包含 Shape 对象而不是通用对象。
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#75715e">// Make Circle a subclass of Shape. 
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">Circle</span>.<span style="color:#a6e22e">prototype</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Shape();</code></pre></div></p>
-<p>Shape 类和 Circle 类现在通过通常所说的原型链 的继承关系联系在一起。下图说明了原型链中的关系：
-<img src="http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/images/op_prototype_chain.png" alt="shape"></p>
-<p>每个原型链末端的基类是 Object 类。Object 类包含一个名为 Object.prototype 的静态属性，该属性指向在 ActionScript 1.0 中创建的所有对象的基原型对象。我们的示例原型链中的下一个对象是 Shape 对象。这是因为从不显式设置 Shape.prototype 属性，所以它仍然包含通用对象（Object 类的实例）。此链中的最后一个链环是 Circle 类，该类链接到其原型 Shape 类（Circle.prototype 属性包含 Shape 对象）。</p>
-<p>如果创建了 Circle 类的实例（如下面的示例所示），该实例会继承 Circle 类的原型链：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#75715e">// Create an instance of the Circle class. 
-</span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myCircle</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Circle</span>();</code></pre></div></p>
-<p>回想一下，我们创建了一个名为 visible 的属性作为 Shape 类的成员。在示例中，visible 属性并不作为 myCircle 对象的一部分，只是 Shape 对象的一个成员，但以下代码行的输出为 true：</p>
-<blockquote>
-<p>trace(myCircle.visible); // output: true</p>
-</blockquote>
-<p>Flash Player 能够沿着原型链检查 myCircle 对象是否继承了 visible 属性。执行此代码时，Flash Player 首先在 myCircle 对象的属性中搜索名为 visible 的属性，但是未发现这样的属性。Flash Player 然后在下一个 Circle.prototype 对象中查找，但是仍未发现名为 visible 的属性。继续检查原型链，Flash Player 最终发现了在 Shape.prototype 对象上定义的 visible 属性，并输出该属性的值。</p>
-<p>为了简便，本节省略了原型链的很多难懂之处和细节，目的是为了提供足够的信息帮助您了解 ActionScript 3.0 对象模型。</p>
-<h3 id="actionscript-20">ActionScript 2.0</h3>
-<p>在 ActionScript 2.0 中引入了 class、extends、public 和 private 等新关键字，通过使用这些关键字，您可以按 Java 和 C++ 等基于类的语言用户所熟悉的方式来定义类。ActionScript 1.0 和 ActionScript 2.0 中的基础继承机制是相同的，了解这一点很重要。ActionScript 2.0 只是增加了定义类的新语法。在该语言的两个版本中，原型链的作用方式是一样的。</p>
-<p>ActionScript 2.0 中引入了新语法（如以下摘录中所示），可允许以数程序员认为更直观的方式定义类：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript">	<span style="color:#75715e">// base class 
-</span><span style="color:#75715e"></span>	<span style="color:#66d9ef">class</span> Shape 
-	{ 
-	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">visible</span><span style="color:#f92672">:</span>Boolean <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span> 
-	}</code></pre></div>
-注意，ActionScript 2.0 还引入了用于编译时类型检查的类型注释。使用类型注释，可以将上个示例中的 visible 属性声明为应只包含布尔值。新 extends 关键字还简化了创建子类的过程。在下面的示例中，通过使用 extends 关键字，可以一步完成在 ActionScript 1.0 中需要分两步完成的过程：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#75715e">// child class 
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Circle</span> <span style="color:#66d9ef">extends</span> Shape 
-{ 
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span>Number<span style="color:#f92672">;</span> 
-    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">radius</span><span style="color:#f92672">:</span>Number<span style="color:#f92672">;</span> 
-    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">Circle</span>(<span style="color:#a6e22e">id</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">radius</span>) 
-    { 
-        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">id</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">id</span><span style="color:#f92672">;</span> 
-        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">radius</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">radius</span><span style="color:#f92672">;</span> 
-        } 
-}</code></pre></div>
-构造函数现在声明为类定义的一部分，还必须显式声明类属性 id 和 radius。</p>
-<p>ActionScript 2.0 中还增加了对接口定义的支持，以使您能够使用为对象间通信正式定义的协议来进一步改进面向对象的程序。</p>
-<h2 id="actionscript-30-类对象">ActionScript 3.0 类对象</h2>
-<p>常见的面向对象的编程范例多数常与 Java 和 C++ 相关联，这种范例使用类定义对象的类型。采用这种范例的编程语言也趋向使用类来构造类定义的数据类型的实例。ActionScript 使用类是为了实现以上两个目的，但其根本还是一种基于原型的语言，并带有有趣的特征。ActionScript 为每一类定义创建了特殊的类对象，允许共享行为和状态。但是，对多数 ActionScript 程序员而言，这个特点可能与实际编码没有什么牵连。ActionScript 3.0 的设计目的是，不使用（甚至是不必了解）这些特殊类对象，就可创建复杂的面向对象的 ActionScript 应用程序。对于要利用类对象的高级程序员，本节提供有关问题的深入讨论。</p>
-<p>下图显示一个类对象的结构，该类对象表示使用语句 class A {} 定义的名为 A 的简单类：</p>
-<p><img src="http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/images/op_class_objec_a_popup.png" alt="as3"></p>
-<p>图中的每个矩形表示一个对象。图中的每一个对象都有下标字符 A，这表示该对象属于类 A。类对象 (CA) 包含对许多其它重要对象的引用。实例 traits 对象 (TA) 用于存储在类定义中定义的实例属性。类 traits 对象 (TCA) 表示类的内部类型，用于存储该类定义的静态属性（下标字符 C 代表”类”）。原型对象 (PA) 始终指的是最初通过 constructor 属性附加到的类对象。</p>
-<h2 id="traits-对象">traits 对象</h2>
-<p>traits 对象是 ActionScript 3.0 中的新增对象，它是为了提高性能而实现的。在以前版本的 ActionScript 中，名称查找是一个耗时的过程，因为 Flash Player 要搜索原型链。在 ActionScript 3.0 中，名称查找更有效、耗时更少，因为可以将继承属性从超类复制到子类的 traits 对象。</p>
-<p>编程代码不能直接访问 traits 对象，但是性能和内存使用情况的改善可反映它的存在。traits 对象给 AVM2 提供了关于类的布局和内容的详细信息。借助这些信息，AVM2 可显著减少执行时间，因为它可以经常生成直接机器指令来直接访问属性或直接调用方法，而省去了查找名称所耗费的时间。</p>
-<p>由于使用了 traits 对象，与以前版本中 ActionScript 类似对象相比，该版本中对象占用内存的时间明显减少。例如，如果某个类已密封（即，该类未声明为 dynamic），则该类实例不需要动态添加属性的哈希表，只保留一个到 traits 对象的指针和该类中定义的固定属性的某些位置。因此，如果对象在 ActionScript 2.0 中需要占用 100 个字节的内存，在 ActionScript 3.0 中只需要占用 20 个字节的内存。</p>
-<p>注： traits 对象是内部实现详细信息，不保证在将来版本的 ActionScript 中此对象不更改，甚至消失。</p>
-<h2 id="原型对象">原型对象</h2>
-<p>每个 ActionScript 类对象都有一个名为 prototype 属性，它表示对类的原型对象的引用。ActionScript 根本上是基于原型的语言，原型对象是旧内容。有关详细信息，请参阅 ActionScript OOP 支持的历史。</p>
-<p>prototype 属性是只读属性，这表示不能将其修改为指向其它对象。这不同于以前版本 ActionScript 中的类 prototype 属性，在以前版本中可以重新分配 prototype，使它指向其它类。虽然 prototype 属性是只读属性，但是它所引用的原型对象不是只读的。换句话说，可以向原型对象添加新属性。向原型对象添加的属性可在类的所有实例中共享。</p>
-<p>原型链是以前版本的 ActionScript 的唯一继承机制，在 ActionScript 3.0 中，原型链只具有辅助作用。主要的继承机制（固定属性）是由 traits 对象在内部处理的。固定属性指的是定义为类定义的一部分的变量或方法。固定属性继承也叫做类继承，因为它是与 class、extends 和 override 等关键字相关的继承机制。</p>
-<p>原型链提供了另一种继承机制，该机制的动态性比固定属性继承的更强。既可以将属性作为类定义的一部分，也可以在运行时通过类对象的 prototype 属性向类的原型对象中添加属性。但是，请注意，如果将编译器设置为严格模式，则不能访问添加到原型对象中的属性，除非使用 dynamic 关键字声明类。</p>
-<p>Object 类就是这样类的示例，它的原型对象附加了若干属性。Object 类的 toString() 和 valueOf() 方法实际上是一些函数，它们分配给 Object 类原型对象的属性。以下是一个示例，说明这些方法的声明理论上是怎样的（实际实现时会因实现详细信息而稍有不同）：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">dynamic</span> <span style="color:#66d9ef">class</span> Object 
-{ 
-    <span style="color:#a6e22e">prototype</span>.<span style="color:#a6e22e">toString</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() 
-    { 
-        <span style="color:#75715e">// statements 
-</span><span style="color:#75715e"></span>    }; 
-    <span style="color:#a6e22e">prototype</span>.<span style="color:#a6e22e">valueOf</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() 
-    { 
-        <span style="color:#75715e">// statements 
-</span><span style="color:#75715e"></span>    }; 
-}</code></pre></div></p>
-<p>如前所述，可以将属性附加到类定义外部的类原型对象。例如，也可以在 Object 类定义外部定义 toString() 方法，如下所示：</p>
-<blockquote>
-<p>Object.prototype.toString = function() 
-{ 
-// statements 
-};</p>
-</blockquote>
-<p>但是，原型继承与固定属性继承不一样，如果要重新定义子类中的方法，原型继承不需要 override 关键字。例如. 如果要重新定义 Object 类的子类中的 valueOf() 方法，您有以下三种选择。第一，可以在类定义中的子类原型对象上定义 valueOf() 方法。以下代码创建一个名为 Foo 的 Object 子类，并将 Foo 原型对象的 valueOf() 方法重新定义为类定义的一部分。因为每个类都是从 Object 继承的，所以不需要使用 extends 关键字。
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#66d9ef">dynamic</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Foo</span> 
-{ 
-    <span style="color:#a6e22e">prototype</span>.<span style="color:#a6e22e">valueOf</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() 
-    { 
-        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Instance of Foo&#34;</span><span style="color:#f92672">;</span> 
-    }; 
-}</code></pre></div></p>
-<p>第二，可以在类定义外部对 Foo 原型对象定义 valueOf() 方法，如以下代码中所示：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#a6e22e">Foo</span>.<span style="color:#a6e22e">prototype</span>.<span style="color:#a6e22e">valueOf</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() 
-{ 
-    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Instance of Foo&#34;</span><span style="color:#f92672">;</span> 
-};</code></pre></div></p>
-<p>第三，可以将名为 valueOf() 的固定属性定义为 Foo 类的一部分。这种方法与其它混合了固定属性继承与原型继承的方法有所不同。要重新定义 valueOf() 的 Foo 的任何子类必须使用 override 关键字。以下代码显示 valueOf() 定义为 Foo 中的固定属性：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Foo</span> 
-{ 
-    <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">valueOf</span>()<span style="color:#f92672">:</span>String 
-    { 
-        <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;Instance of Foo&#34;</span><span style="color:#f92672">;</span> 
-    } 
-}</code></pre></div></p>
-<h2 id="as3-命名空间">AS3 命名空间</h2>
-<p>由于存在两种继承机制，即固定属性继承和原型继承，所以涉及到核心类的属性和方法时，就存在两种机制的兼容性问题。如果与 ActionScript 所基于的 ECMAScript 语言规范兼容，则要求使用原型继承，这意味着核心类的属性和方法是在该类的原型对象上定义的。另一方面，如果与 ActionScript 3.0 兼容，则要求使用固定属性继承，这意味着核心类的属性和方法是使用 const、var 和 function 关键字在类定义中定义的。此外，如果使用固定属性而不是原型属性，将显著提升运行时性能。</p>
-<p>在 ActionScript 3.0 中，通过同时将原型继承和固定属性继承用于核心类，解决了这个问题。每一个核心类都包含两组属性和方法。一组是在原型对象上定义的，用于与 ECMAScript 规范兼容，另一组使用固定属性定义和 AS3 命名空间定义，以便与 ActionScript 3.0 兼容。</p>
-<p>AS3 命名空间提供了一种约定机制，用来在两组属性和方法之间做出选择。如果不使用 AS3 命名空间，核心类的实例会继承在核心类的原型对象上定义的属性和方法。如果决定使用 AS3 命名空间，核心类的实例会继承 AS3 版本，因为固定属性的优先级始终高于原型属性。换句话说，只要固定属性可用，则始终使用固定属性，而不使用同名的原型属性。</p>
-<p>通过用 AS3 命名空间限定属性或方法，可以选择使用 AS3 命名空间版本的属性或方法。例如，下面的代码使用 AS3 版本的 Array.pop() 方法：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">nums</span><span style="color:#f92672">:</span>Array <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Array(<span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">3</span>); 
-<span style="color:#a6e22e">nums</span>.<span style="color:#a6e22e">AS3</span><span style="color:#f92672">::</span><span style="color:#a6e22e">pop</span>(); 
-<span style="color:#a6e22e">trace</span>(<span style="color:#a6e22e">nums</span>); <span style="color:#e6db74">//</span> <span style="color:#a6e22e">output</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">,</span><span style="color:#ae81ff">2</span></code></pre></div></p>
-<p>或者，也可以使用 use namespace 指令打开代码块中所有定义的 AS3 命名空间。例如，以下代码使用 use namespace 指令为 pop() 和 push() 方法打开 AS3 命名空间：
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-actionscript" data-lang="actionscript"><span style="color:#a6e22e">use</span> <span style="color:#66d9ef">namespace</span> <span style="color:#a6e22e">AS3</span><span style="color:#f92672">;</span> 
- 
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">nums</span><span style="color:#f92672">:</span>Array <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Array(<span style="color:#ae81ff">1</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">,</span> <span style="color:#ae81ff">3</span>); 
-<span style="color:#a6e22e">nums</span>.<span style="color:#a6e22e">pop</span>(); 
-<span style="color:#a6e22e">nums</span>.<span style="color:#a6e22e">push</span>(<span style="color:#ae81ff">5</span>); 
-<span style="color:#a6e22e">trace</span>(<span style="color:#a6e22e">nums</span>) <span style="color:#e6db74">//</span> <span style="color:#a6e22e">output</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">,</span><span style="color:#ae81ff">2</span><span style="color:#f92672">,</span><span style="color:#ae81ff">5</span></code></pre></div></p>
-<p>ActionScript 3.0 还为每组属性提供了编译器选项，以便将 AS3 命名空间应用于整个程序。-as3 编译器选项表示 AS3 命名空间，-es 编译器选项表示原型继承选项（es 代表 ECMAScript）。要打开整个程序的 AS3 命名空间，请将 -as3 编译器选项设置为 true，将 -es 编译器选项设置为 false。要使用原型版本，请将编译器选项设置为相反值。Adobe Flex Builder 3 和 Adobe Flash CS4 Professional 的默认编译器选项是 -as3 = true 和 -es = false。</p>
-<p>如果计划扩展任何核心类并覆盖任何方法，应了解 AS3 命名空间对声明覆盖方法的方式有什么影响。如果要使用 AS3 命名空间，覆盖核心类方法的任何方法都必须使用 AS3 命名空间以及 override 属性。如果不打算使用 AS3 命名空间且要重新定义子类中的核心类方法，则不应使用 AS3 命名空间或 override 关键字。</p>
-<hr>
-<p><strong>参考资料</strong></p>
-<ol>
-<li><a href="http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html">http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html</a></li>
-<li><a href="http://hi.baidu.com/iflashigame/item/e72e0d74dfc1f3285c178924">http://hi.baidu.com/iflashigame/item/e72e0d74dfc1f3285c178924</a></li>
-<li><a href="http://www.byywee.com/page/M0/S225/225595.html">http://www.byywee.com/page/M0/S225/225595.html</a></li>
-</ol>
-</main>
-
-<script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
-        issue-term="title"
-        label="💬comment"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-</script>
-
-
-<footer>
-  
-  
-  <hr/>
-  © 2005-2021 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
-
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>ActionScript3的继承机制 | LimboNova</title><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=/css/fonts.css></head><body><nav><ul class=menu><li><a href=/>Home</a></li><li><a href=/tags/>Tags</a></li><li><a href=/about/>About</a></li><li><a href=/index.xml>Subscribe</a></li></ul><hr></nav><div class=article-meta><h1><span class=title>ActionScript3的继承机制</span></h1><h2 class=date>2012/07/31</h2></div><main><p>因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循<a href=http://zh.wikipedia.org/zh/ECMAScript>ECMAScript</a> 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。</p><p>本文主要内容源自Adobe官方教程：<a href=http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html>ActionScript 中面向对象的编程-高级主题</a> ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。</p><p>本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。</p><h2 id=actionscript-oop-支持的历史>ActionScript OOP 支持的历史</h2><p>由于 ActionScript 3.0 是在以前版本的 ActionScript 基础上构建的，了解 ActionScript 对象模型的发展过程可能有所帮助。ActionScript 最初作为早期版本的 Flash 创作工具的简单编写脚本机制。后来，程序员开始使用 ActionScript 建立更加复杂的应用程序。为了迎合这些程序员的需要，每个后续版本都添加了一些语言功能以帮助创建复杂的应用程序。</p><h3 id=actionscript-10>ActionScript 1.0</h3><p>ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本。即使在这个早期开发阶段，ActionScript 对象模型也是建立在基础数据类型对象的概念的基础上。ActionScript 对象是由一组属性 构成的复合数据类型。讨论对象模型时，术语属性 包括附加到对象的所有内容，如变量、函数或方法。</p><p>尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C++ 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。</p><p>要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span>	<span style=color:#75715e>// base class 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>function</span> Shape() {} 
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Create a property named visible. 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	Shape.<span style=color:#a6e22e>prototype</span>.<span style=color:#a6e22e>visible</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span><span style=color:#f92672>;</span></span></span></code></pre></div><p>此构造函数定义可以使用 new 运算符实例化的 Shape 类，如下所示：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span>	<span style=color:#a6e22e>myShape</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Shape();</span></span></code></pre></div></p><p>就像 Shape() 构造函数对象用作 Shape 类实例的原型一样，它还可以用作 Shape 的子类（即扩展 Shape 类的其它类）的原型。</p><p>创建作为 Shape 类的子类的类的过程分两个步骤。首先，通过定义类的构造函数创建该类，如下所示：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span>	<span style=color:#75715e>// child class 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>function</span> <span style=color:#a6e22e>Circle</span>(<span style=color:#a6e22e>id</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>radius</span>) 
+</span></span><span style=display:flex><span>	{ 
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>id</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>id</span><span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>radius</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>radius</span><span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>	}</span></span></code></pre></div></p><p>然后，使用 new 运算符将 Shape 类声明为 Circle 类的原型。默认情况下，创建的所有类都使用 Object 类作为其原型，这意味着 Circle.prototype 当前包含一个通用对象（Object 类的实例）。要指定 Circle 的原型是 Shape 而不是 Object，请使用以下代码更改 Circle.prototype 的值，使其包含 Shape 对象而不是通用对象。<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span><span style=color:#75715e>// Make Circle a subclass of Shape. 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#a6e22e>Circle</span>.<span style=color:#a6e22e>prototype</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Shape();</span></span></code></pre></div></p><p>Shape 类和 Circle 类现在通过通常所说的原型链 的继承关系联系在一起。下图说明了原型链中的关系：
+<img src=http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/images/op_prototype_chain.png alt=shape></p><p>每个原型链末端的基类是 Object 类。Object 类包含一个名为 Object.prototype 的静态属性，该属性指向在 ActionScript 1.0 中创建的所有对象的基原型对象。我们的示例原型链中的下一个对象是 Shape 对象。这是因为从不显式设置 Shape.prototype 属性，所以它仍然包含通用对象（Object 类的实例）。此链中的最后一个链环是 Circle 类，该类链接到其原型 Shape 类（Circle.prototype 属性包含 Shape 对象）。</p><p>如果创建了 Circle 类的实例（如下面的示例所示），该实例会继承 Circle 类的原型链：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span>	<span style=color:#75715e>// Create an instance of the Circle class. 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>myCircle</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Circle</span>();</span></span></code></pre></div></p><p>回想一下，我们创建了一个名为 visible 的属性作为 Shape 类的成员。在示例中，visible 属性并不作为 myCircle 对象的一部分，只是 Shape 对象的一个成员，但以下代码行的输出为 true：</p><blockquote><p>trace(myCircle.visible); // output: true</p></blockquote><p>Flash Player 能够沿着原型链检查 myCircle 对象是否继承了 visible 属性。执行此代码时，Flash Player 首先在 myCircle 对象的属性中搜索名为 visible 的属性，但是未发现这样的属性。Flash Player 然后在下一个 Circle.prototype 对象中查找，但是仍未发现名为 visible 的属性。继续检查原型链，Flash Player 最终发现了在 Shape.prototype 对象上定义的 visible 属性，并输出该属性的值。</p><p>为了简便，本节省略了原型链的很多难懂之处和细节，目的是为了提供足够的信息帮助您了解 ActionScript 3.0 对象模型。</p><h3 id=actionscript-20>ActionScript 2.0</h3><p>在 ActionScript 2.0 中引入了 class、extends、public 和 private 等新关键字，通过使用这些关键字，您可以按 Java 和 C++ 等基于类的语言用户所熟悉的方式来定义类。ActionScript 1.0 和 ActionScript 2.0 中的基础继承机制是相同的，了解这一点很重要。ActionScript 2.0 只是增加了定义类的新语法。在该语言的两个版本中，原型链的作用方式是一样的。</p><p>ActionScript 2.0 中引入了新语法（如以下摘录中所示），可允许以数程序员认为更直观的方式定义类：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span>	<span style=color:#75715e>// base class 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>class</span> Shape 
+</span></span><span style=display:flex><span>	{ 
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>visible</span><span style=color:#f92672>:</span>Boolean <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span><span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>	}</span></span></code></pre></div>注意，ActionScript 2.0 还引入了用于编译时类型检查的类型注释。使用类型注释，可以将上个示例中的 visible 属性声明为应只包含布尔值。新 extends 关键字还简化了创建子类的过程。在下面的示例中，通过使用 extends 关键字，可以一步完成在 ActionScript 1.0 中需要分两步完成的过程：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span><span style=color:#75715e>// child class 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Circle</span> <span style=color:#66d9ef>extends</span> Shape 
+</span></span><span style=display:flex><span>{ 
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>id</span><span style=color:#f92672>:</span>Number<span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>radius</span><span style=color:#f92672>:</span>Number<span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>Circle</span>(<span style=color:#a6e22e>id</span><span style=color:#f92672>,</span> <span style=color:#a6e22e>radius</span>) 
+</span></span><span style=display:flex><span>    { 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>id</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>id</span><span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>radius</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>radius</span><span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>        } 
+</span></span><span style=display:flex><span>}</span></span></code></pre></div>构造函数现在声明为类定义的一部分，还必须显式声明类属性 id 和 radius。</p><p>ActionScript 2.0 中还增加了对接口定义的支持，以使您能够使用为对象间通信正式定义的协议来进一步改进面向对象的程序。</p><h2 id=actionscript-30-类对象>ActionScript 3.0 类对象</h2><p>常见的面向对象的编程范例多数常与 Java 和 C++ 相关联，这种范例使用类定义对象的类型。采用这种范例的编程语言也趋向使用类来构造类定义的数据类型的实例。ActionScript 使用类是为了实现以上两个目的，但其根本还是一种基于原型的语言，并带有有趣的特征。ActionScript 为每一类定义创建了特殊的类对象，允许共享行为和状态。但是，对多数 ActionScript 程序员而言，这个特点可能与实际编码没有什么牵连。ActionScript 3.0 的设计目的是，不使用（甚至是不必了解）这些特殊类对象，就可创建复杂的面向对象的 ActionScript 应用程序。对于要利用类对象的高级程序员，本节提供有关问题的深入讨论。</p><p>下图显示一个类对象的结构，该类对象表示使用语句 class A {} 定义的名为 A 的简单类：</p><p><img src=http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/images/op_class_objec_a_popup.png alt=as3></p><p>图中的每个矩形表示一个对象。图中的每一个对象都有下标字符 A，这表示该对象属于类 A。类对象 (CA) 包含对许多其它重要对象的引用。实例 traits 对象 (TA) 用于存储在类定义中定义的实例属性。类 traits 对象 (TCA) 表示类的内部类型，用于存储该类定义的静态属性（下标字符 C 代表”类”）。原型对象 (PA) 始终指的是最初通过 constructor 属性附加到的类对象。</p><h2 id=traits-对象>traits 对象</h2><p>traits 对象是 ActionScript 3.0 中的新增对象，它是为了提高性能而实现的。在以前版本的 ActionScript 中，名称查找是一个耗时的过程，因为 Flash Player 要搜索原型链。在 ActionScript 3.0 中，名称查找更有效、耗时更少，因为可以将继承属性从超类复制到子类的 traits 对象。</p><p>编程代码不能直接访问 traits 对象，但是性能和内存使用情况的改善可反映它的存在。traits 对象给 AVM2 提供了关于类的布局和内容的详细信息。借助这些信息，AVM2 可显著减少执行时间，因为它可以经常生成直接机器指令来直接访问属性或直接调用方法，而省去了查找名称所耗费的时间。</p><p>由于使用了 traits 对象，与以前版本中 ActionScript 类似对象相比，该版本中对象占用内存的时间明显减少。例如，如果某个类已密封（即，该类未声明为 dynamic），则该类实例不需要动态添加属性的哈希表，只保留一个到 traits 对象的指针和该类中定义的固定属性的某些位置。因此，如果对象在 ActionScript 2.0 中需要占用 100 个字节的内存，在 ActionScript 3.0 中只需要占用 20 个字节的内存。</p><p>注： traits 对象是内部实现详细信息，不保证在将来版本的 ActionScript 中此对象不更改，甚至消失。</p><h2 id=原型对象>原型对象</h2><p>每个 ActionScript 类对象都有一个名为 prototype 属性，它表示对类的原型对象的引用。ActionScript 根本上是基于原型的语言，原型对象是旧内容。有关详细信息，请参阅 ActionScript OOP 支持的历史。</p><p>prototype 属性是只读属性，这表示不能将其修改为指向其它对象。这不同于以前版本 ActionScript 中的类 prototype 属性，在以前版本中可以重新分配 prototype，使它指向其它类。虽然 prototype 属性是只读属性，但是它所引用的原型对象不是只读的。换句话说，可以向原型对象添加新属性。向原型对象添加的属性可在类的所有实例中共享。</p><p>原型链是以前版本的 ActionScript 的唯一继承机制，在 ActionScript 3.0 中，原型链只具有辅助作用。主要的继承机制（固定属性）是由 traits 对象在内部处理的。固定属性指的是定义为类定义的一部分的变量或方法。固定属性继承也叫做类继承，因为它是与 class、extends 和 override 等关键字相关的继承机制。</p><p>原型链提供了另一种继承机制，该机制的动态性比固定属性继承的更强。既可以将属性作为类定义的一部分，也可以在运行时通过类对象的 prototype 属性向类的原型对象中添加属性。但是，请注意，如果将编译器设置为严格模式，则不能访问添加到原型对象中的属性，除非使用 dynamic 关键字声明类。</p><p>Object 类就是这样类的示例，它的原型对象附加了若干属性。Object 类的 toString() 和 valueOf() 方法实际上是一些函数，它们分配给 Object 类原型对象的属性。以下是一个示例，说明这些方法的声明理论上是怎样的（实际实现时会因实现详细信息而稍有不同）：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>dynamic</span> <span style=color:#66d9ef>class</span> Object 
+</span></span><span style=display:flex><span>{ 
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>prototype</span>.<span style=color:#a6e22e>toString</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>function</span>() 
+</span></span><span style=display:flex><span>    { 
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// statements 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    }; 
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>prototype</span>.<span style=color:#a6e22e>valueOf</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>function</span>() 
+</span></span><span style=display:flex><span>    { 
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// statements 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    }; 
+</span></span><span style=display:flex><span>}</span></span></code></pre></div></p><p>如前所述，可以将属性附加到类定义外部的类原型对象。例如，也可以在 Object 类定义外部定义 toString() 方法，如下所示：</p><blockquote><p>Object.prototype.toString = function()
+{
+// statements
+};</p></blockquote><p>但是，原型继承与固定属性继承不一样，如果要重新定义子类中的方法，原型继承不需要 override 关键字。例如. 如果要重新定义 Object 类的子类中的 valueOf() 方法，您有以下三种选择。第一，可以在类定义中的子类原型对象上定义 valueOf() 方法。以下代码创建一个名为 Foo 的 Object 子类，并将 Foo 原型对象的 valueOf() 方法重新定义为类定义的一部分。因为每个类都是从 Object 继承的，所以不需要使用 extends 关键字。<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span><span style=color:#66d9ef>dynamic</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Foo</span> 
+</span></span><span style=display:flex><span>{ 
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>prototype</span>.<span style=color:#a6e22e>valueOf</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>function</span>() 
+</span></span><span style=display:flex><span>    { 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;Instance of Foo&#34;</span><span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>    }; 
+</span></span><span style=display:flex><span>}</span></span></code></pre></div></p><p>第二，可以在类定义外部对 Foo 原型对象定义 valueOf() 方法，如以下代码中所示：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span><span style=color:#a6e22e>Foo</span>.<span style=color:#a6e22e>prototype</span>.<span style=color:#a6e22e>valueOf</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>function</span>() 
+</span></span><span style=display:flex><span>{ 
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;Instance of Foo&#34;</span><span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>};</span></span></code></pre></div></p><p>第三，可以将名为 valueOf() 的固定属性定义为 Foo 类的一部分。这种方法与其它混合了固定属性继承与原型继承的方法有所不同。要重新定义 valueOf() 的 Foo 的任何子类必须使用 override 关键字。以下代码显示 valueOf() 定义为 Foo 中的固定属性：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Foo</span> 
+</span></span><span style=display:flex><span>{ 
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>valueOf</span>()<span style=color:#f92672>:</span>String 
+</span></span><span style=display:flex><span>    { 
+</span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;Instance of Foo&#34;</span><span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span>    } 
+</span></span><span style=display:flex><span>}</span></span></code></pre></div></p><h2 id=as3-命名空间>AS3 命名空间</h2><p>由于存在两种继承机制，即固定属性继承和原型继承，所以涉及到核心类的属性和方法时，就存在两种机制的兼容性问题。如果与 ActionScript 所基于的 ECMAScript 语言规范兼容，则要求使用原型继承，这意味着核心类的属性和方法是在该类的原型对象上定义的。另一方面，如果与 ActionScript 3.0 兼容，则要求使用固定属性继承，这意味着核心类的属性和方法是使用 const、var 和 function 关键字在类定义中定义的。此外，如果使用固定属性而不是原型属性，将显著提升运行时性能。</p><p>在 ActionScript 3.0 中，通过同时将原型继承和固定属性继承用于核心类，解决了这个问题。每一个核心类都包含两组属性和方法。一组是在原型对象上定义的，用于与 ECMAScript 规范兼容，另一组使用固定属性定义和 AS3 命名空间定义，以便与 ActionScript 3.0 兼容。</p><p>AS3 命名空间提供了一种约定机制，用来在两组属性和方法之间做出选择。如果不使用 AS3 命名空间，核心类的实例会继承在核心类的原型对象上定义的属性和方法。如果决定使用 AS3 命名空间，核心类的实例会继承 AS3 版本，因为固定属性的优先级始终高于原型属性。换句话说，只要固定属性可用，则始终使用固定属性，而不使用同名的原型属性。</p><p>通过用 AS3 命名空间限定属性或方法，可以选择使用 AS3 命名空间版本的属性或方法。例如，下面的代码使用 AS3 版本的 Array.pop() 方法：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>nums</span><span style=color:#f92672>:</span>Array <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Array(<span style=color:#ae81ff>1</span><span style=color:#f92672>,</span> <span style=color:#ae81ff>2</span><span style=color:#f92672>,</span> <span style=color:#ae81ff>3</span>); 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>nums</span>.<span style=color:#a6e22e>AS3</span><span style=color:#f92672>::</span><span style=color:#a6e22e>pop</span>(); 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>trace</span>(<span style=color:#a6e22e>nums</span>); <span style=color:#e6db74>//</span> <span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>1</span><span style=color:#f92672>,</span><span style=color:#ae81ff>2</span></span></span></code></pre></div></p><p>或者，也可以使用 use namespace 指令打开代码块中所有定义的 AS3 命名空间。例如，以下代码使用 use namespace 指令为 pop() 和 push() 方法打开 AS3 命名空间：<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-actionscript data-lang=actionscript><span style=display:flex><span><span style=color:#a6e22e>use</span> <span style=color:#66d9ef>namespace</span> <span style=color:#a6e22e>AS3</span><span style=color:#f92672>;</span> 
+</span></span><span style=display:flex><span> 
+</span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>nums</span><span style=color:#f92672>:</span>Array <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> Array(<span style=color:#ae81ff>1</span><span style=color:#f92672>,</span> <span style=color:#ae81ff>2</span><span style=color:#f92672>,</span> <span style=color:#ae81ff>3</span>); 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>nums</span>.<span style=color:#a6e22e>pop</span>(); 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>nums</span>.<span style=color:#a6e22e>push</span>(<span style=color:#ae81ff>5</span>); 
+</span></span><span style=display:flex><span><span style=color:#a6e22e>trace</span>(<span style=color:#a6e22e>nums</span>) <span style=color:#e6db74>//</span> <span style=color:#a6e22e>output</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>1</span><span style=color:#f92672>,</span><span style=color:#ae81ff>2</span><span style=color:#f92672>,</span><span style=color:#ae81ff>5</span></span></span></code></pre></div></p><p>ActionScript 3.0 还为每组属性提供了编译器选项，以便将 AS3 命名空间应用于整个程序。-as3 编译器选项表示 AS3 命名空间，-es 编译器选项表示原型继承选项（es 代表 ECMAScript）。要打开整个程序的 AS3 命名空间，请将 -as3 编译器选项设置为 true，将 -es 编译器选项设置为 false。要使用原型版本，请将编译器选项设置为相反值。Adobe Flex Builder 3 和 Adobe Flash CS4 Professional 的默认编译器选项是 -as3 = true 和 -es = false。</p><p>如果计划扩展任何核心类并覆盖任何方法，应了解 AS3 命名空间对声明覆盖方法的方式有什么影响。如果要使用 AS3 命名空间，覆盖核心类方法的任何方法都必须使用 AS3 命名空间以及 override 属性。如果不打算使用 AS3 命名空间且要重新定义子类中的核心类方法，则不应使用 AS3 命名空间或 override 关键字。</p><hr><p><strong>参考资料</strong></p><ol><li><a href=http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html>http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html</a></li><li><a href=http://hi.baidu.com/iflashigame/item/e72e0d74dfc1f3285c178924>http://hi.baidu.com/iflashigame/item/e72e0d74dfc1f3285c178924</a></li><li><a href=http://www.byywee.com/page/M0/S225/225595.html>http://www.byywee.com/page/M0/S225/225595.html</a></li></ol></main><script src=https://utteranc.es/client.js repo=anthonyhan/anthonyhan.github.io issue-term=title label=💬comment theme=github-light crossorigin=anonymous async></script><footer><hr>© 2005 - 2022 Anthony | <a href=https://github.com/anthonyhan>Github</a> | <a href=https://twitter.com/antonius_hq>Twitter</a></footer></body></html>

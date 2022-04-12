@@ -1,64 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>book on LimboNova</title>
-    <link>/tags/book/</link>
-    <description>Recent content in book on LimboNova</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <lastBuildDate>Fri, 12 Apr 2013 12:16:03 +0800</lastBuildDate><atom:link href="/tags/book/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Ruby on Rails 入门体验</title>
-      <link>/posts/ror-tutorial-review/</link>
-      <pubDate>Fri, 12 Apr 2013 12:16:03 +0800</pubDate>
-      
-      <guid>/posts/ror-tutorial-review/</guid>
-      <description>&lt;p&gt;今年年初时决定学习一下 Web 开发方面的知识，因为对 Ruby 早有耳闻，所以很自然地就选择了 Ruby on Rails 作为目标。在网上看到 Ruby on Rails Tutorial的教程，于是就跟着教程，边学边做地把这本书看完了。对 RoR 有了一个大概的了解，包括框架结构和开发流程，还有一些常用的Gems，确实是一本不错的实践入门书。&lt;/p&gt;
-&lt;h2 id=&#34;关于教程&#34;&gt;关于教程&lt;/h2&gt;
-&lt;p&gt;一开始时看的是英文原版，阅读速度缓慢，而我对实践充满热情，迫切希望早点学完自己动手做。恰好发现 Andor Chen 已经翻译了大部分章节，遇到有疑问的地方，就对照英文检查语句和代码。顺便修正一些译文里的错误，然后发送 pull request 让作者合并。&lt;/p&gt;
-&lt;p&gt;这本书和以前看的 Flex 入门书——《Flex 3 权威指南》类似，都是以构建一个应用为主线，由浅入深地介绍 RoR 开发的基本知识，从最开始的静态页面到模型生成，控制器，路由，数据库，Ajax，还有贯彻整个开发过程的测试。教程里开发的是一个微博站点，而 Twitter 以前就是使用 RoR 开发的，做起来也饶有趣味。&lt;/p&gt;
-&lt;p&gt;花了差不多两个月的业余时间看完了这个教程，并最终完成了那个微博网站，包括大部分练习题的功能。总的来说，还是有点挑战的。由于书中大部分都是编写步骤，注重手把手的教学实践。在原理的介绍上篇幅很少，而 RoR 这样“约定优于配置”的理念让我有点不适应，书中并无约定方面的解释，很多方法像变戏法一般地已经实现好了，而我却想一探究竟，搞清楚其幕后的动作。但毕竟这是一本入门书，或许是我要求太高了。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>观潮与弄潮</title>
-      <link>/posts/book-review-on-top-of-tides/</link>
-      <pubDate>Wed, 20 Feb 2013 20:00:58 +0800</pubDate>
-      
-      <guid>/posts/book-review-on-top-of-tides/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://img3.doubanio.com/lpic/s6807265.jpg&#34; alt=&#34;cover&#34;&gt;&lt;/p&gt;
-&lt;p&gt;春节期间看完了这本书，收获颇多。一开始看到介绍，我以为这是一本记述IT简史的书，看到后面，越发现远远不止这些。&lt;/p&gt;
-&lt;h2 id=&#34;观潮时代的浪潮&#34;&gt;观潮：时代的浪潮&lt;/h2&gt;
-&lt;p&gt;IT技术人员，特别是作者这样的计算机科学家，历来对贝尔实验室有着无比的崇敬和向往。故事从贝尔实验室的东家 —— AT&amp;amp;T 公司开始，悉数介绍了 AT&amp;amp;T，IBM，Apple，Intel，Microsoft，Cisco，Yahoo，HP，Motorola，Google 等科技浪潮中各领风骚的著名企业，还有 Sun，Novell，Netscape，RealNetworks 这些“与机会失之交臂的公司”。回顾科技工业一百多年来的发展历程，分析了这些公司成功失败的原因。&lt;/p&gt;
-&lt;p&gt;在谈到微软时，吴军描述比尔·盖茨在起家时，包括微软成立后的十几年里，一直惯用冒险的空手套白狼手法抢占先机。当年操作系统领域的专家 Jim Allchin 对微软的技术根本瞧不上，他说，你们微软的东西是最烂的。而盖茨做到了保守和冒险的平衡，打动了 Allchin等一批技术大牛，完成研发上的布局。对于市场的策略则是：薄利多销和来者不拒。这个可以从早期的微软广告中窥见一斑，比如史蒂夫·鲍尔默做的DOS广告等等。&lt;/p&gt;
-&lt;p&gt;Cisco，我只知道这是一家卖路由器等网络设备的公司，还参与过GFW这样为虎作伥的项目。没想到思科的历史这么久远，尤其是善待离职创业的员工，以及对其创业公司的扶持和收购，真是十分高明的手法。&lt;/p&gt;
-&lt;p&gt;作者形容摩托罗拉是一家贵族式的公司，这个在模拟通信领域的佼佼者，在数字通信时代显得力不从心，依然孤傲地以技术为重心，却眼睁睁地看着木工厂起家的诺基亚超越了自己。在商业竞争中，光有技术显然是不行的。正如作者所言，“从技术角度看，铱星移动通信系统是非常成功的。这是真正的科技精品。我常常想，我们这些被成为高科技公司的互联网公司做到的东西和铱星系统相比，简直就像是玩具。” 君子之泽，五世而斩，虽然贵族式的摩托罗拉被Google收购，即便Google看中的是它若干的通信专利，但是至少它的技术创造依然造福于人。&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Flex 4 Fun Reading Notes</title>
-      <link>/posts/flex-4-fun-reading-notes/</link>
-      <pubDate>Mon, 01 Aug 2011 20:51:36 +0800</pubDate>
-      
-      <guid>/posts/flex-4-fun-reading-notes/</guid>
-      <description>You are about to embark on a great journey with the best possible companions:the solid Flash engine, the versatile Flex framework and a very good &amp;gt; teacher.You will seldom enjoy a programming book as much as you will this one.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>book on LimboNova</title><link>/tags/book/</link><description>Recent content in book on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 12 Apr 2013 12:16:03 +0800</lastBuildDate><atom:link href="/tags/book/index.xml" rel="self" type="application/rss+xml"/><item><title>Ruby on Rails 入门体验</title><link>/posts/ror-tutorial-review/</link><pubDate>Fri, 12 Apr 2013 12:16:03 +0800</pubDate><guid>/posts/ror-tutorial-review/</guid><description>&lt;p>今年年初时决定学习一下 Web 开发方面的知识，因为对 Ruby 早有耳闻，所以很自然地就选择了 Ruby on Rails 作为目标。在网上看到 Ruby on Rails Tutorial的教程，于是就跟着教程，边学边做地把这本书看完了。对 RoR 有了一个大概的了解，包括框架结构和开发流程，还有一些常用的Gems，确实是一本不错的实践入门书。&lt;/p>
+&lt;h2 id="关于教程">关于教程&lt;/h2>
+&lt;p>一开始时看的是英文原版，阅读速度缓慢，而我对实践充满热情，迫切希望早点学完自己动手做。恰好发现 Andor Chen 已经翻译了大部分章节，遇到有疑问的地方，就对照英文检查语句和代码。顺便修正一些译文里的错误，然后发送 pull request 让作者合并。&lt;/p>
+&lt;p>这本书和以前看的 Flex 入门书——《Flex 3 权威指南》类似，都是以构建一个应用为主线，由浅入深地介绍 RoR 开发的基本知识，从最开始的静态页面到模型生成，控制器，路由，数据库，Ajax，还有贯彻整个开发过程的测试。教程里开发的是一个微博站点，而 Twitter 以前就是使用 RoR 开发的，做起来也饶有趣味。&lt;/p>
+&lt;p>花了差不多两个月的业余时间看完了这个教程，并最终完成了那个微博网站，包括大部分练习题的功能。总的来说，还是有点挑战的。由于书中大部分都是编写步骤，注重手把手的教学实践。在原理的介绍上篇幅很少，而 RoR 这样“约定优于配置”的理念让我有点不适应，书中并无约定方面的解释，很多方法像变戏法一般地已经实现好了，而我却想一探究竟，搞清楚其幕后的动作。但毕竟这是一本入门书，或许是我要求太高了。&lt;/p></description></item><item><title>观潮与弄潮</title><link>/posts/book-review-on-top-of-tides/</link><pubDate>Wed, 20 Feb 2013 20:00:58 +0800</pubDate><guid>/posts/book-review-on-top-of-tides/</guid><description>&lt;p>&lt;img src="https://img3.doubanio.com/lpic/s6807265.jpg" alt="cover">&lt;/p>
+&lt;p>春节期间看完了这本书，收获颇多。一开始看到介绍，我以为这是一本记述IT简史的书，看到后面，越发现远远不止这些。&lt;/p>
+&lt;h2 id="观潮时代的浪潮">观潮：时代的浪潮&lt;/h2>
+&lt;p>IT技术人员，特别是作者这样的计算机科学家，历来对贝尔实验室有着无比的崇敬和向往。故事从贝尔实验室的东家 —— AT&amp;amp;T 公司开始，悉数介绍了 AT&amp;amp;T，IBM，Apple，Intel，Microsoft，Cisco，Yahoo，HP，Motorola，Google 等科技浪潮中各领风骚的著名企业，还有 Sun，Novell，Netscape，RealNetworks 这些“与机会失之交臂的公司”。回顾科技工业一百多年来的发展历程，分析了这些公司成功失败的原因。&lt;/p>
+&lt;p>在谈到微软时，吴军描述比尔·盖茨在起家时，包括微软成立后的十几年里，一直惯用冒险的空手套白狼手法抢占先机。当年操作系统领域的专家 Jim Allchin 对微软的技术根本瞧不上，他说，你们微软的东西是最烂的。而盖茨做到了保守和冒险的平衡，打动了 Allchin等一批技术大牛，完成研发上的布局。对于市场的策略则是：薄利多销和来者不拒。这个可以从早期的微软广告中窥见一斑，比如史蒂夫·鲍尔默做的DOS广告等等。&lt;/p>
+&lt;p>Cisco，我只知道这是一家卖路由器等网络设备的公司，还参与过GFW这样为虎作伥的项目。没想到思科的历史这么久远，尤其是善待离职创业的员工，以及对其创业公司的扶持和收购，真是十分高明的手法。&lt;/p>
+&lt;p>作者形容摩托罗拉是一家贵族式的公司，这个在模拟通信领域的佼佼者，在数字通信时代显得力不从心，依然孤傲地以技术为重心，却眼睁睁地看着木工厂起家的诺基亚超越了自己。在商业竞争中，光有技术显然是不行的。正如作者所言，“从技术角度看，铱星移动通信系统是非常成功的。这是真正的科技精品。我常常想，我们这些被成为高科技公司的互联网公司做到的东西和铱星系统相比，简直就像是玩具。” 君子之泽，五世而斩，虽然贵族式的摩托罗拉被Google收购，即便Google看中的是它若干的通信专利，但是至少它的技术创造依然造福于人。&lt;/p></description></item><item><title>Flex 4 Fun Reading Notes</title><link>/posts/flex-4-fun-reading-notes/</link><pubDate>Mon, 01 Aug 2011 20:51:36 +0800</pubDate><guid>/posts/flex-4-fun-reading-notes/</guid><description>You are about to embark on a great journey with the best possible companions:the solid Flash engine, the versatile Flex framework and a very good &amp;gt; teacher.You will seldom enjoy a programming book as much as you will this one.
 Romain Guy
- About the Book 从N神的 RIABook.cn 找到的一本介绍Flex 4 开发的书，还不到300页。重点发掘 Flex 4 SDK 的绘图和动画功能，详细地介绍了 Flex 4 的这些新特性，并提供了很多例子。所以很适合像我这样从Flex 3 起步的开发者。恰当的绘图和动画能带来更好的用户体验，而这也是Flex 4 中很酷很有趣的地方，书名正由此而来(Flex For Fun)。
-About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK Team 研究图形动画。曾是 Adobe Flex SDK Team 的资深计算机科学家 (senior computer scientist)，负责 Flex effects 和 Flex 4 中新效果的架构。在此之前，他在 Sun Java client team 工作了几年，合著了一本关于使用Java 客户端平台开发丰富用户体验应用的书 Filthy Rich Clients 。 个人博客：http://chetchat.</description>
-    </item>
-    
-    <item>
-      <title>《Flex3权威指南》阅读总结</title>
-      <link>/posts/flex3-tfs-reading-summary/</link>
-      <pubDate>Mon, 25 Jul 2011 12:31:00 +0800</pubDate>
-      
-      <guid>/posts/flex3-tfs-reading-summary/</guid>
-      <description>这本书比较全面地介绍了Flex 3 SDK的各项组件和功能。这是一个基于web前端技术的框架。作者从Flex组件开始讲解，以flexGrocer为实践项目，将每课教授的内容切实地运用到项目中。
+About the Book 从N神的 RIABook.cn 找到的一本介绍Flex 4 开发的书，还不到300页。重点发掘 Flex 4 SDK 的绘图和动画功能，详细地介绍了 Flex 4 的这些新特性，并提供了很多例子。所以很适合像我这样从Flex 3 起步的开发者。恰当的绘图和动画能带来更好的用户体验，而这也是Flex 4 中很酷很有趣的地方，书名正由此而来(Flex For Fun)。
+About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK Team 研究图形动画。曾是 Adobe Flex SDK Team 的资深计算机科学家 (senior computer scientist)，负责 Flex effects 和 Flex 4 中新效果的架构。在此之前，他在 Sun Java client team 工作了几年，合著了一本关于使用Java 客户端平台开发丰富用户体验应用的书 Filthy Rich Clients 。 个人博客：http://chetchat.</description></item><item><title>《Flex3权威指南》阅读总结</title><link>/posts/flex3-tfs-reading-summary/</link><pubDate>Mon, 25 Jul 2011 12:31:00 +0800</pubDate><guid>/posts/flex3-tfs-reading-summary/</guid><description>这本书比较全面地介绍了Flex 3 SDK的各项组件和功能。这是一个基于web前端技术的框架。作者从Flex组件开始讲解，以flexGrocer为实践项目，将每课教授的内容切实地运用到项目中。
 主要内容有：
- 组件：flex组件分类及如何自定义组件； 事件：如何监听事件，捕获事件，以及如何自定义事件，如何发布事件。事件是如何冒泡的？ 外观：如何自定义控件的外观，使用skin或者css的方法； 拖拽功能：如何使用拖放代理，如何自定义，拖放时对象的赋值等等； 深度链接和历史管理：可以使用浏览器的前进后退功能； 打印功能：FlexPrintJob，PrintDataGrid，功能比较弱； 格式器，验证器：formatter，validator，非常有用！ 后台联系紧密的RemoteObject，还有几种远程交互的方式：httpService，SOAP,blazeDS,LCDS&amp;hellip; AIR：使用AIR开发桌面应用；  最后介绍了非常重要的Flash Player 的GC策略，以及如何防止内存泄漏。如何使用Flash Builder 的profiling功能对应用进行memory profiling, performance profiling。
+组件：flex组件分类及如何自定义组件； 事件：如何监听事件，捕获事件，以及如何自定义事件，如何发布事件。事件是如何冒泡的？ 外观：如何自定义控件的外观，使用skin或者css的方法； 拖拽功能：如何使用拖放代理，如何自定义，拖放时对象的赋值等等； 深度链接和历史管理：可以使用浏览器的前进后退功能； 打印功能：FlexPrintJob，PrintDataGrid，功能比较弱； 格式器，验证器：formatter，validator，非常有用！ 后台联系紧密的RemoteObject，还有几种远程交互的方式：httpService，SOAP,blazeDS,LCDS&amp;hellip; AIR：使用AIR开发桌面应用； 最后介绍了非常重要的Flash Player 的GC策略，以及如何防止内存泄漏。如何使用Flash Builder 的profiling功能对应用进行memory profiling, performance profiling。
 全书通过一个flexGrocer项目，让读者逐步在实践中学习flex的各项特性和功能，但不足的是，操作步骤充斥全书，很少讲解系统的架构，原理，以及操作的理由。与其叫“权威指南”，不如称之为“使用指南”，该书的英文原名则十分贴切——&amp;ldquo;training from the source&amp;rdquo;。
-由于方方面面都介绍到了，因此十分适合想对flex 作进一步了解的开发者。没有ActionScript语法解释，没有架构设计讲解，是一大遗憾，不过这本书的定位就这样了，看来要看别的书籍来填补了。</description>
-    </item>
-    
-  </channel>
-</rss>
+由于方方面面都介绍到了，因此十分适合想对flex 作进一步了解的开发者。没有ActionScript语法解释，没有架构设计讲解，是一大遗憾，不过这本书的定位就这样了，看来要看别的书籍来填补了。</description></item></channel></rss>
