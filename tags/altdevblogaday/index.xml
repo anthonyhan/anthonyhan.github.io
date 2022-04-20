@@ -6,16 +6,16 @@
     <description>Recent content in AltDevBlogADay on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 20 Apr 2022 14:22:48 +0800</lastBuildDate><atom:link href="/tags/altdevblogaday/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 09 Oct 2019 20:22:48 +0800</lastBuildDate><atom:link href="/tags/altdevblogaday/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>面向对象的行为树不是面向数据的</title>
       <link>/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/</link>
-      <pubDate>Wed, 20 Apr 2022 14:22:48 +0800</pubDate>
+      <pubDate>Wed, 09 Oct 2019 20:22:48 +0800</pubDate>
       
       <guid>/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/</guid>
       <description>原文：Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)
 作者：Bjoern Knafla
-文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使过去了十年，但很多文章仍值得一看。
+文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。
 背景 简单的行为树可以使用面向对象方式来实现，如果性能满足需求，非常适合人手不多开发时间紧张的小型团队。
 简单实现如下：
 class BehaviorTreeNode { public:  // ...  virtual BehaviorState update() = 0;  virtual void resetState() = 0; };  template class ActionBehaviorTreeNode : public BehaviorTreeNode { public:  explicit ActionBehaviorTreeNode(ActionData *data);   // Calls a certain member function of actor.  virtual BehaviorState update();   // Does nothing.  virtual void resetState();  private:  ActionData *data; };  class SequenceBehaviorTreeNode : public BehaviorTreeNode { public:  // .</description>

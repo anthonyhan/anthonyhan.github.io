@@ -6,16 +6,33 @@
     <description>Recent content on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 20 Apr 2022 14:22:48 +0800</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 23 Jan 2022 22:36:28 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Debian Redmine 备份与恢复</title>
+      <link>/posts/debian-redmine-backup-and-restore/</link>
+      <pubDate>Sun, 23 Jan 2022 22:36:28 +0000</pubDate>
+      
+      <guid>/posts/debian-redmine-backup-and-restore/</guid>
+      <description>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。
+系统需求  Redmine 3.3 installed with apt on Debian 9 (stretch). Database: PostgreSQL  备份 配置文件 配置文件包含路径：/etc/redmine/{instance}
+例如，默认实例名称为default，则配置文件路径为/etc/redmine/{default}。包含以下配置文件：
+ configuration.yml database.xml secret_key.txt  数据库 在备份脚本执行用户的主目录创建 .pgpass 文件，加入连接数据库的用户名密码等连接信息。
+echo &amp;#34;HOST:PORT:DB_NAME:USERNAME:PASSWORD&amp;#34; &amp;gt; ~/.pgpass 例如：
+echo &amp;#34;localhost:5432:redmine_default:redmine/instances/default:PASSWORD&amp;#34; &amp;gt; ~/.pgpass # 赋予权限 chmod 600 ~/.pgpass 使用 pg_dump 导出数据：
+pg_dump -U redmine/instances/default -d redmine_default -h localhost -Fc --file=/home/redmine/redmine_backup/db_dumps/redmine_`date +%Y-%m-%d`.sqlc 附件 路径：/var/lib/redmine/${instance}/files
+rsync -a /var/lib/redmine/default/files /home/redmine/redmine_backup/ 插件 路径：/usr/share/redmine/plugins
+主题 路径：/usr/share/redmine/public/themes</description>
+    </item>
+    
     <item>
       <title>面向对象的行为树不是面向数据的</title>
       <link>/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/</link>
-      <pubDate>Wed, 20 Apr 2022 14:22:48 +0800</pubDate>
+      <pubDate>Wed, 09 Oct 2019 20:22:48 +0800</pubDate>
       
       <guid>/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/</guid>
       <description>原文：Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)
 作者：Bjoern Knafla
-文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使过去了十年，但很多文章仍值得一看。
+文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。
 背景 简单的行为树可以使用面向对象方式来实现，如果性能满足需求，非常适合人手不多开发时间紧张的小型团队。
 简单实现如下：
 class BehaviorTreeNode { public:  // ...  virtual BehaviorState update() = 0;  virtual void resetState() = 0; };  template class ActionBehaviorTreeNode : public BehaviorTreeNode { public:  explicit ActionBehaviorTreeNode(ActionData *data);   // Calls a certain member function of actor.  virtual BehaviorState update();   // Does nothing.  virtual void resetState();  private:  ActionData *data; };  class SequenceBehaviorTreeNode : public BehaviorTreeNode { public:  // .</description>
@@ -24,7 +41,7 @@ class BehaviorTreeNode { public:  // ...  virtual BehaviorState update() = 0;  v
     <item>
       <title>Behavior Trees in Gigantic</title>
       <link>/posts/behavior-trees-in-gigantic/</link>
-      <pubDate>Sat, 02 Apr 2022 15:46:59 +0800</pubDate>
+      <pubDate>Sat, 07 Sep 2019 15:46:59 +0800</pubDate>
       
       <guid>/posts/behavior-trees-in-gigantic/</guid>
       <description>偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
@@ -46,23 +63,6 @@ class BehaviorTreeNode { public:  // ...  virtual BehaviorState update() = 0;  v
 因此 Gigantic 引入“子树”这一概念。在主树中加入“Subtree Proxy”类型的节点，并设置指定的子树，执行时就会跳转到对应的子树。子树的结构也采用栈，因为它本质上也是一棵行为树。需要注意的是，要避免子树滥用造成的循环。如果有必要，在编辑行为树时加入循环检查，提醒设计师注意这一问题。
 注：子树不是新鲜概念了，但循环检测还是有必要的，即使有时是刻意为之。
 优化 通常 AI 代理的行为都是类似的，很多NPC共用同一个行为树。因此利用享元模式，可以将行为树的结构与代理的状态数据分开。行为树的结构数据应当是不互斥的，静态且无状态的。即使代理的数量激增，其所占用的行为树的静态数据也始终保持不变。</description>
-    </item>
-    
-    <item>
-      <title>Debian Redmine 备份与恢复</title>
-      <link>/posts/debian-redmine-backup-and-restore/</link>
-      <pubDate>Sun, 23 Jan 2022 22:36:28 +0000</pubDate>
-      
-      <guid>/posts/debian-redmine-backup-and-restore/</guid>
-      <description>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。
-系统需求  Redmine 3.3 installed with apt on Debian 9 (stretch). Database: PostgreSQL  备份 配置文件 配置文件包含路径：/etc/redmine/{instance}
-例如，默认实例名称为default，则配置文件路径为/etc/redmine/{default}。包含以下配置文件：
- configuration.yml database.xml secret_key.txt  数据库 在备份脚本执行用户的主目录创建 .pgpass 文件，加入连接数据库的用户名密码等连接信息。
-echo &amp;#34;HOST:PORT:DB_NAME:USERNAME:PASSWORD&amp;#34; &amp;gt; ~/.pgpass 例如：
-echo &amp;#34;localhost:5432:redmine_default:redmine/instances/default:PASSWORD&amp;#34; &amp;gt; ~/.pgpass # 赋予权限 chmod 600 ~/.pgpass 使用 pg_dump 导出数据：
-pg_dump -U redmine/instances/default -d redmine_default -h localhost -Fc --file=/home/redmine/redmine_backup/db_dumps/redmine_`date +%Y-%m-%d`.sqlc 附件 路径：/var/lib/redmine/${instance}/files
-rsync -a /var/lib/redmine/default/files /home/redmine/redmine_backup/ 插件 路径：/usr/share/redmine/plugins
-主题 路径：/usr/share/redmine/public/themes</description>
     </item>
     
     <item>
