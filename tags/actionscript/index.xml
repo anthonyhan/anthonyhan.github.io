@@ -1,152 +1,252 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>actionscript on LimboNova</title><link>/tags/actionscript/</link><description>Recent content in actionscript on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Fri, 12 Jul 2013 19:48:33 +0800</lastBuildDate><atom:link href="/tags/actionscript/index.xml" rel="self" type="application/rss+xml"/><item><title>XML数据源的级联ComboBox</title><link>/posts/cascading-combobox-with-xml-dataprovider/</link><pubDate>Fri, 12 Jul 2013 19:48:33 +0800</pubDate><guid>/posts/cascading-combobox-with-xml-dataprovider/</guid><description>&lt;h2 id="background">Background&lt;/h2>
-&lt;p>要做一个表单，其中自然少不了ComboBox，数据源不是从后台动态获取的，竟然是一个Excel表格文件！这个数据量很大，而且还有可能会修改，所以只能采用外部加载的方式。写一个解析Excel数据的库自然是不现实的，所以决定把Excel转换成XML格式，然后再加载。&lt;/p>
-&lt;h2 id="excel转换成xml">Excel转换成XML&lt;/h2>
-&lt;p>一般直接将Excel是不能导出成XML的，因为“不包含任何XML映射”，所以首先需要建立一个XML映射，其实就是设计一个XML结构，然后将Excel数据映射到对应的节点上。这一步其实很简单，但是颇具技巧性。&lt;/p>
-&lt;h3 id="开发工具选项卡">“开发工具”选项卡&lt;/h3>
-&lt;p>导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-&amp;ldquo;选项&amp;rdquo;-“自定义功能区”对话框，勾选“开发工具”。&lt;/p></description></item><item><title>基于AS3.0的图像抖动实现</title><link>/posts/image-dithering-algorithm-as3/</link><pubDate>Tue, 02 Apr 2013 20:21:09 +0800</pubDate><guid>/posts/image-dithering-algorithm-as3/</guid><description>&lt;p>不知当初自己出于什么目的，OneNote 里留了一条关于 Floyd–Steinberg dithering 的笔记。好奇之余，打开链接看了一下，方才想起这个当初让我觉得新奇的古老算法。&lt;/p>
-&lt;h2 id="概述">概述&lt;/h2>
-&lt;p>余忆童稚时，能张目对日，明察秋毫……”如果你对过去黑白报纸的图片仔细观察过的话，一定会发现，那些黑白照片由很多圆形或方形的图形组成。是的，那就是半色调（Halftone）和抖动（Dither ）技术。&lt;/p>
-&lt;p>&lt;img src="https://pixy.org/src/405/thumbs350/4057896.jpg" alt="Halftone">&lt;/p>
-&lt;p>半色调（Halftone）是指为了模拟出连续调影像（色阶）的视觉感觉，一般用墨点（半色调网点）的大小或频率的改变，来模拟明暗的变化。半色调广泛应用于报刊出版等领域，当年那些黑白出版物上尤其常见，现在的牛奶包装上也能看出来。&lt;/p>
-&lt;h2 id="阈值法thresholding">阈值法（Thresholding）&lt;/h2>
-&lt;p>当像素值大于设定阈值时，输出为亮点，否则输出为暗点，从而实现二值化。经过处理的图像往往失去细节，缺乏层次感。下图所示的就是二值化的图像。
-&lt;img src="http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg" alt="lena_binary">&lt;/p></description></item><item><title>HSV/HSL转换到RGB色彩空间</title><link>/posts/convert-hsv-hsl-to-rgb/</link><pubDate>Fri, 08 Mar 2013 18:08:17 +0800</pubDate><guid>/posts/convert-hsv-hsl-to-rgb/</guid><description>&lt;p>处理图像时，有时候会遇到不同色彩空间转换的情况。比较常见的是HSV/HSL到RGB的转换。&lt;/p>
-&lt;h2 id="hsvhsbhsl简介">HSV(HSB)/HSL简介&lt;/h2>
-&lt;p>不同于RGB/CYMK，HSV和HSL是两种比较常见的基于圆柱坐标系的色彩表示方法。这种方法对颜色的表达,对人来说更直观，更易于感受。因此艺术家有时偏好使用 HSL或HSV 而不选择 三原色光模式（即RGB模型） 或 印刷四分色模式（即CMYK模型），因为它类似于人类感觉颜色的方式，具有较强的感知度。RGB 和 CMYK 分别是加法原色和减法原色模型，以原色组合的方式定义颜色，而 HSV 以人类更熟悉的方式封装了关于颜色的信息：“这是什么颜色？深浅如何？明暗如何？”。&lt;/p>
-&lt;p>&lt;img src="http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/500px-Hsl-hsv_models.svg.png" alt="">&lt;/p>
-&lt;h3 id="色彩定义">色彩定义&lt;/h3>
-&lt;ul>
-&lt;li>H ：Hue(色相)，色彩的基本属性，就是平常所说的颜色名称，如红色、黄色等。&lt;/li>
-&lt;li>S ：saturation(饱和度)，色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值。&lt;/li>
-&lt;li>V ：value(色调)，取0-100%。&lt;/li>
-&lt;li>B ：brightness(明度)，取0-100%。&lt;/li>
-&lt;li>L ：lightness(亮度)，取0-100%。&lt;/li>
-&lt;/ul>
-&lt;p>HSL 和 HSV 二者都把颜色描述在圆柱坐标系内的点，这个圆柱的中心轴取值为自底部的黑色到顶部的白色而在它们中间是的灰色，绕这个轴的角度对应于“色相”，到这个轴的距离对应于“饱和度”，而沿着这个轴的高度对应于“亮度”，“色调”或“明度”。&lt;/p>
-&lt;p>这两种表示在用目的上类似，但在方法上有区别。二者在数学上都是圆柱，但 HSV（色相，饱和度，色调）在概念上可以被认为是颜色的倒圆锥体（黑点在下顶点，白色在上底面圆心），HSL 在概念上表示了一个双圆锥体和圆球体（白色在上顶点，黑色在下顶点，最大横切面的圆心是半程灰色）。注意尽管在 HSL 和 HSV 中“色相”指称相同的性质，它们的“饱和度”的定义是明显不同的。&lt;/p>
-&lt;p>因为 HSL 和 HSV 是设备依赖的 RGB 的简单变换，(h, s, l) 或 (h, s, v) 三元组定义的颜色依赖于所使用的特定红色、绿色和蓝色“加法原色”。每个独特的 RGB 设备都伴随着一个独特的 HSL 和 HSV 空间。但是 (h, s, l) 或 (h, s, v) 三元组在被约束于特定 RGB 空间比如 sRGB 的时候就变成明确的了。&lt;/p>
-&lt;p>HSV 模型在 1978 年由计算机图形学先驱 Alvy Ray Smith 创立，它是三原色光模式的一种非线性变换。&lt;/p></description></item><item><title>Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性</title><link>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</link><pubDate>Thu, 27 Sep 2012 12:10:11 +0800</pubDate><guid>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</guid><description>FP11.4发布没多长时间，很多新功能还没有用上，FP11.5 Beta就已经发布了。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>actionscript on LimboNova</title>
+    <link>/tags/actionscript/</link>
+    <description>Recent content in actionscript on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 12 Jul 2013 19:48:33 +0800</lastBuildDate><atom:link href="/tags/actionscript/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>XML数据源的级联ComboBox</title>
+      <link>/posts/cascading-combobox-with-xml-dataprovider/</link>
+      <pubDate>Fri, 12 Jul 2013 19:48:33 +0800</pubDate>
+      
+      <guid>/posts/cascading-combobox-with-xml-dataprovider/</guid>
+      <description>&lt;h2 id=&#34;background&#34;&gt;Background&lt;/h2&gt;
+&lt;p&gt;要做一个表单，其中自然少不了ComboBox，数据源不是从后台动态获取的，竟然是一个Excel表格文件！这个数据量很大，而且还有可能会修改，所以只能采用外部加载的方式。写一个解析Excel数据的库自然是不现实的，所以决定把Excel转换成XML格式，然后再加载。&lt;/p&gt;
+&lt;h2 id=&#34;excel转换成xml&#34;&gt;Excel转换成XML&lt;/h2&gt;
+&lt;p&gt;一般直接将Excel是不能导出成XML的，因为“不包含任何XML映射”，所以首先需要建立一个XML映射，其实就是设计一个XML结构，然后将Excel数据映射到对应的节点上。这一步其实很简单，但是颇具技巧性。&lt;/p&gt;
+&lt;h3 id=&#34;开发工具选项卡&#34;&gt;“开发工具”选项卡&lt;/h3&gt;
+&lt;p&gt;导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-&amp;ldquo;选项&amp;rdquo;-“自定义功能区”对话框，勾选“开发工具”。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>基于AS3.0的图像抖动实现</title>
+      <link>/posts/image-dithering-algorithm-as3/</link>
+      <pubDate>Tue, 02 Apr 2013 20:21:09 +0800</pubDate>
+      
+      <guid>/posts/image-dithering-algorithm-as3/</guid>
+      <description>&lt;p&gt;不知当初自己出于什么目的，OneNote 里留了一条关于 Floyd–Steinberg dithering 的笔记。好奇之余，打开链接看了一下，方才想起这个当初让我觉得新奇的古老算法。&lt;/p&gt;
+&lt;h2 id=&#34;概述&#34;&gt;概述&lt;/h2&gt;
+&lt;p&gt;余忆童稚时，能张目对日，明察秋毫……”如果你对过去黑白报纸的图片仔细观察过的话，一定会发现，那些黑白照片由很多圆形或方形的图形组成。是的，那就是半色调（Halftone）和抖动（Dither ）技术。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://pixy.org/src/405/thumbs350/4057896.jpg&#34; alt=&#34;Halftone&#34;&gt;&lt;/p&gt;
+&lt;p&gt;半色调（Halftone）是指为了模拟出连续调影像（色阶）的视觉感觉，一般用墨点（半色调网点）的大小或频率的改变，来模拟明暗的变化。半色调广泛应用于报刊出版等领域，当年那些黑白出版物上尤其常见，现在的牛奶包装上也能看出来。&lt;/p&gt;
+&lt;h2 id=&#34;阈值法thresholding&#34;&gt;阈值法（Thresholding）&lt;/h2&gt;
+&lt;p&gt;当像素值大于设定阈值时，输出为亮点，否则输出为暗点，从而实现二值化。经过处理的图像往往失去细节，缺乏层次感。下图所示的就是二值化的图像。
+&lt;img src=&#34;http://bn1files.storage.live.com/y1pc9sLMhqq1WExNmIq9Qft1bu9Ixxo2xltiiwTy9vscj-inAdrNTw2DA/lena_binary.jpg&#34; alt=&#34;lena_binary&#34;&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>HSV/HSL转换到RGB色彩空间</title>
+      <link>/posts/convert-hsv-hsl-to-rgb/</link>
+      <pubDate>Fri, 08 Mar 2013 18:08:17 +0800</pubDate>
+      
+      <guid>/posts/convert-hsv-hsl-to-rgb/</guid>
+      <description>&lt;p&gt;处理图像时，有时候会遇到不同色彩空间转换的情况。比较常见的是HSV/HSL到RGB的转换。&lt;/p&gt;
+&lt;h2 id=&#34;hsvhsbhsl简介&#34;&gt;HSV(HSB)/HSL简介&lt;/h2&gt;
+&lt;p&gt;不同于RGB/CYMK，HSV和HSL是两种比较常见的基于圆柱坐标系的色彩表示方法。这种方法对颜色的表达,对人来说更直观，更易于感受。因此艺术家有时偏好使用 HSL或HSV 而不选择 三原色光模式（即RGB模型） 或 印刷四分色模式（即CMYK模型），因为它类似于人类感觉颜色的方式，具有较强的感知度。RGB 和 CMYK 分别是加法原色和减法原色模型，以原色组合的方式定义颜色，而 HSV 以人类更熟悉的方式封装了关于颜色的信息：“这是什么颜色？深浅如何？明暗如何？”。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Hsl-hsv_models.svg/500px-Hsl-hsv_models.svg.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;色彩定义&#34;&gt;色彩定义&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;H ：Hue(色相)，色彩的基本属性，就是平常所说的颜色名称，如红色、黄色等。&lt;/li&gt;
+&lt;li&gt;S ：saturation(饱和度)，色彩的纯度，越高色彩越纯，低则逐渐变灰，取0-100%的数值。&lt;/li&gt;
+&lt;li&gt;V ：value(色调)，取0-100%。&lt;/li&gt;
+&lt;li&gt;B ：brightness(明度)，取0-100%。&lt;/li&gt;
+&lt;li&gt;L ：lightness(亮度)，取0-100%。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;HSL 和 HSV 二者都把颜色描述在圆柱坐标系内的点，这个圆柱的中心轴取值为自底部的黑色到顶部的白色而在它们中间是的灰色，绕这个轴的角度对应于“色相”，到这个轴的距离对应于“饱和度”，而沿着这个轴的高度对应于“亮度”，“色调”或“明度”。&lt;/p&gt;
+&lt;p&gt;这两种表示在用目的上类似，但在方法上有区别。二者在数学上都是圆柱，但 HSV（色相，饱和度，色调）在概念上可以被认为是颜色的倒圆锥体（黑点在下顶点，白色在上底面圆心），HSL 在概念上表示了一个双圆锥体和圆球体（白色在上顶点，黑色在下顶点，最大横切面的圆心是半程灰色）。注意尽管在 HSL 和 HSV 中“色相”指称相同的性质，它们的“饱和度”的定义是明显不同的。&lt;/p&gt;
+&lt;p&gt;因为 HSL 和 HSV 是设备依赖的 RGB 的简单变换，(h, s, l) 或 (h, s, v) 三元组定义的颜色依赖于所使用的特定红色、绿色和蓝色“加法原色”。每个独特的 RGB 设备都伴随着一个独特的 HSL 和 HSV 空间。但是 (h, s, l) 或 (h, s, v) 三元组在被约束于特定 RGB 空间比如 sRGB 的时候就变成明确的了。&lt;/p&gt;
+&lt;p&gt;HSV 模型在 1978 年由计算机图形学先驱 Alvy Ray Smith 创立，它是三原色光模式的一种非线性变换。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性</title>
+      <link>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</link>
+      <pubDate>Thu, 27 Sep 2012 12:10:11 +0800</pubDate>
+      
+      <guid>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</guid>
+      <description>FP11.4发布没多长时间，很多新功能还没有用上，FP11.5 Beta就已经发布了。
 主要特性及优点(不定期更新)：
 在Flash Player的relase build 的调试堆栈跟踪：允许开发者在release和debug build中都可以显示堆栈跟踪信息（以前只能在debug build下输出）； 支持多个二进制文件打包(AIR)：允许开发者一起打包ANE的第三方静态库、框架、包； ActionScript 多线程支持共享二进制数据：允许开发者在多个工作线程之间共享内存； 支持在iOS打包、加载多个SWF文件(AIR)：允许开发者在iOS加载多个包含ActionScript字节码的SWF文件。
-参考资料
-http://labs.adobe.com/technologies/flashplatformruntimes/flashplayer11-5/ http://labs.adobe.com/technologies/flashplatformruntimes/air3-5/</description></item><item><title>在 Flash Player 中显示GIF动画</title><link>/posts/gif-animation-in-flash-player/</link><pubDate>Wed, 26 Sep 2012 18:31:46 +0800</pubDate><guid>/posts/gif-animation-in-flash-player/</guid><description>&lt;p>之前遇到这个需求，本人坚持”不重复发明轮子”的原则，弘扬”积极的偷懒不算偷懒”的精神，找到了两个解决方案。因为之前研究了GIF格式和LWZ算法，所以理解起来，没有太大的问题。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="方案一as3gif">方案一：as3gif&lt;/h2>
-&lt;p>作者：Thibault Imbert
-项目地址：http://code.google.com/p/as3gif/&lt;/p>
-&lt;p>2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-actionscript" data-lang="actionscript">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we create the GIFPlayer, it plays automatically by default
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">var&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>&lt;span style="color:#f92672">:&lt;/span>&lt;span style="color:#a6e22e">GIFPlayer&lt;/span> &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#66d9ef">new&lt;/span> &lt;span style="color:#a6e22e">GIFPlayer&lt;/span>();
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we show it
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">addChild&lt;/span> ( &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span> );
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// we load a gif file
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">load&lt;/span> ( &lt;span style="color:#66d9ef">new&lt;/span> URLRequest (&lt;span style="color:#e6db74">&amp;#34;animation.gif&amp;#34;&lt;/span>) );
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// you can also load any valid GIF stream (ByteArray) with the loadBytes method (version 0.2)
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">loadBytes&lt;/span> ( &lt;span style="color:#a6e22e">gifStream&lt;/span> );
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the IOErrorEvent.IO_ERROR event, dispatched when the GIF fails to load
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( IOErrorEvent.&lt;span style="color:#a6e22e">IO_ERROR&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onIOError&lt;/span> );
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the GIFPlayerEvent.COMPLETE event, dispatched when GIF is loaded
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">GIFPlayerEvent&lt;/span>.&lt;span style="color:#a6e22e">COMPLETE&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onCompleteGIFLoad&lt;/span> );
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the FrameEvent.FRAME_RENDERED event, dispatched when a GIF frame is rendered on screen
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">FrameEvent&lt;/span>.&lt;span style="color:#a6e22e">FRAME_RENDERED&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onFrameRendered&lt;/span> );
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// listen for the FileTypeEvent.INVALID event, dispatched when an invalid file is loaded
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">addEventListener&lt;/span> ( &lt;span style="color:#a6e22e">FileTypeEvent&lt;/span>.&lt;span style="color:#a6e22e">INVALID&lt;/span>&lt;span style="color:#f92672">,&lt;/span> &lt;span style="color:#a6e22e">onInvalidFileLoaded&lt;/span> );
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// get total frames
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">totalFrames&lt;/span>&lt;span style="color:#f92672">;&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#75715e">// standard methods
-&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">play&lt;/span>();
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">stop&lt;/span>();
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">gotoAndStop&lt;/span>(&lt;span style="color:#ae81ff">3&lt;/span>);
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#a6e22e">myGIFPlayer&lt;/span>.&lt;span style="color:#a6e22e">gotoAndPlay&lt;/span>(&lt;span style="color:#ae81ff">3&lt;/span>);&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
-&lt;p>优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。&lt;/p>
-&lt;p>缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。&lt;/p></description></item><item><title>Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</title><link>/posts/asc2-release-notes/</link><pubDate>Fri, 31 Aug 2012 17:50:12 +0800</pubDate><guid>/posts/asc2-release-notes/</guid><description>&lt;p>伴随着Flash Builder 4.7 beta的发布，正如Adobe所承诺的那样，新的编译器也浮出水面。全新的编译器到底有哪些改进和新特性，想必是大多数ActionScript开发比较关心的问题。简单翻译了下ASC2.0官方发布说明，希望能对同行们有一点帮助。&lt;/p>
-&lt;p>如果要了解Flash Builder 4.7，可以参看zrong的&lt;a href="http://zengrong.net/post/1676.htm">这篇文章&lt;/a>。&lt;/p>
-&lt;p>** August 2012 – Adobe® ActionScript® Compiler 2.0 (Build 2.0.0.345083) **
-Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.&lt;/p>
-&lt;p>ASC 2.0 是一个新的ActionScript® 3.0 (AS3)编译器。相比之前版本更遵循AS3语言规范，编译性能方面有了很大改善。在内存压力下更稳定，并包含一些演示性的优化选项（内联，无用代码删除），这些选项可以有选择地启用。&lt;/p>
-&lt;p>这个编译器已经包含在刚发布的 Flash Builder® 4.7 预览版中。其单独版本已经同AIR SDK 3.4 一起打包发布。&lt;/p>
-&lt;p>注意：ASC 2.0支持编译AS3应用，虽然留有熟悉的mxmlc和compc命令行入口，但是不支持Flex应用的编译。&lt;/p>
-&lt;p>当有更多信息时，该文档可能会不定期更新。&lt;/p>
-&lt;h2 id="版本说明--august-2012">版本说明 – August 2012&lt;/h2>
-&lt;ul>
-&lt;li>这是新编译器ASC 2.0 的第一个公开预览版；&lt;/li>
-&lt;li>Flash Builder 4.7 and the ASC 2.0 command-line compiler now share the same code model. This avoids duplicate representations of a program and means the IDE has an accurate representation of the language – matching the compiler. （没看懂，不清楚code model，representation的定义）&lt;/li>
-&lt;li>全新多线程架构，支持多文件同时编译，减少编译时间；&lt;/li>
-&lt;li>更佳的常数合并和常数传播带来运行时更佳性能的代码；&lt;/li>
-&lt;li>通过移除不必要的活动记录减少函数开销；&lt;/li>
-&lt;li>包含内联和无用代码删除相关的字节码优化；&lt;/li>
-&lt;li>加入新关键字”goto”，实现AS3的非线性控制流；&lt;/li>
-&lt;li>现在支持SWF 13的LZMA压缩了。&lt;/li>
-&lt;li>新的符号管理系统，意味着包含Flash 和 AIR项目的Flash Builder 4.7 AS工作空间，编译起来应该会快多了；&lt;/li>
-&lt;li>fontswf, optimizer，swfdump和swcdepends ，基于ASC 2.0的新版本可以用了；&lt;/li>
-&lt;li>Asdoc，fdb的旧版本依然包括在内；&lt;/li>
-&lt;li>字体转码已经从[Embed]语法中移除，现在字体需要先预转码并作为SWF嵌入，可以通过工具（如fontswf或Flash Professional CS6）来完成。&lt;/li>
-&lt;li>源代码中的相对路径（[Embed] assets, includes, etc…）将从其包含文件相对解析。要指定一个相对于源文件根目录的路径，需要在你的路径前加”/”；&lt;/li>
-&lt;li>英文编译器错误信息已经翻译成法文，日文，中文，区域取决于JVM的设置，并可以通过 -tools-locale 设置项改写。&lt;/li>
-&lt;/ul></description></item><item><title>基于AS3.0的相似图像搜索算法实现</title><link>/posts/similar-image-searching-algorithm-as3/</link><pubDate>Tue, 14 Aug 2012 19:59:25 +0800</pubDate><guid>/posts/similar-image-searching-algorithm-as3/</guid><description>&lt;p>Google的图像搜索，可以根据用户上传或者网络上的图片找到与此最相似的图片(百度也有类似功能)。&lt;/p>
-&lt;p>&lt;img src="https://pjkm4w.bay.livefilestore.com/y1pOjCa3mvtvwKjegr_UmRLkNG9nUpMQU-uMfHod4eqmrtsEsIHz4jI_4yyhi7oe7xURPx9ZOu-lMQsUi8FbN4reRvqjqVlik3i/google_image_search.png" alt="google image search" title="Google Image Search">&lt;/p>
-&lt;p>阮一峰的博客曾经提到过 “感知哈希算法(Perceptual hash algorithm)”，主要介绍了 Dr. Neal Krawetz基于感知哈希算法的”平均哈希算法(Average Hash algorithm)”。相比其他算法，这种算法简单快速，很容易实现。&lt;/p>
-&lt;p>对于图像来说，高频信息体现图像的细节，低频信息体现图像的边缘和轮廓。一幅大而清晰的图像不仅包含低频，而且会包含很多高频分量。而小图片因为缺乏细节部分，往往只有低频信息。因此用只包含低频分量的图像来做图像相似度匹配是非常合适的。&lt;/p>
-&lt;p>感知哈希算法的基本原理是根据图像特征生成一个特定(但非唯一)的指纹，根据指纹来比较图像的相似度。其特点是，即使图像放大缩小，调整高宽，或者有少许色彩变化（对比度，亮度等等），仍然可以匹配到相似的图像。&lt;/p>
-&lt;h2 id="平均哈希算法average-hash-algorithm">平均哈希算法(Average Hash algorithm)&lt;/h2>
-&lt;p>实现步骤如下：&lt;/p>
-&lt;ol>
-&lt;li>
-&lt;p>缩小尺寸：移除高频部分，将图像缩小至8×8像素,不考虑高宽比；
-{% img &lt;a href="https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg">https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg&lt;/a> 64 64 %}&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>减少颜色：转为灰度图，将64像素的RGB 64×3个颜色值简化为 64个色值；
-{% img &lt;a href="https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg">https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg&lt;/a> 64 64 %}&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>计算平均值：计算64个颜色的均值；&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>比较灰度值：将每个像素的颜色值与平均值比较，小于均值记0，否则记1；&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>计算哈希值：将上述的比较结果拼起来构成一个64位的整数。&lt;/p>
-&lt;/li>
-&lt;/ol></description></item><item><title>ActionScript 3.0 闭包及作用域</title><link>/posts/actionscript-3-0-closure/</link><pubDate>Sun, 05 Aug 2012 19:11:50 +0800</pubDate><guid>/posts/actionscript-3-0-closure/</guid><description>&lt;p>闭包作为动态语言的基石，在OO实现和框架构建上有着-十分重要的作用。但是闭包的定义比较抽象，不利于理解，闭包在各语言中的实现不尽相同，闭包的函数作用域也有区别。&lt;/p>
-&lt;p>参考整理了这篇文章(非原创),主要内容来自&lt;/p>
-&lt;ul>
-&lt;li>IBM Thoughtworks 文档：&lt;a href="http://www.ibm.com/developerworks/cn/linux/l-cn-closure">闭包的概念、形式与应用&lt;/a>；&lt;/li>
-&lt;li>Adobe官方文档：&lt;a href="http://www.ibm.com/developerworks/cn/linux/l-cn-closure/">Flash ActionScript 3.0 编程- 函数作用域&lt;/a>。&lt;/li>
-&lt;/ul>
-&lt;h2 id="什么是闭包">什么是闭包&lt;/h2>
-&lt;p>闭包的概念出现于60年代，最早实现闭包的程序语言是&lt;a href="http://zh.wikipedia.org/wiki/Scheme">Scheme&lt;/a>。关于闭包的定义，说法比较多。&lt;/p>
-&lt;ul>
-&lt;li>
-&lt;p>&lt;a href="http://zh.wikipedia.org/wiki/Scheme">Scheme&lt;/a>语言设计者这样定义闭包：”we introduce the notion of a closure which is a data structure containing a lambda expression, and an environment to be used when that lambda expression is applied to arguments.”&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>英文Wikipedia 则是解释为：”a closure (also lexical closure or function closure) is a &lt;a href="http://en.wikipedia.org/wiki/Function_(computer_science)">function&lt;/a> together with a referencing environment for the &lt;a href="http://en.wikipedia.org/wiki/Non-local_variable">non-local variables&lt;/a> of that function. “。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>中文维基百科：”在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，是引用了&lt;a href="http://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%8F%98%E9%87%8F">自由变量&lt;/a>的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。”
-综合这些定义，可以认为闭包一种特殊的数据结构，不仅仅是函数，还包括与其相关的引用环境。闭包只是在形式和表现上像函数，但实际上不是函数。函数是一些可执行的代码，这些代码在函数被定义后就确定了，不会在执行时发生变化，所以一个函数只有一个实例。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。所谓引用环境是指在程序执行中的某个点所有处于活跃状态的约束所组成的集合。其中的约束是指一个变量的名字和其所代表的对象之间的联系。那么为什么要把引用环境与函数组合起来呢？这主要是因为在支持嵌套作用域的语言中，有时不能简单直接地确定函数的引用环境。这样的语言一般具有这样的特性：&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>函数是一阶值（First-class value），即函数可以作为另一个函数的返回值或参数，还可以作为一个变量的值。&lt;/p>
-&lt;/li>
-&lt;li>
-&lt;p>函数可以嵌套定义，即在一个函数内部可以定义另一个函数。&lt;/p>
-&lt;/li>
-&lt;/ul>
-&lt;h2 id="闭包作用域">闭包作用域&lt;/h2>
-&lt;p>函数的范围不但决定了可以在程序中的什么位置调用函数，而且还决定了函数可以访问哪些定义。适用于变量标识符的作用域规则同样也适用于函数标识符。在全局作用域中声明的函数在整个代码中都可用。例如，ActionScript 3.0 包含可在代码中的任意位置使用的全局函数，如 isNaN() 和 parseInt()。嵌套函数（即在另一个函数中声明的函数）可以在声明它的函数中的任意位置上使用。&lt;/p>
-&lt;h3 id="作用域链the-scope-chain">作用域链(The scope chain)&lt;/h3>
-&lt;p>无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。&lt;/p></description></item><item><title>ActionScript3的继承机制</title><link>/posts/actionscript3-inheritance-mechanism/</link><pubDate>Tue, 31 Jul 2012 18:25:09 +0800</pubDate><guid>/posts/actionscript3-inheritance-mechanism/</guid><description>&lt;p>因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循&lt;a href="http://zh.wikipedia.org/zh/ECMAScript">ECMAScript&lt;/a> 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。&lt;/p>
-&lt;p>本文主要内容源自Adobe官方教程：&lt;a href="http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html">ActionScript 中面向对象的编程-高级主题&lt;/a> ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。&lt;/p>
-&lt;p>本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。&lt;/p>
-&lt;h2 id="actionscript-oop-支持的历史">ActionScript OOP 支持的历史&lt;/h2>
-&lt;p>由于 ActionScript 3.0 是在以前版本的 ActionScript 基础上构建的，了解 ActionScript 对象模型的发展过程可能有所帮助。ActionScript 最初作为早期版本的 Flash 创作工具的简单编写脚本机制。后来，程序员开始使用 ActionScript 建立更加复杂的应用程序。为了迎合这些程序员的需要，每个后续版本都添加了一些语言功能以帮助创建复杂的应用程序。&lt;/p>
-&lt;h3 id="actionscript-10">ActionScript 1.0&lt;/h3>
-&lt;p>ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本。即使在这个早期开发阶段，ActionScript 对象模型也是建立在基础数据类型对象的概念的基础上。ActionScript 对象是由一组属性 构成的复合数据类型。讨论对象模型时，术语属性 包括附加到对象的所有内容，如变量、函数或方法。&lt;/p>
-&lt;p>尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C++ 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。&lt;/p>
-&lt;p>要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：&lt;/p></description></item><item><title>Flash中使用原生鼠标指针</title><link>/posts/native-mouse-cursors-in-flash/</link><pubDate>Wed, 11 Jul 2012 17:06:52 +0800</pubDate><guid>/posts/native-mouse-cursors-in-flash/</guid><description>Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过操作系统指针机制实现基于位图的原生鼠标指针，此方式比使用显示对象来显示自定义指针图像更有效。
+ 参考资料
+ http://labs.adobe.com/technologies/flashplatformruntimes/flashplayer11-5/ http://labs.adobe.com/technologies/flashplatformruntimes/air3-5/  </description>
+    </item>
+    
+    <item>
+      <title>在 Flash Player 中显示GIF动画</title>
+      <link>/posts/gif-animation-in-flash-player/</link>
+      <pubDate>Wed, 26 Sep 2012 18:31:46 +0800</pubDate>
+      
+      <guid>/posts/gif-animation-in-flash-player/</guid>
+      <description>&lt;p&gt;之前遇到这个需求，本人坚持”不重复发明轮子”的原则，弘扬”积极的偷懒不算偷懒”的精神，找到了两个解决方案。因为之前研究了GIF格式和LWZ算法，所以理解起来，没有太大的问题。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;方案一as3gif&#34;&gt;方案一：as3gif&lt;/h2&gt;
+&lt;p&gt;作者：Thibault Imbert
+项目地址：http://code.google.com/p/as3gif/&lt;/p&gt;
+&lt;p&gt;2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-actionscript&#34; data-lang=&#34;actionscript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we create the GIFPlayer, it plays automatically by default
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayer&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we show it
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;addChild&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// we load a gif file
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;load&lt;/span&gt; ( &lt;span style=&#34;color:#66d9ef&#34;&gt;new&lt;/span&gt; URLRequest (&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;animation.gif&amp;#34;&lt;/span&gt;) );
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// you can also load any valid GIF stream (ByteArray) with the loadBytes method (version 0.2)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;loadBytes&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;gifStream&lt;/span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the IOErrorEvent.IO_ERROR event, dispatched when the GIF fails to load
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( IOErrorEvent.&lt;span style=&#34;color:#a6e22e&#34;&gt;IO_ERROR&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onIOError&lt;/span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the GIFPlayerEvent.COMPLETE event, dispatched when GIF is loaded
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;GIFPlayerEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;COMPLETE&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onCompleteGIFLoad&lt;/span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the FrameEvent.FRAME_RENDERED event, dispatched when a GIF frame is rendered on screen
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;FrameEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;FRAME_RENDERED&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onFrameRendered&lt;/span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// listen for the FileTypeEvent.INVALID event, dispatched when an invalid file is loaded
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;addEventListener&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;FileTypeEvent&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;INVALID&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onInvalidFileLoaded&lt;/span&gt; );
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// get total frames
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;totalFrames&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#75715e&#34;&gt;// standard methods
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;play&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;stop&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;gotoAndStop&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;myGIFPlayer&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;gotoAndPlay&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。&lt;/p&gt;
+&lt;p&gt;缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</title>
+      <link>/posts/asc2-release-notes/</link>
+      <pubDate>Fri, 31 Aug 2012 17:50:12 +0800</pubDate>
+      
+      <guid>/posts/asc2-release-notes/</guid>
+      <description>&lt;p&gt;伴随着Flash Builder 4.7 beta的发布，正如Adobe所承诺的那样，新的编译器也浮出水面。全新的编译器到底有哪些改进和新特性，想必是大多数ActionScript开发比较关心的问题。简单翻译了下ASC2.0官方发布说明，希望能对同行们有一点帮助。&lt;/p&gt;
+&lt;p&gt;如果要了解Flash Builder 4.7，可以参看zrong的&lt;a href=&#34;http://zengrong.net/post/1676.htm&#34;&gt;这篇文章&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;** August 2012 – Adobe® ActionScript® Compiler 2.0 (Build 2.0.0.345083) **
+Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.&lt;/p&gt;
+&lt;p&gt;ASC 2.0 是一个新的ActionScript® 3.0 (AS3)编译器。相比之前版本更遵循AS3语言规范，编译性能方面有了很大改善。在内存压力下更稳定，并包含一些演示性的优化选项（内联，无用代码删除），这些选项可以有选择地启用。&lt;/p&gt;
+&lt;p&gt;这个编译器已经包含在刚发布的 Flash Builder® 4.7 预览版中。其单独版本已经同AIR SDK 3.4 一起打包发布。&lt;/p&gt;
+&lt;p&gt;注意：ASC 2.0支持编译AS3应用，虽然留有熟悉的mxmlc和compc命令行入口，但是不支持Flex应用的编译。&lt;/p&gt;
+&lt;p&gt;当有更多信息时，该文档可能会不定期更新。&lt;/p&gt;
+&lt;h2 id=&#34;版本说明--august-2012&#34;&gt;版本说明 – August 2012&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;这是新编译器ASC 2.0 的第一个公开预览版；&lt;/li&gt;
+&lt;li&gt;Flash Builder 4.7 and the ASC 2.0 command-line compiler now share the same code model. This avoids duplicate representations of a program and means the IDE has an accurate representation of the language – matching the compiler. （没看懂，不清楚code model，representation的定义）&lt;/li&gt;
+&lt;li&gt;全新多线程架构，支持多文件同时编译，减少编译时间；&lt;/li&gt;
+&lt;li&gt;更佳的常数合并和常数传播带来运行时更佳性能的代码；&lt;/li&gt;
+&lt;li&gt;通过移除不必要的活动记录减少函数开销；&lt;/li&gt;
+&lt;li&gt;包含内联和无用代码删除相关的字节码优化；&lt;/li&gt;
+&lt;li&gt;加入新关键字”goto”，实现AS3的非线性控制流；&lt;/li&gt;
+&lt;li&gt;现在支持SWF 13的LZMA压缩了。&lt;/li&gt;
+&lt;li&gt;新的符号管理系统，意味着包含Flash 和 AIR项目的Flash Builder 4.7 AS工作空间，编译起来应该会快多了；&lt;/li&gt;
+&lt;li&gt;fontswf, optimizer，swfdump和swcdepends ，基于ASC 2.0的新版本可以用了；&lt;/li&gt;
+&lt;li&gt;Asdoc，fdb的旧版本依然包括在内；&lt;/li&gt;
+&lt;li&gt;字体转码已经从[Embed]语法中移除，现在字体需要先预转码并作为SWF嵌入，可以通过工具（如fontswf或Flash Professional CS6）来完成。&lt;/li&gt;
+&lt;li&gt;源代码中的相对路径（[Embed] assets, includes, etc…）将从其包含文件相对解析。要指定一个相对于源文件根目录的路径，需要在你的路径前加”/”；&lt;/li&gt;
+&lt;li&gt;英文编译器错误信息已经翻译成法文，日文，中文，区域取决于JVM的设置，并可以通过 -tools-locale 设置项改写。&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>基于AS3.0的相似图像搜索算法实现</title>
+      <link>/posts/similar-image-searching-algorithm-as3/</link>
+      <pubDate>Tue, 14 Aug 2012 19:59:25 +0800</pubDate>
+      
+      <guid>/posts/similar-image-searching-algorithm-as3/</guid>
+      <description>&lt;p&gt;Google的图像搜索，可以根据用户上传或者网络上的图片找到与此最相似的图片(百度也有类似功能)。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://pjkm4w.bay.livefilestore.com/y1pOjCa3mvtvwKjegr_UmRLkNG9nUpMQU-uMfHod4eqmrtsEsIHz4jI_4yyhi7oe7xURPx9ZOu-lMQsUi8FbN4reRvqjqVlik3i/google_image_search.png&#34; alt=&#34;google image search&#34; title=&#34;Google Image Search&#34;&gt;&lt;/p&gt;
+&lt;p&gt;阮一峰的博客曾经提到过 “感知哈希算法(Perceptual hash algorithm)”，主要介绍了 Dr. Neal Krawetz基于感知哈希算法的”平均哈希算法(Average Hash algorithm)”。相比其他算法，这种算法简单快速，很容易实现。&lt;/p&gt;
+&lt;p&gt;对于图像来说，高频信息体现图像的细节，低频信息体现图像的边缘和轮廓。一幅大而清晰的图像不仅包含低频，而且会包含很多高频分量。而小图片因为缺乏细节部分，往往只有低频信息。因此用只包含低频分量的图像来做图像相似度匹配是非常合适的。&lt;/p&gt;
+&lt;p&gt;感知哈希算法的基本原理是根据图像特征生成一个特定(但非唯一)的指纹，根据指纹来比较图像的相似度。其特点是，即使图像放大缩小，调整高宽，或者有少许色彩变化（对比度，亮度等等），仍然可以匹配到相似的图像。&lt;/p&gt;
+&lt;h2 id=&#34;平均哈希算法average-hash-algorithm&#34;&gt;平均哈希算法(Average Hash algorithm)&lt;/h2&gt;
+&lt;p&gt;实现步骤如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;缩小尺寸：移除高频部分，将图像缩小至8×8像素,不考虑高宽比；
+{% img &lt;a href=&#34;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg&#34;&gt;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg&lt;/a&gt; 64 64 %}&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;减少颜色：转为灰度图，将64像素的RGB 64×3个颜色值简化为 64个色值；
+{% img &lt;a href=&#34;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg&#34;&gt;https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg&lt;/a&gt; 64 64 %}&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;计算平均值：计算64个颜色的均值；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;比较灰度值：将每个像素的颜色值与平均值比较，小于均值记0，否则记1；&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;计算哈希值：将上述的比较结果拼起来构成一个64位的整数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>ActionScript 3.0 闭包及作用域</title>
+      <link>/posts/actionscript-3-0-closure/</link>
+      <pubDate>Sun, 05 Aug 2012 19:11:50 +0800</pubDate>
+      
+      <guid>/posts/actionscript-3-0-closure/</guid>
+      <description>&lt;p&gt;闭包作为动态语言的基石，在OO实现和框架构建上有着-十分重要的作用。但是闭包的定义比较抽象，不利于理解，闭包在各语言中的实现不尽相同，闭包的函数作用域也有区别。&lt;/p&gt;
+&lt;p&gt;参考整理了这篇文章(非原创),主要内容来自&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;IBM Thoughtworks 文档：&lt;a href=&#34;http://www.ibm.com/developerworks/cn/linux/l-cn-closure&#34;&gt;闭包的概念、形式与应用&lt;/a&gt;；&lt;/li&gt;
+&lt;li&gt;Adobe官方文档：&lt;a href=&#34;http://www.ibm.com/developerworks/cn/linux/l-cn-closure/&#34;&gt;Flash ActionScript 3.0 编程- 函数作用域&lt;/a&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;什么是闭包&#34;&gt;什么是闭包&lt;/h2&gt;
+&lt;p&gt;闭包的概念出现于60年代，最早实现闭包的程序语言是&lt;a href=&#34;http://zh.wikipedia.org/wiki/Scheme&#34;&gt;Scheme&lt;/a&gt;。关于闭包的定义，说法比较多。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;http://zh.wikipedia.org/wiki/Scheme&#34;&gt;Scheme&lt;/a&gt;语言设计者这样定义闭包：”we introduce the notion of a closure which is a data structure containing a lambda expression, and an environment to be used when that lambda expression is applied to arguments.”&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;英文Wikipedia 则是解释为：”a closure (also lexical closure or function closure) is a &lt;a href=&#34;http://en.wikipedia.org/wiki/Function_(computer_science)&#34;&gt;function&lt;/a&gt; together with a referencing environment for the &lt;a href=&#34;http://en.wikipedia.org/wiki/Non-local_variable&#34;&gt;non-local variables&lt;/a&gt; of that function. “。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;中文维基百科：”在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，是引用了&lt;a href=&#34;http://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%8F%98%E9%87%8F&#34;&gt;自由变量&lt;/a&gt;的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。”
+综合这些定义，可以认为闭包一种特殊的数据结构，不仅仅是函数，还包括与其相关的引用环境。闭包只是在形式和表现上像函数，但实际上不是函数。函数是一些可执行的代码，这些代码在函数被定义后就确定了，不会在执行时发生变化，所以一个函数只有一个实例。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。所谓引用环境是指在程序执行中的某个点所有处于活跃状态的约束所组成的集合。其中的约束是指一个变量的名字和其所代表的对象之间的联系。那么为什么要把引用环境与函数组合起来呢？这主要是因为在支持嵌套作用域的语言中，有时不能简单直接地确定函数的引用环境。这样的语言一般具有这样的特性：&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;函数是一阶值（First-class value），即函数可以作为另一个函数的返回值或参数，还可以作为一个变量的值。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;函数可以嵌套定义，即在一个函数内部可以定义另一个函数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;闭包作用域&#34;&gt;闭包作用域&lt;/h2&gt;
+&lt;p&gt;函数的范围不但决定了可以在程序中的什么位置调用函数，而且还决定了函数可以访问哪些定义。适用于变量标识符的作用域规则同样也适用于函数标识符。在全局作用域中声明的函数在整个代码中都可用。例如，ActionScript 3.0 包含可在代码中的任意位置使用的全局函数，如 isNaN() 和 parseInt()。嵌套函数（即在另一个函数中声明的函数）可以在声明它的函数中的任意位置上使用。&lt;/p&gt;
+&lt;h3 id=&#34;作用域链the-scope-chain&#34;&gt;作用域链(The scope chain)&lt;/h3&gt;
+&lt;p&gt;无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ActionScript3的继承机制</title>
+      <link>/posts/actionscript3-inheritance-mechanism/</link>
+      <pubDate>Tue, 31 Jul 2012 18:25:09 +0800</pubDate>
+      
+      <guid>/posts/actionscript3-inheritance-mechanism/</guid>
+      <description>&lt;p&gt;因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循&lt;a href=&#34;http://zh.wikipedia.org/zh/ECMAScript&#34;&gt;ECMAScript&lt;/a&gt; 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。&lt;/p&gt;
+&lt;p&gt;本文主要内容源自Adobe官方教程：&lt;a href=&#34;http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html&#34;&gt;ActionScript 中面向对象的编程-高级主题&lt;/a&gt; ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。&lt;/p&gt;
+&lt;p&gt;本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。&lt;/p&gt;
+&lt;h2 id=&#34;actionscript-oop-支持的历史&#34;&gt;ActionScript OOP 支持的历史&lt;/h2&gt;
+&lt;p&gt;由于 ActionScript 3.0 是在以前版本的 ActionScript 基础上构建的，了解 ActionScript 对象模型的发展过程可能有所帮助。ActionScript 最初作为早期版本的 Flash 创作工具的简单编写脚本机制。后来，程序员开始使用 ActionScript 建立更加复杂的应用程序。为了迎合这些程序员的需要，每个后续版本都添加了一些语言功能以帮助创建复杂的应用程序。&lt;/p&gt;
+&lt;h3 id=&#34;actionscript-10&#34;&gt;ActionScript 1.0&lt;/h3&gt;
+&lt;p&gt;ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本。即使在这个早期开发阶段，ActionScript 对象模型也是建立在基础数据类型对象的概念的基础上。ActionScript 对象是由一组属性 构成的复合数据类型。讨论对象模型时，术语属性 包括附加到对象的所有内容，如变量、函数或方法。&lt;/p&gt;
+&lt;p&gt;尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C++ 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。&lt;/p&gt;
+&lt;p&gt;要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Flash中使用原生鼠标指针</title>
+      <link>/posts/native-mouse-cursors-in-flash/</link>
+      <pubDate>Wed, 11 Jul 2012 17:06:52 +0800</pubDate>
+      
+      <guid>/posts/native-mouse-cursors-in-flash/</guid>
+      <description>Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过操作系统指针机制实现基于位图的原生鼠标指针，此方式比使用显示对象来显示自定义指针图像更有效。
 理解原生位图指针 自Flash Player 5开始，一直使用 InteractiveObject.startDrag 和 Mouse.hide 来自定义光标外形。但是之前的这种实现有以下几个限制：
-显示对象实现的光标受限于舞台的维度。当用户把光标在舞台边界处，自定义光标会显示不完全。 显示对象光标在Flash Player 渲染时非常消耗资源，因为整个舞台必须在很高的帧数下重新渲染。updateAfterEvent 方法的使用会导致高CPU占用。 如果SWF因为某些原因停顿了几毫秒，光标动画也会停顿，用户会误认为程序不响应了。 总体上看，相比原生光标，显示对象实现的光标比较迟缓，不够流畅，用户体验不好。 实现原生鼠标光标 实现原生鼠标光标只需要 MouseCursorData 类的几个属性，非常简洁高效。
+ 显示对象实现的光标受限于舞台的维度。当用户把光标在舞台边界处，自定义光标会显示不完全。 显示对象光标在Flash Player 渲染时非常消耗资源，因为整个舞台必须在很高的帧数下重新渲染。updateAfterEvent 方法的使用会导致高CPU占用。 如果SWF因为某些原因停顿了几毫秒，光标动画也会停顿，用户会误认为程序不响应了。 总体上看，相比原生光标，显示对象实现的光标比较迟缓，不够流畅，用户体验不好。  实现原生鼠标光标 实现原生鼠标光标只需要 MouseCursorData 类的几个属性，非常简洁高效。
 flash.ui.MouseCursorData 的三个属性：
-data：BitmapData 对象的 Vector 包含光标图像或图像。可提供多个图像，并将 frameRate 属性设置为使光标具有动画效果。但是位图大小有限制，最大光标大小为 32×32 像素。 frameRate：使光标具有动画效果的帧速率，在 data 属性中提供多个图像并将帧速率设置为大于 0 的值，以便为指针添加动画效果。光标帧速率可能不同于当前的 SWF 帧速率，就是说调整帧率后光标动画帧率不会变化。 hotSpot：以像素表示的光标热点，热点是指在光标上注册鼠标单击所在的点。默认情况下位于左上角 (0,0)。 代码示例 动态光标和静态光标的实现方式差不多，只需要在data中存入多个位图并设置frameRate。代码如下： private function createFakeCursor():void { this.fakeCursor = new Shape(); var bmp:BitmapData = this.generateCursorBmp(8); fakeCursor.graphics.beginBitmapFill(bmp); fakeCursor.graphics.drawRect(0,0,bmp.width,bmp.height); fakeCursor.graphics.endFill(); fakeCursor.visible = false; this.</description></item></channel></rss>
+ data：BitmapData 对象的 Vector 包含光标图像或图像。可提供多个图像，并将 frameRate 属性设置为使光标具有动画效果。但是位图大小有限制，最大光标大小为 32×32 像素。 frameRate：使光标具有动画效果的帧速率，在 data 属性中提供多个图像并将帧速率设置为大于 0 的值，以便为指针添加动画效果。光标帧速率可能不同于当前的 SWF 帧速率，就是说调整帧率后光标动画帧率不会变化。 hotSpot：以像素表示的光标热点，热点是指在光标上注册鼠标单击所在的点。默认情况下位于左上角 (0,0)。  代码示例 动态光标和静态光标的实现方式差不多，只需要在data中存入多个位图并设置frameRate。代码如下： private function createFakeCursor():void { 	this.fakeCursor = new Shape(); 	var bmp:BitmapData = this.generateCursorBmp(8); 	fakeCursor.graphics.beginBitmapFill(bmp); 	fakeCursor.graphics.drawRect(0,0,bmp.width,bmp.height); 	fakeCursor.graphics.endFill(); 	fakeCursor.visible = false; 	this.</description>
+    </item>
+    
+  </channel>
+</rss>

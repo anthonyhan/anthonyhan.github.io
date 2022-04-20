@@ -1,39 +1,90 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>game on LimboNova</title><link>/tags/game/</link><description>Recent content in game on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Thu, 26 Apr 2018 22:54:34 +0800</lastBuildDate><atom:link href="/tags/game/index.xml" rel="self" type="application/rss+xml"/><item><title>晶体管：献给赛博朋克的十四行诗</title><link>/posts/transistor-a-sonnet-to-cyberpunk/</link><pubDate>Thu, 26 Apr 2018 22:54:34 +0800</pubDate><guid>/posts/transistor-a-sonnet-to-cyberpunk/</guid><description>&lt;blockquote>
-&lt;p>When I first saw you up on that stage back there.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>game on LimboNova</title>
+    <link>/tags/game/</link>
+    <description>Recent content in game on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 26 Apr 2018 22:54:34 +0800</lastBuildDate><atom:link href="/tags/game/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>晶体管：献给赛博朋克的十四行诗</title>
+      <link>/posts/transistor-a-sonnet-to-cyberpunk/</link>
+      <pubDate>Thu, 26 Apr 2018 22:54:34 +0800</pubDate>
+      
+      <guid>/posts/transistor-a-sonnet-to-cyberpunk/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;When I first saw you up on that stage back there.
 It was like&amp;hellip;
 everyone loved you.
-Everyone except for them.&lt;/p>
-&lt;/blockquote>
-&lt;p>《晶体管》(Transistor) 是一款由《堡垒》(Bastion)开发商 &lt;a href="https://www.supergiantgames.com/">Supergiant Games&lt;/a> 所开发的科幻题材作品。游戏讲述了主角——云堤城 (Cloudbank) 歌星红伶 (Red)，躲过卡梅拉塔组织 (The Camerata) 刺杀后，意外获得了一件名叫“晶体管” (Transistor) 的武器，并以此复仇的故事。&lt;/p>
-&lt;p>虽然《晶体管》被官方定义为 ARPG ，但确切地说，它更应该被称作为一款 TRPG (Tactical RPG)。类似 XCOM 或者 神界：原罪 (Divinity: Original Sin) 的战斗规则 但又有所不同。首先，在行动规划阶段没有移动的次序和限制，玩家可以移动多次，并且在发动技能前后都可以移动，行动规划如同施放“时间暂停”一般。其次，个别技能会影响敌人位置，如拉近/击飞等效果。而在行动规划期间，受到此类效果影响的敌人并不会实时改变其位置，因为是规划嘛，所以需要一定的预判，游戏中会给出相应的提示。&lt;/p>
-&lt;p>&lt;img src="/images/screenshots/20180426140854_1.jpg" alt="transistor">&lt;/p></description></item><item><title>建筑师谈《监狱建筑师》</title><link>/posts/asked-an-architect-about-the-game-prison-architect/</link><pubDate>Tue, 08 Aug 2017 16:28:00 +0800</pubDate><guid>/posts/asked-an-architect-about-the-game-prison-architect/</guid><description>&lt;p>&lt;strong>原文：&lt;/strong> &lt;a href="https://motherboard.vice.com/en_us/article/gvyzm4/we-asked-an-architect-about-the-game-prison-architect">We Asked an Architect About the Game &amp;lsquo;Prison Architect&amp;rsquo;&lt;/a>&lt;/p>
-&lt;p>&lt;strong>作者：&lt;/strong> EMANUEL MAIBERG&lt;/p>
-&lt;p>&lt;strong>译者：&lt;/strong> Anthony Han&lt;/p>
-&lt;blockquote>
-&lt;p>这是一篇我自己翻译的文章，主要动力源于几个月前玩的《监狱建筑师》这款游戏。因琐事所累，当时没有写下自己的体验感受。只留下书签栏中的这篇文章，或许可以从另一个角度来看这款游戏并审视其独特题材的社会意义。&lt;/p>
-&lt;/blockquote>
-&lt;p>&lt;img src="https://www.introversion.co.uk/prisonarchitect/images/screenshots/large/prison-architect-12.jpg" alt="prison architect">&lt;/p>
-&lt;p>《监狱建筑师》，一款类似模拟城市的监狱模拟经营游戏，恰到好处地探究到了其主题的骇人之处。&lt;/p>
-&lt;p>玩家作为《监狱建筑师》的首要任务是用电椅处死一个囚犯，但在你按那个死亡开关前，你还得弄清楚很多细节。你需要建一个单独的建筑，带有一个执行室和拘留室。如果你心肠好的话，可以加一个窗和书架。每个房间需要一定的大小，并使用不同类型的地板。每个房间还需要连接到监狱的电网，电椅会消耗很多电力，所以你要为你的发电机增加一些电容器。&lt;/p>
-&lt;p>当你处死囚犯的时候，这个事只是众多的待办事项中的一项：建更多的牢房，扩大食堂，建一个实施戒毒方案的公共房间，修复淋浴管道。还有，哦，处死这个囚犯。&lt;/p>
-&lt;p>游戏开发商 Introversion Software 的创意总监克里斯·迪莱（Chris Delay）说，他们特意挑选了监狱生活中最黑暗的部分作为游戏的第一章节。他说：“如果把它当成建造酒店或者其它东西的游戏就会非常轻松。”“但从一开始，我们就认识到，必须让玩家知道这是不一样的体验，他必须要有不一样的思路。”&lt;/p>
-&lt;p>游戏的最基本的建筑单元就是那些构成地图的方块。如何解决问题就看你如何有效使用分配给你的空间，经过足够长的时间后，你就会得到自己看待世界的方式（以自己的想法来构建世界），这就是模拟经营游戏的乐趣。这是一个关于最优化的练习。如果你像我一样，看到整齐有序的书架或者清洁干净的桌面感到莫名的享受时，玩模拟经营游戏尤其满足。&lt;/p>
-&lt;p>但是，我依然会记得这个游戏的主题，尤其知道现实生活中这一切都是真实存在的之后，我意识到，原来我在游戏里干得很棒的工作竟然如此可怕。&lt;/p></description></item><item><title>从《Dear Esther》和《Journey》看当今游戏发展</title><link>/posts/visioning-games-from-dear-esther-and-journey/</link><pubDate>Thu, 03 Jan 2013 22:02:16 +0800</pubDate><guid>/posts/visioning-games-from-dear-esther-and-journey/</guid><description>&lt;p>&lt;strong>标题：&lt;/strong> 从《Dear Esther》和《Journey》看当今游戏发展
-&lt;strong>译者：&lt;/strong> &lt;a href="http://gamerboom.com/archives/53084">游戏邦&lt;/a>&lt;/p>
-&lt;p>&lt;strong>原文：&lt;/strong> Visioning games – what we can learn from games like Dear Esther and Journey
-&lt;strong>作者：&lt;/strong> &lt;a href="http://krillbite.com/blog/05/visioning-games-what-we-can-learn-from-games-like-dear-esther-and-journey/">Adrian Tingstad Husby&lt;/a>&lt;/p>
-&lt;blockquote>
-&lt;p>这是一篇转载的文章，已获得译者许可。原文发表于2012年5月8日，前段时间体验完Dear Esther，无意中看到了这篇译文，恰巧 Journey被评为IGN 2012年度最佳游戏。文章讲得很有道理，“除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。”&lt;/p>
-&lt;/blockquote>
-&lt;p>游戏所具有的程序，互动和（潜在的）非线型属性让它们能够更好地处理一些人类心智问题（比起其它静态且线型媒体来说）。但是通常情况下，因为游戏总是会受到一些条条框框和人们无尽期望的束缚，所以很难体现出同等艺术媒体所具有的情感或故事。&lt;/p>
-&lt;p>我既是一名游戏玩家也是游戏开发者，但是纵观今天的游戏，我们看到的却只是一些“有趣的”骗人玩意儿。除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。引用Scott Brodie的话来说就是“比起其它受欢迎的艺术形式，游戏产业从整体来看显得更加平庸与幼稚。”尽管觉得遗憾，但是我真的非常同意Scott的说法。&lt;/p>
-&lt;p>我认为我们有必要在此讨论一些重要的问题。即是否能够创造一款不是通过进度条或高分而推动奖励的电子游戏？这是一种与趣味情感相互协调的机制，但是它们是否能够与其它复杂且相对严肃的情感结合在一起？是否正是因为玩家对于外部奖励的狂热追求才促使游戏区别于浪漫的戏剧和纪录片？&lt;/p>
-&lt;p>最近我到gameosphere网站玩了《Journey》和新版的《Dear Esther》，并发现这两款游戏在设计方面有许多共同点。这些共同点都遵循着一种发展趋势——尽管都是基于独立场景而言。我个人认为这类型的游戏不仅能够让我对未来的游戏媒体发展充满期待，同时它们也完美地体现出我对于游戏的一些想法。&lt;/p>
-&lt;p>真心希望当前的游戏领域现状能够发生改变。而我们也同时在当前的游戏身上找到了许多值得讨论和学习之处。&lt;/p>
-&lt;p>&lt;img src="http://gamerboom.com/wp-content/uploads/2012/05/Journeyfrom-tmeink.com%EF%BC%89.jpg" alt="journey" title="Journey">&lt;/p></description></item><item><title>Less is more : Dear Esther 简评</title><link>/posts/less-is-more-dear-esther-review/</link><pubDate>Mon, 31 Dec 2012 21:03:40 +0800</pubDate><guid>/posts/less-is-more-dear-esther-review/</guid><description>&lt;p>Less is more，是现代主义建筑大师路德维希·密斯·凡德罗提倡简单，反对过度装饰的设计理念，也是极简主义的经典表述。在AAA级游戏制作成本及规模不断攀升的同时，一些独立游戏开发者则朝着这个方向发展，简约的风格带来一种与众不同的清新和震撼。&lt;/p>
-&lt;p>&lt;img src="https://caad5q.bay.livefilestore.com/y1pASxJ__z-L7UIlgez3qwETURyMwHukRsphU-hwYx0pdCMHwRxTZt2qpGys17GfaAfXpGEQUxSqvt1OTQL-ajueqprGIkTuPpw/dearesther%202013-01-03%2022-18-18-05.jpg" alt="dear esther">&lt;/p>
-&lt;p>Dear Esther 由独立游戏工作室 &lt;a href="http://www.thechineseroom.co.uk/">The Chinese Room [室] &lt;/a> 制作， 起初是作为Source引擎的Mod作品在2008年发布，2012年在Steam平台发售商业版。游戏没有复杂的操作，玩家所能做的只有前后左右(WSAD) 和放大(Zoom)，采用Source引擎，游戏画面渲染的很不错，诸如水面的反射，水流的折射等物理效果让人印象深刻。简单的操作，极少的交互凸显了叙事的重要性，让整个游戏的情节成为了该游戏的核心。&lt;/p>
-&lt;p>游戏以一个废弃的海岛为场景，玩家可自由探索地区，并在途中某些地点触发画外音。叙述者自称“我”，即主角，也可指代为玩家自己。言语多以 “Dear Esther”开始，很像书信的开头，内容都是主角写给Esther的信件节选。玩家通过不断地探索来获得更多的叙述，以及结合游戏场景中的物件，从而获得零星的故事片段。随着探索区域的逐渐深入，获得的线索也越来越多，原本散乱的记忆拼图最终成为了一个整体。&lt;/p></description></item><item><title>南方周末：《系统》[转载]</title><link>/posts/southern-weekly-the-system/</link><pubDate>Sun, 06 Jan 2008 06:06:29 +0800</pubDate><guid>/posts/southern-weekly-the-system/</guid><description>来源: 南方周末 作者: 曹筠武　张春蔚　王轶庶
+Everyone except for them.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;《晶体管》(Transistor) 是一款由《堡垒》(Bastion)开发商 &lt;a href=&#34;https://www.supergiantgames.com/&#34;&gt;Supergiant Games&lt;/a&gt; 所开发的科幻题材作品。游戏讲述了主角——云堤城 (Cloudbank) 歌星红伶 (Red)，躲过卡梅拉塔组织 (The Camerata) 刺杀后，意外获得了一件名叫“晶体管” (Transistor) 的武器，并以此复仇的故事。&lt;/p&gt;
+&lt;p&gt;虽然《晶体管》被官方定义为 ARPG ，但确切地说，它更应该被称作为一款 TRPG (Tactical RPG)。类似 XCOM 或者 神界：原罪 (Divinity: Original Sin) 的战斗规则 但又有所不同。首先，在行动规划阶段没有移动的次序和限制，玩家可以移动多次，并且在发动技能前后都可以移动，行动规划如同施放“时间暂停”一般。其次，个别技能会影响敌人位置，如拉近/击飞等效果。而在行动规划期间，受到此类效果影响的敌人并不会实时改变其位置，因为是规划嘛，所以需要一定的预判，游戏中会给出相应的提示。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/screenshots/20180426140854_1.jpg&#34; alt=&#34;transistor&#34;&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>建筑师谈《监狱建筑师》</title>
+      <link>/posts/asked-an-architect-about-the-game-prison-architect/</link>
+      <pubDate>Tue, 08 Aug 2017 16:28:00 +0800</pubDate>
+      
+      <guid>/posts/asked-an-architect-about-the-game-prison-architect/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;https://motherboard.vice.com/en_us/article/gvyzm4/we-asked-an-architect-about-the-game-prison-architect&#34;&gt;We Asked an Architect About the Game &amp;lsquo;Prison Architect&amp;rsquo;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;作者：&lt;/strong&gt; EMANUEL MAIBERG&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;译者：&lt;/strong&gt; Anthony Han&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;这是一篇我自己翻译的文章，主要动力源于几个月前玩的《监狱建筑师》这款游戏。因琐事所累，当时没有写下自己的体验感受。只留下书签栏中的这篇文章，或许可以从另一个角度来看这款游戏并审视其独特题材的社会意义。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://www.introversion.co.uk/prisonarchitect/images/screenshots/large/prison-architect-12.jpg&#34; alt=&#34;prison architect&#34;&gt;&lt;/p&gt;
+&lt;p&gt;《监狱建筑师》，一款类似模拟城市的监狱模拟经营游戏，恰到好处地探究到了其主题的骇人之处。&lt;/p&gt;
+&lt;p&gt;玩家作为《监狱建筑师》的首要任务是用电椅处死一个囚犯，但在你按那个死亡开关前，你还得弄清楚很多细节。你需要建一个单独的建筑，带有一个执行室和拘留室。如果你心肠好的话，可以加一个窗和书架。每个房间需要一定的大小，并使用不同类型的地板。每个房间还需要连接到监狱的电网，电椅会消耗很多电力，所以你要为你的发电机增加一些电容器。&lt;/p&gt;
+&lt;p&gt;当你处死囚犯的时候，这个事只是众多的待办事项中的一项：建更多的牢房，扩大食堂，建一个实施戒毒方案的公共房间，修复淋浴管道。还有，哦，处死这个囚犯。&lt;/p&gt;
+&lt;p&gt;游戏开发商 Introversion Software 的创意总监克里斯·迪莱（Chris Delay）说，他们特意挑选了监狱生活中最黑暗的部分作为游戏的第一章节。他说：“如果把它当成建造酒店或者其它东西的游戏就会非常轻松。”“但从一开始，我们就认识到，必须让玩家知道这是不一样的体验，他必须要有不一样的思路。”&lt;/p&gt;
+&lt;p&gt;游戏的最基本的建筑单元就是那些构成地图的方块。如何解决问题就看你如何有效使用分配给你的空间，经过足够长的时间后，你就会得到自己看待世界的方式（以自己的想法来构建世界），这就是模拟经营游戏的乐趣。这是一个关于最优化的练习。如果你像我一样，看到整齐有序的书架或者清洁干净的桌面感到莫名的享受时，玩模拟经营游戏尤其满足。&lt;/p&gt;
+&lt;p&gt;但是，我依然会记得这个游戏的主题，尤其知道现实生活中这一切都是真实存在的之后，我意识到，原来我在游戏里干得很棒的工作竟然如此可怕。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>从《Dear Esther》和《Journey》看当今游戏发展</title>
+      <link>/posts/visioning-games-from-dear-esther-and-journey/</link>
+      <pubDate>Thu, 03 Jan 2013 22:02:16 +0800</pubDate>
+      
+      <guid>/posts/visioning-games-from-dear-esther-and-journey/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;标题：&lt;/strong&gt; 从《Dear Esther》和《Journey》看当今游戏发展
+&lt;strong&gt;译者：&lt;/strong&gt; &lt;a href=&#34;http://gamerboom.com/archives/53084&#34;&gt;游戏邦&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; Visioning games – what we can learn from games like Dear Esther and Journey
+&lt;strong&gt;作者：&lt;/strong&gt; &lt;a href=&#34;http://krillbite.com/blog/05/visioning-games-what-we-can-learn-from-games-like-dear-esther-and-journey/&#34;&gt;Adrian Tingstad Husby&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;这是一篇转载的文章，已获得译者许可。原文发表于2012年5月8日，前段时间体验完Dear Esther，无意中看到了这篇译文，恰巧 Journey被评为IGN 2012年度最佳游戏。文章讲得很有道理，“除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;游戏所具有的程序，互动和（潜在的）非线型属性让它们能够更好地处理一些人类心智问题（比起其它静态且线型媒体来说）。但是通常情况下，因为游戏总是会受到一些条条框框和人们无尽期望的束缚，所以很难体现出同等艺术媒体所具有的情感或故事。&lt;/p&gt;
+&lt;p&gt;我既是一名游戏玩家也是游戏开发者，但是纵观今天的游戏，我们看到的却只是一些“有趣的”骗人玩意儿。除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。引用Scott Brodie的话来说就是“比起其它受欢迎的艺术形式，游戏产业从整体来看显得更加平庸与幼稚。”尽管觉得遗憾，但是我真的非常同意Scott的说法。&lt;/p&gt;
+&lt;p&gt;我认为我们有必要在此讨论一些重要的问题。即是否能够创造一款不是通过进度条或高分而推动奖励的电子游戏？这是一种与趣味情感相互协调的机制，但是它们是否能够与其它复杂且相对严肃的情感结合在一起？是否正是因为玩家对于外部奖励的狂热追求才促使游戏区别于浪漫的戏剧和纪录片？&lt;/p&gt;
+&lt;p&gt;最近我到gameosphere网站玩了《Journey》和新版的《Dear Esther》，并发现这两款游戏在设计方面有许多共同点。这些共同点都遵循着一种发展趋势——尽管都是基于独立场景而言。我个人认为这类型的游戏不仅能够让我对未来的游戏媒体发展充满期待，同时它们也完美地体现出我对于游戏的一些想法。&lt;/p&gt;
+&lt;p&gt;真心希望当前的游戏领域现状能够发生改变。而我们也同时在当前的游戏身上找到了许多值得讨论和学习之处。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;http://gamerboom.com/wp-content/uploads/2012/05/Journeyfrom-tmeink.com%EF%BC%89.jpg&#34; alt=&#34;journey&#34; title=&#34;Journey&#34;&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Less is more : Dear Esther 简评</title>
+      <link>/posts/less-is-more-dear-esther-review/</link>
+      <pubDate>Mon, 31 Dec 2012 21:03:40 +0800</pubDate>
+      
+      <guid>/posts/less-is-more-dear-esther-review/</guid>
+      <description>&lt;p&gt;Less is more，是现代主义建筑大师路德维希·密斯·凡德罗提倡简单，反对过度装饰的设计理念，也是极简主义的经典表述。在AAA级游戏制作成本及规模不断攀升的同时，一些独立游戏开发者则朝着这个方向发展，简约的风格带来一种与众不同的清新和震撼。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://caad5q.bay.livefilestore.com/y1pASxJ__z-L7UIlgez3qwETURyMwHukRsphU-hwYx0pdCMHwRxTZt2qpGys17GfaAfXpGEQUxSqvt1OTQL-ajueqprGIkTuPpw/dearesther%202013-01-03%2022-18-18-05.jpg&#34; alt=&#34;dear esther&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Dear Esther 由独立游戏工作室 &lt;a href=&#34;http://www.thechineseroom.co.uk/&#34;&gt;The Chinese Room [室] &lt;/a&gt; 制作， 起初是作为Source引擎的Mod作品在2008年发布，2012年在Steam平台发售商业版。游戏没有复杂的操作，玩家所能做的只有前后左右(WSAD) 和放大(Zoom)，采用Source引擎，游戏画面渲染的很不错，诸如水面的反射，水流的折射等物理效果让人印象深刻。简单的操作，极少的交互凸显了叙事的重要性，让整个游戏的情节成为了该游戏的核心。&lt;/p&gt;
+&lt;p&gt;游戏以一个废弃的海岛为场景，玩家可自由探索地区，并在途中某些地点触发画外音。叙述者自称“我”，即主角，也可指代为玩家自己。言语多以 “Dear Esther”开始，很像书信的开头，内容都是主角写给Esther的信件节选。玩家通过不断地探索来获得更多的叙述，以及结合游戏场景中的物件，从而获得零星的故事片段。随着探索区域的逐渐深入，获得的线索也越来越多，原本散乱的记忆拼图最终成为了一个整体。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>南方周末：《系统》[转载]</title>
+      <link>/posts/southern-weekly-the-system/</link>
+      <pubDate>Sun, 06 Jan 2008 06:06:29 +0800</pubDate>
+      
+      <guid>/posts/southern-weekly-the-system/</guid>
+      <description>来源: 南方周末 作者: 曹筠武　张春蔚　王轶庶
 ■编者按：
 在一款同时在线人数超过百万、全部玩家加起来可以组成一个超级城市的网络游戏中，它的游戏精神是指向乐趣，还是指向权力和金钱？它的社会规则是新世界的开放自由，还是率土之滨莫非王臣？这不只是对某一款游戏的追问，甚至也不只是对韩式网游的价值观的追问，而是对人与游戏、人与人的关系的追问。虚拟世界是现实世界的一部分，也有着人们必须捍卫的准则。
 在当下中国最火的一款网络游戏中，玩家们遭遇到一个“系统”，它正在施行一种充满诱惑力的统治。这个“系统”隐匿无踪，却无处不在。它是一位虚拟却真实的垄断者。“如果没有我的允许，这个国家的一片叶子也不能动。”这是智利前独裁者皮诺切特的声音，悄然回响在这个虚拟世界之中。
@@ -91,7 +142,16 @@ Everyone except for them.&lt;/p>
 玩家在不懈地开着箱子，他们有时好运地得到一点好东西，绝大部分时间几无所获，但越是没有收获，他们越是迫不及待地打开下一个箱子。他们每点击一下，就代表一块钱，又一块钱……就像一个永不停歇的沙漏，金钱涓滴成河一般随着每一次点击汇成巨流，流向看不见的系统。
 吕洋自认为运气还比较好，“平均开1000个箱子，好运的话能有十几次拿到好东西。”
 由此吕洋成为了她现在所鄙夷的“人民币玩家”，上万的人民币被迅速而几乎不被察觉地花了出去。在游戏中。“女王”拥有了可怕的威力，她为自己，也为朋友报仇；她接受请求，为本国的商队护镖；同时她也会和英雄们一起侵入别国。她声誉日隆，跻身英雄之列，在游戏里，她甚至和威猛的帮主“狼烟”喜结连理。当然，也由于她在现实中是一个那么可爱的姑娘，她被推举为楚国的国王。“国王万岁！”人们向她俯首称臣。那是吕洋在征途中的最高点，也惟有在那转瞬即逝的一刻，吕洋觉得自己付出的时间和金钱是值得的。
-国王累了 “系统”是最为勤奋的——女王觉得自己像驴子——花钱买你生气——快感只在一刹那 吕洋心里清楚，王位是真金白银买来的。一套转生150级左右的顶级装备，平均要开5000个宝箱。按照系统繁复的装备打造设置，要给一套装备镶上14颗星星，打开“灵魂锁链”，镶嵌补天神石，花费又在5000元左右。随着等级的提高，原有的装备又必须相应替换或升级。平均每升5级，装备就要更新一套。</description></item><item><title>PlaneScape:Torment的故事[转载]</title><link>/posts/story-of-planescape-torment/</link><pubDate>Tue, 06 Nov 2007 15:12:47 +0800</pubDate><guid>/posts/story-of-planescape-torment/</guid><description>现在，让我们了解一下，无名氏——游戏中是这样称呼这名不死人的，他是如何度过他那漫长的一生的。
+国王累了 “系统”是最为勤奋的——女王觉得自己像驴子——花钱买你生气——快感只在一刹那 吕洋心里清楚，王位是真金白银买来的。一套转生150级左右的顶级装备，平均要开5000个宝箱。按照系统繁复的装备打造设置，要给一套装备镶上14颗星星，打开“灵魂锁链”，镶嵌补天神石，花费又在5000元左右。随着等级的提高，原有的装备又必须相应替换或升级。平均每升5级，装备就要更新一套。</description>
+    </item>
+    
+    <item>
+      <title>PlaneScape:Torment的故事[转载]</title>
+      <link>/posts/story-of-planescape-torment/</link>
+      <pubDate>Tue, 06 Nov 2007 15:12:47 +0800</pubDate>
+      
+      <guid>/posts/story-of-planescape-torment/</guid>
+      <description>现在，让我们了解一下，无名氏——游戏中是这样称呼这名不死人的，他是如何度过他那漫长的一生的。
 在行星之间旅行是非常有趣的事，有时候你会遇到一些意想不到的东西。上次在书记区大肆采购的时候我们就在一堆乱七八糟的坎吉人手稿中找到了一张令人惊讶不已的羊皮纸信笺。有很多人会对此感兴趣的，因为上面记载的是一个在法印城非常有名的人的传奇经历，这个人虽然有很多个名字，但是最为人所知的还是“无名氏”。最初的无名氏应该是一个为别人提供建议的指导人，然而他的建议却导致了背叛。我们看到信笺里提到了一份契约，这直接证实了无名氏最原始的分身所犯下的不可饶恕的罪过，这可怕的罪行是他永远也无法补救的。然而，信笺里并没有提及这项罪行的具体内容，只是隐隐约约的暗示这个世界慢慢老化的事实与之有关。
 他向暗夜魔女解谜者寻求帮助，想借她之手变为不死之身以逃避对自己的惩罚并能有机会补偿自己所犯的罪过。面对自己所爱的人，解谜者完成了他的请求，将无名氏与他的死亡化身剥离。但是这样做要付出一个可怕的代价，虽然每次死亡只会让无名氏昏睡一段时间，但是这样同时也会对他的思想造成伤害，使他失去记忆。由此而来在无名氏的一生中就产生了无数的分身，每一个分身都仅仅保留了对过去的一点点的残缺的记忆。
 对于以后的许多分身仅有一些片断的纪录。伟大的将军、强大魔法师的门徒、沾满鲜血被执法者追杀的凶手、试图在法印城昏暗的街道里躲闪的盗贼。他在行星上流浪，残忍与善良，混乱与公正。他扮演过很多角色，行事变化多端，在漫长的生涯中唯一不变的就是深入他肌肤的折磨的纹身，这个图纹同时也吸引了其他深受折磨的灵魂围聚在他身边。毫无疑问的，这些灵魂的大多数都被抹煞了。
@@ -138,4 +198,8 @@ Everyone except for them.&lt;/p>
 他一直在试图搞清他是谁，属于世界上哪个地方。
 维勒： 维勒是个不停歇的灵魂，他拒绝死亡。即使当他死亡时，他也保留下了他的盔甲和巨斧以便能够继续消除全宇宙不公平事件的事业。他没有物质上的身体，除了盔甲，他是完全透明的。他总是把面罩放下来，所以他发出的任何声音都像是从一个巨大的空容器中传出来的。
 这个永不停息的灵魂是主张公平的一派，他们的存在就是为了惩罚罪恶，并且对他们所追缉的罪犯毫不留情。如果他发现你或你同伴中之一犯了罪，他同样会寻求“判决”。
-原文出自NTRPG，已佚 润色版本源自 《PS:T》無名氏的故事</description></item></channel></rss>
+  原文出自NTRPG，已佚 润色版本源自 《PS:T》無名氏的故事  </description>
+    </item>
+    
+  </channel>
+</rss>

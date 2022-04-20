@@ -1,11 +1,30 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>mind map on LimboNova</title><link>/tags/mind-map/</link><description>Recent content in mind map on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Sat, 26 Feb 2011 16:16:18 +0800</lastBuildDate><atom:link href="/tags/mind-map/index.xml" rel="self" type="application/rss+xml"/><item><title>使用思维导图工具 PersonalBrain 进行需求分析</title><link>/posts/do-requirement-analysis-using-personalbrain/</link><pubDate>Sat, 26 Feb 2011 16:16:18 +0800</pubDate><guid>/posts/do-requirement-analysis-using-personalbrain/</guid><description> TheBrain 的真正价值之所在——与其他信息和文件建立链接。这种链接被称作“跳跃”(jump)，因为你在这之前看不到这种联系。 —— 《华尔街日报》
-很久以前用大英百科全书2008软件时，接触到其附带的一款思维导图软件——TheBrain，发展至今，它从众多Mind Map软件中脱颖而出，独树一帜 —— PersonalBrain。这款软件的使用者广泛，其中不乏黑客、科学家、警察、军人以及商界精英等等，他们用它来对自己的各种想法、所从事的项目甚至是收集到的犯罪数据进行处理。意大利警察顾问罗伯托•卡波迪耶奇(Roberto Capodieci)使用这款软件来寻找犯罪团伙成员之间的联系，而英国科学历史学家詹姆斯•伯克(James Burke)利用它来研究历史上伟大发明家之间的关联。这是一款非常奇特非常酷的应用程序，一旦你掌握如何使用它，我想你的后半辈子就离不了它了。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>mind map on LimboNova</title>
+    <link>/tags/mind-map/</link>
+    <description>Recent content in mind map on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 26 Feb 2011 16:16:18 +0800</lastBuildDate><atom:link href="/tags/mind-map/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用思维导图工具 PersonalBrain 进行需求分析</title>
+      <link>/posts/do-requirement-analysis-using-personalbrain/</link>
+      <pubDate>Sat, 26 Feb 2011 16:16:18 +0800</pubDate>
+      
+      <guid>/posts/do-requirement-analysis-using-personalbrain/</guid>
+      <description> TheBrain 的真正价值之所在——与其他信息和文件建立链接。这种链接被称作“跳跃”(jump)，因为你在这之前看不到这种联系。 —— 《华尔街日报》
+ 很久以前用大英百科全书2008软件时，接触到其附带的一款思维导图软件——TheBrain，发展至今，它从众多Mind Map软件中脱颖而出，独树一帜 —— PersonalBrain。这款软件的使用者广泛，其中不乏黑客、科学家、警察、军人以及商界精英等等，他们用它来对自己的各种想法、所从事的项目甚至是收集到的犯罪数据进行处理。意大利警察顾问罗伯托•卡波迪耶奇(Roberto Capodieci)使用这款软件来寻找犯罪团伙成员之间的联系，而英国科学历史学家詹姆斯•伯克(James Burke)利用它来研究历史上伟大发明家之间的关联。这是一款非常奇特非常酷的应用程序，一旦你掌握如何使用它，我想你的后半辈子就离不了它了。
 特色 PersonalBrain不同与一般的思维导图软件，它有着自己的特色。
-一般的Mind Map 只允许由中心思想向四周辐射，且每个节点只有一个父节点，这是一个树形结构，而PersonalBrain则没有这些限制，一个节点被称为”想法(thought)”，每个想法可以有若干个“父想法”，若干个”子想法”，若干个“跳跃想法(jump thought)”。这是模仿人脑的思维方式，多点辐射关联，最后完成的思维图就会是一张看似极其复杂的蛛网图。
-在PersonalBrain的视图中，如果你点击一个想法，与之相关的其他想法会理解展开并围绕在其周围，这让你可以更专注地集中精力考虑这一个想法。
-TheBrain 的真正价值在于一个想法与其他非直接相关的想法建立的链接 ——“跳跃想法”(jump thought)。
-使用 刚刚学习使用PersonalBrain，还没入门，只做了一张树形结构的思维导图，本人暂时还没学会如何合理地使用 jump thoughts。一般先建立好主要树形结构，然后想到什么就把想法添加到相应的节点上，这样建立起一个个链接。虽然整体是树形的，没有凸显PersonalBrain的优势，但也可以从图上很容易地看出，目前思想体系中的重心，它们关系到整个AstroLog需求思路。
+  一般的Mind Map 只允许由中心思想向四周辐射，且每个节点只有一个父节点，这是一个树形结构，而PersonalBrain则没有这些限制，一个节点被称为”想法(thought)”，每个想法可以有若干个“父想法”，若干个”子想法”，若干个“跳跃想法(jump thought)”。这是模仿人脑的思维方式，多点辐射关联，最后完成的思维图就会是一张看似极其复杂的蛛网图。
+  在PersonalBrain的视图中，如果你点击一个想法，与之相关的其他想法会理解展开并围绕在其周围，这让你可以更专注地集中精力考虑这一个想法。
+  TheBrain 的真正价值在于一个想法与其他非直接相关的想法建立的链接 ——“跳跃想法”(jump thought)。
+  使用 刚刚学习使用PersonalBrain，还没入门，只做了一张树形结构的思维导图，本人暂时还没学会如何合理地使用 jump thoughts。一般先建立好主要树形结构，然后想到什么就把想法添加到相应的节点上，这样建立起一个个链接。虽然整体是树形的，没有凸显PersonalBrain的优势，但也可以从图上很容易地看出，目前思想体系中的重心，它们关系到整个AstroLog需求思路。
 进阶使用 展示下高手制作的MindMap，善用Jump thoughts，错综复杂。让人眼花缭乱。
 总结及感想 PersonalBrain用来做资料整理和项目分析，相比MindManager要逊色一点，但是其强大的功能是毋庸置疑的。但也比较难入门，我自己不太了解“jump thoughts”的具体的用法。而且习惯了使用树状结构，很难改适应其他方式，使用的时候努力将所有的想法按照一定的规则整理起来，但是随着想法的增多，这样的做法逐渐就行不通了，经常纠结某个thought是不是应该在某个节点上。查找了众多资料，发现很多有和我相同的问题，有个网友指出：“这样做根本无法体现PersonalBrain的优势。 要想用好PersonalBrain，可以看一下两个参数：Thoughts数量、Links数量/Thoughts数量（File-Utilities-Statistics）。因为网状结构适合解决复杂问题，少数量的Thoughts无法发挥这种优势，因此在平时应该把自己所有的想法一股脑投进去，并把能想到的有关系的Thoughts都连接起来，不要怕会乱成一团。这样当Thoughts数达到一定程度后，你所有的知识就会自动组合布局，变成一个有趣的复杂网络，当你查看这个网络的时候，会有一种检视一个小型秩序社会的感觉。 不管一个人的记忆力再好，也不可能把脑子里所有想法间的联系都发现并记住，而使用PersonalBrain则可以帮助你发现一些平时根本不会想起的联系，它可以代替你做到‘灵光一闪’”。所以，这是一款很Cool的应用程序，一旦学会就再也离不开它了。
-参考资料
-http://www.douban.com/group/topic/1725222/ http://hi.baidu.com/jinhuali1980/blog/item/90a536f9eba3e2829f51467a.html http://www.360doc.com/content/10/0921/23/3297062_55475807.shtml http://blog.csdn.net/ThinkInChaos/archive/2008/08/03/2762543.aspx http://blog.thebrain.com/megabrain/</description></item></channel></rss>
+ 参考资料
+ http://www.douban.com/group/topic/1725222/ http://hi.baidu.com/jinhuali1980/blog/item/90a536f9eba3e2829f51467a.html http://www.360doc.com/content/10/0921/23/3297062_55475807.shtml http://blog.csdn.net/ThinkInChaos/archive/2008/08/03/2762543.aspx http://blog.thebrain.com/megabrain/  </description>
+    </item>
+    
+  </channel>
+</rss>

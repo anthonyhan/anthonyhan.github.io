@@ -1,4 +1,111 @@
-<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明 | LimboNova</title><link rel=stylesheet href=/css/style.css><link rel=stylesheet href=/css/fonts.css></head><body><nav><ul class=menu><li><a href=/>Home</a></li><li><a href=/tags/>Tags</a></li><li><a href=/about/>About</a></li><li><a href=/index.xml>Subscribe</a></li></ul><hr></nav><div class=article-meta><h1><span class=title>Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</span></h1><h2 class=date>2012/08/31</h2></div><main><p>伴随着Flash Builder 4.7 beta的发布，正如Adobe所承诺的那样，新的编译器也浮出水面。全新的编译器到底有哪些改进和新特性，想必是大多数ActionScript开发比较关心的问题。简单翻译了下ASC2.0官方发布说明，希望能对同行们有一点帮助。</p><p>如果要了解Flash Builder 4.7，可以参看zrong的<a href=http://zengrong.net/post/1676.htm>这篇文章</a>。</p><p>** August 2012 – Adobe® ActionScript® Compiler 2.0 (Build 2.0.0.345083) **
-Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p><p>ASC 2.0 是一个新的ActionScript® 3.0 (AS3)编译器。相比之前版本更遵循AS3语言规范，编译性能方面有了很大改善。在内存压力下更稳定，并包含一些演示性的优化选项（内联，无用代码删除），这些选项可以有选择地启用。</p><p>这个编译器已经包含在刚发布的 Flash Builder® 4.7 预览版中。其单独版本已经同AIR SDK 3.4 一起打包发布。</p><p>注意：ASC 2.0支持编译AS3应用，虽然留有熟悉的mxmlc和compc命令行入口，但是不支持Flex应用的编译。</p><p>当有更多信息时，该文档可能会不定期更新。</p><h2 id=版本说明--august-2012>版本说明 – August 2012</h2><ul><li>这是新编译器ASC 2.0 的第一个公开预览版；</li><li>Flash Builder 4.7 and the ASC 2.0 command-line compiler now share the same code model. This avoids duplicate representations of a program and means the IDE has an accurate representation of the language – matching the compiler. （没看懂，不清楚code model，representation的定义）</li><li>全新多线程架构，支持多文件同时编译，减少编译时间；</li><li>更佳的常数合并和常数传播带来运行时更佳性能的代码；</li><li>通过移除不必要的活动记录减少函数开销；</li><li>包含内联和无用代码删除相关的字节码优化；</li><li>加入新关键字”goto”，实现AS3的非线性控制流；</li><li>现在支持SWF 13的LZMA压缩了。</li><li>新的符号管理系统，意味着包含Flash 和 AIR项目的Flash Builder 4.7 AS工作空间，编译起来应该会快多了；</li><li>fontswf, optimizer，swfdump和swcdepends ，基于ASC 2.0的新版本可以用了；</li><li>Asdoc，fdb的旧版本依然包括在内；</li><li>字体转码已经从[Embed]语法中移除，现在字体需要先预转码并作为SWF嵌入，可以通过工具（如fontswf或Flash Professional CS6）来完成。</li><li>源代码中的相对路径（[Embed] assets, includes, etc…）将从其包含文件相对解析。要指定一个相对于源文件根目录的路径，需要在你的路径前加”/”；</li><li>英文编译器错误信息已经翻译成法文，日文，中文，区域取决于JVM的设置，并可以通过 -tools-locale 设置项改写。</li></ul><h2 id=安装说明>安装说明</h2><h3 id=flash-builder-47>Flash Builder 4.7</h3><ul><li>The Flash Builder 4.7 预览版包含了附带ASC 2.0的AIR SDK 3.4；</li><li>所有Flash Builder 4.7 ActionScript项目默认使用ASC 2.0编译器；</li></ul><h3 id=命令行编译器>命令行编译器</h3><ul><li>下载附带ASC 2.0的AIR 3.4 SDK 并解压；</li><li>需要安装Java 1.6.0+；</li><li>命令行工具的 ASC 2.0 版本都在SDK的 bin 目录里；</li><li>Flex ant tasks and 的ASC 2.0 版本在ant/lib/flexTasks.jar中；</li><li>Ant tasks 定义为:
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明 | LimboNova</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</span></h1>
+
+<h2 class="date">2012/08/31</h2>
+</div>
+
+<main>
+<p>伴随着Flash Builder 4.7 beta的发布，正如Adobe所承诺的那样，新的编译器也浮出水面。全新的编译器到底有哪些改进和新特性，想必是大多数ActionScript开发比较关心的问题。简单翻译了下ASC2.0官方发布说明，希望能对同行们有一点帮助。</p>
+<p>如果要了解Flash Builder 4.7，可以参看zrong的<a href="http://zengrong.net/post/1676.htm">这篇文章</a>。</p>
+<p>** August 2012 – Adobe® ActionScript® Compiler 2.0 (Build 2.0.0.345083) **
+Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
+<p>ASC 2.0 是一个新的ActionScript® 3.0 (AS3)编译器。相比之前版本更遵循AS3语言规范，编译性能方面有了很大改善。在内存压力下更稳定，并包含一些演示性的优化选项（内联，无用代码删除），这些选项可以有选择地启用。</p>
+<p>这个编译器已经包含在刚发布的 Flash Builder® 4.7 预览版中。其单独版本已经同AIR SDK 3.4 一起打包发布。</p>
+<p>注意：ASC 2.0支持编译AS3应用，虽然留有熟悉的mxmlc和compc命令行入口，但是不支持Flex应用的编译。</p>
+<p>当有更多信息时，该文档可能会不定期更新。</p>
+<h2 id="版本说明--august-2012">版本说明 – August 2012</h2>
+<ul>
+<li>这是新编译器ASC 2.0 的第一个公开预览版；</li>
+<li>Flash Builder 4.7 and the ASC 2.0 command-line compiler now share the same code model. This avoids duplicate representations of a program and means the IDE has an accurate representation of the language – matching the compiler. （没看懂，不清楚code model，representation的定义）</li>
+<li>全新多线程架构，支持多文件同时编译，减少编译时间；</li>
+<li>更佳的常数合并和常数传播带来运行时更佳性能的代码；</li>
+<li>通过移除不必要的活动记录减少函数开销；</li>
+<li>包含内联和无用代码删除相关的字节码优化；</li>
+<li>加入新关键字”goto”，实现AS3的非线性控制流；</li>
+<li>现在支持SWF 13的LZMA压缩了。</li>
+<li>新的符号管理系统，意味着包含Flash 和 AIR项目的Flash Builder 4.7 AS工作空间，编译起来应该会快多了；</li>
+<li>fontswf, optimizer，swfdump和swcdepends ，基于ASC 2.0的新版本可以用了；</li>
+<li>Asdoc，fdb的旧版本依然包括在内；</li>
+<li>字体转码已经从[Embed]语法中移除，现在字体需要先预转码并作为SWF嵌入，可以通过工具（如fontswf或Flash Professional CS6）来完成。</li>
+<li>源代码中的相对路径（[Embed] assets, includes, etc…）将从其包含文件相对解析。要指定一个相对于源文件根目录的路径，需要在你的路径前加”/”；</li>
+<li>英文编译器错误信息已经翻译成法文，日文，中文，区域取决于JVM的设置，并可以通过 -tools-locale 设置项改写。</li>
+</ul>
+<h2 id="安装说明">安装说明</h2>
+<h3 id="flash-builder-47">Flash Builder 4.7</h3>
+<ul>
+<li>The Flash Builder 4.7 预览版包含了附带ASC 2.0的AIR SDK 3.4；</li>
+<li>所有Flash Builder 4.7 ActionScript项目默认使用ASC 2.0编译器；</li>
+</ul>
+<h3 id="命令行编译器">命令行编译器</h3>
+<ul>
+<li>下载附带ASC 2.0的AIR 3.4 SDK 并解压；</li>
+<li>需要安装Java 1.6.0+；</li>
+<li>命令行工具的 ASC 2.0 版本都在SDK的 bin 目录里；</li>
+<li>Flex ant tasks <!-- raw HTML omitted --> and <!-- raw HTML omitted --> 的ASC 2.0 版本在ant/lib/flexTasks.jar中；</li>
+<li>Ant tasks 定义为:
 mxmlc=com.adobe.flash.compiler.ant.MXMLCTask
-compc=com.adobe.flash.compiler.ant.COMPCTask</li></ul><h2 id=已知问题>已知问题</h2><ul><li>不支持Flex编译；</li><li>AS3 向后兼容性—— 关于在ASC 2.0或Flash Builder 4.7中编译AS3代码的兼容性差异，请参看 <a href=http://www.adobe.com/go/fbstart_asc20>AS3兼容性文档</a>。</li></ul><hr><p><strong>参考资料</strong></p><ol><li><a href=http://labsdownload.adobe.com/pub/labs/flashplatformruntimes/air3-4/air3-4_p1_sdk_asc2_releasenotes.pdf>http://labsdownload.adobe.com/pub/labs/flashplatformruntimes/air3-4/air3-4_p1_sdk_asc2_releasenotes.pdf</a></li><li><a href=http://en.wikipedia.org/wiki/Compiler_optimization>http://en.wikipedia.org/wiki/Compiler_optimization</a></li><li><a href=http://en.wikipedia.org/wiki/Constant_folding>http://en.wikipedia.org/wiki/Constant_folding</a></li><li><a href=http://en.wikipedia.org/wiki/Call_stack>http://en.wikipedia.org/wiki/Call_stack</a></li></ol></main><script src=https://utteranc.es/client.js repo=anthonyhan/anthonyhan.github.io issue-term=title label=💬comment theme=github-light crossorigin=anonymous async></script><footer><hr>© 2005 - 2022 Anthony | <a href=https://github.com/anthonyhan>Github</a> | <a href=https://twitter.com/antonius_hq>Twitter</a></footer></body></html>
+compc=com.adobe.flash.compiler.ant.COMPCTask</li>
+</ul>
+<h2 id="已知问题">已知问题</h2>
+<ul>
+<li>不支持Flex编译；</li>
+<li>AS3 向后兼容性—— 关于在ASC 2.0或Flash Builder 4.7中编译AS3代码的兼容性差异，请参看 <a href="http://www.adobe.com/go/fbstart_asc20">AS3兼容性文档</a>。</li>
+</ul>
+<hr>
+<p><strong>参考资料</strong></p>
+<ol>
+<li><a href="http://labsdownload.adobe.com/pub/labs/flashplatformruntimes/air3-4/air3-4_p1_sdk_asc2_releasenotes.pdf">http://labsdownload.adobe.com/pub/labs/flashplatformruntimes/air3-4/air3-4_p1_sdk_asc2_releasenotes.pdf</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Compiler_optimization">http://en.wikipedia.org/wiki/Compiler_optimization</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Constant_folding">http://en.wikipedia.org/wiki/Constant_folding</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Call_stack">http://en.wikipedia.org/wiki/Call_stack</a></li>
+</ol>
+</main>
+
+<script src="https://utteranc.es/client.js"
+        repo="anthonyhan/anthonyhan.github.io"
+        issue-term="title"
+        label="💬comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+<footer>
+  
+  
+  <hr/>
+  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
+  
+  </footer>
+  
+  </body>
+</html>
+

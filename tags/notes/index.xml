@@ -1,11 +1,56 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>notes on LimboNova</title><link>/tags/notes/</link><description>Recent content in notes on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 18 Jul 2011 22:23:56 +0800</lastBuildDate><atom:link href="/tags/notes/index.xml" rel="self" type="application/rss+xml"/><item><title>《Flex3权威指南》学习笔记 04</title><link>/posts/flex3-tfs-notes-04/</link><pubDate>Mon, 18 Jul 2011 22:23:56 +0800</pubDate><guid>/posts/flex3-tfs-notes-04/</guid><description>Lesson 21：部署Flex应用程序 AIR: Adobe Integrated Runtime AIR 特点： 直接访问文件系统； 可以从操作系统拖拽文件到AIR应用中； 使用窗口API，可实现自定义应用外观； 提供API部署不完全连接Internet的应用； 脱离浏览器，可设置快捷键(hotkey); 提供嵌入式数据库，具有更强更完备的客户端数据存储能力。 Lesson 22：创建过渡和行为 行为和效果： 淡入淡出 向内溶解，向外溶解 移动或重新调整组件 旋转组件 缩放 从左、右、上、下显示 光亮，光圈 音效等等 Lesson 23：Flex的打印功能 Flex提供的打印功能比较简单，可以满足基本的应用，但是复杂一点的就有些吃不消。不知道SDK4.0+有没有改善，我自己暂时还没有使用过SDK4.0+的打印功能。 FlexPrintJob：打印对象( 容器，组件等) PrintDataGrid：适用于打印的DataGrid，就是针对打印做过优化的，利于显示和具备更好的打印效果。 FlexPrintJob流程： new FlexPrintJob() start() addObject() send() 清理工作 FlexPrintJobScaleType : 打印缩放比例，提供几种打印内容与纸张之间的比例关系； MATCH_WIDTH 适合宽度，缩放对象以填充可用页面宽度。 MATCH_HEIGHT 适合高度，缩放对象以填充可用页面高度。 SHOW_ALL 显示全部，缩放对象以适合在单个页面中填充一个尺寸；也就是说，选择 MATCH_WIDTH 或 MATCH_HEIGHT 缩放类型中较小的值。 FILL_PAGE 填充页面，将对象缩放到至少一整页那么大；也就是说，选择较大的 MATCH_WIDTH 或 MATCH_HEIGHT 缩放类型。 NONE 不设置，不要缩放输出。 Lesson 24 ：使用共享对象 使用SharedObject类保存特定的用户信息，看了下在线文档，写的很清楚而且详细。“SharedObject * 类用于在用户计算机或服务器上读取和存储有限的数据量。使用共享对象，可在永久贮存在本地计算机或远程服务器上的多个客户端 SWF 文件和对象之间实现实时数据共享。本地共享对象类似于浏览器 Cookie，远程共享对象类似于实时数据传输设备。为了使用远程共享对象，您需要 Adobe Flash Media Server。” 使用SharedObject可以执行以下操作： 保持本地永久性； 在Flash Media Server 上存储并共享数据； 实时共享数据。（这个功能总是被演示一次又一次…） ShardObject 特性： 保存在客户端上 扩展名为 .</description></item><item><title>《Flex3权威指南》学习笔记 03</title><link>/posts/flex3-tfs-notes-03/</link><pubDate>Wed, 06 Jul 2011 22:40:49 +0800</pubDate><guid>/posts/flex3-tfs-notes-03/</guid><description>Lesson 16：自定义Flex应用程序的外观 样式和皮肤；
-使用标签属性设置样式：如 color，disabledColor，fontSize，fontStyle，fontWeight，fontFamily … ; 也可使用 ActionScript 设置：mybButton.setStyle(“color”,”#00FF00”);
-样式继承： ASDoc中，每个样式有个 “CSS继承”(CSS Inheritance) 的属性。表示该样式是否可以从其父容器出继承；
-&amp;lt;mx:Style&amp;gt; 设置样式约定：
-样式名小写，单词之间使用连字符隔开：background-color: #FFFFFF; 也可使用大小写混合的方式： backgroundColor: #00FF00; 类选择符：将一组样式属性定义为一个样式类。 .CustomCombo { color: #00FF00; selectedColor: #EA800C; } 组件可使用 styleName 调用：
-&amp;lt;mx:ComboBox styleName=”customCombo”/&amp;gt;
-类型选择符 ComboBox { color: #FF0000; selectedColor: #EA800C; } 这样设置，将影响所有叫 “ComboBox”类的样式；
-使用 Flash Builder 编写 CSS，只要打开CSS文件编辑即可；
-使用CSS文件设置样式，将文件编译到应用程序中，就必须重新编译应用程序；</description></item><item><title>《Flex3权威指南》学习笔记 02</title><link>/posts/flex3-tfs-notes-02/</link><pubDate>Tue, 05 Jul 2011 22:28:42 +0800</pubDate><guid>/posts/flex3-tfs-notes-02/</guid><description>Lesson 9：使用自定义事件 松耦合架构：可以使用自定义事件，将更改通知其他组件，不要求组件知道应用程序其余部分的信息； View 通过 事件 与 Controller 建立联系； 无论何时触发事件，Flash Player 都会发布事件。事件流描述了事件对象在应用程序中传递的过程，当事件被触发时，事件对象穿过层层容器，在根应用程序与负责事件处理的组件之间往返传递； Flex事件冒泡过程： 捕获期：事件发出后，按照容器由外到内找到事件的目标，即与用户交互的目标组件； 目标期：调用事件目标对象的事件处理函数； 冒泡期：由内向外发送事件，检查其他监听器，重复上述步骤2； Event 类所有实例都具有 bubbles * 属性，用来指定事件对象是否会参与事件流的冒泡期。如果事件的bubbles属性为true，则发布事件的组件，其每一层父容器都能够捕获事件。若为false，则只有事件源可以捕获。缺省值为false； Lesson 10：用ActionScript 3.0创建自定义组件 在MXML中创建组件，可以使用 MXML标签向组件添加元素，而在 ActionScript 中则需要重写(override) createChildren() 方法。Flex组件在初始化中，会调用 createChildren()* 。其调用顺序为： 构造函数( Constructor ); createChildren(); //需要重写 commitProperties(); measure(); updateDisplayList(); //需要重写 Flex容器： 布局区域：绘制子元素的地方； 边饰部分： 边框 背景 滚动条 页边距 标题 脚注 …… measure()：计算组件的默认大小和（可选）默认最小大小； updateDisplayList()：通过设置此容器子项的位置和大小来响应大小更改； getExplicitOrMeasuredHeight()：确定是使用显式高度还是测量高度的一种简便方法； getExplicitOrMeasuredWidth()：确定是使用显式宽度还是测量宽度的一种简便方法； setActualSize()：设置此对象的实际大小。 控件的描述及功能介绍，多用用toolTip属性； Lesson 11：使用DataGrid与项目呈现器 DataGrid：能为用户与数据交互提供最多的选项，但也会带来额外的开销； Flex 表示月份时， 0 代表一月，11代表12月。Date(2010,3,1) 即初始化为 “2010年4月1日”； DataGrid 默认支持数据排序； 可使用 set/get 函数 设置/获取对象属性值，在函数中亦可作其它相关的操作，保证组件数据的及时更新。getter/setter不能太复杂，否则可能无效； AdvancedDataGrid 属性： sortExpertMode：默认情况下，sortExpertMode 属性设置为 false，这意味着在某列的标题区域单击，将按该列对 AdvancedDataGrid 控件的行进行排序； styleFunction：呈现每个单元格时调用的回调函数； 要掌握使用renderer呈现器在DataGrid中的使用； Lesson 12：使用拖放 概念 拖拽初始器：(源控件) –&amp;gt; dragEnabled； 拖拽代理：(拖拽过程中紧随指针显示的内容); 释放目标：(目标控件) –&amp;gt; dropEnabled； 拖拽源：(拖拽数据； 非增强型组件上的隐藏拖放机制： 把数据赋值给 DragSource对象（DragSource.</description></item><item><title>《Flex3权威指南》学习笔记 01</title><link>/posts/flex3-tfs-notes-01/</link><pubDate>Mon, 04 Jul 2011 22:03:38 +0800</pubDate><guid>/posts/flex3-tfs-notes-01/</guid><description>很久以前看的书，也是很久以前写的笔记。再回顾一遍，算是温故知新吧。
-Lesson 1-5：基础知识 Flex 并非从上到下创建组件，而可以看成是由内到外创建。只有应用程序的所有元素都已创建后，此时才是向外部资源请求并使用数据的适当时机； 直接在 ActionScript 中建立as类，可以创建自定义的事件类，建立值对象(value object)等； as元标签(Metadata)：[Bindable] 被指定在 class 关键字前，表示该类的每一个属性都可以用来绑定，可以被绑定到空间或其它数据结构； 使用自定义类时，可以使用 import 关键字类导入需要的类，在Flash Builder中，一般会被自动导入； 所有MXML文件最终会被编译为一个 ActionScript 类，在创建 MXML 文件时必须遵守与创建 ActionScript 类时相同的约定； ActionScript 中，uint 数据类型表示无符号整数，非负数； 使用 httpService返回数据的2种方法： 直接在绑定中使用数据； 使用 resultEvent事件处理函数； 若要将数据填入空间或者过滤，排序等手段操作数据，应选择 ArrayCollection 数据结构； 支持 dataProvider 的控件有三个优点： 可将相同数据填入多个控件； 可在运行时断开dataProvider； 当修改 dataProvider 时，更改会反映到所有使用它的控件上； Lesson 6：为控件使用远程XML数据 RPC,HttpService调用过程：
-&amp;lt;mx:Application 设置RPC &amp;gt;； &amp;lt;mx:HttpService 设置结果处理函数dataHandler(event)&amp;gt;； &amp;lt;mx: script &amp;gt; dataHandler将获取的数据赋予变量或控件； XML结构：</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>notes on LimboNova</title>
+    <link>/tags/notes/</link>
+    <description>Recent content in notes on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Mon, 18 Jul 2011 22:23:56 +0800</lastBuildDate><atom:link href="/tags/notes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>《Flex3权威指南》学习笔记 04</title>
+      <link>/posts/flex3-tfs-notes-04/</link>
+      <pubDate>Mon, 18 Jul 2011 22:23:56 +0800</pubDate>
+      
+      <guid>/posts/flex3-tfs-notes-04/</guid>
+      <description>Lesson 21：部署Flex应用程序  AIR: Adobe Integrated Runtime AIR 特点：  直接访问文件系统； 可以从操作系统拖拽文件到AIR应用中； 使用窗口API，可实现自定义应用外观； 提供API部署不完全连接Internet的应用； 脱离浏览器，可设置快捷键(hotkey); 提供嵌入式数据库，具有更强更完备的客户端数据存储能力。    Lesson 22：创建过渡和行为  行为和效果：  淡入淡出 向内溶解，向外溶解 移动或重新调整组件 旋转组件 缩放 从左、右、上、下显示 光亮，光圈 音效等等    Lesson 23：Flex的打印功能  Flex提供的打印功能比较简单，可以满足基本的应用，但是复杂一点的就有些吃不消。不知道SDK4.0+有没有改善，我自己暂时还没有使用过SDK4.0+的打印功能。 FlexPrintJob：打印对象( 容器，组件等) PrintDataGrid：适用于打印的DataGrid，就是针对打印做过优化的，利于显示和具备更好的打印效果。 FlexPrintJob流程：  new FlexPrintJob() start() addObject() send() 清理工作   FlexPrintJobScaleType : 打印缩放比例，提供几种打印内容与纸张之间的比例关系；  MATCH_WIDTH 适合宽度，缩放对象以填充可用页面宽度。 MATCH_HEIGHT 适合高度，缩放对象以填充可用页面高度。 SHOW_ALL 显示全部，缩放对象以适合在单个页面中填充一个尺寸；也就是说，选择 MATCH_WIDTH 或 MATCH_HEIGHT 缩放类型中较小的值。 FILL_PAGE 填充页面，将对象缩放到至少一整页那么大；也就是说，选择较大的 MATCH_WIDTH 或 MATCH_HEIGHT 缩放类型。 NONE 不设置，不要缩放输出。    Lesson 24 ：使用共享对象  使用SharedObject类保存特定的用户信息，看了下在线文档，写的很清楚而且详细。“SharedObject * 类用于在用户计算机或服务器上读取和存储有限的数据量。使用共享对象，可在永久贮存在本地计算机或远程服务器上的多个客户端 SWF 文件和对象之间实现实时数据共享。本地共享对象类似于浏览器 Cookie，远程共享对象类似于实时数据传输设备。为了使用远程共享对象，您需要 Adobe Flash Media Server。” 使用SharedObject可以执行以下操作：  保持本地永久性； 在Flash Media Server 上存储并共享数据； 实时共享数据。（这个功能总是被演示一次又一次…）   ShardObject 特性：  保存在客户端上 扩展名为 .</description>
+    </item>
+    
+    <item>
+      <title>《Flex3权威指南》学习笔记 03</title>
+      <link>/posts/flex3-tfs-notes-03/</link>
+      <pubDate>Wed, 06 Jul 2011 22:40:49 +0800</pubDate>
+      
+      <guid>/posts/flex3-tfs-notes-03/</guid>
+      <description>Lesson 16：自定义Flex应用程序的外观   样式和皮肤；
+  使用标签属性设置样式：如 color，disabledColor，fontSize，fontStyle，fontWeight，fontFamily … ; 也可使用 ActionScript 设置：mybButton.setStyle(“color”,”#00FF00”);
+  样式继承： ASDoc中，每个样式有个 “CSS继承”(CSS Inheritance) 的属性。表示该样式是否可以从其父容器出继承；
+  &amp;lt;mx:Style&amp;gt; 设置样式约定：
+ 样式名小写，单词之间使用连字符隔开：background-color: #FFFFFF; 也可使用大小写混合的方式： backgroundColor: #00FF00;    类选择符：将一组样式属性定义为一个样式类。 .CustomCombo { color: #00FF00; selectedColor: #EA800C; } 组件可使用 styleName 调用：
+ &amp;lt;mx:ComboBox styleName=”customCombo”/&amp;gt;   类型选择符 ComboBox { color: #FF0000; selectedColor: #EA800C; } 这样设置，将影响所有叫 “ComboBox”类的样式；
+  使用 Flash Builder 编写 CSS，只要打开CSS文件编辑即可；
+  使用CSS文件设置样式，将文件编译到应用程序中，就必须重新编译应用程序；</description>
+    </item>
+    
+    <item>
+      <title>《Flex3权威指南》学习笔记 02</title>
+      <link>/posts/flex3-tfs-notes-02/</link>
+      <pubDate>Tue, 05 Jul 2011 22:28:42 +0800</pubDate>
+      
+      <guid>/posts/flex3-tfs-notes-02/</guid>
+      <description>Lesson 9：使用自定义事件  松耦合架构：可以使用自定义事件，将更改通知其他组件，不要求组件知道应用程序其余部分的信息； View 通过 事件 与 Controller 建立联系； 无论何时触发事件，Flash Player 都会发布事件。事件流描述了事件对象在应用程序中传递的过程，当事件被触发时，事件对象穿过层层容器，在根应用程序与负责事件处理的组件之间往返传递； Flex事件冒泡过程：  捕获期：事件发出后，按照容器由外到内找到事件的目标，即与用户交互的目标组件； 目标期：调用事件目标对象的事件处理函数； 冒泡期：由内向外发送事件，检查其他监听器，重复上述步骤2；   Event 类所有实例都具有 bubbles * 属性，用来指定事件对象是否会参与事件流的冒泡期。如果事件的bubbles属性为true，则发布事件的组件，其每一层父容器都能够捕获事件。若为false，则只有事件源可以捕获。缺省值为false；  Lesson 10：用ActionScript 3.0创建自定义组件  在MXML中创建组件，可以使用 MXML标签向组件添加元素，而在 ActionScript 中则需要重写(override) createChildren() 方法。Flex组件在初始化中，会调用 createChildren()* 。其调用顺序为：  构造函数( Constructor ); createChildren(); //需要重写 commitProperties(); measure(); updateDisplayList(); //需要重写   Flex容器：  布局区域：绘制子元素的地方； 边饰部分：  边框 背景 滚动条 页边距 标题 脚注 ……     measure()：计算组件的默认大小和（可选）默认最小大小； updateDisplayList()：通过设置此容器子项的位置和大小来响应大小更改； getExplicitOrMeasuredHeight()：确定是使用显式高度还是测量高度的一种简便方法； getExplicitOrMeasuredWidth()：确定是使用显式宽度还是测量宽度的一种简便方法； setActualSize()：设置此对象的实际大小。 控件的描述及功能介绍，多用用toolTip属性；  Lesson 11：使用DataGrid与项目呈现器  DataGrid：能为用户与数据交互提供最多的选项，但也会带来额外的开销； Flex 表示月份时， 0 代表一月，11代表12月。Date(2010,3,1) 即初始化为 “2010年4月1日”； DataGrid 默认支持数据排序； 可使用 set/get 函数 设置/获取对象属性值，在函数中亦可作其它相关的操作，保证组件数据的及时更新。getter/setter不能太复杂，否则可能无效； AdvancedDataGrid 属性：  sortExpertMode：默认情况下，sortExpertMode 属性设置为 false，这意味着在某列的标题区域单击，将按该列对 AdvancedDataGrid 控件的行进行排序； styleFunction：呈现每个单元格时调用的回调函数；   要掌握使用renderer呈现器在DataGrid中的使用；  Lesson 12：使用拖放  概念  拖拽初始器：(源控件) –&amp;gt; dragEnabled； 拖拽代理：(拖拽过程中紧随指针显示的内容); 释放目标：(目标控件) –&amp;gt; dropEnabled； 拖拽源：(拖拽数据；   非增强型组件上的隐藏拖放机制：  把数据赋值给 DragSource对象（DragSource.</description>
+    </item>
+    
+    <item>
+      <title>《Flex3权威指南》学习笔记 01</title>
+      <link>/posts/flex3-tfs-notes-01/</link>
+      <pubDate>Mon, 04 Jul 2011 22:03:38 +0800</pubDate>
+      
+      <guid>/posts/flex3-tfs-notes-01/</guid>
+      <description>很久以前看的书，也是很久以前写的笔记。再回顾一遍，算是温故知新吧。
+ Lesson 1-5：基础知识  Flex 并非从上到下创建组件，而可以看成是由内到外创建。只有应用程序的所有元素都已创建后，此时才是向外部资源请求并使用数据的适当时机； 直接在 ActionScript 中建立as类，可以创建自定义的事件类，建立值对象(value object)等； as元标签(Metadata)：[Bindable] 被指定在 class 关键字前，表示该类的每一个属性都可以用来绑定，可以被绑定到空间或其它数据结构； 使用自定义类时，可以使用 import 关键字类导入需要的类，在Flash Builder中，一般会被自动导入； 所有MXML文件最终会被编译为一个 ActionScript 类，在创建 MXML 文件时必须遵守与创建 ActionScript 类时相同的约定； ActionScript 中，uint 数据类型表示无符号整数，非负数； 使用 httpService返回数据的2种方法：  直接在绑定中使用数据； 使用 resultEvent事件处理函数；   若要将数据填入空间或者过滤，排序等手段操作数据，应选择 ArrayCollection 数据结构； 支持 dataProvider 的控件有三个优点：  可将相同数据填入多个控件； 可在运行时断开dataProvider； 当修改 dataProvider 时，更改会反映到所有使用它的控件上；    Lesson 6：为控件使用远程XML数据   RPC,HttpService调用过程：
+ &amp;lt;mx:Application 设置RPC &amp;gt;； &amp;lt;mx:HttpService 设置结果处理函数dataHandler(event)&amp;gt;； &amp;lt;mx: script &amp;gt; dataHandler将获取的数据赋予变量或控件；    XML结构：</description>
+    </item>
+    
+  </channel>
+</rss>
