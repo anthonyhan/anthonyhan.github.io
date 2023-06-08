@@ -1,38 +1,160 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>游戏AI入门指南(Part 2) | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>游戏AI入门指南(Part 2) - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="原文： The Total Beginner&rsquo;s Guide to Game AI
+作者： Ben Sizer
+译者： Anthony Han
+进阶决策
+虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。
+有限状态机
+有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。
+这非常适用于游戏中的NPC。一个警卫可能具有以下状态：
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
+巡逻
+攻击
+逃跑
 
-<div class="article-meta">
-<h1><span class="title">游戏AI入门指南(Part 2)</span></h1>
+当状态改变时，你可能会想到这些规则：
 
-<h2 class="date">2019/03/25</h2>
-</div>
+如果警卫看到敌人，就立即攻击
+如果警卫正在攻击但无法再看到敌人，那么返回巡逻
+如果警卫正在攻击但受了重伤，那么开始逃跑
+
+这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：
+
+空闲（巡逻期间）
+搜寻（刚才发现的敌人躲起来时）
+求助（发现敌人，但因为敌人太强而无法独自作战时）
+
+通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。
+如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="游戏AI入门指南(Part 2)" />
+<meta property="og:description" content="原文： The Total Beginner&rsquo;s Guide to Game AI
+作者： Ben Sizer
+译者： Anthony Han
+进阶决策
+虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。
+有限状态机
+有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。
+这非常适用于游戏中的NPC。一个警卫可能具有以下状态：
+
+巡逻
+攻击
+逃跑
+
+当状态改变时，你可能会想到这些规则：
+
+如果警卫看到敌人，就立即攻击
+如果警卫正在攻击但无法再看到敌人，那么返回巡逻
+如果警卫正在攻击但受了重伤，那么开始逃跑
+
+这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：
+
+空闲（巡逻期间）
+搜寻（刚才发现的敌人躲起来时）
+求助（发现敌人，但因为敌人太强而无法独自作战时）
+
+通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。
+如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/the-total-beginners-guide-to-game-ai-part-2/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-25T23:10:09+00:00" />
+<meta property="article:modified_time" content="2021-03-25T23:10:09+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="游戏AI入门指南(Part 2)"/>
+<meta name="twitter:description" content="原文： The Total Beginner&rsquo;s Guide to Game AI
+作者： Ben Sizer
+译者： Anthony Han
+进阶决策
+虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。
+有限状态机
+有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。
+这非常适用于游戏中的NPC。一个警卫可能具有以下状态：
+
+巡逻
+攻击
+逃跑
+
+当状态改变时，你可能会想到这些规则：
+
+如果警卫看到敌人，就立即攻击
+如果警卫正在攻击但无法再看到敌人，那么返回巡逻
+如果警卫正在攻击但受了重伤，那么开始逃跑
+
+这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：
+
+空闲（巡逻期间）
+搜寻（刚才发现的敌人躲起来时）
+求助（发现敌人，但因为敌人太强而无法独自作战时）
+
+通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。
+如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
 <main>
-<p><strong>原文：</strong> <a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&rsquo;s Guide to Game AI</a>
+	<article>
+		<div class="title">
+			<h1 class="title">游戏AI入门指南(Part 2)</h1>
+			<div class="meta">Posted on Mar 25, 2021</div>
+		</div>
+		
+
+		<section class="body">
+			<p><strong>原文：</strong> <a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&rsquo;s Guide to Game AI</a>
 <strong>作者：</strong> <a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer</a>
 <strong>译者：</strong> <a href="https://www.limbonova.com/about/#blog-author">Anthony Han</a></p>
 <h2 id="进阶决策">进阶决策</h2>
@@ -334,8 +456,8 @@
 <h3 id="引导steering">引导(Steering)</h3>
 <p>一般来说，我们会认为代理有一个速度值，包含其移动的速度和方向。可以用米/秒，英里/小时，像素/秒等单位来表示。回顾前面的“感知/思考/行动”循环，我们可以设想“思考”时选择一个速度，然后“行动”时将这个速度应用于代理，让它移动到其他地方。游戏通常会有一个物理系统来执行这项任务，检查每个实体的速度值并相应地调整位置，因此可以将这个工作委托给该系统，而让AI自行决定代理的速度。</p>
 <p>如果一个代理希望去某个地方，那么就让代理以某个速度沿该目标方向移动。可用用一个这样简单的公式：</p>
-<pre tabindex="0"><code>wanted_travel = destination_position – agent_position
-</code></pre><p>假设在一个2D世界里，一个代理位于坐标(-2，-2)，目的地坐标在(30，20)——大致东北方的某个地方，代理到达那里所需的行程为(32，22) 。假设米/秒为单位——如果代理的速度为5米/秒，那么将速度向量进行特征缩放，得到值约为(4.12，2.83)。基于这个速度值移动，代理就会像我们期望的那样在8秒后到达目的地。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>wanted_travel = destination_position – agent_position
+</span></span></code></pre></div><p>假设在一个2D世界里，一个代理位于坐标(-2，-2)，目的地坐标在(30，20)——大致东北方的某个地方，代理到达那里所需的行程为(32，22) 。假设米/秒为单位——如果代理的速度为5米/秒，那么将速度向量进行特征缩放，得到值约为(4.12，2.83)。基于这个速度值移动，代理就会像我们期望的那样在8秒后到达目的地。</p>
 <p>（译注：可以先对(32，22)进行 normalization 处理，得到单位向量(0.824,0.5665)，乘以速度标量5m/s，可得速度向量(4.12,2.83)）</p>
 <p>我们可以随时根据需要重新计算速度。如果代理到目标只有原距离一半，则所需的行程将是原长度一半，但是一旦缩放到代理的最大速度5m/s，速度就会相同。同样适用于正在移动的目标（合理范围内），允许代理在移动时进行校正。</p>
 <p>通常我们需要更多的控制权——比如我们可能想在开始时缓慢地提高速度，表示一个人从静止到移动，从步行再到奔跑。我们让它在到达目标时也进行相同的动作，让它在接近目的地时缓慢停止。这通常由所谓的“<a href="http://www.red3d.com/cwr/steer/">引导行为(steering behaviours)</a>”来处理，每个行为都有特定的名称，例如“寻找”，“逃跑”，“到达”等。这些方法的思想是，根据将代理的位置和当前速度，并将加速度应用于代理的速度上，从而产生向目标移动的不同方式。</p>
@@ -373,22 +495,22 @@
 <p>最简单的方法或许就是：依次尝试每个动作，直到没有合适的动作为止。看看自己的手牌，看到可以打出沼泽，就打出这张牌。然后这回合还有其他动作可做吗？不能召唤妖精秘教徒也不能召唤漂泊法术师，因为它们分别需要绿色和蓝色法术力，而我们在场的沼泽只能提供黑色法术力。我们不能再打出森林地牌，因为我们已经打出了沼泽。所以虽然AI玩家完成了一个有效的回合，但不是一个非常理想的回合。幸运的是，我们可以做得更好。</p>
 <p>寻路算法通过搜索得到一个位置的列表，并依此穿越世界最终达到期望位置。与寻路的方法类似，我们的规划器也可以找到一个动作列表，使游戏进入期望状态。路径上的每个位置都有一组邻居，它们是路径上下一步的潜在选择。与此类似，计划中的每个动作都有邻居或“继任者”，它们是计划中下一步的候选对象。我们可以搜索这些动作以及后续动作，直到达到所需状态为止。</p>
 <p>在示例中，假设期望的结果是“尽可能召唤一个生物”。回合开始时，我们只能根据游戏规则允许2种潜在动作：</p>
-<pre tabindex="0"><code>1. 使用（打出）沼泽地牌（结果：沼泽从手牌中移除，进入战场）
-2. 使用（打出）树林地牌（结果：树林从手牌中移除，进入战场）
-</code></pre><p>还是取决于游戏规则，所采取的每个动作会启用一些动作，禁用其他一些动作。假设我们选择使用沼泽地牌，那么会将该动作从继任动作中排除（因为已经使用过沼泽），因此将“使用树林地牌”也删除了（因为游戏规则允许每回合只能使用一张地牌），并添加“横置沼泽地牌以获得1点黑色法术力”作为继任动作——实际上也是唯一的继任者。如果我们再进一步选择“横置沼泽地牌”，我们将会获得1点无法使用的黑色法术力，这毫无意义。</p>
-<pre tabindex="0"><code>1. 使用（打出）沼泽地牌（结果：沼泽从手牌中移除，进入战场）
-  1.1 横置沼泽地牌（结果：沼泽被横置，+1 黑色法术力）
-    没有可用动作 - 结束
-2. 使用（打出）树林地牌（结果：树林从手牌中移除，进入战场）
-</code></pre><p>这些简短的动作并没有取得多大成就，如果我们用寻路做类比的话，那么我们将陷入僵局。因此，我们重复执行下一个动作的过程。我们选择“使用（打出）树林地牌”，同样地，将“使用（打出）树林地牌”和“使用（打出）沼泽地牌”从候选项中移除，并打开“横置树林地牌”作为下一步（也是唯一的步骤）。这给了我们1点绿色法术力，在这种情况下，它打开了第三步，即召唤妖精秘教徒。</p>
-<pre tabindex="0"><code>1. 使用（打出）沼泽地牌（结果：沼泽从手牌中移除，进入战场）
-  1.1 横置沼泽地牌（结果：沼泽被横置，+1 黑色法术力）
-    没有可用动作 - 结束
-2. 使用（打出）树林地牌（结果：树林从手牌中移除，进入战场）
-  2.1 横置树林地牌（结果：树林被横置，+1 绿色法术力）
-    2.1.1 召唤妖精秘教徒（结果：妖精秘教徒进入战场，-1 绿色法术力）
-      没有可用动作 - 结束
-</code></pre><p>现在我们探索了所有可能的动作以及这些动作之后的动作，并且找到了一个计划，使我们可以召唤生物：使用（打出）树林地牌，横置树林，召唤妖精秘教徒。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>1. 使用（打出）沼泽地牌（结果：沼泽从手牌中移除，进入战场）
+</span></span><span style="display:flex;"><span>2. 使用（打出）树林地牌（结果：树林从手牌中移除，进入战场）
+</span></span></code></pre></div><p>还是取决于游戏规则，所采取的每个动作会启用一些动作，禁用其他一些动作。假设我们选择使用沼泽地牌，那么会将该动作从继任动作中排除（因为已经使用过沼泽），因此将“使用树林地牌”也删除了（因为游戏规则允许每回合只能使用一张地牌），并添加“横置沼泽地牌以获得1点黑色法术力”作为继任动作——实际上也是唯一的继任者。如果我们再进一步选择“横置沼泽地牌”，我们将会获得1点无法使用的黑色法术力，这毫无意义。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>1. 使用（打出）沼泽地牌（结果：沼泽从手牌中移除，进入战场）
+</span></span><span style="display:flex;"><span>  1.1 横置沼泽地牌（结果：沼泽被横置，+1 黑色法术力）
+</span></span><span style="display:flex;"><span>    没有可用动作 - 结束
+</span></span><span style="display:flex;"><span>2. 使用（打出）树林地牌（结果：树林从手牌中移除，进入战场）
+</span></span></code></pre></div><p>这些简短的动作并没有取得多大成就，如果我们用寻路做类比的话，那么我们将陷入僵局。因此，我们重复执行下一个动作的过程。我们选择“使用（打出）树林地牌”，同样地，将“使用（打出）树林地牌”和“使用（打出）沼泽地牌”从候选项中移除，并打开“横置树林地牌”作为下一步（也是唯一的步骤）。这给了我们1点绿色法术力，在这种情况下，它打开了第三步，即召唤妖精秘教徒。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>1. 使用（打出）沼泽地牌（结果：沼泽从手牌中移除，进入战场）
+</span></span><span style="display:flex;"><span>  1.1 横置沼泽地牌（结果：沼泽被横置，+1 黑色法术力）
+</span></span><span style="display:flex;"><span>    没有可用动作 - 结束
+</span></span><span style="display:flex;"><span>2. 使用（打出）树林地牌（结果：树林从手牌中移除，进入战场）
+</span></span><span style="display:flex;"><span>  2.1 横置树林地牌（结果：树林被横置，+1 绿色法术力）
+</span></span><span style="display:flex;"><span>    2.1.1 召唤妖精秘教徒（结果：妖精秘教徒进入战场，-1 绿色法术力）
+</span></span><span style="display:flex;"><span>      没有可用动作 - 结束
+</span></span></code></pre></div><p>现在我们探索了所有可能的动作以及这些动作之后的动作，并且找到了一个计划，使我们可以召唤生物：使用（打出）树林地牌，横置树林，召唤妖精秘教徒。</p>
 <p>显然这是一个非常简单的示例，一般你会希望选择<strong>最佳</strong>计划，而不是仅选择满足某种条件（例如“召唤生物”）的计划。通常来说，你可以根据最终结果或遵循该计划的累积收益来对潜在计划进行评分。比如，你可能会因使用地牌而获得1分，并因召唤生物而获得3分。“使用（打出）沼泽地牌”是一个简短的计划，可得1分，但是“使用树林地牌 → 横置树林 → 召唤妖精秘教徒”是一个可得4分的计划，其中土地1点，生物3点。这将是获得最高评分的计划，因此它会被选中并执行。</p>
 <p>我们已经展示了如何在万智牌的单个回合中完成规划，但是也可以应用于连续的回合中规划（例如在国际象棋里，先移动兵从而为主教的出子腾出空间。或者在 XCOM 里冲刺到掩体里，以便下一回合从这里射击），也可以随着时间的推移采取总体策略（例如，在星际争霸里，建造其他神族建筑之前先建造水晶塔，或者在上古卷轴：天际里，攻击敌人之前猛喝强化生命药水）。</p>
 <h3 id="改进型规划">改进型规划</h3>
@@ -399,26 +521,70 @@
 <p>最佳优先搜索中一个有趣且日益流行的变体是<a href="https://en.wikipedia.org/wiki/Monte_Carlo_tree_search">蒙特卡洛树搜索(Monte Carlo Tree Search, MTCS)</a>。在连续的动作决策过程中，它不会去猜测哪个计划比其他计划更好，而是每一步选择随机的后续动作，直到没有更多动作可用时结束（可能是假设的计划达成了游戏的胜利/失败条件），并且该结果来衡量先前选择的优劣。通过连续多次重复这个过程，即使情况发生变化（比如对手采取预防措施来阻止我们），也可以很好地估算出哪个下一步最好。</p>
 <p>最后，如果不提及<a href="http://alumni.media.mit.edu/~jorkin/goap.html">“面向目标的行动规划(Goal-Oriented Action Planning, GOAP)”</a>（简称GOAP），那么关于游戏AI规划的讨论就不算完整。这是一种广泛使用和讨论的技术，但是除了一些特定的实现细节外，它本质上是一个后向推理规划器。先从目标开始，然后选择实现目标的行动，或可以实现目标的一系列行动。例如：如果目标是“干掉玩家”，而玩家处于掩护状态，则计划可能是 “投掷手榴弹(FlushOutWithGrenade)” → “拔出武器(Draw Weapon)” → “攻击(Attack)”。</p>
 <p>通常我们会设计几个目标，每个目标都有其自己的优先级。如果不能满足最高优先级的目标（例如，由于看不见玩家，则无法用行动组成“杀死玩家”计划），它会回退到优先级较低的目标，比如“巡逻”或者“站岗”。</p>
-</main>
+		</section>
 
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/ai">ai</a></li>
+					
+					<li><a href="/tags/game-dev">game dev</a></li>
+					
+					<li><a href="/tags/game-ai">game ai</a></li>
+					
+					<li><a href="/tags/fsm">FSM</a></li>
+					
+					<li><a href="/tags/hfsm">HFSM</a></li>
+					
+					<li><a href="/tags/behavior-tree">behavior tree</a></li>
+					
+					<li><a href="/tags/utility-based">utility-based</a></li>
+					
+					<li><a href="/tags/goap">GOAP</a></li>
+					
+					<li><a href="/tags/navigation">navigation</a></li>
+					
+					<li><a href="/tags/planning">planning</a></li>
+					
+					<li><a href="/tags/learning">learning</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
 <script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
+        repo=""
         issue-term="title"
         label="💬comment"
         theme="github-light"
         crossorigin="anonymous"
         async>
 </script>
-
-
+		
+	</article>
+</main>
 <footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

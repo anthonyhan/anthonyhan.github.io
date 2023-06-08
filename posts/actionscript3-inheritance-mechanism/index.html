@@ -1,38 +1,106 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ActionScript3的继承机制 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>ActionScript3的继承机制 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循ECMAScript 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。
+本文主要内容源自Adobe官方教程：ActionScript 中面向对象的编程-高级主题 ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。
+本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。
+ActionScript OOP 支持的历史
+由于 ActionScript 3.0 是在以前版本的 ActionScript 基础上构建的，了解 ActionScript 对象模型的发展过程可能有所帮助。ActionScript 最初作为早期版本的 Flash 创作工具的简单编写脚本机制。后来，程序员开始使用 ActionScript 建立更加复杂的应用程序。为了迎合这些程序员的需要，每个后续版本都添加了一些语言功能以帮助创建复杂的应用程序。
+ActionScript 1.0
+ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本。即使在这个早期开发阶段，ActionScript 对象模型也是建立在基础数据类型对象的概念的基础上。ActionScript 对象是由一组属性 构成的复合数据类型。讨论对象模型时，术语属性 包括附加到对象的所有内容，如变量、函数或方法。
+尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C&#43;&#43; 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。
+要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="ActionScript3的继承机制" />
+<meta property="og:description" content="因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循ECMAScript 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。
+本文主要内容源自Adobe官方教程：ActionScript 中面向对象的编程-高级主题 ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。
+本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。
+ActionScript OOP 支持的历史
+由于 ActionScript 3.0 是在以前版本的 ActionScript 基础上构建的，了解 ActionScript 对象模型的发展过程可能有所帮助。ActionScript 最初作为早期版本的 Flash 创作工具的简单编写脚本机制。后来，程序员开始使用 ActionScript 建立更加复杂的应用程序。为了迎合这些程序员的需要，每个后续版本都添加了一些语言功能以帮助创建复杂的应用程序。
+ActionScript 1.0
+ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本。即使在这个早期开发阶段，ActionScript 对象模型也是建立在基础数据类型对象的概念的基础上。ActionScript 对象是由一组属性 构成的复合数据类型。讨论对象模型时，术语属性 包括附加到对象的所有内容，如变量、函数或方法。
+尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C&#43;&#43; 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。
+要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/actionscript3-inheritance-mechanism/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2012-07-31T18:25:09+08:00" />
+<meta property="article:modified_time" content="2012-07-31T18:25:09+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ActionScript3的继承机制"/>
+<meta name="twitter:description" content="因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循ECMAScript 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。
+本文主要内容源自Adobe官方教程：ActionScript 中面向对象的编程-高级主题 ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。
+本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。
+ActionScript OOP 支持的历史
+由于 ActionScript 3.0 是在以前版本的 ActionScript 基础上构建的，了解 ActionScript 对象模型的发展过程可能有所帮助。ActionScript 最初作为早期版本的 Flash 创作工具的简单编写脚本机制。后来，程序员开始使用 ActionScript 建立更加复杂的应用程序。为了迎合这些程序员的需要，每个后续版本都添加了一些语言功能以帮助创建复杂的应用程序。
+ActionScript 1.0
+ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本。即使在这个早期开发阶段，ActionScript 对象模型也是建立在基础数据类型对象的概念的基础上。ActionScript 对象是由一组属性 构成的复合数据类型。讨论对象模型时，术语属性 包括附加到对象的所有内容，如变量、函数或方法。
+尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C&#43;&#43; 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。
+要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true："/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
 
-<div class="article-meta">
-<h1><span class="title">ActionScript3的继承机制</span></h1>
+	
+	
 
-<h2 class="date">2012/07/31</h2>
-</div>
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
 <main>
-<p>因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循<a href="http://zh.wikipedia.org/zh/ECMAScript">ECMAScript</a> 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。</p>
+	<article>
+		<div class="title">
+			<h1 class="title">ActionScript3的继承机制</h1>
+			<div class="meta">Posted on Jul 31, 2012</div>
+		</div>
+		
+
+		<section class="body">
+			<p>因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循<a href="http://zh.wikipedia.org/zh/ECMAScript">ECMAScript</a> 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。</p>
 <p>本文主要内容源自Adobe官方教程：<a href="http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html">ActionScript 中面向对象的编程-高级主题</a> ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。</p>
 <p>本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。</p>
 <h2 id="actionscript-oop-支持的历史">ActionScript OOP 支持的历史</h2>
@@ -121,9 +189,9 @@
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></p>
 <p>如前所述，可以将属性附加到类定义外部的类原型对象。例如，也可以在 Object 类定义外部定义 toString() 方法，如下所示：</p>
 <blockquote>
-<p>Object.prototype.toString = function() 
-{ 
-// statements 
+<p>Object.prototype.toString = function()
+{
+// statements
 };</p>
 </blockquote>
 <p>但是，原型继承与固定属性继承不一样，如果要重新定义子类中的方法，原型继承不需要 override 关键字。例如. 如果要重新定义 Object 类的子类中的 valueOf() 方法，您有以下三种选择。第一，可以在类定义中的子类原型对象上定义 valueOf() 方法。以下代码创建一个名为 Foo 的 Object 子类，并将 Foo 原型对象的 valueOf() 方法重新定义为类定义的一部分。因为每个类都是从 Object 继承的，所以不需要使用 extends 关键字。
@@ -171,26 +239,50 @@
 <li><a href="http://hi.baidu.com/iflashigame/item/e72e0d74dfc1f3285c178924">http://hi.baidu.com/iflashigame/item/e72e0d74dfc1f3285c178924</a></li>
 <li><a href="http://www.byywee.com/page/M0/S225/225595.html">http://www.byywee.com/page/M0/S225/225595.html</a></li>
 </ol>
-</main>
+		</section>
 
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/actionscript">actionscript</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
 <script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
+        repo=""
         issue-term="title"
         label="💬comment"
         theme="github-light"
         crossorigin="anonymous"
         async>
 </script>
-
-
+		
+	</article>
+</main>
 <footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

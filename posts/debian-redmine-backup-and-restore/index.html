@@ -1,38 +1,82 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Debian Redmine 备份与恢复 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Debian Redmine 备份与恢复 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Do" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="Debian Redmine 备份与恢复" />
+<meta property="og:description" content="几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Do" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/debian-redmine-backup-and-restore/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-01-23T22:36:28+00:00" />
+<meta property="article:modified_time" content="2019-01-23T22:36:28+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Debian Redmine 备份与恢复"/>
+<meta name="twitter:description" content="几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Do"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
 
-<div class="article-meta">
-<h1><span class="title">Debian Redmine 备份与恢复</span></h1>
+	
+	
 
-<h2 class="date">2022/01/23</h2>
-</div>
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
 <main>
-<p>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。</p>
+	<article>
+		<div class="title">
+			<h1 class="title">Debian Redmine 备份与恢复</h1>
+			<div class="meta">Posted on Jan 23, 2019</div>
+		</div>
+		
+
+		<section class="body">
+			<p>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。</p>
 <h2 id="系统需求">系统需求</h2>
 <ol>
 <li>Redmine 3.3 installed with apt on Debian 9 (stretch).</li>
@@ -115,13 +159,13 @@
 <ol>
 <li>恢复插件至路径 <code>/usr/share/redmine/plugins</code></li>
 <li>更新插件
-<pre tabindex="0"><code>cd /usr/share/redmine
-rake redmine:plugins:migrate RAILS_ENV=production
-</code></pre></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>cd /usr/share/redmine
+</span></span><span style="display:flex;"><span>rake redmine:plugins:migrate RAILS_ENV=production
+</span></span></code></pre></div></li>
 <li>重启 Redmine
-<pre tabindex="0"><code>cd /var/lib/redmine/default/tmp
-touch restart.txt
-</code></pre></li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>cd /var/lib/redmine/default/tmp
+</span></span><span style="display:flex;"><span>touch restart.txt
+</span></span></code></pre></div></li>
 </ol>
 <h3 id="主题-1">主题</h3>
 <p>恢复主题文件路径：<code>/usr/share/redmine/public/themes</code></p>
@@ -167,26 +211,50 @@ touch restart.txt
 </span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;------------------------------&#34;</span>
 </span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;restore completed!&#34;</span>
 </span></span></code></pre></div>
-</main>
+		</section>
 
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/redmine">redmine</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
 <script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
+        repo=""
         issue-term="title"
         label="💬comment"
         theme="github-light"
         crossorigin="anonymous"
         async>
 </script>
-
-
+		
+	</article>
+</main>
 <footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

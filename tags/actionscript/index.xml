@@ -6,6 +6,7 @@
     <description>Recent content in actionscript on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
+    <copyright>© Anthony</copyright>
     <lastBuildDate>Fri, 12 Jul 2013 19:48:33 +0800</lastBuildDate><atom:link href="/tags/actionscript/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>XML数据源的级联ComboBox</title>
@@ -67,11 +68,7 @@
       <pubDate>Thu, 27 Sep 2012 12:10:11 +0800</pubDate>
       
       <guid>/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/</guid>
-      <description>FP11.4发布没多长时间，很多新功能还没有用上，FP11.5 Beta就已经发布了。
-主要特性及优点(不定期更新)：
-在Flash Player的relase build 的调试堆栈跟踪：允许开发者在release和debug build中都可以显示堆栈跟踪信息（以前只能在debug build下输出）； 支持多个二进制文件打包(AIR)：允许开发者一起打包ANE的第三方静态库、框架、包； ActionScript 多线程支持共享二进制数据：允许开发者在多个工作线程之间共享内存； 支持在iOS打包、加载多个SWF文件(AIR)：允许开发者在iOS加载多个包含ActionScript字节码的SWF文件。
- 参考资料
- http://labs.adobe.com/technologies/flashplatformruntimes/flashplayer11-5/ http://labs.adobe.com/technologies/flashplatformruntimes/air3-5/  </description>
+      <description>FP11.4发布没多长时间，很多新功能还没有用上，FP11.5 Beta就已经发布了。 主要特性及优点(不定期更新)： 在Flash Player的</description>
     </item>
     
     <item>
@@ -241,11 +238,7 @@ Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.&lt;/p&gt;
       <pubDate>Wed, 11 Jul 2012 17:06:52 +0800</pubDate>
       
       <guid>/posts/native-mouse-cursors-in-flash/</guid>
-      <description>Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过操作系统指针机制实现基于位图的原生鼠标指针，此方式比使用显示对象来显示自定义指针图像更有效。
-理解原生位图指针 自Flash Player 5开始，一直使用 InteractiveObject.startDrag 和 Mouse.hide 来自定义光标外形。但是之前的这种实现有以下几个限制：
- 显示对象实现的光标受限于舞台的维度。当用户把光标在舞台边界处，自定义光标会显示不完全。 显示对象光标在Flash Player 渲染时非常消耗资源，因为整个舞台必须在很高的帧数下重新渲染。updateAfterEvent 方法的使用会导致高CPU占用。 如果SWF因为某些原因停顿了几毫秒，光标动画也会停顿，用户会误认为程序不响应了。 总体上看，相比原生光标，显示对象实现的光标比较迟缓，不够流畅，用户体验不好。  实现原生鼠标光标 实现原生鼠标光标只需要 MouseCursorData 类的几个属性，非常简洁高效。
-flash.ui.MouseCursorData 的三个属性：
- data：BitmapData 对象的 Vector 包含光标图像或图像。可提供多个图像，并将 frameRate 属性设置为使光标具有动画效果。但是位图大小有限制，最大光标大小为 32×32 像素。 frameRate：使光标具有动画效果的帧速率，在 data 属性中提供多个图像并将帧速率设置为大于 0 的值，以便为指针添加动画效果。光标帧速率可能不同于当前的 SWF 帧速率，就是说调整帧率后光标动画帧率不会变化。 hotSpot：以像素表示的光标热点，热点是指在光标上注册鼠标单击所在的点。默认情况下位于左上角 (0,0)。  代码示例 动态光标和静态光标的实现方式差不多，只需要在data中存入多个位图并设置frameRate。代码如下： private function createFakeCursor():void { 	this.fakeCursor = new Shape(); 	var bmp:BitmapData = this.generateCursorBmp(8); 	fakeCursor.graphics.beginBitmapFill(bmp); 	fakeCursor.graphics.drawRect(0,0,bmp.width,bmp.height); 	fakeCursor.graphics.endFill(); 	fakeCursor.visible = false; 	this.</description>
+      <description>Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过</description>
     </item>
     
   </channel>

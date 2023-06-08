@@ -6,6 +6,7 @@
     <description>Recent content in book on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
+    <copyright>© Anthony</copyright>
     <lastBuildDate>Fri, 12 Apr 2013 12:16:03 +0800</lastBuildDate><atom:link href="/tags/book/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Ruby on Rails 入门体验</title>
@@ -41,10 +42,7 @@
       <pubDate>Mon, 01 Aug 2011 20:51:36 +0800</pubDate>
       
       <guid>/posts/flex-4-fun-reading-notes/</guid>
-      <description>You are about to embark on a great journey with the best possible companions:the solid Flash engine, the versatile Flex framework and a very good &amp;gt; teacher.You will seldom enjoy a programming book as much as you will this one.
-Romain Guy
- About the Book 从N神的 RIABook.cn 找到的一本介绍Flex 4 开发的书，还不到300页。重点发掘 Flex 4 SDK 的绘图和动画功能，详细地介绍了 Flex 4 的这些新特性，并提供了很多例子。所以很适合像我这样从Flex 3 起步的开发者。恰当的绘图和动画能带来更好的用户体验，而这也是Flex 4 中很酷很有趣的地方，书名正由此而来(Flex For Fun)。
-About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK Team 研究图形动画。曾是 Adobe Flex SDK Team 的资深计算机科学家 (senior computer scientist)，负责 Flex effects 和 Flex 4 中新效果的架构。在此之前，他在 Sun Java client team 工作了几年，合著了一本关于使用Java 客户端平台开发丰富用户体验应用的书 Filthy Rich Clients 。 个人博客：http://chetchat.</description>
+      <description>You are about to embark on a great journey with the best possible companions:the solid Flash engine, the versatile Flex framework and a very good &amp;gt; teacher.You will seldom enjoy a programming book as much as you will this one. Romain Guy About the Book 从N神的 RIABook.cn 找到的一本介绍Flex 4 开发的书，还不到</description>
     </item>
     
     <item>
@@ -53,11 +51,7 @@ About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK 
       <pubDate>Mon, 25 Jul 2011 12:31:00 +0800</pubDate>
       
       <guid>/posts/flex3-tfs-reading-summary/</guid>
-      <description>这本书比较全面地介绍了Flex 3 SDK的各项组件和功能。这是一个基于web前端技术的框架。作者从Flex组件开始讲解，以flexGrocer为实践项目，将每课教授的内容切实地运用到项目中。
-主要内容有：
- 组件：flex组件分类及如何自定义组件； 事件：如何监听事件，捕获事件，以及如何自定义事件，如何发布事件。事件是如何冒泡的？ 外观：如何自定义控件的外观，使用skin或者css的方法； 拖拽功能：如何使用拖放代理，如何自定义，拖放时对象的赋值等等； 深度链接和历史管理：可以使用浏览器的前进后退功能； 打印功能：FlexPrintJob，PrintDataGrid，功能比较弱； 格式器，验证器：formatter，validator，非常有用！ 后台联系紧密的RemoteObject，还有几种远程交互的方式：httpService，SOAP,blazeDS,LCDS&amp;hellip; AIR：使用AIR开发桌面应用；  最后介绍了非常重要的Flash Player 的GC策略，以及如何防止内存泄漏。如何使用Flash Builder 的profiling功能对应用进行memory profiling, performance profiling。
-全书通过一个flexGrocer项目，让读者逐步在实践中学习flex的各项特性和功能，但不足的是，操作步骤充斥全书，很少讲解系统的架构，原理，以及操作的理由。与其叫“权威指南”，不如称之为“使用指南”，该书的英文原名则十分贴切——&amp;ldquo;training from the source&amp;rdquo;。
-由于方方面面都介绍到了，因此十分适合想对flex 作进一步了解的开发者。没有ActionScript语法解释，没有架构设计讲解，是一大遗憾，不过这本书的定位就这样了，看来要看别的书籍来填补了。</description>
+      <description>这本书比较全面地介绍了Flex 3 SDK的各项组件和功能。这是一个基于web前端技术的框架。作者从Flex组件开始讲解，以flexGrocer</description>
     </item>
     
   </channel>

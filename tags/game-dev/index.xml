@@ -6,71 +6,111 @@
     <description>Recent content in game dev on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 09 Oct 2019 20:22:48 +0800</lastBuildDate><atom:link href="/tags/game-dev/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>© Anthony</copyright>
+    <lastBuildDate>Tue, 19 Apr 2022 20:22:48 +0800</lastBuildDate><atom:link href="/tags/game-dev/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>面向对象的行为树不是面向数据的</title>
       <link>/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/</link>
-      <pubDate>Wed, 09 Oct 2019 20:22:48 +0800</pubDate>
+      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
       
       <guid>/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/</guid>
-      <description>原文：Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)
-作者：Bjoern Knafla
-文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。
-背景 简单的行为树可以使用面向对象方式来实现，如果性能满足需求，非常适合人手不多开发时间紧张的小型团队。
-简单实现如下：
-class BehaviorTreeNode { public:  // ...  virtual BehaviorState update() = 0;  virtual void resetState() = 0; };  template class ActionBehaviorTreeNode : public BehaviorTreeNode { public:  explicit ActionBehaviorTreeNode(ActionData *data);   // Calls a certain member function of actor.  virtual BehaviorState update();   // Does nothing.  virtual void resetState();  private:  ActionData *data; };  class SequenceBehaviorTreeNode : public BehaviorTreeNode { public:  // .</description>
+      <description>&lt;p&gt;原文：&lt;a href=&#34;https://jahej.com/alt/2011_03_10_shocker-naive-object-oriented-behavior-tree-isnt-data-oriented.html&#34;&gt;Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;作者：&lt;a href=&#34;http://bjoernknafla.com/&#34;&gt;Bjoern Knafla&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。&lt;/p&gt;
+&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;简单的行为树可以使用面向对象方式来实现，如果性能满足需求，非常适合人手不多开发时间紧张的小型团队。&lt;/p&gt;
+&lt;p&gt;简单实现如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;BehaviorTreeNode&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// ...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;virtual&lt;/span&gt; BehaviorState update() &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;virtual&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;resetState&lt;/span&gt;() &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;template&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ActionBehaviorTreeNode&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; BehaviorTreeNode {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;explicit&lt;/span&gt; ActionBehaviorTreeNode(ActionData &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;data);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// Calls a certain member function of actor.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;virtual&lt;/span&gt; BehaviorState &lt;span style=&#34;color:#a6e22e&#34;&gt;update&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// Does nothing.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;virtual&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;resetState&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ActionData &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;data;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;SequenceBehaviorTreeNode&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; BehaviorTreeNode {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// ...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// Iterate through children, start from next to run until done or a child
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// returns that it is running.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;virtual&lt;/span&gt; BehaviorState update();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// Calls resetState for the next to run node as it might have returned a
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// running state during the last update.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// Prepares to start from the first child on next update.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;virtual&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;resetState&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  std&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;vector children; &lt;span style=&#34;color:#75715e&#34;&gt;// In sequence order.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  std&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;size_t nextChildToUpdateIndex;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;PriorityBehaviorTreeNode&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt; BehaviorTreeNode {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;public&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// ...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// Iterate through children, start from next to run until the first one
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// returns success or that it is running.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// If this child&amp;#39;s index is lower than that of the previous one returning
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// running, rest the later child.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;virtual&lt;/span&gt; BehaviorState update();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// Calls resetState for the next to run child as it might have returned a
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// running state during the last update.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;// Prepares to start from the first child on next update.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;virtual&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;resetState&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;private&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  std&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;vector children; &lt;span style=&#34;color:#75715e&#34;&gt;// In highest to lowest priority order.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;  std&lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt;size_t nextChildToUpdateIndex;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// ... and so on with other node types...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Tony Albrecht 在 演讲 &lt;a href=&#34;https://www.youtube.com/watch?v=VAT9E-M-PoE&#34;&gt;Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube&lt;/a&gt; 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>Behavior Trees in Gigantic</title>
       <link>/posts/behavior-trees-in-gigantic/</link>
-      <pubDate>Sat, 07 Sep 2019 15:46:59 +0800</pubDate>
+      <pubDate>Tue, 07 Sep 2021 15:46:59 +0800</pubDate>
       
       <guid>/posts/behavior-trees-in-gigantic/</guid>
-      <description>偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
-背景 Gigantic是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。
-作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。
-有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。
-实现 一般执行逻辑 关于行为树的基本介绍以及工作原理，不予赘述。参看 AI行为树的工作原理
-一般来说，行为树的执行顺序采用深度优先，父节点根据子节点执行并返回的状态作为输入，执行自身节点的逻辑，并返回其处理结果。
-在子节点返回成功/失败状态之前，行为树会从子节点继续执行，直到其返回成功/失败。然后执行其父节点，直到行为树根节点返回成功/失败。因此 Gigantic 采用栈来实现行为树的执行逻辑。子节点返回结果后从栈顶弹出，继续执行栈顶的节点。若该节点为Select，Sequence之类的复合节点，需要继续处理剩余的子节点，则将子节点压入栈继续执行。
-使用栈来实现，有以下几个优点：
- 栈中只包含当前执行的路径，易于调试； 使用享元模式可实现树结构的共享，与 Agent 关联的行为树任务实例分离，占用内存更少。 实现轮询更简单：有些特殊的节点会在子节点每次执行前，自身也会执行。从而来实现任务及时中断退出，一般叫监测节点。如果有这种功能的节点，那么需要从栈底部向上依次执行该节点。（个人觉得这个理由有些牵强，不符合栈的使用场景，若使用C++标准库的栈则无法实现这个需求。）  注：作者没有指出这种实现的缺点，但需要注意的是：行为树每次执行时伴随着频繁的入栈出栈操作，如果处理不当可能造成大量的内存碎片。
-并行处理 动作游戏里NPC经常会同时执行多个动作，比如一边移动一边攻击，其行为树如下图所示：
-针对这个需求，一般行为树都会提供并行节点（Parallel）。Gigantic 也使用栈来实现并行节点。为并行节点的每个分支创建新栈。并行节点执行时会依次切换至其分支对应的栈，从而实现并行处理，类似于有些语言的协程（Coroutine）。
-注：这个方法可以扩展成真正的并发实现。线程足够的情况下，让每个分支执行在不同的线程上。
-难点 事件处理 为了维持行为树的执行和便于理解，Gigantic 将事件处理和行为树分离，事件的响应结果作为状态保存，便于行为树轮询时查询。
-注：将状态与决策分离，可以更好地实现组件的模块化，不仅行为树，其它如GOAP，HTN为主要框架的架构也可以这样处理。
-具体可参考 Humphreys. 2016. Modular AI System
-重用 随着游戏中 AI 的行为逐步丰富，行为树的复杂度也随之上升。如果树节点不具备重用的特性，那么不论是编写 AI 逻辑，还是调试功能都会带来很多不便。
-因此 Gigantic 引入“子树”这一概念。在主树中加入“Subtree Proxy”类型的节点，并设置指定的子树，执行时就会跳转到对应的子树。子树的结构也采用栈，因为它本质上也是一棵行为树。需要注意的是，要避免子树滥用造成的循环。如果有必要，在编辑行为树时加入循环检查，提醒设计师注意这一问题。
-注：子树不是新鲜概念了，但循环检测还是有必要的，即使有时是刻意为之。
-优化 通常 AI 代理的行为都是类似的，很多NPC共用同一个行为树。因此利用享元模式，可以将行为树的结构与代理的状态数据分开。行为树的结构数据应当是不互斥的，静态且无状态的。即使代理的数量激增，其所占用的行为树的静态数据也始终保持不变。</description>
+      <description>偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。 背景 Gigantic是一个结合了PVE的5v5的多</description>
     </item>
     
     <item>
       <title>游戏AI入门指南(Part 3)</title>
       <link>/posts/the-total-beginners-guide-to-game-ai-part-3/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
       
       <guid>/posts/the-total-beginners-guide-to-game-ai-part-3/</guid>
-      <description>学习能力和适应能力 我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。
-统计和概率 在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。
-但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的移动平均(windowed average)，如只考虑最后20个数据点。
-假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！
-另一个有趣的方法是使用朴素贝叶斯分类器(Naive Bayes Classifier)来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。
-使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。
-简单的基于权重的自适应 让我们更进一步讨论这个话题。不只是利用输入数据在不同的预编程策略之间选择，或许我们还想修改一系列影响决策的数值。充分了解我们的游戏世界和规则后，我们可以执行以下操作：
- 让AI在游戏过程中收集有关世界状态和关键事件的数据（如上所述）； 以收集的数据为基础，更改其中的值或其“权重”； 根据处理或评估这些权重来进行决策。  假设在一张FPS游戏地图上，AI代理有几个主要房间可供选择。每个房间都有一个权重，用来表示其进入该房间的意愿，并且一开始所有房间的权重都是相等的。当代理选择要去的地方时，先随机选择一个房间，但会基于权重而有所偏向。现在设想一下，当AI代理被杀死时，它会记下其所在的房间并减轻权重，因此它以后不太可能再回到这个房间。类似地，假如AI代理因为击杀敌人得分了，那么它可能会增加其所在房间的权重，从而将其优先级提高。如果开始的时候一个房间对AI特别致命，AI代理会在将来避开这里，但如果AI代理在其他房间击杀了很多敌人，那么它会回到那里。
-马尔可夫模型 如果我们想使用这样收集的数据进行预测，那该如何呢？例如玩家在玩游戏的过程中，我们记录下他们在一段时间内进入的每个房间，自然会期望用这些数据来预测玩家可能前往的下一个房间。通过跟踪玩家当前所在的房间和之前去过的房间，并将其记录为一对值，我们可以计算出前一种情况导致后一种情况的频率，并将其用于预测未来的情况。
-假设有3个房间，红色，绿色和蓝色，以下是我们在游戏中的观察结果：
-   首个房间 总次数 下个房间 次数 百分比     红色 10 红色 2 20%    10 绿色 7 70%    10 蓝色 1 10%   绿色 10 红色 3 30%    10 绿色 5 50%    10 蓝色 2 20%   蓝色 8 红色 6 75%    8 绿色 2 25%    8 蓝色 0 0%    每个房间的观测数据相当均匀，没法告诉我们哪里最适合打埋伏。玩家在地图上的均匀分布​对数据产生了影响，在这三个房间中出现有同样的可能性。但是他们进入的下个房间的数据是有用处的，可以帮我们预测玩家在地图上的移动。</description>
+      <description>&lt;h2 id=&#34;学习能力和适应能力&#34;&gt;学习能力和适应能力&lt;/h2&gt;
+&lt;p&gt;我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。&lt;/p&gt;
+&lt;h3 id=&#34;统计和概率&#34;&gt;统计和概率&lt;/h3&gt;
+&lt;p&gt;在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。&lt;/p&gt;
+&lt;p&gt;但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的&lt;a href=&#34;https://en.wikipedia.org/wiki/Moving_average&#34;&gt;移动平均(windowed average)&lt;/a&gt;，如只考虑最后20个数据点。&lt;/p&gt;
+&lt;p&gt;假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！&lt;/p&gt;
+&lt;p&gt;另一个有趣的方法是使用&lt;a href=&#34;https://zh.wikipedia.org/zh-hans/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8&#34;&gt;朴素贝叶斯分类器(Naive Bayes Classifier)&lt;/a&gt;来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。&lt;/p&gt;
+&lt;p&gt;使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。&lt;/p&gt;</description>
     </item>
     
     <item>
       <title>游戏AI入门指南(Part 2)</title>
       <link>/posts/the-total-beginners-guide-to-game-ai-part-2/</link>
-      <pubDate>Mon, 25 Mar 2019 23:10:09 +0000</pubDate>
+      <pubDate>Thu, 25 Mar 2021 23:10:09 +0000</pubDate>
       
       <guid>/posts/the-total-beginners-guide-to-game-ai-part-2/</guid>
       <description>&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/&#34;&gt;The Total Beginner&amp;rsquo;s Guide to Game AI&lt;/a&gt;
@@ -105,7 +145,7 @@ class BehaviorTreeNode { public:  // ...  virtual BehaviorState update() = 0;  v
     <item>
       <title>游戏AI入门指南(Part 1)</title>
       <link>/posts/the-total-beginners-guide-to-game-ai-part-1/</link>
-      <pubDate>Wed, 20 Mar 2019 20:30:43 +0000</pubDate>
+      <pubDate>Sat, 20 Mar 2021 20:30:43 +0000</pubDate>
       
       <guid>/posts/the-total-beginners-guide-to-game-ai-part-1/</guid>
       <description>&lt;p&gt;&lt;strong&gt;原文：&lt;/strong&gt; &lt;a href=&#34;https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/&#34;&gt;The Total Beginner&amp;rsquo;s Guide to Game AI&lt;/a&gt;
@@ -139,32 +179,32 @@ class BehaviorTreeNode { public:  // ...  virtual BehaviorState update() = 0;  v
 &lt;ol&gt;
 &lt;li&gt;创建项目目录&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;mkdir ts_pixi
-cd ts_pixi
-mkdir assets src dist
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir ts_pixi
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd ts_pixi
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir assets src dist
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;新建项目文件&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;touch index.html
-touch src/main.ts
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;touch index.html
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;touch src/main.ts
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;初始化项目&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm init
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm init
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;PixiJS&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev pixi.js
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm install --save-dev pixi.js
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应&lt;code&gt;@types&lt;/code&gt;文件，用于代码提示等功能。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev typescript @types/pixi.js @types/node
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm install --save-dev typescript @types/pixi.js @types/node
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;其它&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev ts-loader webpack webpack-dev-server
-&lt;/code&gt;&lt;/pre&gt;</description>
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm install --save-dev ts-loader webpack webpack-dev-server
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     
     <item>
@@ -176,38 +216,38 @@ touch src/main.ts
       <description>&lt;p&gt;PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。&lt;/p&gt;
 &lt;h2 id=&#34;前提&#34;&gt;前提&lt;/h2&gt;
 &lt;p&gt;不可或缺的当然是node。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;node --version
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;node --version
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
 &lt;h3 id=&#34;初始化项目&#34;&gt;初始化项目&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;创建项目目录&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;mkdir ts_pixi
-cd ts_pixi
-mkdir assets src dist
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir ts_pixi
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd ts_pixi
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir assets src dist
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;新建项目文件&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;touch index.html
-touch src/main.ts
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;touch index.html
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;touch src/main.ts
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;初始化项目&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm init
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm init
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;安装模块&#34;&gt;安装模块&lt;/h3&gt;
 &lt;ol&gt;
 &lt;li&gt;PixiJS&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save pixi.js
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm install --save pixi.js
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
 &lt;li&gt;TypeScript&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev typescript
-&lt;/code&gt;&lt;/pre&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm install --save-dev typescript
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;其它&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;npm install --save-dev browserify browserify-shim http-server tsify tslint
-&lt;/code&gt;&lt;/pre&gt;</description>
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;npm install --save-dev browserify browserify-shim http-server tsify tslint
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     
     <item>

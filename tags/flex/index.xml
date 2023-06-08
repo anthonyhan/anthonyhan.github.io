@@ -6,6 +6,7 @@
     <description>Recent content in flex on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
+    <copyright>© Anthony</copyright>
     <lastBuildDate>Mon, 09 Jul 2012 19:51:11 +0800</lastBuildDate><atom:link href="/tags/flex/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Apache Flex 4.8.0 近况及试用</title>
@@ -13,8 +14,7 @@
       <pubDate>Mon, 09 Jul 2012 19:51:11 +0800</pubDate>
       
       <guid>/posts/apache-flex-4-8-0-news-trial/</guid>
-      <description>自从Apache接手Flex已经过去了半年。虽然已经有一年没有开发Flex应用，但是一直关注着对于这个框架的未来和发展。To be or not to be, that’s the question.
-Apache Flex 最新进展（2012/7） Apache Flex 工作  Apache Flex 团队目前正在测试一个Apache Flex 4.8.0的发行候选版本。Apache Flex 4.8.0 是Adobe Flex 4.6.0的等同版本。当前的主要工作是保证在新的Apache license下，能够继续使用Flex框架所有的特性；下个阶段会进行bug修复，新功能和新组件的实现工作。如果想自行build可以Check out 这个说明文档。 商标问题已经大量清除。 JIRA已经导入了Adobe bug tracker 所有问题。 问题附件涵盖直到2012年1月30日之前的SDK，DMV和Automation bug。 Mustella 测试框架已经捐献并做了一些测试。 对于那些想自己编译编译器，框架等代码的人，基于ANT的编译脚本已经重新设计并且非常易于使用。Check out 上面那个README文档和相关的env.properties 模板文件获取入门信息。  社区工作  一群热心的贡献者们正努力让Flex 更易于下载和编译，以便其能够在IDE中使用(包括 Flash Builder 和 ItelliJ)。他们制作了一个AIR/Flex应用来帮你下载所有必要组件，并放置在相应的目录。 点这里查看。 FlexUnit 正在捐献给Apache 的过程中。 关于Apache Flex 历史和发展，Justin Mclean 做了一个非常精彩的演讲。 360|Flex (现在叫 360|Stack) 宣布360|MIN，活动将于10月22-23日在拉斯维加斯举办。Adobe 2012 MAX大会将在同一周举办。360|MIN 是一个barcamp式的聚会活动，届时将会有许多Apache Flex 的贡献者在现场。  欲悉更多，请订阅 flex-dev 邮件列表！</description>
+      <description>自从Apache接手Flex已经过去了半年。虽然已经有一年没有开发Flex应用，但是一直关注着对于这个框架的未来和发展。To be or not to be, tha</description>
     </item>
     
     <item>
@@ -23,10 +23,7 @@ Apache Flex 最新进展（2012/7） Apache Flex 工作  Apache Flex 团队目�
       <pubDate>Mon, 01 Aug 2011 20:51:36 +0800</pubDate>
       
       <guid>/posts/flex-4-fun-reading-notes/</guid>
-      <description>You are about to embark on a great journey with the best possible companions:the solid Flash engine, the versatile Flex framework and a very good &amp;gt; teacher.You will seldom enjoy a programming book as much as you will this one.
-Romain Guy
- About the Book 从N神的 RIABook.cn 找到的一本介绍Flex 4 开发的书，还不到300页。重点发掘 Flex 4 SDK 的绘图和动画功能，详细地介绍了 Flex 4 的这些新特性，并提供了很多例子。所以很适合像我这样从Flex 3 起步的开发者。恰当的绘图和动画能带来更好的用户体验，而这也是Flex 4 中很酷很有趣的地方，书名正由此而来(Flex For Fun)。
-About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK Team 研究图形动画。曾是 Adobe Flex SDK Team 的资深计算机科学家 (senior computer scientist)，负责 Flex effects 和 Flex 4 中新效果的架构。在此之前，他在 Sun Java client team 工作了几年，合著了一本关于使用Java 客户端平台开发丰富用户体验应用的书 Filthy Rich Clients 。 个人博客：http://chetchat.</description>
+      <description>You are about to embark on a great journey with the best possible companions:the solid Flash engine, the versatile Flex framework and a very good &amp;gt; teacher.You will seldom enjoy a programming book as much as you will this one. Romain Guy About the Book 从N神的 RIABook.cn 找到的一本介绍Flex 4 开发的书，还不到</description>
     </item>
     
     <item>
@@ -35,11 +32,7 @@ About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK 
       <pubDate>Mon, 25 Jul 2011 12:31:00 +0800</pubDate>
       
       <guid>/posts/flex3-tfs-reading-summary/</guid>
-      <description>这本书比较全面地介绍了Flex 3 SDK的各项组件和功能。这是一个基于web前端技术的框架。作者从Flex组件开始讲解，以flexGrocer为实践项目，将每课教授的内容切实地运用到项目中。
-主要内容有：
- 组件：flex组件分类及如何自定义组件； 事件：如何监听事件，捕获事件，以及如何自定义事件，如何发布事件。事件是如何冒泡的？ 外观：如何自定义控件的外观，使用skin或者css的方法； 拖拽功能：如何使用拖放代理，如何自定义，拖放时对象的赋值等等； 深度链接和历史管理：可以使用浏览器的前进后退功能； 打印功能：FlexPrintJob，PrintDataGrid，功能比较弱； 格式器，验证器：formatter，validator，非常有用！ 后台联系紧密的RemoteObject，还有几种远程交互的方式：httpService，SOAP,blazeDS,LCDS&amp;hellip; AIR：使用AIR开发桌面应用；  最后介绍了非常重要的Flash Player 的GC策略，以及如何防止内存泄漏。如何使用Flash Builder 的profiling功能对应用进行memory profiling, performance profiling。
-全书通过一个flexGrocer项目，让读者逐步在实践中学习flex的各项特性和功能，但不足的是，操作步骤充斥全书，很少讲解系统的架构，原理，以及操作的理由。与其叫“权威指南”，不如称之为“使用指南”，该书的英文原名则十分贴切——&amp;ldquo;training from the source&amp;rdquo;。
-由于方方面面都介绍到了，因此十分适合想对flex 作进一步了解的开发者。没有ActionScript语法解释，没有架构设计讲解，是一大遗憾，不过这本书的定位就这样了，看来要看别的书籍来填补了。</description>
+      <description>这本书比较全面地介绍了Flex 3 SDK的各项组件和功能。这是一个基于web前端技术的框架。作者从Flex组件开始讲解，以flexGrocer</description>
     </item>
     
     <item>
@@ -48,7 +41,7 @@ About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK 
       <pubDate>Mon, 18 Jul 2011 22:23:56 +0800</pubDate>
       
       <guid>/posts/flex3-tfs-notes-04/</guid>
-      <description>Lesson 21：部署Flex应用程序  AIR: Adobe Integrated Runtime AIR 特点：  直接访问文件系统； 可以从操作系统拖拽文件到AIR应用中； 使用窗口API，可实现自定义应用外观； 提供API部署不完全连接Internet的应用； 脱离浏览器，可设置快捷键(hotkey); 提供嵌入式数据库，具有更强更完备的客户端数据存储能力。    Lesson 22：创建过渡和行为  行为和效果：  淡入淡出 向内溶解，向外溶解 移动或重新调整组件 旋转组件 缩放 从左、右、上、下显示 光亮，光圈 音效等等    Lesson 23：Flex的打印功能  Flex提供的打印功能比较简单，可以满足基本的应用，但是复杂一点的就有些吃不消。不知道SDK4.0+有没有改善，我自己暂时还没有使用过SDK4.0+的打印功能。 FlexPrintJob：打印对象( 容器，组件等) PrintDataGrid：适用于打印的DataGrid，就是针对打印做过优化的，利于显示和具备更好的打印效果。 FlexPrintJob流程：  new FlexPrintJob() start() addObject() send() 清理工作   FlexPrintJobScaleType : 打印缩放比例，提供几种打印内容与纸张之间的比例关系；  MATCH_WIDTH 适合宽度，缩放对象以填充可用页面宽度。 MATCH_HEIGHT 适合高度，缩放对象以填充可用页面高度。 SHOW_ALL 显示全部，缩放对象以适合在单个页面中填充一个尺寸；也就是说，选择 MATCH_WIDTH 或 MATCH_HEIGHT 缩放类型中较小的值。 FILL_PAGE 填充页面，将对象缩放到至少一整页那么大；也就是说，选择较大的 MATCH_WIDTH 或 MATCH_HEIGHT 缩放类型。 NONE 不设置，不要缩放输出。    Lesson 24 ：使用共享对象  使用SharedObject类保存特定的用户信息，看了下在线文档，写的很清楚而且详细。“SharedObject * 类用于在用户计算机或服务器上读取和存储有限的数据量。使用共享对象，可在永久贮存在本地计算机或远程服务器上的多个客户端 SWF 文件和对象之间实现实时数据共享。本地共享对象类似于浏览器 Cookie，远程共享对象类似于实时数据传输设备。为了使用远程共享对象，您需要 Adobe Flash Media Server。” 使用SharedObject可以执行以下操作：  保持本地永久性； 在Flash Media Server 上存储并共享数据； 实时共享数据。（这个功能总是被演示一次又一次…）   ShardObject 特性：  保存在客户端上 扩展名为 .</description>
+      <description>Lesson 21：部署Flex应用程序 AIR: Adobe Integrated Runtime AIR 特点： 直接访问文件系统； 可以从操作系统拖拽文件到AIR应用中； 使用窗口API，可实现自定义应用外观； 提</description>
     </item>
     
     <item>
@@ -57,14 +50,7 @@ About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK 
       <pubDate>Wed, 06 Jul 2011 22:40:49 +0800</pubDate>
       
       <guid>/posts/flex3-tfs-notes-03/</guid>
-      <description>Lesson 16：自定义Flex应用程序的外观   样式和皮肤；
-  使用标签属性设置样式：如 color，disabledColor，fontSize，fontStyle，fontWeight，fontFamily … ; 也可使用 ActionScript 设置：mybButton.setStyle(“color”,”#00FF00”);
-  样式继承： ASDoc中，每个样式有个 “CSS继承”(CSS Inheritance) 的属性。表示该样式是否可以从其父容器出继承；
-  &amp;lt;mx:Style&amp;gt; 设置样式约定：
- 样式名小写，单词之间使用连字符隔开：background-color: #FFFFFF; 也可使用大小写混合的方式： backgroundColor: #00FF00;    类选择符：将一组样式属性定义为一个样式类。 .CustomCombo { color: #00FF00; selectedColor: #EA800C; } 组件可使用 styleName 调用：
- &amp;lt;mx:ComboBox styleName=”customCombo”/&amp;gt;   类型选择符 ComboBox { color: #FF0000; selectedColor: #EA800C; } 这样设置，将影响所有叫 “ComboBox”类的样式；
-  使用 Flash Builder 编写 CSS，只要打开CSS文件编辑即可；
-  使用CSS文件设置样式，将文件编译到应用程序中，就必须重新编译应用程序；</description>
+      <description>Lesson 16：自定义Flex应用程序的外观 样式和皮肤； 使用标签属性设置样式：如 color，disabledColor，fontSize，fontS</description>
     </item>
     
     <item>
@@ -73,7 +59,7 @@ About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK 
       <pubDate>Tue, 05 Jul 2011 22:28:42 +0800</pubDate>
       
       <guid>/posts/flex3-tfs-notes-02/</guid>
-      <description>Lesson 9：使用自定义事件  松耦合架构：可以使用自定义事件，将更改通知其他组件，不要求组件知道应用程序其余部分的信息； View 通过 事件 与 Controller 建立联系； 无论何时触发事件，Flash Player 都会发布事件。事件流描述了事件对象在应用程序中传递的过程，当事件被触发时，事件对象穿过层层容器，在根应用程序与负责事件处理的组件之间往返传递； Flex事件冒泡过程：  捕获期：事件发出后，按照容器由外到内找到事件的目标，即与用户交互的目标组件； 目标期：调用事件目标对象的事件处理函数； 冒泡期：由内向外发送事件，检查其他监听器，重复上述步骤2；   Event 类所有实例都具有 bubbles * 属性，用来指定事件对象是否会参与事件流的冒泡期。如果事件的bubbles属性为true，则发布事件的组件，其每一层父容器都能够捕获事件。若为false，则只有事件源可以捕获。缺省值为false；  Lesson 10：用ActionScript 3.0创建自定义组件  在MXML中创建组件，可以使用 MXML标签向组件添加元素，而在 ActionScript 中则需要重写(override) createChildren() 方法。Flex组件在初始化中，会调用 createChildren()* 。其调用顺序为：  构造函数( Constructor ); createChildren(); //需要重写 commitProperties(); measure(); updateDisplayList(); //需要重写   Flex容器：  布局区域：绘制子元素的地方； 边饰部分：  边框 背景 滚动条 页边距 标题 脚注 ……     measure()：计算组件的默认大小和（可选）默认最小大小； updateDisplayList()：通过设置此容器子项的位置和大小来响应大小更改； getExplicitOrMeasuredHeight()：确定是使用显式高度还是测量高度的一种简便方法； getExplicitOrMeasuredWidth()：确定是使用显式宽度还是测量宽度的一种简便方法； setActualSize()：设置此对象的实际大小。 控件的描述及功能介绍，多用用toolTip属性；  Lesson 11：使用DataGrid与项目呈现器  DataGrid：能为用户与数据交互提供最多的选项，但也会带来额外的开销； Flex 表示月份时， 0 代表一月，11代表12月。Date(2010,3,1) 即初始化为 “2010年4月1日”； DataGrid 默认支持数据排序； 可使用 set/get 函数 设置/获取对象属性值，在函数中亦可作其它相关的操作，保证组件数据的及时更新。getter/setter不能太复杂，否则可能无效； AdvancedDataGrid 属性：  sortExpertMode：默认情况下，sortExpertMode 属性设置为 false，这意味着在某列的标题区域单击，将按该列对 AdvancedDataGrid 控件的行进行排序； styleFunction：呈现每个单元格时调用的回调函数；   要掌握使用renderer呈现器在DataGrid中的使用；  Lesson 12：使用拖放  概念  拖拽初始器：(源控件) –&amp;gt; dragEnabled； 拖拽代理：(拖拽过程中紧随指针显示的内容); 释放目标：(目标控件) –&amp;gt; dropEnabled； 拖拽源：(拖拽数据；   非增强型组件上的隐藏拖放机制：  把数据赋值给 DragSource对象（DragSource.</description>
+      <description>Lesson 9：使用自定义事件 松耦合架构：可以使用自定义事件，将更改通知其他组件，不要求组件知道应用程序其余部分的信息； View 通过 事件 与 Controller 建立联系； 无论何</description>
     </item>
     
     <item>
@@ -82,9 +68,7 @@ About the Author Chet Haase ：此牛人现已跳槽，现在Google Android SDK 
       <pubDate>Mon, 04 Jul 2011 22:03:38 +0800</pubDate>
       
       <guid>/posts/flex3-tfs-notes-01/</guid>
-      <description>很久以前看的书，也是很久以前写的笔记。再回顾一遍，算是温故知新吧。
- Lesson 1-5：基础知识  Flex 并非从上到下创建组件，而可以看成是由内到外创建。只有应用程序的所有元素都已创建后，此时才是向外部资源请求并使用数据的适当时机； 直接在 ActionScript 中建立as类，可以创建自定义的事件类，建立值对象(value object)等； as元标签(Metadata)：[Bindable] 被指定在 class 关键字前，表示该类的每一个属性都可以用来绑定，可以被绑定到空间或其它数据结构； 使用自定义类时，可以使用 import 关键字类导入需要的类，在Flash Builder中，一般会被自动导入； 所有MXML文件最终会被编译为一个 ActionScript 类，在创建 MXML 文件时必须遵守与创建 ActionScript 类时相同的约定； ActionScript 中，uint 数据类型表示无符号整数，非负数； 使用 httpService返回数据的2种方法：  直接在绑定中使用数据； 使用 resultEvent事件处理函数；   若要将数据填入空间或者过滤，排序等手段操作数据，应选择 ArrayCollection 数据结构； 支持 dataProvider 的控件有三个优点：  可将相同数据填入多个控件； 可在运行时断开dataProvider； 当修改 dataProvider 时，更改会反映到所有使用它的控件上；    Lesson 6：为控件使用远程XML数据   RPC,HttpService调用过程：
- &amp;lt;mx:Application 设置RPC &amp;gt;； &amp;lt;mx:HttpService 设置结果处理函数dataHandler(event)&amp;gt;； &amp;lt;mx: script &amp;gt; dataHandler将获取的数据赋予变量或控件；    XML结构：</description>
+      <description>很久以前看的书，也是很久以前写的笔记。再回顾一遍，算是温故知新吧。 Lesson 1-5：基础知识 Flex 并非从上到下创建组件，而可以看成是由内到外创建。只有应</description>
     </item>
     
   </channel>

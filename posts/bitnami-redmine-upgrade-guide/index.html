@@ -1,38 +1,199 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bitnami Redmine 升级简易指南 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Bitnami Redmine 升级简易指南 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。
+系统需求
+适用于Windows平台的 Bitnami Redmine 2.x&#43; 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
 
-<div class="article-meta">
-<h1><span class="title">Bitnami Redmine 升级简易指南</span></h1>
 
-<h2 class="date">2016/09/27</h2>
-</div>
+Redmine version
+Supported Ruby versions
+Rails version used
+
+
+
+
+3.3, current trunk
+ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3
+Rails 4.2
+
+
+3.2, 3.1
+ruby 1.9.3, 2.0.0, 2.1, 2.21
+Rails 4.2
+
+
+
+Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.
+Redmine does not support JRuby because some gems do not support Rails 4.2.
+细节参看 Requirements
+备份数据
+Bitnami Stack
+若使用 Bitnami 集成包，可以直接备份整个目录即可。
+Redmine
+若只升级 Redmine 则先确认系统需求然后执行备份。
+备份文件
+最好备份整个 redmine 目录，主要包括
+
+上传文件(apps\redmine\htdocs\files)
+插件(apps\redmine\htdocs\plugins)
+主题(apps\redmine\htdocs\themes)
+配置文件(apps\redmine\htdocs\config)
+" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="Bitnami Redmine 升级简易指南" />
+<meta property="og:description" content="顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。
+系统需求
+适用于Windows平台的 Bitnami Redmine 2.x&#43; 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表
+
+
+
+Redmine version
+Supported Ruby versions
+Rails version used
+
+
+
+
+3.3, current trunk
+ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3
+Rails 4.2
+
+
+3.2, 3.1
+ruby 1.9.3, 2.0.0, 2.1, 2.21
+Rails 4.2
+
+
+
+Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.
+Redmine does not support JRuby because some gems do not support Rails 4.2.
+细节参看 Requirements
+备份数据
+Bitnami Stack
+若使用 Bitnami 集成包，可以直接备份整个目录即可。
+Redmine
+若只升级 Redmine 则先确认系统需求然后执行备份。
+备份文件
+最好备份整个 redmine 目录，主要包括
+
+上传文件(apps\redmine\htdocs\files)
+插件(apps\redmine\htdocs\plugins)
+主题(apps\redmine\htdocs\themes)
+配置文件(apps\redmine\htdocs\config)
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/bitnami-redmine-upgrade-guide/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-09-27T11:00:54+08:00" />
+<meta property="article:modified_time" content="2016-09-27T11:00:54+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Bitnami Redmine 升级简易指南"/>
+<meta name="twitter:description" content="顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。
+系统需求
+适用于Windows平台的 Bitnami Redmine 2.x&#43; 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表
+
+
+
+Redmine version
+Supported Ruby versions
+Rails version used
+
+
+
+
+3.3, current trunk
+ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3
+Rails 4.2
+
+
+3.2, 3.1
+ruby 1.9.3, 2.0.0, 2.1, 2.21
+Rails 4.2
+
+
+
+Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.
+Redmine does not support JRuby because some gems do not support Rails 4.2.
+细节参看 Requirements
+备份数据
+Bitnami Stack
+若使用 Bitnami 集成包，可以直接备份整个目录即可。
+Redmine
+若只升级 Redmine 则先确认系统需求然后执行备份。
+备份文件
+最好备份整个 redmine 目录，主要包括
+
+上传文件(apps\redmine\htdocs\files)
+插件(apps\redmine\htdocs\plugins)
+主题(apps\redmine\htdocs\themes)
+配置文件(apps\redmine\htdocs\config)
+"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
 <main>
-<p>顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。</p>
+	<article>
+		<div class="title">
+			<h1 class="title">Bitnami Redmine 升级简易指南</h1>
+			<div class="meta">Posted on Sep 27, 2016</div>
+		</div>
+		
+
+		<section class="body">
+			<p>顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。</p>
 <h2 id="系统需求">系统需求</h2>
 <p>适用于Windows平台的 Bitnami Redmine 2.x+ 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表</p>
 <table>
@@ -109,16 +270,16 @@ Redmine does not support JRuby because some gems do not support Rails 4.2.
 <li>运行 manager-windows.exe，停止数据库外的其它所有服务；</li>
 <li>登录数据库，如果数据库不在本地需要加 -h 参数指定主机名；</li>
 </ol>
-<pre tabindex="0"><code>mysql -u root -p 
-mysql&gt; drop database bitnami_redmine;
-mysql&gt; create database bitnami_redmine;
-mysql&gt; grant all privileges on bitnami_redmine.* to &#39;bn_redmine&#39;@&#39;localhost&#39; identified by &#39;DATABASE_PASSWORD&#39;;
-mysql&gt; quit
-</code></pre><ol start="3">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mysql -u root -p 
+</span></span><span style="display:flex;"><span>mysql&gt; drop database bitnami_redmine;
+</span></span><span style="display:flex;"><span>mysql&gt; create database bitnami_redmine;
+</span></span><span style="display:flex;"><span>mysql&gt; grant all privileges on bitnami_redmine.* to &#39;bn_redmine&#39;@&#39;localhost&#39; identified by &#39;DATABASE_PASSWORD&#39;;
+</span></span><span style="display:flex;"><span>mysql&gt; quit
+</span></span></code></pre></div><ol start="3">
 <li>导入之前的备份数据</li>
 </ol>
-<pre tabindex="0"><code>mysql -u root -p bitnami_redmine &lt; redmine_backup.sql
-</code></pre><ol start="4">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mysql -u root -p bitnami_redmine &lt; redmine_backup.sql
+</span></span></code></pre></div><ol start="4">
 <li>更新数据库用户名和密码，配置文件为 <code>apps/redmine/htdocs/config/database.yml</code>，如果安装时设置了，似乎不用再设置
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yml" data-lang="yml"><span style="display:flex;"><span><span style="color:#f92672">production</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">adapter</span>: <span style="color:#ae81ff">mysql2</span>
@@ -129,9 +290,9 @@ mysql&gt; quit
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">encoding</span>: <span style="color:#ae81ff">utf8</span></span></span></code></pre></div></li>
 <li>迁移数据库到最新版</li>
 </ol>
-<pre tabindex="0"><code>cd apps/redmine/htdocs 
-bundle exec rake redmine:plugins:migrate RAILS_ENV=production
-</code></pre><p>如果安装过插件，执行 <code>bundle exec rake redmine:plugins:migrate RAILS_ENV=production</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>cd apps/redmine/htdocs 
+</span></span><span style="display:flex;"><span>bundle exec rake redmine:plugins:migrate RAILS_ENV=production
+</span></span></code></pre></div><p>如果安装过插件，执行 <code>bundle exec rake redmine:plugins:migrate RAILS_ENV=production</code></p>
 <h3 id="清理">清理</h3>
 <ol>
 <li>清理缓存
@@ -149,26 +310,50 @@ bundle exec rake redmine:plugins:migrate RAILS_ENV=production
 <li><a href="https://docs.bitnami.com/installer/windows-faq/#how-to-upgrade-a-bitnami-stack">https://docs.bitnami.com/installer/windows-faq/#how-to-upgrade-a-bitnami-stack</a></li>
 <li><a href="http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements">http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements</a></li>
 </ol>
-</main>
+		</section>
 
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/redmine">redmine</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
 <script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
+        repo=""
         issue-term="title"
         label="💬comment"
         theme="github-light"
         crossorigin="anonymous"
         async>
 </script>
-
-
+		
+	</article>
+</main>
 <footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

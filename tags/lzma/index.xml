@@ -6,6 +6,7 @@
     <description>Recent content in lzma on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
+    <copyright>© Anthony</copyright>
     <lastBuildDate>Fri, 27 Jul 2012 18:31:25 +0800</lastBuildDate><atom:link href="/tags/lzma/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Flash Player 11.4 ByteArray压缩算法初探</title>
@@ -13,15 +14,7 @@
       <pubDate>Fri, 27 Jul 2012 18:31:25 +0800</pubDate>
       
       <guid>/posts/flash-player-11-4-bytearray-compression/</guid>
-      <description>Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。
-ByteArray “ByteArray 类提供用于优化读取、写入以及处理二进制数据的方法和属性。内存中的数据是一个压缩字节数组（数据类型的最紧凑表示形式），但可以使用标准 []（数组访问）运算符来操作 ByteArray 类的实例。也可以使用与 URLStream 和 Socket 类中的方法相类似的方法将它作为内存中的文件进行读取和写入。”
-“此外，还支持 zlib 压缩和解压缩，以及 Action Message Format (AMF) 对象序列化。”
-目前压缩/解压缩支持三种算法：CompressionAlgorithm. DEFLATE, CompressionAlgorithm. ZLIB, CompressionAlgorithm.LZMA(Flash Player 11.4)。
-压缩算法 DEFLATE DEFLATE是同时使用了LZ77 算法与哈夫曼编码(Huffman Coding) 的一个无损数据压缩算法。它最初是由Phil Katz为他的PKZIP归档工具第二版所定义的，后来定义在RFC 1951规范中。
-RFC：http://www.ietf.org/rfc/rfc1951.txt
-哈夫曼编码压缩算法的细节，可以参看这篇文章。
-ZLIB deflate 压缩算法用于多种压缩格式，如 zlib、gzip、一些 zip 实现等。在使用这些压缩格式之一压缩数据时，除了存储原始数据的压缩版本之外，压缩格式数据（例如 .zip 文件）还包括元数据信息。举例来说，各种文件格式中包括的元数据的类型有文件名、文件修改日期/时间、原始文件大小、可选的注释、校验和数据等。
-例如，在使用 zlib 算法压缩 ByteArray 时，将以特定的格式构建生成的 ByteArray。一些字节包含有关所压缩数据的元数据，而另一些字节包含原始 ByteArray 数据的实际压缩版本。根据 zlib 压缩数据格式规范的定义，这些字节（即包含原始数据的压缩版本的部分）使用 deflate 算法进行压缩。因此，这些字节与对原始 ByteArray 调用 compress( air. CompressionAlgorithm.DEFLATE) 所得的结果相同。但是，compress( air.CompressionAlgorithm.ZLIB) 生成的结果包括额外的元数据，而 compress(CompressionAlgorithm.DEFLATE) 生成的结果只包括原始 ByteArray 数据的压缩版本，没有任何其他内容。</description>
+      <description>Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。 ByteArray “ByteArray 类提供用于优化读取、写入以及处理二进</description>
     </item>
     
   </channel>

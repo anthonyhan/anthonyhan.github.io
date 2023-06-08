@@ -6,20 +6,12 @@
     <description>Recent content in Tags on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Sun, 23 Jan 2022 22:36:28 +0000</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>redmine</title>
-      <link>/tags/redmine/</link>
-      <pubDate>Sun, 23 Jan 2022 22:36:28 +0000</pubDate>
-      
-      <guid>/tags/redmine/</guid>
-      <description></description>
-    </item>
-    
+    <copyright>© Anthony</copyright>
+    <lastBuildDate>Tue, 19 Apr 2022 20:22:48 +0800</lastBuildDate><atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ai</title>
       <link>/tags/ai/</link>
-      <pubDate>Wed, 09 Oct 2019 20:22:48 +0800</pubDate>
+      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
       
       <guid>/tags/ai/</guid>
       <description></description>
@@ -28,7 +20,7 @@
     <item>
       <title>AltDevBlogADay</title>
       <link>/tags/altdevblogaday/</link>
-      <pubDate>Wed, 09 Oct 2019 20:22:48 +0800</pubDate>
+      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
       
       <guid>/tags/altdevblogaday/</guid>
       <description></description>
@@ -37,7 +29,7 @@
     <item>
       <title>behavior tree</title>
       <link>/tags/behavior-tree/</link>
-      <pubDate>Wed, 09 Oct 2019 20:22:48 +0800</pubDate>
+      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
       
       <guid>/tags/behavior-tree/</guid>
       <description></description>
@@ -46,7 +38,7 @@
     <item>
       <title>game ai</title>
       <link>/tags/game-ai/</link>
-      <pubDate>Wed, 09 Oct 2019 20:22:48 +0800</pubDate>
+      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
       
       <guid>/tags/game-ai/</guid>
       <description></description>
@@ -55,7 +47,7 @@
     <item>
       <title>game dev</title>
       <link>/tags/game-dev/</link>
-      <pubDate>Wed, 09 Oct 2019 20:22:48 +0800</pubDate>
+      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
       
       <guid>/tags/game-dev/</guid>
       <description></description>
@@ -64,7 +56,7 @@
     <item>
       <title>FSM</title>
       <link>/tags/fsm/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
       
       <guid>/tags/fsm/</guid>
       <description></description>
@@ -73,7 +65,7 @@
     <item>
       <title>GOAP</title>
       <link>/tags/goap/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
       
       <guid>/tags/goap/</guid>
       <description></description>
@@ -82,7 +74,7 @@
     <item>
       <title>HFSM</title>
       <link>/tags/hfsm/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
       
       <guid>/tags/hfsm/</guid>
       <description></description>
@@ -91,7 +83,7 @@
     <item>
       <title>learning</title>
       <link>/tags/learning/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
       
       <guid>/tags/learning/</guid>
       <description></description>
@@ -100,7 +92,7 @@
     <item>
       <title>navigation</title>
       <link>/tags/navigation/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
       
       <guid>/tags/navigation/</guid>
       <description></description>
@@ -109,7 +101,7 @@
     <item>
       <title>planning</title>
       <link>/tags/planning/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
       
       <guid>/tags/planning/</guid>
       <description></description>
@@ -118,9 +110,18 @@
     <item>
       <title>utility-based</title>
       <link>/tags/utility-based/</link>
-      <pubDate>Wed, 03 Apr 2019 00:36:28 +0000</pubDate>
+      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
       
       <guid>/tags/utility-based/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>redmine</title>
+      <link>/tags/redmine/</link>
+      <pubDate>Wed, 23 Jan 2019 22:36:28 +0000</pubDate>
+      
+      <guid>/tags/redmine/</guid>
       <description></description>
     </item>
     

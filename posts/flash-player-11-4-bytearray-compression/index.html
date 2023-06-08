@@ -1,38 +1,82 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Flash Player 11.4 ByteArray压缩算法初探 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Flash Player 11.4 ByteArray压缩算法初探 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。 ByteArray “ByteArray 类提供用于优化读取、写入以及处理二进" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="Flash Player 11.4 ByteArray压缩算法初探" />
+<meta property="og:description" content="Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。 ByteArray “ByteArray 类提供用于优化读取、写入以及处理二进" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/flash-player-11-4-bytearray-compression/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2012-07-27T18:31:25+08:00" />
+<meta property="article:modified_time" content="2012-07-27T18:31:25+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Flash Player 11.4 ByteArray压缩算法初探"/>
+<meta name="twitter:description" content="Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。 ByteArray “ByteArray 类提供用于优化读取、写入以及处理二进"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
 
-<div class="article-meta">
-<h1><span class="title">Flash Player 11.4 ByteArray压缩算法初探</span></h1>
+	
+	
 
-<h2 class="date">2012/07/27</h2>
-</div>
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
 <main>
-<p>Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。</p>
+	<article>
+		<div class="title">
+			<h1 class="title">Flash Player 11.4 ByteArray压缩算法初探</h1>
+			<div class="meta">Posted on Jul 27, 2012</div>
+		</div>
+		
+
+		<section class="body">
+			<p>Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。</p>
 <h2 id="bytearray">ByteArray</h2>
 <p>“ByteArray 类提供用于优化读取、写入以及处理二进制数据的方法和属性。内存中的数据是一个压缩字节数组（数据类型的最紧凑表示形式），但可以使用标准 []（数组访问）运算符来操作 ByteArray 类的实例。也可以使用与 URLStream 和 Socket 类中的方法相类似的方法将它作为内存中的文件进行读取和写入。”</p>
 <p>“此外，还支持 zlib 压缩和解压缩，以及 Action Message Format (AMF) 对象序列化。”</p>
@@ -118,26 +162,52 @@
 <li><a href="http://www.ietf.org/rfc/rfc1951.txt">http://www.ietf.org/rfc/rfc1951.txt</a></li>
 </ol>
 
-</main>
+		</section>
 
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/flash">flash</a></li>
+					
+					<li><a href="/tags/lzma">lzma</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
 <script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
+        repo=""
         issue-term="title"
         label="💬comment"
         theme="github-light"
         crossorigin="anonymous"
         async>
 </script>
-
-
+		
+	</article>
+</main>
 <footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

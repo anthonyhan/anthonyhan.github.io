@@ -2,71 +2,71 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/posts/debian-redmine-backup-and-restore/</loc>
-    <lastmod>2022-01-23T22:36:28+00:00</lastmod>
-  </url><url>
-    <loc>/</loc>
-    <lastmod>2022-01-23T22:36:28+00:00</lastmod>
-  </url><url>
-    <loc>/posts/</loc>
-    <lastmod>2022-01-23T22:36:28+00:00</lastmod>
-  </url><url>
-    <loc>/tags/redmine/</loc>
-    <lastmod>2022-01-23T22:36:28+00:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2022-01-23T22:36:28+00:00</lastmod>
-  </url><url>
     <loc>/tags/ai/</loc>
-    <lastmod>2019-10-09T20:22:48+08:00</lastmod>
+    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
   </url><url>
     <loc>/tags/altdevblogaday/</loc>
-    <lastmod>2019-10-09T20:22:48+08:00</lastmod>
+    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
   </url><url>
     <loc>/tags/behavior-tree/</loc>
-    <lastmod>2019-10-09T20:22:48+08:00</lastmod>
+    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
   </url><url>
     <loc>/tags/game-ai/</loc>
-    <lastmod>2019-10-09T20:22:48+08:00</lastmod>
+    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
   </url><url>
     <loc>/tags/game-dev/</loc>
-    <lastmod>2019-10-09T20:22:48+08:00</lastmod>
+    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
+  </url><url>
+    <loc>/posts/</loc>
+    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
   </url><url>
     <loc>/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/</loc>
-    <lastmod>2019-10-09T20:22:48+08:00</lastmod>
+    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
   </url><url>
     <loc>/posts/behavior-trees-in-gigantic/</loc>
-    <lastmod>2019-09-07T15:46:59+08:00</lastmod>
+    <lastmod>2021-09-07T15:46:59+08:00</lastmod>
   </url><url>
     <loc>/tags/fsm/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/goap/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/hfsm/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/learning/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/navigation/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/planning/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/utility-based/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/posts/the-total-beginners-guide-to-game-ai-part-3/</loc>
-    <lastmod>2019-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/posts/the-total-beginners-guide-to-game-ai-part-2/</loc>
-    <lastmod>2019-03-25T23:10:09+00:00</lastmod>
+    <lastmod>2021-03-25T23:10:09+00:00</lastmod>
   </url><url>
     <loc>/posts/the-total-beginners-guide-to-game-ai-part-1/</loc>
-    <lastmod>2019-03-20T20:30:43+00:00</lastmod>
+    <lastmod>2021-03-20T20:30:43+00:00</lastmod>
+  </url><url>
+    <loc>/posts/debian-redmine-backup-and-restore/</loc>
+    <lastmod>2019-01-23T22:36:28+00:00</lastmod>
+  </url><url>
+    <loc>/tags/redmine/</loc>
+    <lastmod>2019-01-23T22:36:28+00:00</lastmod>
   </url><url>
     <loc>/tags/game/</loc>
     <lastmod>2018-04-26T22:54:34+08:00</lastmod>
@@ -266,10 +266,10 @@
     <loc>/posts/flex3-tfs-reading-summary/</loc>
     <lastmod>2011-07-25T12:31:00+08:00</lastmod>
   </url><url>
-    <loc>/tags/notes/</loc>
+    <loc>/posts/flex3-tfs-notes-04/</loc>
     <lastmod>2011-07-18T22:23:56+08:00</lastmod>
   </url><url>
-    <loc>/posts/flex3-tfs-notes-04/</loc>
+    <loc>/tags/notes/</loc>
     <lastmod>2011-07-18T22:23:56+08:00</lastmod>
   </url><url>
     <loc>/posts/flex3-tfs-notes-03/</loc>

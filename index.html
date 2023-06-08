@@ -1,355 +1,292 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-	<meta name="generator" content="Hugo 0.96.0" />
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>LimboNova | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html>
+	<head>
+	<meta name="generator" content="Hugo 0.113.0">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>LimboNova | Home </title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Powered by Hugo." />
+	<meta property="og:image" content=""/>
+	<link rel="alternate" type="application/rss+xml" href="/index.xml" title="LimboNova" />
+	<meta property="og:title" content="LimboNova" />
+<meta property="og:description" content="Powered by Hugo." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LimboNova"/>
+<meta name="twitter:description" content="Powered by Hugo."/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
 
+	
+	
 
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
 
+	<body>
+		<div class="content">
+			<header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
-
-
+			
+			<main class="list">
+				<div class="site-description"><p>Seize the Day</p></div>
+				
+				
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/">面向对象的行为树不是面向数据的</a></h1>
+					<time>Apr 19, 2022</time>
+					<br><div class="description">
+	
+	<p>原文：<a href="https://jahej.com/alt/2011_03_10_shocker-naive-object-oriented-behavior-tree-isnt-data-oriented.html">Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)</a></p>
+<p>作者：<a href="http://bjoernknafla.com/">Bjoern Knafla</a></p>
+<p>文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。</p>
+<h2 id="背景">背景</h2>
+<p>简单的行为树可以使用面向对象方式来实现，如果性能满足需求，非常适合人手不多开发时间紧张的小型团队。</p>
+<p>简单实现如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BehaviorTreeNode</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState update() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">template</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ActionBehaviorTreeNode</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BehaviorTreeNode {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">explicit</span> ActionBehaviorTreeNode(ActionData <span style="color:#f92672">*</span>data);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Calls a certain member function of actor.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState <span style="color:#a6e22e">update</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Does nothing.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  ActionData <span style="color:#f92672">*</span>data;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SequenceBehaviorTreeNode</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BehaviorTreeNode {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Iterate through children, start from next to run until done or a child
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// returns that it is running.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Calls resetState for the next to run node as it might have returned a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// running state during the last update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Prepares to start from the first child on next update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  std<span style="color:#f92672">::</span>vector children; <span style="color:#75715e">// In sequence order.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  std<span style="color:#f92672">::</span>size_t nextChildToUpdateIndex;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PriorityBehaviorTreeNode</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BehaviorTreeNode {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Iterate through children, start from next to run until the first one
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// returns success or that it is running.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// If this child&#39;s index is lower than that of the previous one returning
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// running, rest the later child.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Calls resetState for the next to run child as it might have returned a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// running state during the last update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Prepares to start from the first child on next update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  std<span style="color:#f92672">::</span>vector children; <span style="color:#75715e">// In highest to lowest priority order.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  std<span style="color:#f92672">::</span>size_t nextChildToUpdateIndex;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ... and so on with other node types...
+</span></span></span></code></pre></div><p>Tony Albrecht 在 演讲 <a href="https://www.youtube.com/watch?v=VAT9E-M-PoE">Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube</a> 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/behavior-trees-in-gigantic/">Behavior Trees in Gigantic</a></h1>
+					<time>Sep 7, 2021</time>
+					<br><div class="description">
+	
+	偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。 背景 Gigantic是一个结合了PVE的5v5的多&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/behavior-trees-in-gigantic/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-3/">游戏AI入门指南(Part 3)</a></h1>
+					<time>Apr 3, 2021</time>
+					<br><div class="description">
+	
+	<h2 id="学习能力和适应能力">学习能力和适应能力</h2>
+<p>我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。</p>
+<h3 id="统计和概率">统计和概率</h3>
+<p>在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。</p>
+<p>但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的<a href="https://en.wikipedia.org/wiki/Moving_average">移动平均(windowed average)</a>，如只考虑最后20个数据点。</p>
+<p>假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！</p>
+<p>另一个有趣的方法是使用<a href="https://zh.wikipedia.org/zh-hans/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8">朴素贝叶斯分类器(Naive Bayes Classifier)</a>来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。</p>
+<p>使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-3/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-2/">游戏AI入门指南(Part 2)</a></h1>
+					<time>Mar 25, 2021</time>
+					<br><div class="description">
+	
+	<p><strong>原文：</strong> <a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&rsquo;s Guide to Game AI</a>
+<strong>作者：</strong> <a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer</a>
+<strong>译者：</strong> <a href="https://www.limbonova.com/about/#blog-author">Anthony Han</a></p>
+<h2 id="进阶决策">进阶决策</h2>
+<p>虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。</p>
+<h3 id="有限状态机">有限状态机</h3>
+<p>有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。</p>
+<p>这非常适用于游戏中的NPC。一个警卫可能具有以下状态：</p>
 <ul>
-  
-  
-  
-  <li>
-    <span class="date">2022/01/23</span>
-    <a href="/posts/debian-redmine-backup-and-restore/">Debian Redmine 备份与恢复</a>
-  </li>
-  
-  <li>
-    <span class="date">2019/10/09</span>
-    <a href="/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/">面向对象的行为树不是面向数据的</a>
-  </li>
-  
-  <li>
-    <span class="date">2019/09/07</span>
-    <a href="/posts/behavior-trees-in-gigantic/">Behavior Trees in Gigantic</a>
-  </li>
-  
-  <li>
-    <span class="date">2019/04/03</span>
-    <a href="/posts/the-total-beginners-guide-to-game-ai-part-3/">游戏AI入门指南(Part 3)</a>
-  </li>
-  
-  <li>
-    <span class="date">2019/03/25</span>
-    <a href="/posts/the-total-beginners-guide-to-game-ai-part-2/">游戏AI入门指南(Part 2)</a>
-  </li>
-  
-  <li>
-    <span class="date">2019/03/20</span>
-    <a href="/posts/the-total-beginners-guide-to-game-ai-part-1/">游戏AI入门指南(Part 1)</a>
-  </li>
-  
-  <li>
-    <span class="date">2018/04/26</span>
-    <a href="/posts/transistor-a-sonnet-to-cyberpunk/">晶体管：献给赛博朋克的十四行诗</a>
-  </li>
-  
-  <li>
-    <span class="date">2017/09/21</span>
-    <a href="/posts/setup-pixijs-with-typescript-using-webpack/">基于TypeScript的PixiJS开发环境设置（webpack篇）</a>
-  </li>
-  
-  <li>
-    <span class="date">2017/09/18</span>
-    <a href="/posts/setup-pixijs-with-typescript-using-browserify/">基于TypeScript的PixiJS开发环境设置（browserify篇）</a>
-  </li>
-  
-  <li>
-    <span class="date">2017/09/13</span>
-    <a href="/posts/behavior-trees-for-ai-how-they-work/">AI行为树的工作原理</a>
-  </li>
-  
-  <li>
-    <span class="date">2017/08/08</span>
-    <a href="/posts/asked-an-architect-about-the-game-prison-architect/">建筑师谈《监狱建筑师》</a>
-  </li>
-  
-  <li>
-    <span class="date">2016/12/02</span>
-    <a href="/posts/a-conversation-with-anders-hejlsberg/">Anders Hejlsberg谈C#、Java和C++中的泛型</a>
-  </li>
-  
-  <li>
-    <span class="date">2016/09/27</span>
-    <a href="/posts/bitnami-redmine-upgrade-guide/">Bitnami Redmine 升级简易指南</a>
-  </li>
-  
-  <li>
-    <span class="date">2016/08/18</span>
-    <a href="/posts/markdown-syntax-zhtw/">Markdown Syntax zhTW</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/07/12</span>
-    <a href="/posts/cascading-combobox-with-xml-dataprovider/">XML数据源的级联ComboBox</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/06/01</span>
-    <a href="/posts/tour-of-taihu-lake-day-3/">Tour of Taihu Lake Day 3</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/05/31</span>
-    <a href="/posts/tour-of-taihu-lake-day-2/">Tour of Taihu Lake: Day 2</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/05/30</span>
-    <a href="/posts/tour-of-taihu-lake-day-1/">Tour of Taihu Lake: Day 1</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/04/12</span>
-    <a href="/posts/ror-tutorial-review/">Ruby on Rails 入门体验</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/04/02</span>
-    <a href="/posts/image-dithering-algorithm-as3/">基于AS3.0的图像抖动实现</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/03/08</span>
-    <a href="/posts/convert-hsv-hsl-to-rgb/">HSV/HSL转换到RGB色彩空间</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/02/24</span>
-    <a href="/posts/cycling-log-chongyuan-temple/">重元寺骑行</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/02/20</span>
-    <a href="/posts/book-review-on-top-of-tides/">观潮与弄潮</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/02/17</span>
-    <a href="/posts/fix-nvidia-driver-on-kernel-3-7-7/">3.7.7内核的nVidia驱动安装</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/01/24</span>
-    <a href="/posts/install-nvidia-driver-on-fedora/">在Fedora上安装nVidia显卡驱动程序</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/01/20</span>
-    <a href="/posts/install-ruby-on-rails-on-fedora/">在Fedora上安装Ruby on Rails</a>
-  </li>
-  
-  <li>
-    <span class="date">2013/01/03</span>
-    <a href="/posts/visioning-games-from-dear-esther-and-journey/">从《Dear Esther》和《Journey》看当今游戏发展</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/12/31</span>
-    <a href="/posts/less-is-more-dear-esther-review/">Less is more : Dear Esther 简评</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/09/27</span>
-    <a href="/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/">Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/09/26</span>
-    <a href="/posts/gif-animation-in-flash-player/">在 Flash Player 中显示GIF动画</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/09/20</span>
-    <a href="/posts/gif-format-and-lzw/">GIF 格式及LZW算法浅析</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/08/31</span>
-    <a href="/posts/asc2-release-notes/">Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/08/19</span>
-    <a href="/posts/connecting-your-kindle-fire-to-adb/">连接Kindle Fire到ADB(实体机调试)</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/08/14</span>
-    <a href="/posts/similar-image-searching-algorithm-as3/">基于AS3.0的相似图像搜索算法实现</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/08/05</span>
-    <a href="/posts/actionscript-3-0-closure/">ActionScript 3.0 闭包及作用域</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/07/31</span>
-    <a href="/posts/actionscript3-inheritance-mechanism/">ActionScript3的继承机制</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/07/27</span>
-    <a href="/posts/flash-player-11-4-bytearray-compression/">Flash Player 11.4 ByteArray压缩算法初探</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/07/23</span>
-    <a href="/posts/flash-builder-plugins/">Flash Builder 插件</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/07/11</span>
-    <a href="/posts/native-mouse-cursors-in-flash/">Flash中使用原生鼠标指针</a>
-  </li>
-  
-  <li>
-    <span class="date">2012/07/09</span>
-    <a href="/posts/apache-flex-4-8-0-news-trial/">Apache Flex 4.8.0 近况及试用</a>
-  </li>
-  
-  <li>
-    <span class="date">2011/08/01</span>
-    <a href="/posts/flex-4-fun-reading-notes/">Flex 4 Fun Reading Notes</a>
-  </li>
-  
-  <li>
-    <span class="date">2011/07/25</span>
-    <a href="/posts/flex3-tfs-reading-summary/">《Flex3权威指南》阅读总结</a>
-  </li>
-  
-  <li>
-    <span class="date">2011/07/18</span>
-    <a href="/posts/flex3-tfs-notes-04/">《Flex3权威指南》学习笔记 04</a>
-  </li>
-  
-  <li>
-    <span class="date">2011/07/06</span>
-    <a href="/posts/flex3-tfs-notes-03/">《Flex3权威指南》学习笔记 03</a>
-  </li>
-  
-  <li>
-    <span class="date">2011/07/05</span>
-    <a href="/posts/flex3-tfs-notes-02/">《Flex3权威指南》学习笔记 02</a>
-  </li>
-  
-  <li>
-    <span class="date">2011/07/04</span>
-    <a href="/posts/flex3-tfs-notes-01/">《Flex3权威指南》学习笔记 01</a>
-  </li>
-  
-  <li>
-    <span class="date">2011/06/28</span>
-    <a href="/posts/the-best-of-youth/">绽放的青春，灿烂的人生</a>
-  </li>
-  
-  <li>
-    <span class="date">2011/03/05</span>
-    <a href="/posts/story-behind-balsamiq-mockups/">Balsamiq Mockups 的幕后故事</a>
-  </li>
-  
-  <li>
-    <span class="date">2011/02/28</span>
-    <a href="/posts/balsamiq-mockups/">原型设计工具 Balsamiq Mockups</a>
-  </li>
-  
-  <li>
-    <span class="date">2011/02/26</span>
-    <a href="/posts/do-requirement-analysis-using-personalbrain/">使用思维导图工具 PersonalBrain 进行需求分析</a>
-  </li>
-  
-  <li>
-    <span class="date">2008/07/16</span>
-    <a href="/posts/grizzly-man/">Grizzly Man</a>
-  </li>
-  
-  <li>
-    <span class="date">2008/05/23</span>
-    <a href="/posts/progressive-china/">行进中的中国</a>
-  </li>
-  
-  <li>
-    <span class="date">2008/01/06</span>
-    <a href="/posts/southern-weekly-the-system/">南方周末：《系统》[转载]</a>
-  </li>
-  
-  <li>
-    <span class="date">2007/11/06</span>
-    <a href="/posts/story-of-planescape-torment/">PlaneScape:Torment的故事[转载]</a>
-  </li>
-  
-  <li>
-    <span class="date">2006/10/11</span>
-    <a href="/posts/cancel-tcm-innovation-or-farce/">取消中医中药，革新还是闹剧？</a>
-  </li>
-  
-  <li>
-    <span class="date">2006/09/02</span>
-    <a href="/posts/silent-hill-the-movie-review/">看罢电影《寂静岭》</a>
-  </li>
-  
-  <li>
-    <span class="date">2006/09/01</span>
-    <a href="/posts/redemption-of-a-gangster/">黑帮暴徒的救赎</a>
-  </li>
-  
-  <li>
-    <span class="date">2005/11/09</span>
-    <a href="/posts/about-v/">About V</a>
-  </li>
-  
-  <li>
-    <span class="date">2005/11/08</span>
-    <a href="/posts/final-fantasy-vii-advent-children/">Final Fantasy VII - Advent Children</a>
-  </li>
-  
-  <li>
-    <span class="date">2005/11/07</span>
-    <a href="/posts/about-something/">Something</a>
-  </li>
-  
-  <li>
-    <span class="date">2005/10/15</span>
-    <a href="/posts/a-very-long-engagement/">A Very Long Engagement</a>
-  </li>
-  
+<li>巡逻</li>
+<li>攻击</li>
+<li>逃跑</li>
+</ul>
+<p>当状态改变时，你可能会想到这些规则：</p>
+<ul>
+<li>如果警卫看到敌人，就立即攻击</li>
+<li>如果警卫正在攻击但无法再看到敌人，那么返回巡逻</li>
+<li>如果警卫正在攻击但受了重伤，那么开始逃跑</li>
+</ul>
+<p>这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：</p>
+<ul>
+<li>空闲（巡逻期间）</li>
+<li>搜寻（刚才发现的敌人躲起来时）</li>
+<li>求助（发现敌人，但因为敌人太强而无法独自作战时）</li>
+</ul>
+<p>通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。</p>
+<p>如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-2/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-1/">游戏AI入门指南(Part 1)</a></h1>
+					<time>Mar 20, 2021</time>
+					<br><div class="description">
+	
+	<p><strong>原文：</strong> <a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&rsquo;s Guide to Game AI</a>
+<strong>作者：</strong> <a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer</a>
+<strong>译者：</strong> <a href="https://www.limbonova.com/about/#blog-author">Anthony Han</a></p>
+<blockquote>
+<p>这是一篇非常好的综述类文章，对当今的游戏AI常用技术和实现方法做了简单介绍，参考了近年来的 Game AI Pro 系列。虽然不及论文那样严谨，但全文条理清晰，通俗易懂。确实是一篇入门指南佳作。花了点业余时间翻译出来，为了分享，也希望能温故知新。</p>
+</blockquote>
+<h2 id="引言">引言</h2>
+<p>本文将介绍游戏人工智能（或简称“游戏AI”）的入门概念，让读者了解使用哪些方法来处理AI问题，它们如何协同工作以及如何使用相应的语言或引擎来实现。</p>
+<p>我们假设你具备电子游戏的基本知识，并掌握几何，三角函数等数学概念。大多数代码示例为伪代码，因此不需要特定的编程语言知识。</p>
+<h2 id="什么是游戏ai">什么是游戏AI?</h2>
+<p>游戏AI主要关注实体根据当前条件所采取的行动。这就是传统人工智能文献所指的控制“<a href="https://en.wikipedia.org/wiki/Intelligent_agent">智能代理</a>”，代理通常是游戏中的角色，但也可以是车辆，机器人。或者更抽象的东西，例如一组实体，甚至一个国家或文明。智能代理需要在各种情况下观察周围环境，依此做出决策，并采取行动。这就是所谓的“感知/思考/行动(Sense/Think/Act)”循环：</p>
+<ul>
+<li>感知：代理侦测到或被告知环境中可能影响其行为的事物（例如：附近的威胁，要收集的物品，要调查的兴趣点）。</li>
+<li>思考：代理决定采取的应对措施（例如：考虑是否足够安全来收集物品，或者决定应该先集中精力战斗还是躲藏）。</li>
+<li>行动：代理将先前的决定付诸行动（例如：沿着通向敌人或物品等的路径移动）。由于代理做出了行动，形势已经改变，因此再次重复循环。</li>
+</ul>
+<p>现实世界中的AI，特别是成为新闻热点的那些，通常主要关注循环中的“感知”部分。例如，自动驾驶汽车拍摄道路的图像，结合其他数据（例如雷达和光达），并分析所看到的状况。这个过程一般是通过机器学习来完成，机器学习尤其擅长这方面，获取大量现实世界中有噪声的数据（如汽车前方的道路照片或视频）并加以分析理解，提取诸如“前方20码处有一辆汽车”这类的语义信息。这些被称为“<a href="https://zh.wikipedia.org/wiki/%E7%BB%9F%E8%AE%A1%E5%88%86%E7%B1%BB">分类问题</a>”。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-1/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/debian-redmine-backup-and-restore/">Debian Redmine 备份与恢复</a></h1>
+					<time>Jan 23, 2019</time>
+					<br><div class="description">
+	
+	几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Do&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/debian-redmine-backup-and-restore/">Read more ⟶</a>
+				</section>
+				
+				
+
+<ul class="pagination">
+	<span class="page-item page-prev">
+	
+	</span>
+	<span class="page-item page-next">
+	
+    <a href="/page/2/" class="page-link" aria-label="Next"><span aria-hidden="true">Next →</span></a>
+	
+	</span>
 </ul>
 
-<footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
 
+			</main>
+			<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script>
+		</div>
+		
+	</body>
+</html>

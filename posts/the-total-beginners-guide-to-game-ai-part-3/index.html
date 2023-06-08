@@ -1,38 +1,103 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>游戏AI入门指南(Part 3) | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>游戏AI入门指南(Part 3) - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="学习能力和适应能力
+我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。
+统计和概率
+在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。
+但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的移动平均(windowed average)，如只考虑最后20个数据点。
+假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！
+另一个有趣的方法是使用朴素贝叶斯分类器(Naive Bayes Classifier)来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。
+使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="游戏AI入门指南(Part 3)" />
+<meta property="og:description" content="学习能力和适应能力
+我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。
+统计和概率
+在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。
+但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的移动平均(windowed average)，如只考虑最后20个数据点。
+假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！
+另一个有趣的方法是使用朴素贝叶斯分类器(Naive Bayes Classifier)来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。
+使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/the-total-beginners-guide-to-game-ai-part-3/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-04-03T00:36:28+00:00" />
+<meta property="article:modified_time" content="2021-04-03T00:36:28+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="游戏AI入门指南(Part 3)"/>
+<meta name="twitter:description" content="学习能力和适应能力
+我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。
+统计和概率
+在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。
+但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的移动平均(windowed average)，如只考虑最后20个数据点。
+假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！
+另一个有趣的方法是使用朴素贝叶斯分类器(Naive Bayes Classifier)来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。
+使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
 
-<div class="article-meta">
-<h1><span class="title">游戏AI入门指南(Part 3)</span></h1>
+	
+	
 
-<h2 class="date">2019/04/03</h2>
-</div>
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
 <main>
-<h2 id="学习能力和适应能力">学习能力和适应能力</h2>
+	<article>
+		<div class="title">
+			<h1 class="title">游戏AI入门指南(Part 3)</h1>
+			<div class="meta">Posted on Apr 3, 2021</div>
+		</div>
+		
+
+		<section class="body">
+			<h2 id="学习能力和适应能力">学习能力和适应能力</h2>
 <p>我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。</p>
 <h3 id="统计和概率">统计和概率</h3>
 <p>在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。</p>
@@ -485,27 +550,70 @@
 <li><a href="https://book.douban.com/subject/25796281">人工智能：一种现代的方法</a>，这是了解人工智能通用领域的标准教科书之一。这本书不是专门针对游戏的，而且很多内容比较难懂，但是它对人工智能领域作了一个非常赞的总览，并介绍了许多游戏AI的基础知识。</li>
 </ul>
 <p>除此之外，还有一些由行业专家撰写的关于通用游戏AI的优秀书籍，很难一一列举，你可以阅读相关书评并选择适合自己的书。</p>
+		</section>
 
-</main>
-
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/ai">ai</a></li>
+					
+					<li><a href="/tags/game-dev">game dev</a></li>
+					
+					<li><a href="/tags/game-ai">game ai</a></li>
+					
+					<li><a href="/tags/fsm">FSM</a></li>
+					
+					<li><a href="/tags/hfsm">HFSM</a></li>
+					
+					<li><a href="/tags/behavior-tree">behavior tree</a></li>
+					
+					<li><a href="/tags/utility-based">utility-based</a></li>
+					
+					<li><a href="/tags/goap">GOAP</a></li>
+					
+					<li><a href="/tags/navigation">navigation</a></li>
+					
+					<li><a href="/tags/planning">planning</a></li>
+					
+					<li><a href="/tags/learning">learning</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
 <script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
+        repo=""
         issue-term="title"
         label="💬comment"
         theme="github-light"
         crossorigin="anonymous"
         async>
 </script>
-
-
+		
+	</article>
+</main>
 <footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

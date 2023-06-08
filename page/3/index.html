@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta name="generator" content="Hugo 0.113.0">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>LimboNova | Home </title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Powered by Hugo." />
+	<meta property="og:image" content=""/>
+	<link rel="alternate" type="application/rss+xml" href="/index.xml" title="LimboNova" />
+	<meta property="og:title" content="LimboNova" />
+<meta property="og:description" content="Powered by Hugo." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LimboNova"/>
+<meta name="twitter:description" content="Powered by Hugo."/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+
+	<body>
+		<div class="content">
+			<header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+			
+			<main class="list">
+				<div class="site-description"><p>Seize the Day</p></div>
+				
+				
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/bitnami-redmine-upgrade-guide/">Bitnami Redmine 升级简易指南</a></h1>
+					<time>Sep 27, 2016</time>
+					<br><div class="description">
+	
+	<p>顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。</p>
+<h2 id="系统需求">系统需求</h2>
+<p>适用于Windows平台的 Bitnami Redmine 2.x+ 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表</p>
+<table>
+<thead>
+<tr>
+<th>Redmine version</th>
+<th>Supported Ruby versions</th>
+<th>Rails version used</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.3, current trunk</td>
+<td>ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3</td>
+<td>Rails 4.2</td>
+</tr>
+<tr>
+<td>3.2, 3.1</td>
+<td>ruby 1.9.3, 2.0.0, 2.1, 2.21</td>
+<td>Rails 4.2</td>
+</tr>
+</tbody>
+</table>
+<p>Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.
+Redmine does not support JRuby because some gems do not support Rails 4.2.
+细节参看 <a href="http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements">Requirements</a></p>
+<h2 id="备份数据">备份数据</h2>
+<h3 id="bitnami-stack">Bitnami Stack</h3>
+<p>若使用 Bitnami 集成包，可以直接备份整个目录即可。</p>
+<h3 id="redmine">Redmine</h3>
+<p>若只升级 Redmine 则先确认系统需求然后执行备份。</p>
+<h4 id="备份文件">备份文件</h4>
+<p>最好备份整个 redmine 目录，主要包括</p>
+<ul>
+<li>上传文件(apps\redmine\htdocs\files)</li>
+<li>插件(apps\redmine\htdocs\plugins)</li>
+<li>主题(apps\redmine\htdocs\themes)</li>
+<li>配置文件(apps\redmine\htdocs\config)</li>
+</ul>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/bitnami-redmine-upgrade-guide/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/markdown-syntax-zhtw/">Markdown Syntax zhTW</a></h1>
+					<time>Aug 18, 2016</time>
+					<br><div class="description">
+	
+	NOTE: This is Traditional Chinese Edition Document of Markdown Syntax. If you are seeking for English Edition Document. Please refer to Markdown: Syntax. Markdown: Syntax 概述 哲學 行內 HTML 特殊字元自動轉換 區塊元素 段落和換行 標題 區塊引言 清單 程式碼區塊 分隔線 區段元素 連&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/markdown-syntax-zhtw/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/cascading-combobox-with-xml-dataprovider/">XML数据源的级联ComboBox</a></h1>
+					<time>Jul 12, 2013</time>
+					<br><div class="description">
+	
+	<h2 id="background">Background</h2>
+<p>要做一个表单，其中自然少不了ComboBox，数据源不是从后台动态获取的，竟然是一个Excel表格文件！这个数据量很大，而且还有可能会修改，所以只能采用外部加载的方式。写一个解析Excel数据的库自然是不现实的，所以决定把Excel转换成XML格式，然后再加载。</p>
+<h2 id="excel转换成xml">Excel转换成XML</h2>
+<p>一般直接将Excel是不能导出成XML的，因为“不包含任何XML映射”，所以首先需要建立一个XML映射，其实就是设计一个XML结构，然后将Excel数据映射到对应的节点上。这一步其实很简单，但是颇具技巧性。</p>
+<h3 id="开发工具选项卡">“开发工具”选项卡</h3>
+<p>导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-&ldquo;选项&rdquo;-“自定义功能区”对话框，勾选“开发工具”。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/cascading-combobox-with-xml-dataprovider/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/tour-of-taihu-lake-day-3/">Tour of Taihu Lake Day 3</a></h1>
+					<time>Jun 1, 2013</time>
+					<br><div class="description">
+	
+	<h2 id="概况">概况</h2>
+<p><strong>目标：</strong> 无锡市区 - 苏州园区
+<strong>日期：</strong> 2013年5月27日
+<strong>天气：</strong> 阴转多云
+<strong>路线：</strong> 清宁大桥 → 运河西路 → S230省道 → 舟山路 → 望湖大道 → X204县道（环太湖大道） → 太湖大桥 → 太湖公园 → X206（胥香路） → X206（孙武路） → X206（中山东路） → 苏福路 → 南环路 → 通园路</p>
+<h2 id="行程">行程</h2>
+<p>晚上和同学聊到一点多，早上醒来已经九点半，他已经去上班了，我便收拾好行李就离开了。去了他昨天介绍的早点店吃早饭，店家比较谦虚，写着一两4只的小笼包，我要了二两，端上来一看，恐怕一只就有一两了。酸辣汤勾芡稠度正好，味道也不错，喝了满满一大碗。可惜没吃到无锡的开洋馄饨，等下次有机会了。</p>
+<p><img src="https://lh3.googleusercontent.com/-JI2hwC_99oE/UayEPItuwaI/AAAAAAAAAMo/ZAyiRgsU0J0/s800/IMGP0782.jpg" alt="Alt text"></p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/tour-of-taihu-lake-day-3/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/tour-of-taihu-lake-day-2/">Tour of Taihu Lake: Day 2</a></h1>
+					<time>May 31, 2013</time>
+					<br><div class="description">
+	
+	<h2 id="概况">概况</h2>
+<p><strong>目标：</strong> 宜兴丁山 - 无锡市区
+<strong>日期：</strong> 2013年5月26日
+<strong>天气：</strong> 阵雨，大风
+<strong>路线：</strong> 公园东路 → 汤蜀路 → 方溪路 → S230省道 → 分百路 → 环湖线 → 雪马路 → 梅梁路 → 连峰路 → 环山西路 → 龙头渚自然公园 → 七里风光堤 → 环山东路 → 十里明珠堤 → 湖山路（神骏桥） → S230省道（环太湖公路） → 梅园 → 运河西路 → 清宁大桥</p>
+<h2 id="行程">行程</h2>
+<p>因为密切关注天气情况，知道今天要下雨。七点一刻起床时发现还没有下雨，喜出望外，赶紧吃了早饭收拾好行李。结果没骑200米就下起小雨来，好在车包和背包都有防雨罩。但是我没带雨衣，路上也没找到卖的，只好一路冒雨前行。从丁山龙溪公园出发，一路沿着方溪路向东骑行。逆风又淋雨的滋味真是不好受，但是一旦自己决定开始这段旅程，就不能抱怨这路上的苦。相比昨天，至少今天不用担心烈日造成的高温和晒伤了。大约15分钟后上了S230省道，逆风转为侧风，雨也停了，此时窃喜，觉得今天是最佳的骑行时间，真是太幸福了。</p>
+<p><img src="https://lh4.googleusercontent.com/-bcOmjbf5GZo/UayD-be639I/AAAAAAAAAKM/ARmI3AwmKXs/s800/IMGP0746.jpg" alt="补胎大桥"></p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/tour-of-taihu-lake-day-2/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/tour-of-taihu-lake-day-1/">Tour of Taihu Lake: Day 1</a></h1>
+					<time>May 30, 2013</time>
+					<br><div class="description">
+	
+	<h2 id="概况">概况</h2>
+<p><strong>目标：</strong> 苏州园区 - 宜兴丁山
+<strong>日期：</strong> 2013年5月25日
+<strong>天气：</strong> 晴
+<strong>路线：</strong> 通园路 → 南环高架 → 友新路 → 吴江太湖大桥 → S230省道 → 庙港大桥 →莘七线（沿湖东路） → 莘七线（沿湖西路）→ 莘七线（国富大道）→ 环太湖路 → 滨湖大桥 → 小梅大桥 → 太湖路 → 湖州太湖度假区（太湖乐园） → 滨湖大道 → 夹浦镇（夹浦派出所） → G104国道（发展大道） → 龙溪公园</p>
+<p><strong>装备</strong></p>
+<ul>
+<li>衣：骑行衣裤×2（身上穿1套），头盔×1（装上帽檐），手套×2，袜子×3，骑行雨衣（忘带了，夏天问题不大）；</li>
+<li>食：士力架×2，压缩饼干×2，饮用水×2；</li>
+<li>住：旅馆投宿，只需带基本洗漱用品即可，防晒霜；</li>
+<li>行：单车一辆（这不是废话么），备胎2条，补胎工具，撬胎棒，六角扳手，打气筒，瑞士军刀，骑行背包/驮包，车前包，车管包，码表；</li>
+<li>用：钱包，钥匙，手机，相机，Kindle，备用电池，各种充电器，笔记本，笔，打印好的路书；</li>
+<li>药：创可贴，消炎药，感冒药，清凉油，龙虎人丹。</li>
+</ul>
+<p>** 默念三遍：遵守交通，出入平安 **</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/tour-of-taihu-lake-day-1/">Read more ⟶</a>
+				</section>
+				
+				
+
+<ul class="pagination">
+	<span class="page-item page-prev">
+	
+    <a href="/page/2/" class="page-link" aria-label="Previous"><span aria-hidden="true">← Prev</span></a>
+	
+	</span>
+	<span class="page-item page-next">
+	
+    <a href="/page/4/" class="page-link" aria-label="Next"><span aria-hidden="true">Next →</span></a>
+	
+	</span>
+</ul>
+
+
+			</main>
+			<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script>
+		</div>
+		
+	</body>
+</html>

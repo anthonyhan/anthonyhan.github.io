@@ -1,38 +1,313 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GIF 格式及LZW算法浅析 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>GIF 格式及LZW算法浅析 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。
+花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
+GIF概述
+Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。
+GIF主要分为两个版本，即GIF 87a和GIF 89a：
+GIF 87a：是在1987年制定的版本；
+GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。
+GIF格式结构
+GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。
+结构组成
+结构如下表所示：
 
-<div class="article-meta">
-<h1><span class="title">GIF 格式及LZW算法浅析</span></h1>
 
-<h2 class="date">2012/09/20</h2>
-</div>
+
+
+
+
+
+
+
+
+Header
+Header
+Header
+
+
+Logical Screen Descriptor
+Screen Descriptor Block
+GIF Data Stream
+
+
+Global Color Table
+Global Color Table(optional)
+
+
+
+Application Extension
+Extension Blocks(optional, repeated)
+
+
+
+Graphic Control Extension*
+
+
+
+
+…
+
+
+
+
+Image Descriptor
+Image Blocks(repeated)
+
+
+
+Local Color Table
+
+
+
+
+Table Based Image Data
+
+
+
+
+…
+Extension Blocks(optional, repeated)
+
+
+
+Trailer
+Trailer
+Trailer
+
+
+" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="GIF 格式及LZW算法浅析" />
+<meta property="og:description" content="前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。
+花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。
+
+GIF概述
+Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。
+GIF主要分为两个版本，即GIF 87a和GIF 89a：
+GIF 87a：是在1987年制定的版本；
+GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。
+GIF格式结构
+GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。
+结构组成
+结构如下表所示：
+
+
+
+
+
+
+
+
+
+
+Header
+Header
+Header
+
+
+Logical Screen Descriptor
+Screen Descriptor Block
+GIF Data Stream
+
+
+Global Color Table
+Global Color Table(optional)
+
+
+
+Application Extension
+Extension Blocks(optional, repeated)
+
+
+
+Graphic Control Extension*
+
+
+
+
+…
+
+
+
+
+Image Descriptor
+Image Blocks(repeated)
+
+
+
+Local Color Table
+
+
+
+
+Table Based Image Data
+
+
+
+
+…
+Extension Blocks(optional, repeated)
+
+
+
+Trailer
+Trailer
+Trailer
+
+
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/gif-format-and-lzw/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2012-09-20T18:20:14+08:00" />
+<meta property="article:modified_time" content="2012-09-20T18:20:14+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="GIF 格式及LZW算法浅析"/>
+<meta name="twitter:description" content="前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。
+花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。
+
+GIF概述
+Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。
+GIF主要分为两个版本，即GIF 87a和GIF 89a：
+GIF 87a：是在1987年制定的版本；
+GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。
+GIF格式结构
+GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。
+结构组成
+结构如下表所示：
+
+
+
+
+
+
+
+
+
+
+Header
+Header
+Header
+
+
+Logical Screen Descriptor
+Screen Descriptor Block
+GIF Data Stream
+
+
+Global Color Table
+Global Color Table(optional)
+
+
+
+Application Extension
+Extension Blocks(optional, repeated)
+
+
+
+Graphic Control Extension*
+
+
+
+
+…
+
+
+
+
+Image Descriptor
+Image Blocks(repeated)
+
+
+
+Local Color Table
+
+
+
+
+Table Based Image Data
+
+
+
+
+…
+Extension Blocks(optional, repeated)
+
+
+
+Trailer
+Trailer
+Trailer
+
+
+"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
 <main>
-<p>前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。</p>
+	<article>
+		<div class="title">
+			<h1 class="title">GIF 格式及LZW算法浅析</h1>
+			<div class="meta">Posted on Sep 20, 2012</div>
+		</div>
+		
+
+		<section class="body">
+			<p>前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。</p>
 <p>花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。</p>
 <p><img src="/images/diego.gif" alt="gif sample" title="GIF 多帧动画"></p>
 <h2 id="gif概述">GIF概述</h2>
@@ -841,26 +1116,54 @@ Trailer：表示GIF文件的结尾，它包含一个固定的数值：0x3B。
 <li><a href="http://www.chinaai.org/ip/image-processing/lzw-gif.html">http://www.chinaai.org/ip/image-processing/lzw-gif.html</a></li>
 <li>Terry Welch, <a href="http://www.cs.duke.edu/courses/spring03/cps296.5/papers/welch_1984_technique_for.pdf">&ldquo;A Technique for High-Performance Data Compression&rdquo;</a>, IEEE Computer, June 1984, p. 8–19</li>
 </ol>
-</main>
+		</section>
 
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/algorithm">algorithm</a></li>
+					
+					<li><a href="/tags/gif">gif</a></li>
+					
+					<li><a href="/tags/lzw">lzw</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
 <script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
+        repo=""
         issue-term="title"
         label="💬comment"
         theme="github-light"
         crossorigin="anonymous"
         async>
 </script>
-
-
+		
+	</article>
+</main>
 <footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

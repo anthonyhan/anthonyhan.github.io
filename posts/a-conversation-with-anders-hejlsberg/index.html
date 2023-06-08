@@ -1,38 +1,127 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="标题： Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型
+译者： lover_P
+原文： Generics in C#, Java, and C&#43;&#43;: A Conversation with Anders Hejlsberg, Part VII
+作者： Bill Venners、Bruce Eckel
+人物介绍
+Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读作：C-Sharp）程序设计语言。Hejlsberg第一次登上软件界历史舞台是在80年代早期，因为他为MS-DOS和CP/M设计了Pascal编译器。当时，还是一个小公司的Borland很快雇用了他，并买下了他的编译器，改称Turbo Pascal。在Borland，Hejlsberg继续开发Turbo Pascal，并最终带领他的小组设计了Turbo Pascal的替代品：Delphi。1996年，在进入Borland 13年后，Hejlsberg加入了微软。最初，他做Visual J&#43;&#43;和Windows Fundatioin Classes（WFC）的架构师。随后，Hejlsberg成为C#的首席设计师和.NET Framework的关键参与者。目前，Anders Hejlsberg还在领导着C#程序设计语言的继续开发。
+Bruce Eckel，Think in C&#43;&#43;（C&#43;&#43;编程思想）和Think in Java（Java编程思想）的作者。
+Bill Venners，Artima.com的主编。
+内容
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
+泛型概述
+C#中的泛型
+C#泛型和java泛型的比较
+C#泛型和C&#43;&#43;模板的比较
+C#泛型中的约束
+" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型" />
+<meta property="og:description" content="标题： Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型
+译者： lover_P
+原文： Generics in C#, Java, and C&#43;&#43;: A Conversation with Anders Hejlsberg, Part VII
+作者： Bill Venners、Bruce Eckel
+人物介绍
+Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读作：C-Sharp）程序设计语言。Hejlsberg第一次登上软件界历史舞台是在80年代早期，因为他为MS-DOS和CP/M设计了Pascal编译器。当时，还是一个小公司的Borland很快雇用了他，并买下了他的编译器，改称Turbo Pascal。在Borland，Hejlsberg继续开发Turbo Pascal，并最终带领他的小组设计了Turbo Pascal的替代品：Delphi。1996年，在进入Borland 13年后，Hejlsberg加入了微软。最初，他做Visual J&#43;&#43;和Windows Fundatioin Classes（WFC）的架构师。随后，Hejlsberg成为C#的首席设计师和.NET Framework的关键参与者。目前，Anders Hejlsberg还在领导着C#程序设计语言的继续开发。
+Bruce Eckel，Think in C&#43;&#43;（C&#43;&#43;编程思想）和Think in Java（Java编程思想）的作者。
+Bill Venners，Artima.com的主编。
+内容
 
-<div class="article-meta">
-<h1><span class="title">Anders Hejlsberg谈C#、Java和C++中的泛型</span></h1>
+泛型概述
+C#中的泛型
+C#泛型和java泛型的比较
+C#泛型和C&#43;&#43;模板的比较
+C#泛型中的约束
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/a-conversation-with-anders-hejlsberg/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2016-12-02T18:12:31+08:00" />
+<meta property="article:modified_time" content="2016-12-02T18:12:31+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型"/>
+<meta name="twitter:description" content="标题： Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型
+译者： lover_P
+原文： Generics in C#, Java, and C&#43;&#43;: A Conversation with Anders Hejlsberg, Part VII
+作者： Bill Venners、Bruce Eckel
+人物介绍
+Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读作：C-Sharp）程序设计语言。Hejlsberg第一次登上软件界历史舞台是在80年代早期，因为他为MS-DOS和CP/M设计了Pascal编译器。当时，还是一个小公司的Borland很快雇用了他，并买下了他的编译器，改称Turbo Pascal。在Borland，Hejlsberg继续开发Turbo Pascal，并最终带领他的小组设计了Turbo Pascal的替代品：Delphi。1996年，在进入Borland 13年后，Hejlsberg加入了微软。最初，他做Visual J&#43;&#43;和Windows Fundatioin Classes（WFC）的架构师。随后，Hejlsberg成为C#的首席设计师和.NET Framework的关键参与者。目前，Anders Hejlsberg还在领导着C#程序设计语言的继续开发。
+Bruce Eckel，Think in C&#43;&#43;（C&#43;&#43;编程思想）和Think in Java（Java编程思想）的作者。
+Bill Venners，Artima.com的主编。
+内容
 
-<h2 class="date">2016/12/02</h2>
-</div>
+泛型概述
+C#中的泛型
+C#泛型和java泛型的比较
+C#泛型和C&#43;&#43;模板的比较
+C#泛型中的约束
+"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
 <main>
-<p><strong>标题：</strong> <a href="http://www.cstc.net.cn/docs/docs.php?id=258">Anders Hejlsberg谈C#、Java和C++中的泛型</a>
+	<article>
+		<div class="title">
+			<h1 class="title">Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型</h1>
+			<div class="meta">Posted on Dec 2, 2016</div>
+		</div>
+		
+
+		<section class="body">
+			<p><strong>标题：</strong> <a href="http://www.cstc.net.cn/docs/docs.php?id=258">Anders Hejlsberg谈C#、Java和C++中的泛型</a>
 <strong>译者：</strong> lover_P</p>
 <p><strong>原文：</strong> <a href="http://www.artima.com/intv/generics.html">Generics in C#, Java, and C++: A Conversation with Anders Hejlsberg, Part VII</a>
 <strong>作者：</strong> Bill Venners、Bruce Eckel</p>
@@ -97,26 +186,58 @@ Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读�
 <p>Anders Hejlsberg：是的。这有些像工厂模式，还有很多方法可以做到，这也许不是你最喜欢的方法，但做任何事情都要付出代价。</p>
 <p>Bruce Eckel： 是呀，我开始认为C++模板是一种弱类型机制。而当你想其中添加了约束后，你从弱类型走向了强类型。但这一定会带来更多的复杂性。这就是代价吧。</p>
 <p>Anders Hejlsberg： 关于类型你可以认为它是一个标尺。这个标尺定得越高，程序员的日子就会越不好过，但更高的安全性随之而来。但你可以把这个标尺向任何一个方向调节。</p>
-</main>
+		</section>
 
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/programming">programming</a></li>
+					
+					<li><a href="/tags/generics">generics</a></li>
+					
+					<li><a href="/tags/c">c#</a></li>
+					
+					<li><a href="/tags/java">java</a></li>
+					
+					<li><a href="/tags/c&#43;&#43;">c&#43;&#43;</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
 <script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
+        repo=""
         issue-term="title"
         label="💬comment"
         theme="github-light"
         crossorigin="anonymous"
         async>
 </script>
-
-
+		
+	</article>
+</main>
 <footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

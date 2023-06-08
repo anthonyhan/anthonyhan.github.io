@@ -1,38 +1,166 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>3.7.7内核的nVidia驱动安装 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>3.7.7内核的nVidia驱动安装 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。
+问题分析
+根据报错的信息，可以打开日志文件查看详细的原因：
+    less /var/log/nvidia-installer.log
+日志信息如下：
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
+-&gt; Kernel source path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&rsquo;
+-&gt; Kernel output path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/build&rsquo;
+ERROR: If you are using a Linux 2.4 kernel, please make sure
+you either have configured kernel sources matching your
+kernel or the correct set of kernel headers installed
+on your system.
+If you are using a Linux 2.6 kernel, please make sure
+you have configured kernel sources matching your kernel
+installed on your system. If you specified a separate
+output directory using either the &ldquo;KBUILD_OUTPUT&rdquo; or
+the &ldquo;O&rdquo; KBUILD parameter, make sure to specify this
+directory with the SYSOUT environment variable or with
+the equivalent nvidia-installer command line option.
+Depending on where and how the kernel sources (or the
+kernel headers) were installed, you may need to specify
+their location with the SYSSRC environment variable or
+the equivalent nvidia-installer command line option.
+ERROR: Installation has failed. Please see the file
+&lsquo;/var/log/nvidia-installer.log&rsquo; for details. You may find suggestions
+on fixing installation problems in the README available on the Linux
+driver download page at www.nvidia.com.
 
-<div class="article-meta">
-<h1><span class="title">3.7.7内核的nVidia驱动安装</span></h1>
+大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="3.7.7内核的nVidia驱动安装" />
+<meta property="og:description" content="更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。
+问题分析
+根据报错的信息，可以打开日志文件查看详细的原因：
+    less /var/log/nvidia-installer.log
+日志信息如下：
 
-<h2 class="date">2013/02/17</h2>
-</div>
+-&gt; Kernel source path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&rsquo;
+-&gt; Kernel output path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/build&rsquo;
+ERROR: If you are using a Linux 2.4 kernel, please make sure
+you either have configured kernel sources matching your
+kernel or the correct set of kernel headers installed
+on your system.
+If you are using a Linux 2.6 kernel, please make sure
+you have configured kernel sources matching your kernel
+installed on your system. If you specified a separate
+output directory using either the &ldquo;KBUILD_OUTPUT&rdquo; or
+the &ldquo;O&rdquo; KBUILD parameter, make sure to specify this
+directory with the SYSOUT environment variable or with
+the equivalent nvidia-installer command line option.
+Depending on where and how the kernel sources (or the
+kernel headers) were installed, you may need to specify
+their location with the SYSSRC environment variable or
+the equivalent nvidia-installer command line option.
+ERROR: Installation has failed. Please see the file
+&lsquo;/var/log/nvidia-installer.log&rsquo; for details. You may find suggestions
+on fixing installation problems in the README available on the Linux
+driver download page at www.nvidia.com.
+
+大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/fix-nvidia-driver-on-kernel-3-7-7/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2013-02-17T18:23:39+08:00" />
+<meta property="article:modified_time" content="2013-02-17T18:23:39+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="3.7.7内核的nVidia驱动安装"/>
+<meta name="twitter:description" content="更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。
+问题分析
+根据报错的信息，可以打开日志文件查看详细的原因：
+    less /var/log/nvidia-installer.log
+日志信息如下：
+
+-&gt; Kernel source path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&rsquo;
+-&gt; Kernel output path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/build&rsquo;
+ERROR: If you are using a Linux 2.4 kernel, please make sure
+you either have configured kernel sources matching your
+kernel or the correct set of kernel headers installed
+on your system.
+If you are using a Linux 2.6 kernel, please make sure
+you have configured kernel sources matching your kernel
+installed on your system. If you specified a separate
+output directory using either the &ldquo;KBUILD_OUTPUT&rdquo; or
+the &ldquo;O&rdquo; KBUILD parameter, make sure to specify this
+directory with the SYSOUT environment variable or with
+the equivalent nvidia-installer command line option.
+Depending on where and how the kernel sources (or the
+kernel headers) were installed, you may need to specify
+their location with the SYSSRC environment variable or
+the equivalent nvidia-installer command line option.
+ERROR: Installation has failed. Please see the file
+&lsquo;/var/log/nvidia-installer.log&rsquo; for details. You may find suggestions
+on fixing installation problems in the README available on the Linux
+driver download page at www.nvidia.com.
+
+大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
 <main>
-<p>更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。</p>
+	<article>
+		<div class="title">
+			<h1 class="title">3.7.7内核的nVidia驱动安装</h1>
+			<div class="meta">Posted on Feb 17, 2013</div>
+		</div>
+		
+
+		<section class="body">
+			<p>更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。</p>
 <h2 id="问题分析">问题分析</h2>
 <p>根据报错的信息，可以打开日志文件查看详细的原因：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    less /var/log/nvidia-installer.log</span></span></code></pre></div>
@@ -97,26 +225,54 @@ driver download page at <a href="https://www.nvidia.com">www.nvidia.com</a>.</p>
 <li><a href="http://forums.fedoraforum.org/showthread.php?t=288869">http://forums.fedoraforum.org/showthread.php?t=288869</a></li>
 <li><a href="http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/nvidia-drivers/files/nvidia-drivers-313.18-linux-3.7%2B.patch?revision=1.1">http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-drivers/nvidia-drivers/files/nvidia-drivers-313.18-linux-3.7%2B.patch?revision=1.1</a></li>
 </ol>
-</main>
+		</section>
 
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/linux">linux</a></li>
+					
+					<li><a href="/tags/fedora">fedora</a></li>
+					
+					<li><a href="/tags/nvidia">nvidia</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
 <script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
+        repo=""
         issue-term="title"
         label="💬comment"
         theme="github-light"
         crossorigin="anonymous"
         async>
 </script>
-
-
+		
+	</article>
+</main>
 <footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

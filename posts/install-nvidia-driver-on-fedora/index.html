@@ -1,38 +1,187 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>在Fedora上安装nVidia显卡驱动程序 | LimboNova</title>
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/fonts.css" />
-    
-  </head>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>在Fedora上安装nVidia显卡驱动程序 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。
+系统需求
+软件需求
 
-  <body>
-    <nav>
-    <ul class="menu">
-      
-      <li><a href="/">Home</a></li>
-      
-      <li><a href="/tags/">Tags</a></li>
-      
-      <li><a href="/about/">About</a></li>
-      
-      <li><a href="/index.xml">Subscribe</a></li>
-      
-    </ul>
-    <hr/>
-    </nav>
+Software Element  Supported versions    Check With&hellip;
+Linux kernel        2.4.22 and newer        cat /proc/version
+XFree86*            4.0.1 and newer         XFree86 -version
+X.Org*              1.0 - 1.13              Xorg -version
+Kernel modutils     2.1.121 and newer       insmod &ndash;version
+glibc               2.0                     ls /lib/libc.so.* &gt; 6
 
-<div class="article-meta">
-<h1><span class="title">在Fedora上安装nVidia显卡驱动程序</span></h1>
+硬件需求
+当然是你的显卡要在驱动的支持列表内；
+参见 Supported NVIDIA GPU Products
+安装步骤
+禁用nouveau
+blacklist
 
-<h2 class="date">2013/01/24</h2>
-</div>
+操作前保证有足够的权限，打开文件
+
+
+vi /etc/modprobe.d/balcklist.conf
+
+
+找到 nvidiafb这一行，注释掉
+
+
+#blacklist nvidiafb
+
+
+(可跳过，驱动会自动创建)新建文件 vi /etc/modprobe.d/disable-nouveau.conf,添加以下：
+
+
+blacklist nouveau
+options nouveau modeset=0
+" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="在Fedora上安装nVidia显卡驱动程序" />
+<meta property="og:description" content="自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。
+系统需求
+软件需求
+
+Software Element  Supported versions    Check With&hellip;
+Linux kernel        2.4.22 and newer        cat /proc/version
+XFree86*            4.0.1 and newer         XFree86 -version
+X.Org*              1.0 - 1.13              Xorg -version
+Kernel modutils     2.1.121 and newer       insmod &ndash;version
+glibc               2.0                     ls /lib/libc.so.* &gt; 6
+
+硬件需求
+当然是你的显卡要在驱动的支持列表内；
+参见 Supported NVIDIA GPU Products
+安装步骤
+禁用nouveau
+blacklist
+
+操作前保证有足够的权限，打开文件
+
+
+vi /etc/modprobe.d/balcklist.conf
+
+
+找到 nvidiafb这一行，注释掉
+
+
+#blacklist nvidiafb
+
+
+(可跳过，驱动会自动创建)新建文件 vi /etc/modprobe.d/disable-nouveau.conf,添加以下：
+
+
+blacklist nouveau
+options nouveau modeset=0
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/install-nvidia-driver-on-fedora/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2013-01-24T01:33:13+08:00" />
+<meta property="article:modified_time" content="2013-01-24T01:33:13+08:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="在Fedora上安装nVidia显卡驱动程序"/>
+<meta name="twitter:description" content="自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。
+系统需求
+软件需求
+
+Software Element  Supported versions    Check With&hellip;
+Linux kernel        2.4.22 and newer        cat /proc/version
+XFree86*            4.0.1 and newer         XFree86 -version
+X.Org*              1.0 - 1.13              Xorg -version
+Kernel modutils     2.1.121 and newer       insmod &ndash;version
+glibc               2.0                     ls /lib/libc.so.* &gt; 6
+
+硬件需求
+当然是你的显卡要在驱动的支持列表内；
+参见 Supported NVIDIA GPU Products
+安装步骤
+禁用nouveau
+blacklist
+
+操作前保证有足够的权限，打开文件
+
+
+vi /etc/modprobe.d/balcklist.conf
+
+
+找到 nvidiafb这一行，注释掉
+
+
+#blacklist nvidiafb
+
+
+(可跳过，驱动会自动创建)新建文件 vi /etc/modprobe.d/disable-nouveau.conf,添加以下：
+
+
+blacklist nouveau
+options nouveau modeset=0
+"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
 
 <main>
-<p>自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。</p>
+	<article>
+		<div class="title">
+			<h1 class="title">在Fedora上安装nVidia显卡驱动程序</h1>
+			<div class="meta">Posted on Jan 24, 2013</div>
+		</div>
+		
+
+		<section class="body">
+			<p>自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。</p>
 <h2 id="系统需求">系统需求</h2>
 <h3 id="软件需求">软件需求</h3>
 <blockquote>
@@ -133,26 +282,54 @@ GRUB_CMDLINE_LINUX=&quot;&hellip; nouveau.modeset=0&quot;</li>
 <li><a href="http://fedoraproject.org/wiki/GRUB_2/zh-cn">http://fedoraproject.org/wiki/GRUB_2/zh-cn</a></li>
 <li><a href="http://us.download.nvidia.com/XFree86/Linux-x86/310.19/README/supportedchips.html">http://us.download.nvidia.com/XFree86/Linux-x86/310.19/README/supportedchips.html</a></li>
 </ol>
-</main>
+		</section>
 
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/linux">linux</a></li>
+					
+					<li><a href="/tags/fedora">fedora</a></li>
+					
+					<li><a href="/tags/nvidia">nvidia</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
 <script src="https://utteranc.es/client.js"
-        repo="anthonyhan/anthonyhan.github.io"
+        repo=""
         issue-term="title"
         label="💬comment"
         theme="github-light"
         crossorigin="anonymous"
         async>
 </script>
-
-
+		
+	</article>
+</main>
 <footer>
-  
-  
-  <hr/>
-  © 2005 - 2022 Anthony | <a href="https://github.com/anthonyhan">Github</a> | <a href="https://twitter.com/antonius_hq">Twitter</a>
-  
-  </footer>
-  
-  </body>
-</html>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2023  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
 
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>
