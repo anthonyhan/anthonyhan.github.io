@@ -88,7 +88,12 @@
       <pubDate>Tue, 07 Sep 2021 15:46:59 +0800</pubDate>
       
       <guid>/posts/behavior-trees-in-gigantic/</guid>
-      <description>偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。 背景 Gigantic是一个结合了PVE的5v5的多</description>
+      <description>&lt;p&gt;偶然看到 &lt;a href=&#34;https://medium.com/@gautamv/managing-ai-in-gigantic-523dc84763cf&#34;&gt;Managing AI in Gigantic&lt;/a&gt; 和 &lt;a href=&#34;https://medium.com/@gautamv/advanced-behavior-tree-structures-4b9dc0516f92&#34;&gt;Advanced Behavior Tree Structures&lt;/a&gt; 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。&lt;/p&gt;
+&lt;h2 id=&#34;背景&#34;&gt;背景&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;../../../images/behavior-trees-in-gigantic/image_gigantic_banner.webp&#34; alt=&#34;image_gigantic_banner.webp&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://store.steampowered.com/app/327690/Gigantic/&#34;&gt;Gigantic&lt;/a&gt;是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。&lt;/p&gt;
+&lt;p&gt;作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。&lt;/p&gt;
+&lt;p&gt;有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。&lt;/p&gt;</description>
     </item>
     
     <item>

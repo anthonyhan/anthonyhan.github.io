@@ -14,7 +14,21 @@
       <pubDate>Wed, 23 Jan 2019 22:36:28 +0000</pubDate>
       
       <guid>/posts/debian-redmine-backup-and-restore/</guid>
-      <description>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Do</description>
+      <description>&lt;p&gt;几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。&lt;/p&gt;
+&lt;h2 id=&#34;系统需求&#34;&gt;系统需求&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Redmine 3.3 installed with apt on Debian 9 (stretch).&lt;/li&gt;
+&lt;li&gt;Database: PostgreSQL&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;备份&#34;&gt;备份&lt;/h2&gt;
+&lt;h3 id=&#34;配置文件&#34;&gt;配置文件&lt;/h3&gt;
+&lt;p&gt;配置文件包含路径：&lt;code&gt;/etc/redmine/{instance}&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;例如，默认实例名称为&lt;code&gt;default&lt;/code&gt;，则配置文件路径为&lt;code&gt;/etc/redmine/{default}&lt;/code&gt;。包含以下配置文件：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;configuration.yml&lt;/li&gt;
+&lt;li&gt;database.xml&lt;/li&gt;
+&lt;li&gt;secret_key.txt&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     
     <item>

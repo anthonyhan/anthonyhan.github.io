@@ -157,7 +157,12 @@
 					<time>Sep 7, 2021</time>
 					<br><div class="description">
 	
-	偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。 背景 Gigantic是一个结合了PVE的5v5的多&hellip;
+	<p>偶然看到 <a href="https://medium.com/@gautamv/managing-ai-in-gigantic-523dc84763cf">Managing AI in Gigantic</a> 和 <a href="https://medium.com/@gautamv/advanced-behavior-tree-structures-4b9dc0516f92">Advanced Behavior Tree Structures</a> 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。</p>
+<h2 id="背景">背景</h2>
+<p><img src="../../../images/behavior-trees-in-gigantic/image_gigantic_banner.webp" alt="image_gigantic_banner.webp"></p>
+<p><a href="https://store.steampowered.com/app/327690/Gigantic/">Gigantic</a>是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。</p>
+<p>作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。</p>
+<p>有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。</p>&hellip;
 	
 </div>
 					<a class="readmore" href="/posts/behavior-trees-in-gigantic/">Read more ⟶</a>
@@ -250,7 +255,21 @@
 					<time>Jan 23, 2019</time>
 					<br><div class="description">
 	
-	几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Do&hellip;
+	<p>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。</p>
+<h2 id="系统需求">系统需求</h2>
+<ol>
+<li>Redmine 3.3 installed with apt on Debian 9 (stretch).</li>
+<li>Database: PostgreSQL</li>
+</ol>
+<h2 id="备份">备份</h2>
+<h3 id="配置文件">配置文件</h3>
+<p>配置文件包含路径：<code>/etc/redmine/{instance}</code></p>
+<p>例如，默认实例名称为<code>default</code>，则配置文件路径为<code>/etc/redmine/{default}</code>。包含以下配置文件：</p>
+<ul>
+<li>configuration.yml</li>
+<li>database.xml</li>
+<li>secret_key.txt</li>
+</ul>&hellip;
 	
 </div>
 					<a class="readmore" href="/posts/debian-redmine-backup-and-restore/">Read more ⟶</a>

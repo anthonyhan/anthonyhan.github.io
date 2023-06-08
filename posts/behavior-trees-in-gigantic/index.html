@@ -2,17 +2,32 @@
 <html><head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Behavior Trees in Gigantic - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。 背景 Gigantic是一个结合了PVE的5v5的多" />
+	<meta name="description" content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
+背景
+
+Gigantic是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。
+作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。
+有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。" />
 	<meta property="og:image" content=""/>
 	<meta property="og:title" content="Behavior Trees in Gigantic" />
-<meta property="og:description" content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。 背景 Gigantic是一个结合了PVE的5v5的多" />
+<meta property="og:description" content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
+背景
+
+Gigantic是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。
+作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。
+有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/posts/behavior-trees-in-gigantic/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-09-07T15:46:59+08:00" />
 <meta property="article:modified_time" content="2021-09-07T15:46:59+08:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Behavior Trees in Gigantic"/>
-<meta name="twitter:description" content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。 背景 Gigantic是一个结合了PVE的5v5的多"/>
+<meta name="twitter:description" content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
+背景
+
+Gigantic是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。
+作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。
+有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。"/>
 <script src="/js/feather.min.js"></script>
 	
 	
@@ -134,7 +149,6 @@
 <li><a href="https://gamedevelopment.tutsplus.com/articles/what-is-data-oriented-game-engine-design--cms-21052">What is Data-Oriented Game Engine Design? (tutsplus.com)</a></li>
 <li><a href="https://python-parallel-programmning-cookbook.readthedocs.io/zh_CN/latest/chapter1/06_How_to_evaluate_the_performance_of_a_parallel_program.html#">如何评估并行程序的性能 — python-parallel-programming-cookbook-cn 1.0 文档 (python-parallel-programmning-cookbook.readthedocs.io)</a></li>
 </ol>
-
 		</section>
 
 		<br>
