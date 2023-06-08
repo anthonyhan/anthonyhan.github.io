@@ -1,63 +1,7 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>misc on LimboNova</title>
-    <link>/tags/misc/</link>
-    <description>Recent content in misc on LimboNova</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <copyright>© Anthony</copyright>
-    <lastBuildDate>Sat, 05 Mar 2011 22:45:53 +0800</lastBuildDate><atom:link href="/tags/misc/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Balsamiq Mockups 的幕后故事</title>
-      <link>/posts/story-behind-balsamiq-mockups/</link>
-      <pubDate>Sat, 05 Mar 2011 22:45:53 +0800</pubDate>
-      
-      <guid>/posts/story-behind-balsamiq-mockups/</guid>
-      <description>Balsamiq is a small group of passionate individuals who believe work should be fun and that life is too short for bad software. Balsamiq Mockups, 现在已经不用多作介绍了，相信大家都了解。那我就说点不为人知的，这是一段相当激励人心的创业故</description>
-    </item>
-    
-    <item>
-      <title>行进中的中国</title>
-      <link>/posts/progressive-china/</link>
-      <pubDate>Fri, 23 May 2008 10:33:49 +0800</pubDate>
-      
-      <guid>/posts/progressive-china/</guid>
-      <description>在整理电脑里的文件时，我又看到大二时在维基百科下载的“六四事件”的资料。话说上次在实验室用百度检索很多关键词都能是搜索的，当然六四也不例外。</description>
-    </item>
-    
-    <item>
-      <title>取消中医中药，革新还是闹剧？</title>
-      <link>/posts/cancel-tcm-innovation-or-farce/</link>
-      <pubDate>Wed, 11 Oct 2006 21:31:01 +0800</pubDate>
-      
-      <guid>/posts/cancel-tcm-innovation-or-farce/</guid>
-      <description>今天看到sohu上关于 鼓吹取消中医中药 的事情之后，我觉得一次变革或者一场闹剧确实在身边发生了。不是什么巴以冲突，伊拉克战争之类在遥远地方的事</description>
-    </item>
-    
-    <item>
-      <title>About V</title>
-      <link>/posts/about-v/</link>
-      <pubDate>Wed, 09 Nov 2005 12:53:32 +0800</pubDate>
-      
-      <guid>/posts/about-v/</guid>
-      <description>What does &amp;quot; V&amp;quot; stand for?
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>misc on LimboNova</title><link>/tags/misc/</link><description>Recent content in misc on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© Anthony</copyright><lastBuildDate>Sat, 05 Mar 2011 22:45:53 +0800</lastBuildDate><atom:link href="/tags/misc/index.xml" rel="self" type="application/rss+xml"/><item><title>Balsamiq Mockups 的幕后故事</title><link>/posts/story-behind-balsamiq-mockups/</link><pubDate>Sat, 05 Mar 2011 22:45:53 +0800</pubDate><guid>/posts/story-behind-balsamiq-mockups/</guid><description>Balsamiq is a small group of passionate individuals who believe work should be fun and that life is too short for bad software. Balsamiq Mockups, 现在已经不用多作介绍了，相信大家都了解。那我就说点不为人知的，这是一段相当激励人心的创业故</description></item><item><title>行进中的中国</title><link>/posts/progressive-china/</link><pubDate>Fri, 23 May 2008 10:33:49 +0800</pubDate><guid>/posts/progressive-china/</guid><description>在整理电脑里的文件时，我又看到大二时在维基百科下载的“六四事件”的资料。话说上次在实验室用百度检索很多关键词都能是搜索的，当然六四也不例外。</description></item><item><title>取消中医中药，革新还是闹剧？</title><link>/posts/cancel-tcm-innovation-or-farce/</link><pubDate>Wed, 11 Oct 2006 21:31:01 +0800</pubDate><guid>/posts/cancel-tcm-innovation-or-farce/</guid><description>今天看到sohu上关于 鼓吹取消中医中药 的事情之后，我觉得一次变革或者一场闹剧确实在身边发生了。不是什么巴以冲突，伊拉克战争之类在遥远地方的事</description></item><item><title>About V</title><link>/posts/about-v/</link><pubDate>Wed, 09 Nov 2005 12:53:32 +0800</pubDate><guid>/posts/about-v/</guid><description>What does &amp;quot; V&amp;quot; stand for?
 Once V standed for Victory
 Yesterday V standed for Versus
 Today V stands for Valley
 Tomorrow V stands for Void?
-Maybe, or maybe not</description>
-    </item>
-    
-    <item>
-      <title>Something</title>
-      <link>/posts/about-something/</link>
-      <pubDate>Mon, 07 Nov 2005 19:32:27 +0800</pubDate>
-      
-      <guid>/posts/about-something/</guid>
-      <description>Once You did do Then You used to do Now You are used to do
-Life is a garden We are all gardeners</description>
-    </item>
-    
-  </channel>
-</rss>
+Maybe, or maybe not</description></item><item><title>Something</title><link>/posts/about-something/</link><pubDate>Mon, 07 Nov 2005 19:32:27 +0800</pubDate><guid>/posts/about-something/</guid><description>Once You did do Then You used to do Now You are used to do
+Life is a garden We are all gardeners</description></item></channel></rss>

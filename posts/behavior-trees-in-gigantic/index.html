@@ -1,204 +1,26 @@
-<!DOCTYPE html>
-<html><head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Behavior Trees in Gigantic - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
+<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>Behavior Trees in Gigantic - LimboNova</title><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
 背景
 
 Gigantic是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。
 作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。
-有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。" />
-	<meta property="og:image" content=""/>
-	<meta property="og:title" content="Behavior Trees in Gigantic" />
-<meta property="og:description" content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
+有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。"><meta property="og:image" content><meta property="og:title" content="Behavior Trees in Gigantic"><meta property="og:description" content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
 背景
 
 Gigantic是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。
 作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。
-有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="/posts/behavior-trees-in-gigantic/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-09-07T15:46:59+08:00" />
-<meta property="article:modified_time" content="2021-09-07T15:46:59+08:00" />
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Behavior Trees in Gigantic"/>
-<meta name="twitter:description" content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
+有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。"><meta property="og:type" content="article"><meta property="og:url" content="/posts/behavior-trees-in-gigantic/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-09-07T15:46:59+08:00"><meta property="article:modified_time" content="2021-09-07T15:46:59+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="Behavior Trees in Gigantic"><meta name=twitter:description content="偶然看到 Managing AI in Gigantic 和 Advanced Behavior Tree Structures 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。
 背景
 
 Gigantic是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。
 作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。
-有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。"/>
-<script src="/js/feather.min.js"></script>
-	
-	
-        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
-	
-
-	
-	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
-		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
-	
-
-	
-	
-
-	
-	
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
-		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
-		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
-		
-		
-		<script>
-			document.addEventListener("DOMContentLoaded", function() {
-					renderMathInElement(document.body, {
-							delimiters: [
-									{left: "$$", right: "$$", display: true},
-									{left: "$", right: "$", display: false}
-							]
-					});
-			});
-			</script>
-	
-	
-	
-</head>
-<body>
-        <div class="content"><header>
-	<div class="main">
-		<a href="/">LimboNova</a>
-	</div>
-	<nav>
-		
-		<a href="/">Home</a>
-		
-		<a href="/posts">Archives</a>
-		
-		<a href="/tags">Tags</a>
-		
-		<a href="/about">About</a>
-		
-		
-	</nav>
-</header>
-
-<main>
-	<article>
-		<div class="title">
-			<h1 class="title">Behavior Trees in Gigantic</h1>
-			<div class="meta">Posted on Sep 7, 2021</div>
-		</div>
-		
-
-		<section class="body">
-			<p>偶然看到 <a href="https://medium.com/@gautamv/managing-ai-in-gigantic-523dc84763cf">Managing AI in Gigantic</a> 和 <a href="https://medium.com/@gautamv/advanced-behavior-tree-structures-4b9dc0516f92">Advanced Behavior Tree Structures</a> 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。</p>
-<h2 id="背景">背景</h2>
-<p><img src="../../../images/behavior-trees-in-gigantic/image_gigantic_banner.webp" alt="image_gigantic_banner.webp"></p>
-<p><a href="https://store.steampowered.com/app/327690/Gigantic/">Gigantic</a>是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。</p>
-<p>作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。</p>
-<p>有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。</p>
-<h2 id="实现">实现</h2>
-<h3 id="一般执行逻辑">一般执行逻辑</h3>
-<p>关于行为树的基本介绍以及工作原理，不予赘述。参看 <a href="https://www.limbonova.com/posts/behavior-trees-for-ai-how-they-work/">AI行为树的工作原理</a></p>
-<p><img src="../../../images/behavior-trees-in-gigantic/image_gigantic_bt_exec_node.webp" alt="image_gigantic_bt_exec_node.webp">
-一般来说，行为树的执行顺序采用深度优先，父节点根据子节点执行并返回的状态作为输入，执行自身节点的逻辑，并返回其处理结果。</p>
-<p><img src="../../../images/behavior-trees-in-gigantic/image_gigantic_bt_exec_stack.webp" alt="image_gigantic_bt_exec_stack.webp"></p>
-<p>在子节点返回成功/失败状态之前，行为树会从子节点继续执行，直到其返回成功/失败。然后执行其父节点，直到行为树根节点返回成功/失败。因此 Gigantic 采用栈来实现行为树的执行逻辑。子节点返回结果后从栈顶弹出，继续执行栈顶的节点。若该节点为Select，Sequence之类的复合节点，需要继续处理剩余的子节点，则将子节点压入栈继续执行。</p>
-<p>使用栈来实现，有以下几个优点：</p>
-<ul>
-<li>栈中只包含当前执行的路径，易于调试；</li>
-<li>使用<a href="https://gameprogrammingpatterns.com/flyweight.html">享元模式</a>可实现树结构的共享，与 Agent 关联的行为树任务实例分离，占用内存更少。</li>
-<li>实现轮询更简单：有些特殊的节点会在子节点每次执行前，自身也会执行。从而来实现任务及时中断退出，一般叫监测节点。如果有这种功能的节点，那么需要从栈底部向上依次执行该节点。（个人觉得这个理由有些牵强，不符合栈的使用场景，若使用<a href="https://en.cppreference.com/w/cpp/container/stack">C++标准库的栈</a>则无法实现这个需求。）</li>
-</ul>
-<p>注：作者没有指出这种实现的缺点，但需要注意的是：行为树每次执行时伴随着频繁的入栈出栈操作，如果处理不当可能造成大量的内存碎片。</p>
-<h3 id="并行处理">并行处理</h3>
-<p>动作游戏里NPC经常会同时执行多个动作，比如一边移动一边攻击，其行为树如下图所示：</p>
-<p><img src="../../../images/behavior-trees-in-gigantic/image_gigantic_bt_parallel_node.webp" alt="image_gigantic_bt_parallel_node.webp"></p>
-<p>针对这个需求，一般行为树都会提供并行节点（Parallel）。Gigantic 也使用栈来实现并行节点。为并行节点的每个分支创建新栈。并行节点执行时会依次切换至其分支对应的栈，从而实现并行处理，类似于有些语言的<a href="https://en.wikipedia.org/wiki/Coroutine">协程（Coroutine</a>）。</p>
-<p>注：这个方法可以扩展成真正的并发实现。线程足够的情况下，让每个分支执行在不同的线程上。</p>
-<p><img src="../../../images/behavior-trees-in-gigantic/image_gigantic_bt_parallel_stack.webp" alt="image_gigantic_bt_parallel_stack.webp"></p>
-<h3 id="难点">难点</h3>
-<h4 id="事件处理">事件处理</h4>
-<p>为了维持行为树的执行和便于理解，Gigantic 将事件处理和行为树分离，事件的响应结果作为状态保存，便于行为树轮询时查询。</p>
-<p>注：将状态与决策分离，可以更好地实现组件的模块化，不仅行为树，其它如GOAP，HTN为主要框架的架构也可以这样处理。</p>
-<p><img src="../../../images/behavior-trees-in-gigantic/image_gigantic_bt_modular_framework.webp" alt="image_gigantic_bt_modular_framework.webp"></p>
-<p>具体可参考 <a href="https://ubm-twvideo01.s3.amazonaws.com/o1/vault/gdc2016/Presentations/Humphreys_Troy_Nuts_and_Bolts.pdf">Humphreys. 2016. <em>Modular AI System</em></a></p>
-<h4 id="重用">重用</h4>
-<p>随着游戏中 AI 的行为逐步丰富，行为树的复杂度也随之上升。如果树节点不具备重用的特性，那么不论是编写 AI 逻辑，还是调试功能都会带来很多不便。</p>
-<p>因此 Gigantic 引入“子树”这一概念。在主树中加入“Subtree Proxy”类型的节点，并设置指定的子树，执行时就会跳转到对应的子树。子树的结构也采用栈，因为它本质上也是一棵行为树。需要注意的是，<strong>要避免子树滥用造成的循环</strong>。如果有必要，在编辑行为树时加入循环检查，提醒设计师注意这一问题。</p>
-<p>注：子树不是新鲜概念了，但循环检测还是有必要的，即使有时是刻意为之。</p>
-<p><img src="../../../images/behavior-trees-in-gigantic/image_gigantic_bt_subtree.webp" alt="image_gigantic_bt_subtree.webp"></p>
-<h2 id="优化">优化</h2>
-<p>通常 AI 代理的行为都是类似的，很多NPC共用同一个行为树。因此利用享元模式，可以将行为树的结构与代理的状态数据分开。行为树的结构数据应当是不互斥的，静态且无状态的。即使代理的数量激增，其所占用的行为树的静态数据也始终保持不变。</p>
-<p>除此之外，还可以使用<a href="https://gamedevelopment.tutsplus.com/articles/what-is-data-oriented-game-engine-design--cms-21052">面向数据的引擎设计</a>来组织数据。我们知道行为树是按照深度优先顺序来执行的，所以我们可以按深度优先顺序来扁平化行为树的结构及其状态数据。这样在执行时可以按数组的顺序连续访问数据，较少的状态数据加上合适的内存对齐，我们就可以拥有一个缓存友好的行为树系统。但注意，魔鬼存在于细节之中！（其实没那么容易）</p>
-<p><img src="../../../images/behavior-trees-in-gigantic/image_gigantic_bt_dod.webp" alt="image_gigantic_bt_dod.webp"></p>
-<p>注：关于“Data-Oriented Design”，可以参考 CppCon 2014 时 Mike Acton 的演讲 《&ldquo;Data-Oriented Design and C++&quot;》。</p>
-<ul>
-<li>Video: <a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">CppCon 2014: Mike Acton &ldquo;Data-Oriented Design and C++&rdquo; - YouTube</a></li>
-<li>Video: <a href="https://www.bilibili.com/video/BV12x411P7fU?p=2">Mike Acton: Data-Oriented Design and C++ - 哔哩哔哩_bilibili</a></li>
-<li>Slides: <a href="https://github.com/CppCon/CppCon2014/blob/master/Presentations/Data-Oriented%20Design%20and%20C%2B%2B/Data-Oriented%20Design%20and%20C%2B%2B%20-%20Mike%20Acton%20-%20CppCon%202014.pptx">CppCon2014/Data-Oriented Design and C++ - Mike Acton - CppCon 2014.pptx</a></li>
-</ul>
-<p>这种将有状态数据和无状态数据的拆分，带来的另外一个效率提升是：可以对无状态数据，即行为树的实际结构和执行逻辑，进行简单的多线程无锁访问。据此我们就可以在应用<a href="https://en.wikipedia.org/wiki/Gustafson%27s_law"><em>古斯塔夫森定律</em></a>时，最大化地并行执行行为树。无状态数据是隐式只读的，且可以有多个无竞争关系的读取器。需要写入的部分则是有状态数据，且存储在内存的不同位置，因此不会引起竞争条件。</p>
-<hr>
-<p><strong>参考资料</strong></p>
-<ol>
-<li><a href="https://medium.com/@gautamv/managing-ai-in-gigantic-523dc84763cf">Managing AI in Gigantic | by Gautam Vasudevan | Medium</a></li>
-<li><a href="https://medium.com/@gautamv/advanced-behavior-tree-structures-4b9dc0516f92">Advanced Behavior Tree Structures | by Gautam Vasudevan | Medium</a></li>
-<li><a href="https://ubm-twvideo01.s3.amazonaws.com/o1/vault/gdc2016/Presentations/Humphreys_Troy_Nuts_and_Bolts.pdf">Humphreys. 2016. <em>Modular AI System</em></a></li>
-<li><a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">CppCon 2014: Mike Acton &ldquo;Data-Oriented Design and C++&rdquo; - YouTube</a></li>
-<li><a href="https://gamedevelopment.tutsplus.com/articles/what-is-data-oriented-game-engine-design--cms-21052">What is Data-Oriented Game Engine Design? (tutsplus.com)</a></li>
-<li><a href="https://python-parallel-programmning-cookbook.readthedocs.io/zh_CN/latest/chapter1/06_How_to_evaluate_the_performance_of_a_parallel_program.html#">如何评估并行程序的性能 — python-parallel-programming-cookbook-cn 1.0 文档 (python-parallel-programmning-cookbook.readthedocs.io)</a></li>
-</ol>
-		</section>
-
-		<br>
-		<br>
-		<div class="post-tags">
-			
-			
-			<nav class="nav tags">
-				<ul class="tags">
-					
-					<li><a href="/tags/ai">ai</a></li>
-					
-					<li><a href="/tags/game-dev">game dev</a></li>
-					
-					<li><a href="/tags/game-ai">game ai</a></li>
-					
-					<li><a href="/tags/behavior-tree">behavior tree</a></li>
-					
-				</ul>
-			</nav>
-			
-			
-		</div>
-		
-		
-<script src="https://utteranc.es/client.js"
-        repo=""
-        issue-term="title"
-        label="💬comment"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-</script>
-		
-	</article>
-</main>
-<footer>
-  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
-    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
-    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
-    <a class="border"></a></div>
-  <div class="footer-info">
-    2023  © Anthony |  <a
-      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
-  </div>
-</footer>
-
-
-<script>
-  feather.replace()
-</script></div>
-    </body>
-</html>
+有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。"><script src=/js/feather.min.js></script>
+<link href=/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css rel=stylesheet><link rel=stylesheet type=text/css media=screen href=/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css><link id=darkModeStyle rel=stylesheet type=text/css href=/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css media="(prefers-color-scheme: dark)"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css><script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script></head><body><div class=content><header><div class=main><a href=/>LimboNova</a></div><nav><a href=/>Home</a>
+<a href=/posts>Archives</a>
+<a href=/tags>Tags</a>
+<a href=/about>About</a></nav></header><main><article><div class=title><h1 class=title>Behavior Trees in Gigantic</h1><div class=meta>Posted on Sep 7, 2021</div></div><section class=body><p>偶然看到 <a href=https://medium.com/@gautamv/managing-ai-in-gigantic-523dc84763cf>Managing AI in Gigantic</a> 和 <a href=https://medium.com/@gautamv/advanced-behavior-tree-structures-4b9dc0516f92>Advanced Behavior Tree Structures</a> 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。</p><h2 id=背景>背景</h2><p><img src=../../../images/behavior-trees-in-gigantic/image_gigantic_banner.webp alt=image_gigantic_banner.webp></p><p><a href=https://store.steampowered.com/app/327690/Gigantic/>Gigantic</a>是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。</p><p>作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。</p><p>有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。</p><h2 id=实现>实现</h2><h3 id=一般执行逻辑>一般执行逻辑</h3><p>关于行为树的基本介绍以及工作原理，不予赘述。参看 <a href=https://www.limbonova.com/posts/behavior-trees-for-ai-how-they-work/>AI行为树的工作原理</a></p><p><img src=../../../images/behavior-trees-in-gigantic/image_gigantic_bt_exec_node.webp alt=image_gigantic_bt_exec_node.webp>
+一般来说，行为树的执行顺序采用深度优先，父节点根据子节点执行并返回的状态作为输入，执行自身节点的逻辑，并返回其处理结果。</p><p><img src=../../../images/behavior-trees-in-gigantic/image_gigantic_bt_exec_stack.webp alt=image_gigantic_bt_exec_stack.webp></p><p>在子节点返回成功/失败状态之前，行为树会从子节点继续执行，直到其返回成功/失败。然后执行其父节点，直到行为树根节点返回成功/失败。因此 Gigantic 采用栈来实现行为树的执行逻辑。子节点返回结果后从栈顶弹出，继续执行栈顶的节点。若该节点为Select，Sequence之类的复合节点，需要继续处理剩余的子节点，则将子节点压入栈继续执行。</p><p>使用栈来实现，有以下几个优点：</p><ul><li>栈中只包含当前执行的路径，易于调试；</li><li>使用<a href=https://gameprogrammingpatterns.com/flyweight.html>享元模式</a>可实现树结构的共享，与 Agent 关联的行为树任务实例分离，占用内存更少。</li><li>实现轮询更简单：有些特殊的节点会在子节点每次执行前，自身也会执行。从而来实现任务及时中断退出，一般叫监测节点。如果有这种功能的节点，那么需要从栈底部向上依次执行该节点。（个人觉得这个理由有些牵强，不符合栈的使用场景，若使用<a href=https://en.cppreference.com/w/cpp/container/stack>C++标准库的栈</a>则无法实现这个需求。）</li></ul><p>注：作者没有指出这种实现的缺点，但需要注意的是：行为树每次执行时伴随着频繁的入栈出栈操作，如果处理不当可能造成大量的内存碎片。</p><h3 id=并行处理>并行处理</h3><p>动作游戏里NPC经常会同时执行多个动作，比如一边移动一边攻击，其行为树如下图所示：</p><p><img src=../../../images/behavior-trees-in-gigantic/image_gigantic_bt_parallel_node.webp alt=image_gigantic_bt_parallel_node.webp></p><p>针对这个需求，一般行为树都会提供并行节点（Parallel）。Gigantic 也使用栈来实现并行节点。为并行节点的每个分支创建新栈。并行节点执行时会依次切换至其分支对应的栈，从而实现并行处理，类似于有些语言的<a href=https://en.wikipedia.org/wiki/Coroutine>协程（Coroutine</a>）。</p><p>注：这个方法可以扩展成真正的并发实现。线程足够的情况下，让每个分支执行在不同的线程上。</p><p><img src=../../../images/behavior-trees-in-gigantic/image_gigantic_bt_parallel_stack.webp alt=image_gigantic_bt_parallel_stack.webp></p><h3 id=难点>难点</h3><h4 id=事件处理>事件处理</h4><p>为了维持行为树的执行和便于理解，Gigantic 将事件处理和行为树分离，事件的响应结果作为状态保存，便于行为树轮询时查询。</p><p>注：将状态与决策分离，可以更好地实现组件的模块化，不仅行为树，其它如GOAP，HTN为主要框架的架构也可以这样处理。</p><p><img src=../../../images/behavior-trees-in-gigantic/image_gigantic_bt_modular_framework.webp alt=image_gigantic_bt_modular_framework.webp></p><p>具体可参考 <a href=https://ubm-twvideo01.s3.amazonaws.com/o1/vault/gdc2016/Presentations/Humphreys_Troy_Nuts_and_Bolts.pdf>Humphreys. 2016. <em>Modular AI System</em></a></p><h4 id=重用>重用</h4><p>随着游戏中 AI 的行为逐步丰富，行为树的复杂度也随之上升。如果树节点不具备重用的特性，那么不论是编写 AI 逻辑，还是调试功能都会带来很多不便。</p><p>因此 Gigantic 引入“子树”这一概念。在主树中加入“Subtree Proxy”类型的节点，并设置指定的子树，执行时就会跳转到对应的子树。子树的结构也采用栈，因为它本质上也是一棵行为树。需要注意的是，<strong>要避免子树滥用造成的循环</strong>。如果有必要，在编辑行为树时加入循环检查，提醒设计师注意这一问题。</p><p>注：子树不是新鲜概念了，但循环检测还是有必要的，即使有时是刻意为之。</p><p><img src=../../../images/behavior-trees-in-gigantic/image_gigantic_bt_subtree.webp alt=image_gigantic_bt_subtree.webp></p><h2 id=优化>优化</h2><p>通常 AI 代理的行为都是类似的，很多NPC共用同一个行为树。因此利用享元模式，可以将行为树的结构与代理的状态数据分开。行为树的结构数据应当是不互斥的，静态且无状态的。即使代理的数量激增，其所占用的行为树的静态数据也始终保持不变。</p><p>除此之外，还可以使用<a href=https://gamedevelopment.tutsplus.com/articles/what-is-data-oriented-game-engine-design--cms-21052>面向数据的引擎设计</a>来组织数据。我们知道行为树是按照深度优先顺序来执行的，所以我们可以按深度优先顺序来扁平化行为树的结构及其状态数据。这样在执行时可以按数组的顺序连续访问数据，较少的状态数据加上合适的内存对齐，我们就可以拥有一个缓存友好的行为树系统。但注意，魔鬼存在于细节之中！（其实没那么容易）</p><p><img src=../../../images/behavior-trees-in-gigantic/image_gigantic_bt_dod.webp alt=image_gigantic_bt_dod.webp></p><p>注：关于“Data-Oriented Design”，可以参考 CppCon 2014 时 Mike Acton 的演讲 《&ldquo;Data-Oriented Design and C++"》。</p><ul><li>Video: <a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">CppCon 2014: Mike Acton &ldquo;Data-Oriented Design and C++&rdquo; - YouTube</a></li><li>Video: <a href="https://www.bilibili.com/video/BV12x411P7fU?p=2">Mike Acton: Data-Oriented Design and C++ - 哔哩哔哩_bilibili</a></li><li>Slides: <a href=https://github.com/CppCon/CppCon2014/blob/master/Presentations/Data-Oriented%20Design%20and%20C%2B%2B/Data-Oriented%20Design%20and%20C%2B%2B%20-%20Mike%20Acton%20-%20CppCon%202014.pptx>CppCon2014/Data-Oriented Design and C++ - Mike Acton - CppCon 2014.pptx</a></li></ul><p>这种将有状态数据和无状态数据的拆分，带来的另外一个效率提升是：可以对无状态数据，即行为树的实际结构和执行逻辑，进行简单的多线程无锁访问。据此我们就可以在应用<a href=https://en.wikipedia.org/wiki/Gustafson%27s_law><em>古斯塔夫森定律</em></a>时，最大化地并行执行行为树。无状态数据是隐式只读的，且可以有多个无竞争关系的读取器。需要写入的部分则是有状态数据，且存储在内存的不同位置，因此不会引起竞争条件。</p><hr><p><strong>参考资料</strong></p><ol><li><a href=https://medium.com/@gautamv/managing-ai-in-gigantic-523dc84763cf>Managing AI in Gigantic | by Gautam Vasudevan | Medium</a></li><li><a href=https://medium.com/@gautamv/advanced-behavior-tree-structures-4b9dc0516f92>Advanced Behavior Tree Structures | by Gautam Vasudevan | Medium</a></li><li><a href=https://ubm-twvideo01.s3.amazonaws.com/o1/vault/gdc2016/Presentations/Humphreys_Troy_Nuts_and_Bolts.pdf>Humphreys. 2016. <em>Modular AI System</em></a></li><li><a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">CppCon 2014: Mike Acton &ldquo;Data-Oriented Design and C++&rdquo; - YouTube</a></li><li><a href=https://gamedevelopment.tutsplus.com/articles/what-is-data-oriented-game-engine-design--cms-21052>What is Data-Oriented Game Engine Design? (tutsplus.com)</a></li><li><a href=https://python-parallel-programmning-cookbook.readthedocs.io/zh_CN/latest/chapter1/06_How_to_evaluate_the_performance_of_a_parallel_program.html#>如何评估并行程序的性能 — python-parallel-programming-cookbook-cn 1.0 文档 (python-parallel-programmning-cookbook.readthedocs.io)</a></li></ol></section><br><br><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/ai>ai</a></li><li><a href=/tags/game-dev>game dev</a></li><li><a href=/tags/game-ai>game ai</a></li><li><a href=/tags/behavior-tree>behavior tree</a></li></ul></nav></div><script src=https://utteranc.es/client.js repo issue-term=title label=💬comment theme=github-light crossorigin=anonymous async></script></article></main><footer><div style=display:flex><a class=soc href=https://github.com/anthonyhan rel=me title=GitHub><i data-feather=github></i></a>
+<a class=border></a><a class=soc href=https://twitter.com/_qhan_ rel=me title=Twitter><i data-feather=twitter></i></a>
+<a class=border></a><a class=soc href=/index.xml rel=me title=Rss><i data-feather=rss></i></a>
+<a class=border></a></div><div class=footer-info>2023 © Anthony | <a href=https://github.com/athul/archie>Archie Theme</a> | Built with <a href=https://gohugo.io>Hugo</a></div></footer><script>feather.replace()</script></div></body></html>

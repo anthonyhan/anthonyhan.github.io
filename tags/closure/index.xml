@@ -1,50 +1,30 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>closure on LimboNova</title>
-    <link>/tags/closure/</link>
-    <description>Recent content in closure on LimboNova</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <copyright>© Anthony</copyright>
-    <lastBuildDate>Sun, 05 Aug 2012 19:11:50 +0800</lastBuildDate><atom:link href="/tags/closure/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>ActionScript 3.0 闭包及作用域</title>
-      <link>/posts/actionscript-3-0-closure/</link>
-      <pubDate>Sun, 05 Aug 2012 19:11:50 +0800</pubDate>
-      
-      <guid>/posts/actionscript-3-0-closure/</guid>
-      <description>&lt;p&gt;闭包作为动态语言的基石，在OO实现和框架构建上有着-十分重要的作用。但是闭包的定义比较抽象，不利于理解，闭包在各语言中的实现不尽相同，闭包的函数作用域也有区别。&lt;/p&gt;
-&lt;p&gt;参考整理了这篇文章(非原创),主要内容来自&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;IBM Thoughtworks 文档：&lt;a href=&#34;http://www.ibm.com/developerworks/cn/linux/l-cn-closure&#34;&gt;闭包的概念、形式与应用&lt;/a&gt;；&lt;/li&gt;
-&lt;li&gt;Adobe官方文档：&lt;a href=&#34;http://www.ibm.com/developerworks/cn/linux/l-cn-closure/&#34;&gt;Flash ActionScript 3.0 编程- 函数作用域&lt;/a&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;什么是闭包&#34;&gt;什么是闭包&lt;/h2&gt;
-&lt;p&gt;闭包的概念出现于60年代，最早实现闭包的程序语言是&lt;a href=&#34;http://zh.wikipedia.org/wiki/Scheme&#34;&gt;Scheme&lt;/a&gt;。关于闭包的定义，说法比较多。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;http://zh.wikipedia.org/wiki/Scheme&#34;&gt;Scheme&lt;/a&gt;语言设计者这样定义闭包：”we introduce the notion of a closure which is a data structure containing a lambda expression, and an environment to be used when that lambda expression is applied to arguments.”&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;英文Wikipedia 则是解释为：”a closure (also lexical closure or function closure) is a &lt;a href=&#34;http://en.wikipedia.org/wiki/Function_(computer_science)&#34;&gt;function&lt;/a&gt; together with a referencing environment for the &lt;a href=&#34;http://en.wikipedia.org/wiki/Non-local_variable&#34;&gt;non-local variables&lt;/a&gt; of that function. “。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;中文维基百科：”在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，是引用了&lt;a href=&#34;http://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%8F%98%E9%87%8F&#34;&gt;自由变量&lt;/a&gt;的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。”
-综合这些定义，可以认为闭包一种特殊的数据结构，不仅仅是函数，还包括与其相关的引用环境。闭包只是在形式和表现上像函数，但实际上不是函数。函数是一些可执行的代码，这些代码在函数被定义后就确定了，不会在执行时发生变化，所以一个函数只有一个实例。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。所谓引用环境是指在程序执行中的某个点所有处于活跃状态的约束所组成的集合。其中的约束是指一个变量的名字和其所代表的对象之间的联系。那么为什么要把引用环境与函数组合起来呢？这主要是因为在支持嵌套作用域的语言中，有时不能简单直接地确定函数的引用环境。这样的语言一般具有这样的特性：&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;函数是一阶值（First-class value），即函数可以作为另一个函数的返回值或参数，还可以作为一个变量的值。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;函数可以嵌套定义，即在一个函数内部可以定义另一个函数。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;闭包作用域&#34;&gt;闭包作用域&lt;/h2&gt;
-&lt;p&gt;函数的范围不但决定了可以在程序中的什么位置调用函数，而且还决定了函数可以访问哪些定义。适用于变量标识符的作用域规则同样也适用于函数标识符。在全局作用域中声明的函数在整个代码中都可用。例如，ActionScript 3.0 包含可在代码中的任意位置使用的全局函数，如 isNaN() 和 parseInt()。嵌套函数（即在另一个函数中声明的函数）可以在声明它的函数中的任意位置上使用。&lt;/p&gt;
-&lt;h3 id=&#34;作用域链the-scope-chain&#34;&gt;作用域链(The scope chain)&lt;/h3&gt;
-&lt;p&gt;无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>closure on LimboNova</title><link>/tags/closure/</link><description>Recent content in closure on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© Anthony</copyright><lastBuildDate>Sun, 05 Aug 2012 19:11:50 +0800</lastBuildDate><atom:link href="/tags/closure/index.xml" rel="self" type="application/rss+xml"/><item><title>ActionScript 3.0 闭包及作用域</title><link>/posts/actionscript-3-0-closure/</link><pubDate>Sun, 05 Aug 2012 19:11:50 +0800</pubDate><guid>/posts/actionscript-3-0-closure/</guid><description>&lt;p>闭包作为动态语言的基石，在OO实现和框架构建上有着-十分重要的作用。但是闭包的定义比较抽象，不利于理解，闭包在各语言中的实现不尽相同，闭包的函数作用域也有区别。&lt;/p>
+&lt;p>参考整理了这篇文章(非原创),主要内容来自&lt;/p>
+&lt;ul>
+&lt;li>IBM Thoughtworks 文档：&lt;a href="http://www.ibm.com/developerworks/cn/linux/l-cn-closure">闭包的概念、形式与应用&lt;/a>；&lt;/li>
+&lt;li>Adobe官方文档：&lt;a href="http://www.ibm.com/developerworks/cn/linux/l-cn-closure/">Flash ActionScript 3.0 编程- 函数作用域&lt;/a>。&lt;/li>
+&lt;/ul>
+&lt;h2 id="什么是闭包">什么是闭包&lt;/h2>
+&lt;p>闭包的概念出现于60年代，最早实现闭包的程序语言是&lt;a href="http://zh.wikipedia.org/wiki/Scheme">Scheme&lt;/a>。关于闭包的定义，说法比较多。&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;a href="http://zh.wikipedia.org/wiki/Scheme">Scheme&lt;/a>语言设计者这样定义闭包：”we introduce the notion of a closure which is a data structure containing a lambda expression, and an environment to be used when that lambda expression is applied to arguments.”&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>英文Wikipedia 则是解释为：”a closure (also lexical closure or function closure) is a &lt;a href="http://en.wikipedia.org/wiki/Function_(computer_science)">function&lt;/a> together with a referencing environment for the &lt;a href="http://en.wikipedia.org/wiki/Non-local_variable">non-local variables&lt;/a> of that function. “。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>中文维基百科：”在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，是引用了&lt;a href="http://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%8F%98%E9%87%8F">自由变量&lt;/a>的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。”
+综合这些定义，可以认为闭包一种特殊的数据结构，不仅仅是函数，还包括与其相关的引用环境。闭包只是在形式和表现上像函数，但实际上不是函数。函数是一些可执行的代码，这些代码在函数被定义后就确定了，不会在执行时发生变化，所以一个函数只有一个实例。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。所谓引用环境是指在程序执行中的某个点所有处于活跃状态的约束所组成的集合。其中的约束是指一个变量的名字和其所代表的对象之间的联系。那么为什么要把引用环境与函数组合起来呢？这主要是因为在支持嵌套作用域的语言中，有时不能简单直接地确定函数的引用环境。这样的语言一般具有这样的特性：&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>函数是一阶值（First-class value），即函数可以作为另一个函数的返回值或参数，还可以作为一个变量的值。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>函数可以嵌套定义，即在一个函数内部可以定义另一个函数。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="闭包作用域">闭包作用域&lt;/h2>
+&lt;p>函数的范围不但决定了可以在程序中的什么位置调用函数，而且还决定了函数可以访问哪些定义。适用于变量标识符的作用域规则同样也适用于函数标识符。在全局作用域中声明的函数在整个代码中都可用。例如，ActionScript 3.0 包含可在代码中的任意位置使用的全局函数，如 isNaN() 和 parseInt()。嵌套函数（即在另一个函数中声明的函数）可以在声明它的函数中的任意位置上使用。&lt;/p>
+&lt;h3 id="作用域链the-scope-chain">作用域链(The scope chain)&lt;/h3>
+&lt;p>无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。&lt;/p></description></item></channel></rss>
