@@ -1,73 +1,357 @@
-<!doctype html><html><head><meta name=generator content="Hugo 0.113.0"><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>LimboNova | Home</title><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Powered by Hugo."><meta property="og:image" content><link rel=alternate type=application/rss+xml href=/index.xml title=LimboNova><meta property="og:title" content="LimboNova"><meta property="og:description" content="Powered by Hugo."><meta property="og:type" content="website"><meta property="og:url" content="/"><meta name=twitter:card content="summary"><meta name=twitter:title content="LimboNova"><meta name=twitter:description content="Powered by Hugo."><script src=/js/feather.min.js></script>
-<link href=/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css rel=stylesheet><link rel=stylesheet type=text/css media=screen href=/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css><link id=darkModeStyle rel=stylesheet type=text/css href=/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css media="(prefers-color-scheme: dark)"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css><script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js></script>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
-<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script></head><body><div class=content><header><div class=main><a href=/>LimboNova</a></div><nav><a href=/>Home</a>
-<a href=/posts>Archives</a>
-<a href=/tags>Tags</a>
-<a href=/about>About</a></nav></header><main class=list><div class=site-description><p>Seize the Day</p></div><section class=list-item><h1 class=title><a href=/posts/reading-notes-counselling-for-toads-a-psychological-adventure/>读书笔记：蛤蟆先生去看心理医生</a></h1><time>Oct 26, 2022</time><br><div class=description><p><img src=/images/books/counselling-for-toads.jpg alt=book-cover></p><p>《蛤蟆先生去看心理医生》这本书借用《柳林风声》中的角色，讲述了蛤蟆先生的抑郁症状。在心理咨询师苍鹭的帮助下，蛤蟆先生发现自己的心理状态与童年经历息息相关。最终，他认识到自我，学会控制情绪，摆脱抑郁，并开始新的生活。</p>&mldr;</div><a class=readmore href=/posts/reading-notes-counselling-for-toads-a-psychological-adventure/>Read more ⟶</a></section><section class=list-item><h1 class=title><a href=/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/>面向对象的行为树不是面向数据的</a></h1><time>Apr 19, 2022</time><br><div class=description><p>原文：<a href=https://jahej.com/alt/2011_03_10_shocker-naive-object-oriented-behavior-tree-isnt-data-oriented.html>Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)</a></p><p>作者：<a href=http://bjoernknafla.com/>Bjoern Knafla</a></p><p>文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。</p><h2 id=背景>背景</h2><p>简单的行为树可以使用面向对象方式来实现，如果性能满足需求，非常适合人手不多开发时间紧张的小型团队。</p><p>简单实现如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BehaviorTreeNode</span> {
-</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// ...
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> BehaviorState update() <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>resetState</span>() <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>template</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>ActionBehaviorTreeNode</span> <span style=color:#f92672>:</span> <span style=color:#66d9ef>public</span> BehaviorTreeNode {
-</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>explicit</span> ActionBehaviorTreeNode(ActionData <span style=color:#f92672>*</span>data);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// Calls a certain member function of actor.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> BehaviorState <span style=color:#a6e22e>update</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// Does nothing.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>resetState</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>private</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  ActionData <span style=color:#f92672>*</span>data;
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SequenceBehaviorTreeNode</span> <span style=color:#f92672>:</span> <span style=color:#66d9ef>public</span> BehaviorTreeNode {
-</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// ...
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// Iterate through children, start from next to run until done or a child
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// returns that it is running.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> BehaviorState update();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// Calls resetState for the next to run node as it might have returned a
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// running state during the last update.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// Prepares to start from the first child on next update.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>resetState</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>private</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  std<span style=color:#f92672>::</span>vector children; <span style=color:#75715e>// In sequence order.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  std<span style=color:#f92672>::</span>size_t nextChildToUpdateIndex;
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>PriorityBehaviorTreeNode</span> <span style=color:#f92672>:</span> <span style=color:#66d9ef>public</span> BehaviorTreeNode {
-</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// ...
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// Iterate through children, start from next to run until the first one
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// returns success or that it is running.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// If this child&#39;s index is lower than that of the previous one returning
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// running, rest the later child.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> BehaviorState update();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// Calls resetState for the next to run child as it might have returned a
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// running state during the last update.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// Prepares to start from the first child on next update.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>resetState</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>private</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  std<span style=color:#f92672>::</span>vector children; <span style=color:#75715e>// In highest to lowest priority order.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  std<span style=color:#f92672>::</span>size_t nextChildToUpdateIndex;
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// ... and so on with other node types...
-</span></span></span></code></pre></div><p>Tony Albrecht 在 演讲 <a href="https://www.youtube.com/watch?v=VAT9E-M-PoE">Pitfalls of Object Oriented Programming, Revisited - (TGC 2017) - YouTube</a> 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。</p>&mldr;</div><a class=readmore href=/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/>Read more ⟶</a></section><section class=list-item><h1 class=title><a href=/posts/behavior-trees-in-gigantic/>Behavior Trees in Gigantic</a></h1><time>Sep 7, 2021</time><br><div class=description><p>偶然看到 <a href=https://medium.com/@gautamv/managing-ai-in-gigantic-523dc84763cf>Managing AI in Gigantic</a> 和 <a href=https://medium.com/@gautamv/advanced-behavior-tree-structures-4b9dc0516f92>Advanced Behavior Tree Structures</a> 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。</p><h2 id=背景>背景</h2><p><img src=../../../images/behavior-trees-in-gigantic/image_gigantic_banner.webp alt=image_gigantic_banner.webp></p><p><a href=https://store.steampowered.com/app/327690/Gigantic/>Gigantic</a>是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。</p><p>作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。</p><p>有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。</p>&mldr;</div><a class=readmore href=/posts/behavior-trees-in-gigantic/>Read more ⟶</a></section><section class=list-item><h1 class=title><a href=/posts/the-total-beginners-guide-to-game-ai-part-3/>游戏AI入门指南(Part 3)</a></h1><time>Apr 3, 2021</time><br><div class=description><h2 id=学习能力和适应能力>学习能力和适应能力</h2><p>我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。</p><h3 id=统计和概率>统计和概率</h3><p>在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。</p><p>但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的<a href=https://en.wikipedia.org/wiki/Moving_average>移动平均(windowed average)</a>，如只考虑最后20个数据点。</p><p>假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！</p><p>另一个有趣的方法是使用<a href=https://zh.wikipedia.org/zh-hans/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8>朴素贝叶斯分类器(Naive Bayes Classifier)</a>来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。</p><p>使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。</p>&mldr;</div><a class=readmore href=/posts/the-total-beginners-guide-to-game-ai-part-3/>Read more ⟶</a></section><section class=list-item><h1 class=title><a href=/posts/the-total-beginners-guide-to-game-ai-part-2/>游戏AI入门指南(Part 2)</a></h1><time>Mar 25, 2021</time><br><div class=description><p><strong>原文：</strong> <a href=https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/>The Total Beginner&rsquo;s Guide to Game AI</a>
-<strong>作者：</strong> <a href=https://www.gamedev.net/profile/2996-kylotan/>Ben Sizer</a>
-<strong>译者：</strong> <a href=https://www.limbonova.com/about/#blog-author>Anthony Han</a></p><h2 id=进阶决策>进阶决策</h2><p>虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。</p><h3 id=有限状态机>有限状态机</h3><p>有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。</p><p>这非常适用于游戏中的NPC。一个警卫可能具有以下状态：</p><ul><li>巡逻</li><li>攻击</li><li>逃跑</li></ul><p>当状态改变时，你可能会想到这些规则：</p><ul><li>如果警卫看到敌人，就立即攻击</li><li>如果警卫正在攻击但无法再看到敌人，那么返回巡逻</li><li>如果警卫正在攻击但受了重伤，那么开始逃跑</li></ul><p>这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：</p><ul><li>空闲（巡逻期间）</li><li>搜寻（刚才发现的敌人躲起来时）</li><li>求助（发现敌人，但因为敌人太强而无法独自作战时）</li></ul><p>通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。</p><p>如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。</p>&mldr;</div><a class=readmore href=/posts/the-total-beginners-guide-to-game-ai-part-2/>Read more ⟶</a></section><section class=list-item><h1 class=title><a href=/posts/the-total-beginners-guide-to-game-ai-part-1/>游戏AI入门指南(Part 1)</a></h1><time>Mar 20, 2021</time><br><div class=description><p><strong>原文：</strong> <a href=https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/>The Total Beginner&rsquo;s Guide to Game AI</a>
-<strong>作者：</strong> <a href=https://www.gamedev.net/profile/2996-kylotan/>Ben Sizer</a>
-<strong>译者：</strong> <a href=https://www.limbonova.com/about/#blog-author>Anthony Han</a></p><blockquote><p>这是一篇非常好的综述类文章，对当今的游戏AI常用技术和实现方法做了简单介绍，参考了近年来的 Game AI Pro 系列。虽然不及论文那样严谨，但全文条理清晰，通俗易懂。确实是一篇入门指南佳作。花了点业余时间翻译出来，为了分享，也希望能温故知新。</p></blockquote><h2 id=引言>引言</h2><p>本文将介绍游戏人工智能（或简称“游戏AI”）的入门概念，让读者了解使用哪些方法来处理AI问题，它们如何协同工作以及如何使用相应的语言或引擎来实现。</p><p>我们假设你具备电子游戏的基本知识，并掌握几何，三角函数等数学概念。大多数代码示例为伪代码，因此不需要特定的编程语言知识。</p><h2 id=什么是游戏ai>什么是游戏AI?</h2><p>游戏AI主要关注实体根据当前条件所采取的行动。这就是传统人工智能文献所指的控制“<a href=https://en.wikipedia.org/wiki/Intelligent_agent>智能代理</a>”，代理通常是游戏中的角色，但也可以是车辆，机器人。或者更抽象的东西，例如一组实体，甚至一个国家或文明。智能代理需要在各种情况下观察周围环境，依此做出决策，并采取行动。这就是所谓的“感知/思考/行动(Sense/Think/Act)”循环：</p><ul><li>感知：代理侦测到或被告知环境中可能影响其行为的事物（例如：附近的威胁，要收集的物品，要调查的兴趣点）。</li><li>思考：代理决定采取的应对措施（例如：考虑是否足够安全来收集物品，或者决定应该先集中精力战斗还是躲藏）。</li><li>行动：代理将先前的决定付诸行动（例如：沿着通向敌人或物品等的路径移动）。由于代理做出了行动，形势已经改变，因此再次重复循环。</li></ul><p>现实世界中的AI，特别是成为新闻热点的那些，通常主要关注循环中的“感知”部分。例如，自动驾驶汽车拍摄道路的图像，结合其他数据（例如雷达和光达），并分析所看到的状况。这个过程一般是通过机器学习来完成，机器学习尤其擅长这方面，获取大量现实世界中有噪声的数据（如汽车前方的道路照片或视频）并加以分析理解，提取诸如“前方20码处有一辆汽车”这类的语义信息。这些被称为“<a href=https://zh.wikipedia.org/wiki/%E7%BB%9F%E8%AE%A1%E5%88%86%E7%B1%BB>分类问题</a>”。</p>&mldr;</div><a class=readmore href=/posts/the-total-beginners-guide-to-game-ai-part-1/>Read more ⟶</a></section><ul class=pagination><span class="page-item page-prev"></span><span class="page-item page-next"><a href=/page/2/ class=page-link aria-label=Next><span aria-hidden=true>Next →</span></a></span></ul></main><footer><div style=display:flex><a class=soc href=https://github.com/anthonyhan rel=me title=GitHub><i data-feather=github></i></a>
-<a class=border></a><a class=soc href=https://twitter.com/_qhan_ rel=me title=Twitter><i data-feather=twitter></i></a>
-<a class=border></a><a class=soc href=/index.xml rel=me title=Rss><i data-feather=rss></i></a>
-<a class=border></a></div><div class=footer-info>2023 © Anthony | <a href=https://github.com/athul/archie>Archie Theme</a> | Built with <a href=https://gohugo.io>Hugo</a></div></footer><script>feather.replace()</script></div></body></html>
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta name="generator" content="Hugo 0.122.0">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>LimboNova | Home </title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Powered by Hugo." />
+	<meta property="og:image" content=""/>
+	<link rel="alternate" type="application/rss+xml" href="/index.xml" title="LimboNova" />
+	<meta property="og:title" content="LimboNova" />
+<meta property="og:description" content="Powered by Hugo." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="LimboNova"/>
+<meta name="twitter:description" content="Powered by Hugo."/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+
+	<body>
+		<div class="content">
+			<header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+			
+			<main class="list">
+				<div class="site-description"><p>Seize the Day</p></div>
+				
+				
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/reading-notes-counselling-for-toads-a-psychological-adventure/">读书笔记：蛤蟆先生去看心理医生</a></h1>
+					<time>Oct 26, 2022</time>
+					<br><div class="description">
+	
+	<p><img src="/images/books/counselling-for-toads.jpg" alt="book-cover"></p>
+<p>《蛤蟆先生去看心理医生》这本书借用《柳林风声》中的角色，讲述了蛤蟆先生的抑郁症状。在心理咨询师苍鹭的帮助下，蛤蟆先生发现自己的心理状态与童年经历息息相关。最终，他认识到自我，学会控制情绪，摆脱抑郁，并开始新的生活。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/reading-notes-counselling-for-toads-a-psychological-adventure/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/">面向对象的行为树不是面向数据的</a></h1>
+					<time>Apr 19, 2022</time>
+					<br><div class="description">
+	
+	<p>原文：<a href="https://jahej.com/alt/2011_03_10_shocker-naive-object-oriented-behavior-tree-isnt-data-oriented.html">Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)</a></p>
+<p>作者：<a href="http://bjoernknafla.com/">Bjoern Knafla</a></p>
+<p>文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。</p>
+<h2 id="背景">背景</h2>
+<p>简单的行为树可以使用面向对象方式来实现，如果性能满足需求，非常适合人手不多开发时间紧张的小型团队。</p>
+<p>简单实现如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BehaviorTreeNode</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState update() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">template</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ActionBehaviorTreeNode</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BehaviorTreeNode {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">explicit</span> ActionBehaviorTreeNode(ActionData <span style="color:#f92672">*</span>data);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Calls a certain member function of actor.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState <span style="color:#a6e22e">update</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Does nothing.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  ActionData <span style="color:#f92672">*</span>data;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SequenceBehaviorTreeNode</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BehaviorTreeNode {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Iterate through children, start from next to run until done or a child
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// returns that it is running.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Calls resetState for the next to run node as it might have returned a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// running state during the last update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Prepares to start from the first child on next update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  std<span style="color:#f92672">::</span>vector children; <span style="color:#75715e">// In sequence order.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  std<span style="color:#f92672">::</span>size_t nextChildToUpdateIndex;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PriorityBehaviorTreeNode</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BehaviorTreeNode {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Iterate through children, start from next to run until the first one
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// returns success or that it is running.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// If this child&#39;s index is lower than that of the previous one returning
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// running, rest the later child.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Calls resetState for the next to run child as it might have returned a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// running state during the last update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Prepares to start from the first child on next update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  std<span style="color:#f92672">::</span>vector children; <span style="color:#75715e">// In highest to lowest priority order.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  std<span style="color:#f92672">::</span>size_t nextChildToUpdateIndex;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ... and so on with other node types...
+</span></span></span></code></pre></div><p>Tony Albrecht 在 演讲 <a href="https://www.youtube.com/watch?v=VAT9E-M-PoE">Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube</a> 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/the-behavior-tree-starter-kit/">The Behavior Tree Starter Kit</a></h1>
+					<time>Mar 28, 2022</time>
+					<br><div class="description">
+	
+	<!-- raw HTML omitted -->
+<p>偶然看到一个2012年 Alex Champandard 的演讲<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，本想看看有什么可以借鉴，看到一半后，发现就是 Game AI Pro 的文章 《The Behavior Tree Starter Kit<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>》的演示版。结合代码<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>，对照着看一遍，有助于理解。</p>
+<h2 id="motivation">Motivation</h2>
+<p>行为树广泛应用于各个系统：角色，策略，小队，动画，镜头……</p>
+<p>使用案例：</p>
+<ul>
+<li>Rockstar Games： R.A.G.E.</li>
+<li>Guerrilla Games：Killzone 2 &amp; 3</li>
+<li>Uncharted 2</li>
+<li>Halo 3</li>
+<li>NBA &lsquo;09</li>
+<li>Metro 2033</li>
+<li>Crysis: Warhead</li>
+<li>League of Legends</li>
+</ul>
+<h2 id="the-basics">The Basics</h2>
+<h3 id="v1原型">v1：原型</h3>
+<p>一个基本的行为树实现：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Status</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Return values of and valid states for behaviors.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    BH_INVALID,
+</span></span><span style="display:flex;"><span>    BH_SUCCESS,
+</span></span><span style="display:flex;"><span>    BH_FAILURE,
+</span></span><span style="display:flex;"><span>    BH_RUNNING,
+</span></span><span style="display:flex;"><span>    BH_ABORTED,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Behavior</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Base class for actions, conditions and composites.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status update()				<span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()			{}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onTerminate</span>(Status)	{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Behavior()
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">:</span>   m_eStatus(BH_INVALID)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Behavior()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">tick</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            onInitialize();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            onTerminate(m_eStatus);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">reset</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> BH_INVALID;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">abort</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        onTerminate(BH_ABORTED);
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> BH_ABORTED;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isTerminated</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus <span style="color:#f92672">==</span> BH_SUCCESS  <span style="color:#f92672">||</span>  m_eStatus <span style="color:#f92672">==</span> BH_FAILURE;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isRunning</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus <span style="color:#f92672">==</span> BH_RUNNING;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">getStatus</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    Status m_eStatus;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/the-behavior-tree-starter-kit/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/ai-in-swords-and-soldiers/">AI in Swords and Soldiers</a></h1>
+					<time>Oct 18, 2021</time>
+					<br><div class="description">
+	
+	<h2 id="前言">前言</h2>
+<p>偶然发现收藏夹里躺了多年的文章链接<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，写作时间是2011年前后，作者是 Ronimo Games 的联合创始人 Joost van Dongen，简述了当时他们如何构建《剑与勇士》的 AI。<a href="https://store.steampowered.com/app/63500/Swords_and_Soldiers_HD">《剑与勇士》（Swords &amp; Soldiers）</a>是 Ronimo Games 在2009年开发的一款2D横向卷轴RTS游戏。</p>
+<p>简单翻译整理了一下，看看有没有参考价值。</p>
+<h2 id="译文">译文</h2>
+<p>众所周知，为策略游戏创建良好的 AI 是一项艰巨的任务。AI 设计当然从来都不是一件容易的事，但对于策略游戏来说，选项和情况的复杂性非常高。我认为《剑与勇士》是第一款在游戏中实现真正出色 AI 的游戏，所以我想看看我们是如何做到这一点的会很有趣。</p>
+<p><img src="/images/ai-in-swords-and-soldiers/swords_and_soldiers.webp" alt="swords_and_soldiers"></p>
+<p>人工智能领域要么解决非常简单的问题，比如国际象棋（与实时战略游戏相比，国际象棋非常简单，更不用说与现实世界相比了！），要么只会提供大量精巧高效的辅助算法，比如寻路。在复杂情况下做出真正的决策本质上是一个尚未解决的问题，而且不会在短期内得到解决。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/ai-in-swords-and-soldiers/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/behavior-trees-in-gigantic/">Behavior Trees in Gigantic</a></h1>
+					<time>Sep 7, 2021</time>
+					<br><div class="description">
+	
+	<p>偶然看到 <a href="https://medium.com/@gautamv/managing-ai-in-gigantic-523dc84763cf">Managing AI in Gigantic</a> 和 <a href="https://medium.com/@gautamv/advanced-behavior-tree-structures-4b9dc0516f92">Advanced Behavior Tree Structures</a> 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。</p>
+<h2 id="背景">背景</h2>
+<p><img src="/images/behavior-trees-in-gigantic/image_gigantic_banner.webp" alt="image_gigantic_banner.webp"></p>
+<p><a href="https://store.steampowered.com/app/327690/Gigantic/">Gigantic</a>是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。</p>
+<p>作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。</p>
+<p>有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/behavior-trees-in-gigantic/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-3/">游戏AI入门指南(Part 3)</a></h1>
+					<time>Apr 3, 2021</time>
+					<br><div class="description">
+	
+	<h2 id="学习能力和适应能力">学习能力和适应能力</h2>
+<p>我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。</p>
+<h3 id="统计和概率">统计和概率</h3>
+<p>在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。</p>
+<p>但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的<a href="https://en.wikipedia.org/wiki/Moving_average">移动平均(windowed average)</a>，如只考虑最后20个数据点。</p>
+<p>假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！</p>
+<p>另一个有趣的方法是使用<a href="https://zh.wikipedia.org/zh-hans/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8">朴素贝叶斯分类器(Naive Bayes Classifier)</a>来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。</p>
+<p>使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-3/">Read more ⟶</a>
+				</section>
+				
+				
+
+<ul class="pagination">
+	<span class="page-item page-prev">
+	
+	</span>
+	<span class="page-item page-next">
+	
+    <a href="/page/2/" class="page-link" aria-label="Next"><span aria-hidden="true">Next →</span></a>
+	
+	</span>
+</ul>
+
+
+			</main>
+			<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script>
+		</div>
+		
+	</body>
+</html>

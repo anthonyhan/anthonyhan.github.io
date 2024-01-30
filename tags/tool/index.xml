@@ -1,1 +1,27 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>tool on LimboNova</title><link>/tags/tool/</link><description>Recent content in tool on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© Anthony</copyright><lastBuildDate>Mon, 28 Feb 2011 22:45:32 +0800</lastBuildDate><atom:link href="/tags/tool/index.xml" rel="self" type="application/rss+xml"/><item><title>原型设计工具 Balsamiq Mockups</title><link>/posts/balsamiq-mockups/</link><pubDate>Mon, 28 Feb 2011 22:45:32 +0800</pubDate><guid>/posts/balsamiq-mockups/</guid><description>Mockups is bitchin’. Pure and simple. It’s rare to find a tool that both devs and non-devs enjoy using, and use productively together. Huge fan!” Jay Simons, VP of Marketing,Atlassian 这是一位 Balsamiq 的客户对 Balsamiq Mockups 的评价，像这样的褒奖还有很多</description></item><item><title>使用思维导图工具 PersonalBrain 进行需求分析</title><link>/posts/do-requirement-analysis-using-personalbrain/</link><pubDate>Sat, 26 Feb 2011 16:16:18 +0800</pubDate><guid>/posts/do-requirement-analysis-using-personalbrain/</guid><description>TheBrain 的真正价值之所在——与其他信息和文件建立链接。这种链接被称作“跳跃”(jump)，因为你在这之前看不到这种联系。 —— 《华尔街日报》 很久以前</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>tool on LimboNova</title>
+    <link>/tags/tool/</link>
+    <description>Recent content in tool on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© Anthony</copyright>
+    <lastBuildDate>Mon, 28 Feb 2011 22:45:32 +0800</lastBuildDate>
+    <atom:link href="/tags/tool/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>原型设计工具 Balsamiq Mockups</title>
+      <link>/posts/balsamiq-mockups/</link>
+      <pubDate>Mon, 28 Feb 2011 22:45:32 +0800</pubDate>
+      <guid>/posts/balsamiq-mockups/</guid>
+      <description>Mockups is bitchin’. Pure and simple. It’s rare to find a tool that both devs and non-devs enjoy using, and use productively together. Huge fan!” Jay Simons, VP of Marketing,Atlassian 这是一位 Balsamiq 的客户对 Balsamiq Mockups 的评价，像这样的褒奖还有很多</description>
+    </item>
+    <item>
+      <title>使用思维导图工具 PersonalBrain 进行需求分析</title>
+      <link>/posts/do-requirement-analysis-using-personalbrain/</link>
+      <pubDate>Sat, 26 Feb 2011 16:16:18 +0800</pubDate>
+      <guid>/posts/do-requirement-analysis-using-personalbrain/</guid>
+      <description>TheBrain 的真正价值之所在——与其他信息和文件建立链接。这种链接被称作“跳跃”(jump)，因为你在这之前看不到这种联系。 —— 《华尔街日报》 很久以前</description>
+    </item>
+  </channel>
+</rss>

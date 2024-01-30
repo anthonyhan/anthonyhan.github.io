@@ -1,39 +1,289 @@
-<!doctype html><html><head><meta name=generator content="Hugo 0.113.0"><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>LimboNova | Home</title><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Powered by Hugo."><meta property="og:image" content><link rel=alternate type=application/rss+xml href=/index.xml title=LimboNova><meta property="og:title" content="LimboNova"><meta property="og:description" content="Powered by Hugo."><meta property="og:type" content="website"><meta property="og:url" content="/"><meta name=twitter:card content="summary"><meta name=twitter:title content="LimboNova"><meta name=twitter:description content="Powered by Hugo."><script src=/js/feather.min.js></script>
-<link href=/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css rel=stylesheet><link rel=stylesheet type=text/css media=screen href=/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css><link id=darkModeStyle rel=stylesheet type=text/css href=/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css media="(prefers-color-scheme: dark)"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css><script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js></script>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
-<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script></head><body><div class=content><header><div class=main><a href=/>LimboNova</a></div><nav><a href=/>Home</a>
-<a href=/posts>Archives</a>
-<a href=/tags>Tags</a>
-<a href=/about>About</a></nav></header><main class=list><div class=site-description><p>Seize the Day</p></div><section class=list-item><h1 class=title><a href=/posts/fix-nvidia-driver-on-kernel-3-7-7/>3.7.7内核的nVidia驱动安装</a></h1><time>Feb 17, 2013</time><br><div class=description><p>更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。</p><h2 id=问题分析>问题分析</h2><p>根据报错的信息，可以打开日志文件查看详细的原因：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>    less /var/log/nvidia-installer.log</span></span></code></pre></div><p>日志信息如下：</p><blockquote><p>-> Kernel source path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&rsquo;
--> Kernel output path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/build&rsquo;
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta name="generator" content="Hugo 0.122.0">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>LimboNova | Home </title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Powered by Hugo." />
+	<meta property="og:image" content=""/>
+	<link rel="alternate" type="application/rss+xml" href="/index.xml" title="LimboNova" />
+	<meta property="og:title" content="LimboNova" />
+<meta property="og:description" content="Powered by Hugo." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="LimboNova"/>
+<meta name="twitter:description" content="Powered by Hugo."/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+
+	<body>
+		<div class="content">
+			<header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+			
+			<main class="list">
+				<div class="site-description"><p>Seize the Day</p></div>
+				
+				
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/cycling-log-chongyuan-temple/">重元寺骑行</a></h1>
+					<time>Feb 24, 2013</time>
+					<br><div class="description">
+	
+	<p>正月过半，乍暖还寒，然而阳光明媚，正是外出郊游的好时节。苏州是典型的江南水乡，不仅有周庄，甪直，同里千年古镇，水系也颇为发达，湖泊更是星罗棋布。而此时环湖骑行则是再合适不过的好主意了。</p>
+<p>小西湖，是著名的大闸蟹产区——阳澄湖的内湖，隶属阳澄湖半岛度假区。这个度假区还在开发当中，目前主要有重元寺，莲池湖公园，小西湖这几个地方值得一去。湖边有一片很大的草地，绿茵葱葱，非常开阔。在距离市区这么近还有这么一处好地方，这里简直是世外桃源。每逢周末便能看到很多人自驾驱车前往，在草坪上搭帐篷，放风筝，这次还看到航模爱好者在试飞。沿湖修建了环湖自行车道，总长18公里，值得一提的是，还有一段3.5公里的水上赛道，让人一览湖光水色。</p>
+<p><img src="http://bn1files.storage.live.com/y1pxBk3iGmaOs39yRQQ-A40uXJOG0QqfqfeZXSsEaog5xtUE_kr7xos-kskw_qvUDCZIY2tQ0wVb9wH7nC_0fwBqQ/IMGP0248.jpg" alt="野营帐篷"></p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/cycling-log-chongyuan-temple/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/book-review-on-top-of-tides/">观潮与弄潮</a></h1>
+					<time>Feb 20, 2013</time>
+					<br><div class="description">
+	
+	<p><img src="https://img3.doubanio.com/lpic/s6807265.jpg" alt="cover"></p>
+<p>春节期间看完了这本书，收获颇多。一开始看到介绍，我以为这是一本记述IT简史的书，看到后面，越发现远远不止这些。</p>
+<h2 id="观潮时代的浪潮">观潮：时代的浪潮</h2>
+<p>IT技术人员，特别是作者这样的计算机科学家，历来对贝尔实验室有着无比的崇敬和向往。故事从贝尔实验室的东家 —— AT&amp;T 公司开始，悉数介绍了 AT&amp;T，IBM，Apple，Intel，Microsoft，Cisco，Yahoo，HP，Motorola，Google 等科技浪潮中各领风骚的著名企业，还有 Sun，Novell，Netscape，RealNetworks 这些“与机会失之交臂的公司”。回顾科技工业一百多年来的发展历程，分析了这些公司成功失败的原因。</p>
+<p>在谈到微软时，吴军描述比尔·盖茨在起家时，包括微软成立后的十几年里，一直惯用冒险的空手套白狼手法抢占先机。当年操作系统领域的专家 Jim Allchin 对微软的技术根本瞧不上，他说，你们微软的东西是最烂的。而盖茨做到了保守和冒险的平衡，打动了 Allchin等一批技术大牛，完成研发上的布局。对于市场的策略则是：薄利多销和来者不拒。这个可以从早期的微软广告中窥见一斑，比如史蒂夫·鲍尔默做的DOS广告等等。</p>
+<p>Cisco，我只知道这是一家卖路由器等网络设备的公司，还参与过GFW这样为虎作伥的项目。没想到思科的历史这么久远，尤其是善待离职创业的员工，以及对其创业公司的扶持和收购，真是十分高明的手法。</p>
+<p>作者形容摩托罗拉是一家贵族式的公司，这个在模拟通信领域的佼佼者，在数字通信时代显得力不从心，依然孤傲地以技术为重心，却眼睁睁地看着木工厂起家的诺基亚超越了自己。在商业竞争中，光有技术显然是不行的。正如作者所言，“从技术角度看，铱星移动通信系统是非常成功的。这是真正的科技精品。我常常想，我们这些被成为高科技公司的互联网公司做到的东西和铱星系统相比，简直就像是玩具。” 君子之泽，五世而斩，虽然贵族式的摩托罗拉被Google收购，即便Google看中的是它若干的通信专利，但是至少它的技术创造依然造福于人。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/book-review-on-top-of-tides/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/fix-nvidia-driver-on-kernel-3-7-7/">3.7.7内核的nVidia驱动安装</a></h1>
+					<time>Feb 17, 2013</time>
+					<br><div class="description">
+	
+	<p>更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。</p>
+<h2 id="问题分析">问题分析</h2>
+<p>根据报错的信息，可以打开日志文件查看详细的原因：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    less /var/log/nvidia-installer.log</span></span></code></pre></div>
+<p>日志信息如下：</p>
+<blockquote>
+<p>-&gt; Kernel source path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&rsquo;
+-&gt; Kernel output path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/build&rsquo;
 ERROR: If you are using a Linux 2.4 kernel, please make sure
 you either have configured kernel sources matching your
 kernel or the correct set of kernel headers installed
-on your system.</p><p>If you are using a Linux 2.6 kernel, please make sure
+on your system.</p>
+<p>If you are using a Linux 2.6 kernel, please make sure
 you have configured kernel sources matching your kernel
 installed on your system. If you specified a separate
 output directory using either the &ldquo;KBUILD_OUTPUT&rdquo; or
 the &ldquo;O&rdquo; KBUILD parameter, make sure to specify this
 directory with the SYSOUT environment variable or with
-the equivalent nvidia-installer command line option.</p><p>Depending on where and how the kernel sources (or the
+the equivalent nvidia-installer command line option.</p>
+<p>Depending on where and how the kernel sources (or the
 kernel headers) were installed, you may need to specify
 their location with the SYSSRC environment variable or
 the equivalent nvidia-installer command line option.
 ERROR: Installation has failed. Please see the file
 &lsquo;/var/log/nvidia-installer.log&rsquo; for details. You may find suggestions
 on fixing installation problems in the README available on the Linux
-driver download page at <a href=https://www.nvidia.com>www.nvidia.com</a>.</p></blockquote><p>大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。</p>&mldr;</div><a class=readmore href=/posts/fix-nvidia-driver-on-kernel-3-7-7/>Read more ⟶</a></section><section class=list-item><h1 class=title><a href=/posts/install-nvidia-driver-on-fedora/>在Fedora上安装nVidia显卡驱动程序</a></h1><time>Jan 24, 2013</time><br><div class=description><p>自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。</p><h2 id=系统需求>系统需求</h2><h3 id=软件需求>软件需求</h3><blockquote><p><em>Software Element</em> <em>Supported versions</em> <em>Check With&mldr;</em>
-Linux kernel 2.4.22 and newer cat /proc/version
-XFree86* 4.0.1 and newer XFree86 -version
-X.Org* 1.0 - 1.13 Xorg -version
-Kernel modutils 2.1.121 and newer insmod &ndash;version
-glibc 2.0 ls /lib/libc.so.* > 6</p></blockquote><h3 id=硬件需求>硬件需求</h3><p>当然是你的显卡要在驱动的支持列表内；</p><p>参见 <a href=http://us.download.nvidia.com/XFree86/Linux-x86/310.19/README/supportedchips.html>Supported NVIDIA GPU Products</a></p><h2 id=安装步骤>安装步骤</h2><h3 id=禁用nouveau>禁用nouveau</h3><h4 id=blacklist>blacklist</h4><ol><li>操作前保证有足够的权限，打开文件</li></ol><blockquote><p>vi /etc/modprobe.d/balcklist.conf</p></blockquote><ol start=2><li>找到 nvidiafb这一行，注释掉</li></ol><blockquote><p>#blacklist nvidiafb</p></blockquote><ol start=3><li>(可跳过，驱动会自动创建)新建文件 vi /etc/modprobe.d/disable-nouveau.conf,添加以下：</li></ol><blockquote><p>blacklist nouveau
-options nouveau modeset=0</p></blockquote>&mldr;</div><a class=readmore href=/posts/install-nvidia-driver-on-fedora/>Read more ⟶</a></section><section class=list-item><h1 class=title><a href=/posts/install-ruby-on-rails-on-fedora/>在Fedora上安装Ruby on Rails</a></h1><time>Jan 20, 2013</time><br><div class=description><blockquote><p>Practically all the software in the world is either broken or very difficult to use. So users dread software. They’ve been trained that whenever they try to install something, or even fill out a form online, it’s not going to work. I dread installing stuff, and I have a Ph.D. in computer science.
-Paul Graham, Founders at Work</p></blockquote><p>这几年一直在用AS3.0做开发，已经很久没有接触Linux了。博客上挂着Fedora的倒计时牌子，每次看到新版本倒计时一个接一个地陆续发布，这个周末重新装上了Fedora，学习一些其他的Web开发知识。虽说Ruby on Rails这几年不是很流行了，而且近期Twitter改用java引起了不小的震动，有些人认为RoR过时了,Ruby日薄西山了。我倒是觉得技术人员与其关注这些，不如去专注学习技术。</p><p><img src=https://upload.wikimedia.org/wikipedia/commons/9/9c/Ruby_on_Rails_logo.jpg alt=ror_logo></p><h2 id=安装步骤>安装步骤</h2><p>Fedora更新非常快，我用的是目前最新的Fedora 18。虽然按照文档和教程一步一步安装的，但还是遇到了很多问题。安装的方法有很多种，这个和Ruby语言的特性也很相似 😉 。考虑到环境配置和开发工作，使用RVM安装比较好，RVM可以管理多个Ruby版本和RubyGem，在开发时可以根据需要切换版本，配置环境也很方便。使用yum安装ruby，管理比较麻烦，不适合开发工作。</p><h3 id=安装git和curl>安装git和cURL</h3><p>可以考虑先更新所有包</p><blockquote><p>yum update</p></blockquote><p>安装git</p><blockquote><p>yum install git-core</p></blockquote><p>安装curl</p><blockquote><p>yum install curl</p></blockquote><h3 id=安装rvm>安装RVM</h3><p>RVM，即Ruby Version Manager，可以管理多个版本Ruby，RubyGem，Rails，对开发来说非常有用。</p><blockquote><p>curl -L get.rvm.io | bash -s stable
-source ~/.rvm/scripts/rvm</p></blockquote>&mldr;</div><a class=readmore href=/posts/install-ruby-on-rails-on-fedora/>Read more ⟶</a></section><section class=list-item><h1 class=title><a href=/posts/visioning-games-from-dear-esther-and-journey/>从《Dear Esther》和《Journey》看当今游戏发展</a></h1><time>Jan 3, 2013</time><br><div class=description><p><strong>标题：</strong> 从《Dear Esther》和《Journey》看当今游戏发展
-<strong>译者：</strong> <a href=http://gamerboom.com/archives/53084>游戏邦</a></p><p><strong>原文：</strong> Visioning games – what we can learn from games like Dear Esther and Journey
-<strong>作者：</strong> <a href=http://krillbite.com/blog/05/visioning-games-what-we-can-learn-from-games-like-dear-esther-and-journey/>Adrian Tingstad Husby</a></p><blockquote><p>这是一篇转载的文章，已获得译者许可。原文发表于2012年5月8日，前段时间体验完Dear Esther，无意中看到了这篇译文，恰巧 Journey被评为IGN 2012年度最佳游戏。文章讲得很有道理，“除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。”</p></blockquote><p>游戏所具有的程序，互动和（潜在的）非线型属性让它们能够更好地处理一些人类心智问题（比起其它静态且线型媒体来说）。但是通常情况下，因为游戏总是会受到一些条条框框和人们无尽期望的束缚，所以很难体现出同等艺术媒体所具有的情感或故事。</p><p>我既是一名游戏玩家也是游戏开发者，但是纵观今天的游戏，我们看到的却只是一些“有趣的”骗人玩意儿。除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。引用Scott Brodie的话来说就是“比起其它受欢迎的艺术形式，游戏产业从整体来看显得更加平庸与幼稚。”尽管觉得遗憾，但是我真的非常同意Scott的说法。</p><p>我认为我们有必要在此讨论一些重要的问题。即是否能够创造一款不是通过进度条或高分而推动奖励的电子游戏？这是一种与趣味情感相互协调的机制，但是它们是否能够与其它复杂且相对严肃的情感结合在一起？是否正是因为玩家对于外部奖励的狂热追求才促使游戏区别于浪漫的戏剧和纪录片？</p><p>最近我到gameosphere网站玩了《Journey》和新版的《Dear Esther》，并发现这两款游戏在设计方面有许多共同点。这些共同点都遵循着一种发展趋势——尽管都是基于独立场景而言。我个人认为这类型的游戏不仅能够让我对未来的游戏媒体发展充满期待，同时它们也完美地体现出我对于游戏的一些想法。</p><p>真心希望当前的游戏领域现状能够发生改变。而我们也同时在当前的游戏身上找到了许多值得讨论和学习之处。</p><p><img src=http://gamerboom.com/wp-content/uploads/2012/05/Journeyfrom-tmeink.com%EF%BC%89.jpg alt=journey title=Journey></p>&mldr;</div><a class=readmore href=/posts/visioning-games-from-dear-esther-and-journey/>Read more ⟶</a></section><section class=list-item><h1 class=title><a href=/posts/less-is-more-dear-esther-review/>Less is more : Dear Esther 简评</a></h1><time>Dec 31, 2012</time><br><div class=description><p>Less is more，是现代主义建筑大师路德维希·密斯·凡德罗提倡简单，反对过度装饰的设计理念，也是极简主义的经典表述。在AAA级游戏制作成本及规模不断攀升的同时，一些独立游戏开发者则朝着这个方向发展，简约的风格带来一种与众不同的清新和震撼。</p><p><img src=https://caad5q.bay.livefilestore.com/y1pASxJ__z-L7UIlgez3qwETURyMwHukRsphU-hwYx0pdCMHwRxTZt2qpGys17GfaAfXpGEQUxSqvt1OTQL-ajueqprGIkTuPpw/dearesther%202013-01-03%2022-18-18-05.jpg alt="dear esther"></p><p>Dear Esther 由独立游戏工作室 <a href=http://www.thechineseroom.co.uk/>The Chinese Room [室]</a> 制作， 起初是作为Source引擎的Mod作品在2008年发布，2012年在Steam平台发售商业版。游戏没有复杂的操作，玩家所能做的只有前后左右(WSAD) 和放大(Zoom)，采用Source引擎，游戏画面渲染的很不错，诸如水面的反射，水流的折射等物理效果让人印象深刻。简单的操作，极少的交互凸显了叙事的重要性，让整个游戏的情节成为了该游戏的核心。</p><p>游戏以一个废弃的海岛为场景，玩家可自由探索地区，并在途中某些地点触发画外音。叙述者自称“我”，即主角，也可指代为玩家自己。言语多以 “Dear Esther”开始，很像书信的开头，内容都是主角写给Esther的信件节选。玩家通过不断地探索来获得更多的叙述，以及结合游戏场景中的物件，从而获得零星的故事片段。随着探索区域的逐渐深入，获得的线索也越来越多，原本散乱的记忆拼图最终成为了一个整体。</p>&mldr;</div><a class=readmore href=/posts/less-is-more-dear-esther-review/>Read more ⟶</a></section><section class=list-item><h1 class=title><a href=/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/>Flash Player 11.5 Beta & AIR 3.5 Beta 特性</a></h1><time>Sep 27, 2012</time><br><div class=description>FP11.4发布没多长时间，很多新功能还没有用上，FP11.5 Beta就已经发布了。 主要特性及优点(不定期更新)： 在Flash Player的&mldr;</div><a class=readmore href=/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/>Read more ⟶</a></section><ul class=pagination><span class="page-item page-prev"><a href=/page/4/ class=page-link aria-label=Previous><span aria-hidden=true>← Prev</span></a></span>
-<span class="page-item page-next"><a href=/page/6/ class=page-link aria-label=Next><span aria-hidden=true>Next →</span></a></span></ul></main><footer><div style=display:flex><a class=soc href=https://github.com/anthonyhan rel=me title=GitHub><i data-feather=github></i></a>
-<a class=border></a><a class=soc href=https://twitter.com/_qhan_ rel=me title=Twitter><i data-feather=twitter></i></a>
-<a class=border></a><a class=soc href=/index.xml rel=me title=Rss><i data-feather=rss></i></a>
-<a class=border></a></div><div class=footer-info>2023 © Anthony | <a href=https://github.com/athul/archie>Archie Theme</a> | Built with <a href=https://gohugo.io>Hugo</a></div></footer><script>feather.replace()</script></div></body></html>
+driver download page at <a href="https://www.nvidia.com">www.nvidia.com</a>.</p>
+</blockquote>
+<p>大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/fix-nvidia-driver-on-kernel-3-7-7/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/install-nvidia-driver-on-fedora/">在Fedora上安装nVidia显卡驱动程序</a></h1>
+					<time>Jan 24, 2013</time>
+					<br><div class="description">
+	
+	<p>自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。</p>
+<h2 id="系统需求">系统需求</h2>
+<h3 id="软件需求">软件需求</h3>
+<blockquote>
+<p><em>Software Element</em>  <em>Supported versions</em>    <em>Check With&hellip;</em>
+Linux kernel        2.4.22 and newer        cat /proc/version
+XFree86*            4.0.1 and newer         XFree86 -version
+X.Org*              1.0 - 1.13              Xorg -version
+Kernel modutils     2.1.121 and newer       insmod &ndash;version
+glibc               2.0                     ls /lib/libc.so.* &gt; 6</p>
+</blockquote>
+<h3 id="硬件需求">硬件需求</h3>
+<p>当然是你的显卡要在驱动的支持列表内；</p>
+<p>参见 <a href="http://us.download.nvidia.com/XFree86/Linux-x86/310.19/README/supportedchips.html">Supported NVIDIA GPU Products</a></p>
+<h2 id="安装步骤">安装步骤</h2>
+<h3 id="禁用nouveau">禁用nouveau</h3>
+<h4 id="blacklist">blacklist</h4>
+<ol>
+<li>操作前保证有足够的权限，打开文件</li>
+</ol>
+<blockquote>
+<p>vi /etc/modprobe.d/balcklist.conf</p>
+</blockquote>
+<ol start="2">
+<li>找到 nvidiafb这一行，注释掉</li>
+</ol>
+<blockquote>
+<p>#blacklist nvidiafb</p>
+</blockquote>
+<ol start="3">
+<li>(可跳过，驱动会自动创建)新建文件 vi /etc/modprobe.d/disable-nouveau.conf,添加以下：</li>
+</ol>
+<blockquote>
+<p>blacklist nouveau
+options nouveau modeset=0</p>
+</blockquote>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/install-nvidia-driver-on-fedora/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/install-ruby-on-rails-on-fedora/">在Fedora上安装Ruby on Rails</a></h1>
+					<time>Jan 20, 2013</time>
+					<br><div class="description">
+	
+	<blockquote>
+<p>Practically all the software in the world is either broken or very difficult to use. So users dread software. They’ve been trained that whenever they try to install something, or even fill out a form online, it’s not going to work. I dread installing stuff, and I have a Ph.D. in computer science.
+Paul Graham, Founders at Work</p>
+</blockquote>
+<p>这几年一直在用AS3.0做开发，已经很久没有接触Linux了。博客上挂着Fedora的倒计时牌子，每次看到新版本倒计时一个接一个地陆续发布，这个周末重新装上了Fedora，学习一些其他的Web开发知识。虽说Ruby on Rails这几年不是很流行了，而且近期Twitter改用java引起了不小的震动，有些人认为RoR过时了,Ruby日薄西山了。我倒是觉得技术人员与其关注这些，不如去专注学习技术。</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Ruby_on_Rails_logo.jpg" alt="ror_logo"></p>
+<h2 id="安装步骤">安装步骤</h2>
+<p>Fedora更新非常快，我用的是目前最新的Fedora 18。虽然按照文档和教程一步一步安装的，但还是遇到了很多问题。安装的方法有很多种，这个和Ruby语言的特性也很相似 😉 。考虑到环境配置和开发工作，使用RVM安装比较好，RVM可以管理多个Ruby版本和RubyGem，在开发时可以根据需要切换版本，配置环境也很方便。使用yum安装ruby，管理比较麻烦，不适合开发工作。</p>
+<h3 id="安装git和curl">安装git和cURL</h3>
+<p>可以考虑先更新所有包</p>
+<blockquote>
+<p>yum update</p>
+</blockquote>
+<p>安装git</p>
+<blockquote>
+<p>yum install git-core</p>
+</blockquote>
+<p>安装curl</p>
+<blockquote>
+<p>yum install curl</p>
+</blockquote>
+<h3 id="安装rvm">安装RVM</h3>
+<p>RVM，即Ruby Version Manager，可以管理多个版本Ruby，RubyGem，Rails，对开发来说非常有用。</p>
+<blockquote>
+<p>curl -L get.rvm.io | bash -s stable
+source ~/.rvm/scripts/rvm</p>
+</blockquote>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/install-ruby-on-rails-on-fedora/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/visioning-games-from-dear-esther-and-journey/">从《Dear Esther》和《Journey》看当今游戏发展</a></h1>
+					<time>Jan 3, 2013</time>
+					<br><div class="description">
+	
+	<p><strong>标题：</strong> 从《Dear Esther》和《Journey》看当今游戏发展
+<strong>译者：</strong> <a href="http://gamerboom.com/archives/53084">游戏邦</a></p>
+<p><strong>原文：</strong> Visioning games – what we can learn from games like Dear Esther and Journey
+<strong>作者：</strong> <a href="http://krillbite.com/blog/05/visioning-games-what-we-can-learn-from-games-like-dear-esther-and-journey/">Adrian Tingstad Husby</a></p>
+<blockquote>
+<p>这是一篇转载的文章，已获得译者许可。原文发表于2012年5月8日，前段时间体验完Dear Esther，无意中看到了这篇译文，恰巧 Journey被评为IGN 2012年度最佳游戏。文章讲得很有道理，“除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。”</p>
+</blockquote>
+<p>游戏所具有的程序，互动和（潜在的）非线型属性让它们能够更好地处理一些人类心智问题（比起其它静态且线型媒体来说）。但是通常情况下，因为游戏总是会受到一些条条框框和人们无尽期望的束缚，所以很难体现出同等艺术媒体所具有的情感或故事。</p>
+<p>我既是一名游戏玩家也是游戏开发者，但是纵观今天的游戏，我们看到的却只是一些“有趣的”骗人玩意儿。除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。引用Scott Brodie的话来说就是“比起其它受欢迎的艺术形式，游戏产业从整体来看显得更加平庸与幼稚。”尽管觉得遗憾，但是我真的非常同意Scott的说法。</p>
+<p>我认为我们有必要在此讨论一些重要的问题。即是否能够创造一款不是通过进度条或高分而推动奖励的电子游戏？这是一种与趣味情感相互协调的机制，但是它们是否能够与其它复杂且相对严肃的情感结合在一起？是否正是因为玩家对于外部奖励的狂热追求才促使游戏区别于浪漫的戏剧和纪录片？</p>
+<p>最近我到gameosphere网站玩了《Journey》和新版的《Dear Esther》，并发现这两款游戏在设计方面有许多共同点。这些共同点都遵循着一种发展趋势——尽管都是基于独立场景而言。我个人认为这类型的游戏不仅能够让我对未来的游戏媒体发展充满期待，同时它们也完美地体现出我对于游戏的一些想法。</p>
+<p>真心希望当前的游戏领域现状能够发生改变。而我们也同时在当前的游戏身上找到了许多值得讨论和学习之处。</p>
+<p><img src="http://gamerboom.com/wp-content/uploads/2012/05/Journeyfrom-tmeink.com%EF%BC%89.jpg" alt="journey" title="Journey"></p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/visioning-games-from-dear-esther-and-journey/">Read more ⟶</a>
+				</section>
+				
+				
+
+<ul class="pagination">
+	<span class="page-item page-prev">
+	
+    <a href="/page/4/" class="page-link" aria-label="Previous"><span aria-hidden="true">← Prev</span></a>
+	
+	</span>
+	<span class="page-item page-next">
+	
+    <a href="/page/6/" class="page-link" aria-label="Next"><span aria-hidden="true">Next →</span></a>
+	
+	</span>
+</ul>
+
+
+			</main>
+			<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script>
+		</div>
+		
+	</body>
+</html>

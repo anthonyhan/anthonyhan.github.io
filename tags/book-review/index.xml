@@ -1,2 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>book review on LimboNova</title><link>/tags/book-review/</link><description>Recent content in book review on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© Anthony</copyright><lastBuildDate>Wed, 26 Oct 2022 12:26:33 +0800</lastBuildDate><atom:link href="/tags/book-review/index.xml" rel="self" type="application/rss+xml"/><item><title>读书笔记：蛤蟆先生去看心理医生</title><link>/posts/reading-notes-counselling-for-toads-a-psychological-adventure/</link><pubDate>Wed, 26 Oct 2022 12:26:33 +0800</pubDate><guid>/posts/reading-notes-counselling-for-toads-a-psychological-adventure/</guid><description>&lt;p>&lt;img src="/images/books/counselling-for-toads.jpg" alt="book-cover">&lt;/p>
-&lt;p>《蛤蟆先生去看心理医生》这本书借用《柳林风声》中的角色，讲述了蛤蟆先生的抑郁症状。在心理咨询师苍鹭的帮助下，蛤蟆先生发现自己的心理状态与童年经历息息相关。最终，他认识到自我，学会控制情绪，摆脱抑郁，并开始新的生活。&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>book review on LimboNova</title>
+    <link>/tags/book-review/</link>
+    <description>Recent content in book review on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© Anthony</copyright>
+    <lastBuildDate>Wed, 26 Oct 2022 12:26:33 +0800</lastBuildDate>
+    <atom:link href="/tags/book-review/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>读书笔记：蛤蟆先生去看心理医生</title>
+      <link>/posts/reading-notes-counselling-for-toads-a-psychological-adventure/</link>
+      <pubDate>Wed, 26 Oct 2022 12:26:33 +0800</pubDate>
+      <guid>/posts/reading-notes-counselling-for-toads-a-psychological-adventure/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;/images/books/counselling-for-toads.jpg&#34; alt=&#34;book-cover&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;《蛤蟆先生去看心理医生》这本书借用《柳林风声》中的角色，讲述了蛤蟆先生的抑郁症状。在心理咨询师苍鹭的帮助下，蛤蟆先生发现自己的心理状态与童年经历息息相关。最终，他认识到自我，学会控制情绪，摆脱抑郁，并开始新的生活。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

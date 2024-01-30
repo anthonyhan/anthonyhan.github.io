@@ -1,4 +1,8 @@
-<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>面向对象的行为树不是面向数据的 - LimboNova</title><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="原文：Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>面向对象的行为树不是面向数据的 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="原文：Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)
 作者：Bjoern Knafla
 文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。
 背景
@@ -48,7 +52,7 @@ public:
   // Iterate through children, start from next to run until the first one
   // returns success or that it is running.
 
-  // If this child's index is lower than that of the previous one returning
+  // If this child&#39;s index is lower than that of the previous one returning
   // running, rest the later child.
   virtual BehaviorState update();
 
@@ -63,7 +67,10 @@ private:
 };
 
 // ... and so on with other node types...
-Tony Albrecht 在 演讲 Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。"><meta property="og:image" content><meta property="og:title" content="面向对象的行为树不是面向数据的"><meta property="og:description" content="原文：Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)
+Tony Albrecht 在 演讲 Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="面向对象的行为树不是面向数据的" />
+<meta property="og:description" content="原文：Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)
 作者：Bjoern Knafla
 文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。
 背景
@@ -113,7 +120,7 @@ public:
   // Iterate through children, start from next to run until the first one
   // returns success or that it is running.
 
-  // If this child's index is lower than that of the previous one returning
+  // If this child&#39;s index is lower than that of the previous one returning
   // running, rest the later child.
   virtual BehaviorState update();
 
@@ -128,7 +135,14 @@ private:
 };
 
 // ... and so on with other node types...
-Tony Albrecht 在 演讲 Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。"><meta property="og:type" content="article"><meta property="og:url" content="/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2022-04-19T20:22:48+08:00"><meta property="article:modified_time" content="2022-04-19T20:22:48+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="面向对象的行为树不是面向数据的"><meta name=twitter:description content="原文：Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)
+Tony Albrecht 在 演讲 Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-19T20:22:48+08:00" />
+<meta property="article:modified_time" content="2022-04-19T20:22:48+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="面向对象的行为树不是面向数据的"/>
+<meta name="twitter:description" content="原文：Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)
 作者：Bjoern Knafla
 文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。
 背景
@@ -178,7 +192,7 @@ public:
   // Iterate through children, start from next to run until the first one
   // returns success or that it is running.
 
-  // If this child's index is lower than that of the previous one returning
+  // If this child&#39;s index is lower than that of the previous one returning
   // running, rest the later child.
   virtual BehaviorState update();
 
@@ -193,72 +207,233 @@ private:
 };
 
 // ... and so on with other node types...
-Tony Albrecht 在 演讲 Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。"><script src=/js/feather.min.js></script>
-<link href=/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css rel=stylesheet><link rel=stylesheet type=text/css media=screen href=/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css><link id=darkModeStyle rel=stylesheet type=text/css href=/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css media="(prefers-color-scheme: dark)"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css><script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js></script>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
-<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script></head><body><div class=content><header><div class=main><a href=/>LimboNova</a></div><nav><a href=/>Home</a>
-<a href=/posts>Archives</a>
-<a href=/tags>Tags</a>
-<a href=/about>About</a></nav></header><main><article><div class=title><h1 class=title>面向对象的行为树不是面向数据的</h1><div class=meta>Posted on Apr 19, 2022</div></div><section class=body><p>原文：<a href=https://jahej.com/alt/2011_03_10_shocker-naive-object-oriented-behavior-tree-isnt-data-oriented.html>Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)</a></p><p>作者：<a href=http://bjoernknafla.com/>Bjoern Knafla</a></p><p>文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。</p><h2 id=背景>背景</h2><p>简单的行为树可以使用面向对象方式来实现，如果性能满足需求，非常适合人手不多开发时间紧张的小型团队。</p><p>简单实现如下：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BehaviorTreeNode</span> {
-</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// ...
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> BehaviorState update() <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>resetState</span>() <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>template</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>ActionBehaviorTreeNode</span> <span style=color:#f92672>:</span> <span style=color:#66d9ef>public</span> BehaviorTreeNode {
-</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#66d9ef>explicit</span> ActionBehaviorTreeNode(ActionData <span style=color:#f92672>*</span>data);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// Calls a certain member function of actor.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> BehaviorState <span style=color:#a6e22e>update</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// Does nothing.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>resetState</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>private</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  ActionData <span style=color:#f92672>*</span>data;
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>SequenceBehaviorTreeNode</span> <span style=color:#f92672>:</span> <span style=color:#66d9ef>public</span> BehaviorTreeNode {
-</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// ...
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// Iterate through children, start from next to run until done or a child
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// returns that it is running.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> BehaviorState update();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// Calls resetState for the next to run node as it might have returned a
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// running state during the last update.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// Prepares to start from the first child on next update.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>resetState</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>private</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  std<span style=color:#f92672>::</span>vector children; <span style=color:#75715e>// In sequence order.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  std<span style=color:#f92672>::</span>size_t nextChildToUpdateIndex;
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>PriorityBehaviorTreeNode</span> <span style=color:#f92672>:</span> <span style=color:#66d9ef>public</span> BehaviorTreeNode {
-</span></span><span style=display:flex><span><span style=color:#66d9ef>public</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// ...
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// Iterate through children, start from next to run until the first one
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// returns success or that it is running.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// If this child&#39;s index is lower than that of the previous one returning
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// running, rest the later child.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> BehaviorState update();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>  <span style=color:#75715e>// Calls resetState for the next to run child as it might have returned a
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// running state during the last update.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#75715e>// Prepares to start from the first child on next update.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>virtual</span> <span style=color:#66d9ef>void</span> <span style=color:#a6e22e>resetState</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#66d9ef>private</span><span style=color:#f92672>:</span>
-</span></span><span style=display:flex><span>  std<span style=color:#f92672>::</span>vector children; <span style=color:#75715e>// In highest to lowest priority order.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  std<span style=color:#f92672>::</span>size_t nextChildToUpdateIndex;
-</span></span><span style=display:flex><span>};
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// ... and so on with other node types...
-</span></span></span></code></pre></div><p>Tony Albrecht 在 演讲 <a href="https://www.youtube.com/watch?v=VAT9E-M-PoE">Pitfalls of Object Oriented Programming, Revisited - (TGC 2017) - YouTube</a> 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。</p><p>行为树简化了游戏AI的建模复杂度，降低了调试难度。如果要考虑性能，充分利用硬件资源，也只是一个次要任务。但硬件平台各异，不佳的内存访问模型会降低其性能。比如：</p><ul><li>树的遍历引发随机内存访问，不利于缓存并使内存延迟死灰复燃。</li><li>树节点的递归导致其调用栈深度不可控。</li><li>每次调用节点类<code>update</code>函数会在虚函数表中查找实际的成员函数，产生间接的运行开销。最终造成大量的数据和指令缓存失效！</li><li>在具有非统一内存地址空间的异构架构或平台上 （如 Cell SPU 的主内存和 本地存储（local storage），或者 GPU 的 主机内存（host memory） 和 设备内存（device memory）。），尝试移动这样一个基于图的行为树指针，会导致完全序列化 —— 即复制所有节点，并修复所有指针。—— 没有什么便捷方法可以一次性复制整个行为树。</li><li>在遍历时会调用叶节点的动作，这些动作会处理专门的动作数据。如此便会清空缓存。而且如果在不同工作线程上遍历不同的行为树，则不会协调内存访问，也不会利用共享内存或缓存协调。</li><li>更糟的情况是：行为树系统的使用者可以用任意的内存访问模型和指针来实现他们自己的节点类。如果并行运行行为树却又忘了同步共享数据，从而引发条件竞争，但行为树系统对此没有任何办法来阻止这种情况的发生。更不必说由此带来的性能损耗了，因为高效的序列化取决于对共享数据作正确的同步访问。</li></ul><p>或许基于模板的快速派发调用（Template-based fast dispatch calls）可以取代虚函数表带来的开销，一个任务队列系统也可以使调用栈深度变得可控（实现详见 AiGameDev.com 的行为树实现）。但数据访问造成的 Cache Miss 问题还是无法解决，是时候尝试一些新的行为树表示方式了。</p><p>[注：不清楚 Template-based fast dispatch calls 指的是什么，或许是 Curiously Recurring Template Pattern (CRTP)之类的方案？]</p><h2 id=硬件墙>硬件墙</h2><p>由于时钟频率的提高，指令级并行 (ILP) 的利用，将内存或缓存放入芯片中以最大程度地减少访问较慢主内存，处理器变得越来越快。而更高的时钟速度会导致更多的热量，更复杂的功能导致更多的晶体管，从而产生更多的热量反而降低了性能，一头撞上了这些硬件墙（参见：<a href=http://cliffc.org/blog/wp-content/uploads/2018/05/2018_HardwareCrashCourse-.pdf>Click. 2018. <em>Not Your Father&rsquo;s Von Neumann Machine: A Crash Course in Modern Hardware</em></a>）：</p><ul><li>功耗墙：能消散多少热量的物理限制，由于时钟频率增加导致功耗增加，但散热限制了功耗的增长。</li><li>复杂度墙：为分支预测和推测执行而增加的晶体管会降低性能，架构的复杂度和晶体管数量需要在功耗和性能方面得到论证。</li><li>光速：影响信息在芯片上传输多远的物理限制。</li><li>内存墙：虽然内存带宽和读取速度随着时间的推移而增加，但并没有跟上处理器发展的步伐，正如 [David A. Patterson 在 2004 年的发现](<a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.115.7415&amp;rep=rep1&amp;type=pdf">Patterson. <em>Latency Lags</em></a>)。现在的 CPU 等待数据从主存到达的周期比以往更久。</li></ul><p>硬件制造商通过在处理器中加入更多核心，在核心中加入更多的晶体管的办法来对抗前两堵墙。这些核心通常比它们的单核 CPU 更简单。更多的核心意味着更大的计算潜力，而核心速度却没有增加太多。许多时钟频率不变甚至更低的核心直接转化为更低的功耗要求，从而减少热量产生。</p><p>另外一个策略是引入异构处理器：将不同架构的核心组合封装在一个芯片或物理处理器中。比如 图形处理单元（GPU），向量处理单元（SSE），或者 Cell Broadband 处理器 PPU 和 SPU 在一个芯片上。对于同一类任务，专门用于特定任务的核心比通用处理单元效率更高（功率和性能方面）。</p><p>在使用并行处理前，CPU 会通过将内存层次结构嵌入其中来克服内存墙。越靠近核心，速度越快，内存越小。一些例如x86处理器架构，在无需开发者干预的情况下自动使用缓存，而 Cell 的 SPU 的本地存储，以及一些 GPU 处理器的不同内存池，则属于不同的内存地址空间，需要开发者显式控制。</p><p>撇开不同内存层次结构的复杂性、功率要求和核心数量的可扩展性不谈，有一点永远是正确的：“缓存未命中”和“等待数据从主内存到达”严重限制了单核和多核处理器的性能。正如 Tony Albrecht 所说的：<a href=http://seven-degrees-of-freedom.blogspot.com/2009/10/latency-elephant.html>承认房间里的延迟大象</a>，优化数据和数据访问模式是充分利用平台性能的关键。</p><h2 id=面向数据的设计>面向数据的设计</h2><p>在 2011 年 GDC 上， <a href=https://www.gdcvault.com/play/1014491/Culling-the-Battlefield-Data-Oriented>Culling the Battlefield – Data Oriented Design in Practice</a> 介绍了 DICE 如何替换掉渲染和模拟中用来做剔除的树结构，转而使用数组蛮力处理，获得了可观的性能提升，代码更简洁，使将来的性能优化更加容易。</p><p>他们用了面向数据的思想和设计。那么何谓“面向数据的设计”（data-oriented design）？</p><ul><li>考虑要解决的问题，要遵守的约束条件，不同的解决方案的优点和缺点：首先，期望的输出数据是什么样的？其次，输出的数据如何计算？最后考虑输入数据。</li><li>只将代码视为转换数据表示形式的一种手段。</li><li>专注于解决方案的数据表示，以最大限度地降低内存访问成本，最大限度地提高目标平台缓存或本地存储的局部性。由于其连续的内存布局，简单的数组可以击败复杂的数据表示。</li><li>考虑大批量的数据，而不是单独的数据。对数据排序，避免对数据进行逐条的条件类型检查（<code>if-then-else</code>语句 或 虚函数表查询）。</li><li>明确数据的访问模式（读、写、读写）并排序，再分阶段组织计算。同一个阶段中只读但不写入的共享数据则可以并行处理，而不会有竞争条件的危险。没有任何依赖的数据写入也可以安全地并行处理。与其对每个数据项进行影响性能的同步操作，不如用几个阶段来分隔同步的时机。</li></ul><p>有意思的是，面向数据的设计不仅会带来更快的计算速度，还会带来更简单、更模块化的代码。更容易编写、调试、维护和优化的代码——这一切都要归功于数据优先的思想。</p><hr><p><strong>参考资料</strong></p><ol><li><a href="https://www.youtube.com/watch?v=VAT9E-M-PoE">Pitfalls of Object Oriented Programming, Revisited - (TGC 2017) - YouTube</a></li><li><a href=http://cliffc.org/blog/wp-content/uploads/2018/05/2018_HardwareCrashCourse-.pdf>Click. 2018. <em>Not Your Father&rsquo;s Von Neumann Machine: A Crash Course in Modern Hardware</em></a></li><li><a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.115.7415&amp;rep=rep1&amp;type=pdf">Patterson. <em>Latency Lags</em></a></li><li><a href=https://www.slideshare.net/EmanWebDev/pitfalls-of-object-oriented-programminggcap09>Albrecht. 2009. <em>Pitfalls of Object Oriented Programming</em></a></li><li><a href=https://www.gdcvault.com/play/1014491/Culling-the-Battlefield-Data-Oriented>Collin. 2011. <em>Culling the Battlefield: Data Oriented Design in Practice</em></a></li><li>N. Ilopis, “Data-Oriented Design Now And In The Future,” <em>Games from Within</em>, Jan. 04, 2011. <a href=https://gamesfromwithin.com/data-oriented-design-now-and-in-the-future>https://gamesfromwithin.com/data-oriented-design-now-and-in-the-future</a></li><li>T. Albrecht, “The Latency Elephant.” <a href=http://seven-degrees-of-freedom.blogspot.com/2009/10/latency-elephant.html>http://seven-degrees-of-freedom.blogspot.com/2009/10/latency-elephant.html</a></li></ol></section><br><br><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/ai>ai</a></li><li><a href=/tags/game-dev>game dev</a></li><li><a href=/tags/game-ai>game ai</a></li><li><a href=/tags/behavior-tree>behavior tree</a></li><li><a href=/tags/altdevblogaday>AltDevBlogADay</a></li></ul></nav></div><script src=https://utteranc.es/client.js repo issue-term=title label=💬comment theme=github-light crossorigin=anonymous async></script></article></main><footer><div style=display:flex><a class=soc href=https://github.com/anthonyhan rel=me title=GitHub><i data-feather=github></i></a>
-<a class=border></a><a class=soc href=https://twitter.com/_qhan_ rel=me title=Twitter><i data-feather=twitter></i></a>
-<a class=border></a><a class=soc href=/index.xml rel=me title=Rss><i data-feather=rss></i></a>
-<a class=border></a></div><div class=footer-info>2023 © Anthony | <a href=https://github.com/athul/archie>Archie Theme</a> | Built with <a href=https://gohugo.io>Hugo</a></div></footer><script>feather.replace()</script></div></body></html>
+Tony Albrecht 在 演讲 Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">面向对象的行为树不是面向数据的</h1>
+			<div class="meta">Posted on Apr 19, 2022</div>
+		</div>
+		
+
+		<section class="body">
+			<p>原文：<a href="https://jahej.com/alt/2011_03_10_shocker-naive-object-oriented-behavior-tree-isnt-data-oriented.html">Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)</a></p>
+<p>作者：<a href="http://bjoernknafla.com/">Bjoern Knafla</a></p>
+<p>文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。</p>
+<h2 id="背景">背景</h2>
+<p>简单的行为树可以使用面向对象方式来实现，如果性能满足需求，非常适合人手不多开发时间紧张的小型团队。</p>
+<p>简单实现如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BehaviorTreeNode</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState update() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">template</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ActionBehaviorTreeNode</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BehaviorTreeNode {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">explicit</span> ActionBehaviorTreeNode(ActionData <span style="color:#f92672">*</span>data);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Calls a certain member function of actor.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState <span style="color:#a6e22e">update</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Does nothing.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  ActionData <span style="color:#f92672">*</span>data;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SequenceBehaviorTreeNode</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BehaviorTreeNode {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Iterate through children, start from next to run until done or a child
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// returns that it is running.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Calls resetState for the next to run node as it might have returned a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// running state during the last update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Prepares to start from the first child on next update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  std<span style="color:#f92672">::</span>vector children; <span style="color:#75715e">// In sequence order.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  std<span style="color:#f92672">::</span>size_t nextChildToUpdateIndex;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PriorityBehaviorTreeNode</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BehaviorTreeNode {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Iterate through children, start from next to run until the first one
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// returns success or that it is running.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// If this child&#39;s index is lower than that of the previous one returning
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// running, rest the later child.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> BehaviorState update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Calls resetState for the next to run child as it might have returned a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// running state during the last update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// Prepares to start from the first child on next update.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">resetState</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>  std<span style="color:#f92672">::</span>vector children; <span style="color:#75715e">// In highest to lowest priority order.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  std<span style="color:#f92672">::</span>size_t nextChildToUpdateIndex;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ... and so on with other node types...
+</span></span></span></code></pre></div><p>Tony Albrecht 在 演讲 <a href="https://www.youtube.com/watch?v=VAT9E-M-PoE">Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube</a> 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。</p>
+<p>行为树简化了游戏AI的建模复杂度，降低了调试难度。如果要考虑性能，充分利用硬件资源，也只是一个次要任务。但硬件平台各异，不佳的内存访问模型会降低其性能。比如：</p>
+<ul>
+<li>树的遍历引发随机内存访问，不利于缓存并使内存延迟死灰复燃。</li>
+<li>树节点的递归导致其调用栈深度不可控。</li>
+<li>每次调用节点类<code>update</code>函数会在虚函数表中查找实际的成员函数，产生间接的运行开销。最终造成大量的数据和指令缓存失效！</li>
+<li>在具有非统一内存地址空间的异构架构或平台上 （如 Cell SPU 的主内存和 本地存储（local storage），或者 GPU 的 主机内存（host memory） 和 设备内存（device memory）。），尝试移动这样一个基于图的行为树指针，会导致完全序列化 —— 即复制所有节点，并修复所有指针。—— 没有什么便捷方法可以一次性复制整个行为树。</li>
+<li>在遍历时会调用叶节点的动作，这些动作会处理专门的动作数据。如此便会清空缓存。而且如果在不同工作线程上遍历不同的行为树，则不会协调内存访问，也不会利用共享内存或缓存协调。</li>
+<li>更糟的情况是：行为树系统的使用者可以用任意的内存访问模型和指针来实现他们自己的节点类。如果并行运行行为树却又忘了同步共享数据，从而引发条件竞争，但行为树系统对此没有任何办法来阻止这种情况的发生。更不必说由此带来的性能损耗了，因为高效的序列化取决于对共享数据作正确的同步访问。</li>
+</ul>
+<p>或许基于模板的快速派发调用（Template-based fast dispatch calls）可以取代虚函数表带来的开销，一个任务队列系统也可以使调用栈深度变得可控（实现详见 AiGameDev.com  的行为树实现）。但数据访问造成的 Cache Miss 问题还是无法解决，是时候尝试一些新的行为树表示方式了。</p>
+<p>[注：不清楚 Template-based fast dispatch calls 指的是什么，或许是 Curiously Recurring Template Pattern (CRTP)之类的方案？]</p>
+<h2 id="硬件墙">硬件墙</h2>
+<p>由于时钟频率的提高，指令级并行 (ILP) 的利用，将内存或缓存放入芯片中以最大程度地减少访问较慢主内存，处理器变得越来越快。而更高的时钟速度会导致更多的热量，更复杂的功能导致更多的晶体管，从而产生更多的热量反而降低了性能，一头撞上了这些硬件墙（参见：<a href="http://cliffc.org/blog/wp-content/uploads/2018/05/2018_HardwareCrashCourse-.pdf">Click. 2018. <em>Not Your Father&rsquo;s Von Neumann Machine: A Crash Course in Modern Hardware</em></a>）：</p>
+<ul>
+<li>功耗墙：能消散多少热量的物理限制，由于时钟频率增加导致功耗增加，但散热限制了功耗的增长。</li>
+<li>复杂度墙：为分支预测和推测执行而增加的晶体管会降低性能，架构的复杂度和晶体管数量需要在功耗和性能方面得到论证。</li>
+<li>光速：影响信息在芯片上传输多远的物理限制。</li>
+<li>内存墙：虽然内存带宽和读取速度随着时间的推移而增加，但并没有跟上处理器发展的步伐，正如 [David A. Patterson 在 2004 年的发现](<a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.115.7415&amp;rep=rep1&amp;type=pdf">Patterson. <em>Latency Lags</em></a>)。现在的 CPU 等待数据从主存到达的周期比以往更久。</li>
+</ul>
+<p>硬件制造商通过在处理器中加入更多核心，在核心中加入更多的晶体管的办法来对抗前两堵墙。这些核心通常比它们的单核 CPU 更简单。更多的核心意味着更大的计算潜力，而核心速度却没有增加太多。许多时钟频率不变甚至更低的核心直接转化为更低的功耗要求，从而减少热量产生。</p>
+<p>另外一个策略是引入异构处理器：将不同架构的核心组合封装在一个芯片或物理处理器中。比如 图形处理单元（GPU），向量处理单元（SSE），或者 Cell Broadband 处理器 PPU 和 SPU 在一个芯片上。对于同一类任务，专门用于特定任务的核心比通用处理单元效率更高（功率和性能方面）。</p>
+<p>在使用并行处理前，CPU 会通过将内存层次结构嵌入其中来克服内存墙。越靠近核心，速度越快，内存越小。一些例如x86处理器架构，在无需开发者干预的情况下自动使用缓存，而 Cell 的 SPU 的本地存储，以及一些 GPU 处理器的不同内存池，则属于不同的内存地址空间，需要开发者显式控制。</p>
+<p>撇开不同内存层次结构的复杂性、功率要求和核心数量的可扩展性不谈，有一点永远是正确的：“缓存未命中”和“等待数据从主内存到达”严重限制了单核和多核处理器的性能。正如 Tony Albrecht 所说的：<a href="http://seven-degrees-of-freedom.blogspot.com/2009/10/latency-elephant.html">承认房间里的延迟大象</a>，优化数据和数据访问模式是充分利用平台性能的关键。</p>
+<h2 id="面向数据的设计">面向数据的设计</h2>
+<p>在 2011 年 GDC 上， <a href="https://www.gdcvault.com/play/1014491/Culling-the-Battlefield-Data-Oriented">Culling the Battlefield – Data Oriented Design in Practice</a> 介绍了 DICE 如何替换掉渲染和模拟中用来做剔除的树结构，转而使用数组蛮力处理，获得了可观的性能提升，代码更简洁，使将来的性能优化更加容易。</p>
+<p>他们用了面向数据的思想和设计。那么何谓“面向数据的设计”（data-oriented design）？</p>
+<ul>
+<li>考虑要解决的问题，要遵守的约束条件，不同的解决方案的优点和缺点：首先，期望的输出数据是什么样的？其次，输出的数据如何计算？最后考虑输入数据。</li>
+<li>只将代码视为转换数据表示形式的一种手段。</li>
+<li>专注于解决方案的数据表示，以最大限度地降低内存访问成本，最大限度地提高目标平台缓存或本地存储的局部性。由于其连续的内存布局，简单的数组可以击败复杂的数据表示。</li>
+<li>考虑大批量的数据，而不是单独的数据。对数据排序，避免对数据进行逐条的条件类型检查（<code>if-then-else</code>语句 或 虚函数表查询）。</li>
+<li>明确数据的访问模式（读、写、读写）并排序，再分阶段组织计算。同一个阶段中只读但不写入的共享数据则可以并行处理，而不会有竞争条件的危险。没有任何依赖的数据写入也可以安全地并行处理。与其对每个数据项进行影响性能的同步操作，不如用几个阶段来分隔同步的时机。</li>
+</ul>
+<p>有意思的是，面向数据的设计不仅会带来更快的计算速度，还会带来更简单、更模块化的代码。更容易编写、调试、维护和优化的代码——这一切都要归功于数据优先的思想。</p>
+<hr>
+<p><strong>参考资料</strong></p>
+<ol>
+<li><a href="https://www.youtube.com/watch?v=VAT9E-M-PoE">Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube</a></li>
+<li><a href="http://cliffc.org/blog/wp-content/uploads/2018/05/2018_HardwareCrashCourse-.pdf">Click. 2018. <em>Not Your Father&rsquo;s Von Neumann Machine: A Crash Course in Modern Hardware</em></a></li>
+<li><a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.115.7415&amp;rep=rep1&amp;type=pdf">Patterson. <em>Latency Lags</em></a></li>
+<li><a href="https://www.slideshare.net/EmanWebDev/pitfalls-of-object-oriented-programminggcap09">Albrecht. 2009. <em>Pitfalls of Object Oriented Programming</em></a></li>
+<li><a href="https://www.gdcvault.com/play/1014491/Culling-the-Battlefield-Data-Oriented">Collin. 2011. <em>Culling the Battlefield: Data Oriented Design in Practice</em></a></li>
+<li>N. Ilopis, “Data-Oriented Design Now And In The Future,” <em>Games from Within</em>, Jan. 04, 2011. <a href="https://gamesfromwithin.com/data-oriented-design-now-and-in-the-future">https://gamesfromwithin.com/data-oriented-design-now-and-in-the-future</a></li>
+<li>T. Albrecht, “The Latency Elephant.” <a href="http://seven-degrees-of-freedom.blogspot.com/2009/10/latency-elephant.html">http://seven-degrees-of-freedom.blogspot.com/2009/10/latency-elephant.html</a></li>
+</ol>
+		</section>
+
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/ai">ai</a></li>
+					
+					<li><a href="/tags/game-dev">game dev</a></li>
+					
+					<li><a href="/tags/game-ai">game ai</a></li>
+					
+					<li><a href="/tags/behavior-tree">behavior tree</a></li>
+					
+					<li><a href="/tags/altdevblogaday">AltDevBlogADay</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
+<script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="title"
+        label="💬comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+		
+	</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

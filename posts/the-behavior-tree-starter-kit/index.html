@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>The Behavior Tree Starter Kit - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="
+偶然看到一个2012年 Alex Champandard 的演讲1，本想看看有什么可以借鉴，看到一半后，发现就是 Game AI Pro 的文章 《The Behavior Tree Starter Kit2》的演示版。结合代码3，对照着看一遍，有助于理解。
+Motivation
+行为树广泛应用于各个系统：角色，策略，小队，动画，镜头……
+使用案例：
+
+Rockstar Games： R.A.G.E.
+Guerrilla Games：Killzone 2 &amp; 3
+Uncharted 2
+Halo 3
+NBA &lsquo;09
+Metro 2033
+Crysis: Warhead
+League of Legends
+
+The Basics
+v1：原型
+一个基本的行为树实现：
+enum Status
+/**
+ * Return values of and valid states for behaviors.
+ */
+{
+    BH_INVALID,
+    BH_SUCCESS,
+    BH_FAILURE,
+    BH_RUNNING,
+    BH_ABORTED,
+};
+
+class Behavior
+/**
+ * Base class for actions, conditions and composites.
+ */
+{
+public:
+    virtual Status update()				= 0;
+
+    virtual void onInitialize()			{}
+    virtual void onTerminate(Status)	{}
+
+    Behavior()
+    :   m_eStatus(BH_INVALID)
+    {
+    }
+
+    virtual ~Behavior()
+    {
+    }
+
+    Status tick()
+    {
+        if (m_eStatus != BH_RUNNING)
+        {
+            onInitialize();
+        }
+
+        m_eStatus = update();
+
+        if (m_eStatus != BH_RUNNING)
+        {
+            onTerminate(m_eStatus);
+        }
+        return m_eStatus;
+    }
+
+    void reset()
+    {
+        m_eStatus = BH_INVALID;
+    }
+
+    void abort()
+    {
+        onTerminate(BH_ABORTED);
+        m_eStatus = BH_ABORTED;
+    }
+
+    bool isTerminated() const
+    {
+        return m_eStatus == BH_SUCCESS  ||  m_eStatus == BH_FAILURE;
+    }
+
+    bool isRunning() const
+    {
+        return m_eStatus == BH_RUNNING;
+    }
+
+    Status getStatus() const
+    {
+        return m_eStatus;
+    }
+
+private:
+    Status m_eStatus;
+};
+" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="The Behavior Tree Starter Kit" />
+<meta property="og:description" content="
+偶然看到一个2012年 Alex Champandard 的演讲1，本想看看有什么可以借鉴，看到一半后，发现就是 Game AI Pro 的文章 《The Behavior Tree Starter Kit2》的演示版。结合代码3，对照着看一遍，有助于理解。
+Motivation
+行为树广泛应用于各个系统：角色，策略，小队，动画，镜头……
+使用案例：
+
+Rockstar Games： R.A.G.E.
+Guerrilla Games：Killzone 2 &amp; 3
+Uncharted 2
+Halo 3
+NBA &lsquo;09
+Metro 2033
+Crysis: Warhead
+League of Legends
+
+The Basics
+v1：原型
+一个基本的行为树实现：
+enum Status
+/**
+ * Return values of and valid states for behaviors.
+ */
+{
+    BH_INVALID,
+    BH_SUCCESS,
+    BH_FAILURE,
+    BH_RUNNING,
+    BH_ABORTED,
+};
+
+class Behavior
+/**
+ * Base class for actions, conditions and composites.
+ */
+{
+public:
+    virtual Status update()				= 0;
+
+    virtual void onInitialize()			{}
+    virtual void onTerminate(Status)	{}
+
+    Behavior()
+    :   m_eStatus(BH_INVALID)
+    {
+    }
+
+    virtual ~Behavior()
+    {
+    }
+
+    Status tick()
+    {
+        if (m_eStatus != BH_RUNNING)
+        {
+            onInitialize();
+        }
+
+        m_eStatus = update();
+
+        if (m_eStatus != BH_RUNNING)
+        {
+            onTerminate(m_eStatus);
+        }
+        return m_eStatus;
+    }
+
+    void reset()
+    {
+        m_eStatus = BH_INVALID;
+    }
+
+    void abort()
+    {
+        onTerminate(BH_ABORTED);
+        m_eStatus = BH_ABORTED;
+    }
+
+    bool isTerminated() const
+    {
+        return m_eStatus == BH_SUCCESS  ||  m_eStatus == BH_FAILURE;
+    }
+
+    bool isRunning() const
+    {
+        return m_eStatus == BH_RUNNING;
+    }
+
+    Status getStatus() const
+    {
+        return m_eStatus;
+    }
+
+private:
+    Status m_eStatus;
+};
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/the-behavior-tree-starter-kit/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-28T23:44:48+08:00" />
+<meta property="article:modified_time" content="2022-03-28T23:44:48+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="The Behavior Tree Starter Kit"/>
+<meta name="twitter:description" content="
+偶然看到一个2012年 Alex Champandard 的演讲1，本想看看有什么可以借鉴，看到一半后，发现就是 Game AI Pro 的文章 《The Behavior Tree Starter Kit2》的演示版。结合代码3，对照着看一遍，有助于理解。
+Motivation
+行为树广泛应用于各个系统：角色，策略，小队，动画，镜头……
+使用案例：
+
+Rockstar Games： R.A.G.E.
+Guerrilla Games：Killzone 2 &amp; 3
+Uncharted 2
+Halo 3
+NBA &lsquo;09
+Metro 2033
+Crysis: Warhead
+League of Legends
+
+The Basics
+v1：原型
+一个基本的行为树实现：
+enum Status
+/**
+ * Return values of and valid states for behaviors.
+ */
+{
+    BH_INVALID,
+    BH_SUCCESS,
+    BH_FAILURE,
+    BH_RUNNING,
+    BH_ABORTED,
+};
+
+class Behavior
+/**
+ * Base class for actions, conditions and composites.
+ */
+{
+public:
+    virtual Status update()				= 0;
+
+    virtual void onInitialize()			{}
+    virtual void onTerminate(Status)	{}
+
+    Behavior()
+    :   m_eStatus(BH_INVALID)
+    {
+    }
+
+    virtual ~Behavior()
+    {
+    }
+
+    Status tick()
+    {
+        if (m_eStatus != BH_RUNNING)
+        {
+            onInitialize();
+        }
+
+        m_eStatus = update();
+
+        if (m_eStatus != BH_RUNNING)
+        {
+            onTerminate(m_eStatus);
+        }
+        return m_eStatus;
+    }
+
+    void reset()
+    {
+        m_eStatus = BH_INVALID;
+    }
+
+    void abort()
+    {
+        onTerminate(BH_ABORTED);
+        m_eStatus = BH_ABORTED;
+    }
+
+    bool isTerminated() const
+    {
+        return m_eStatus == BH_SUCCESS  ||  m_eStatus == BH_FAILURE;
+    }
+
+    bool isRunning() const
+    {
+        return m_eStatus == BH_RUNNING;
+    }
+
+    Status getStatus() const
+    {
+        return m_eStatus;
+    }
+
+private:
+    Status m_eStatus;
+};
+"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">The Behavior Tree Starter Kit</h1>
+			<div class="meta">Posted on Mar 28, 2022</div>
+		</div>
+		
+
+		<section class="body">
+			<!-- raw HTML omitted -->
+<p>偶然看到一个2012年 Alex Champandard 的演讲<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，本想看看有什么可以借鉴，看到一半后，发现就是 Game AI Pro 的文章 《The Behavior Tree Starter Kit<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>》的演示版。结合代码<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>，对照着看一遍，有助于理解。</p>
+<h2 id="motivation">Motivation</h2>
+<p>行为树广泛应用于各个系统：角色，策略，小队，动画，镜头……</p>
+<p>使用案例：</p>
+<ul>
+<li>Rockstar Games： R.A.G.E.</li>
+<li>Guerrilla Games：Killzone 2 &amp; 3</li>
+<li>Uncharted 2</li>
+<li>Halo 3</li>
+<li>NBA &lsquo;09</li>
+<li>Metro 2033</li>
+<li>Crysis: Warhead</li>
+<li>League of Legends</li>
+</ul>
+<h2 id="the-basics">The Basics</h2>
+<h3 id="v1原型">v1：原型</h3>
+<p>一个基本的行为树实现：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Status</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Return values of and valid states for behaviors.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    BH_INVALID,
+</span></span><span style="display:flex;"><span>    BH_SUCCESS,
+</span></span><span style="display:flex;"><span>    BH_FAILURE,
+</span></span><span style="display:flex;"><span>    BH_RUNNING,
+</span></span><span style="display:flex;"><span>    BH_ABORTED,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Behavior</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Base class for actions, conditions and composites.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status update()				<span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()			{}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onTerminate</span>(Status)	{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Behavior()
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">:</span>   m_eStatus(BH_INVALID)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Behavior()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">tick</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            onInitialize();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            onTerminate(m_eStatus);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">reset</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> BH_INVALID;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">abort</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        onTerminate(BH_ABORTED);
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> BH_ABORTED;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isTerminated</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus <span style="color:#f92672">==</span> BH_SUCCESS  <span style="color:#f92672">||</span>  m_eStatus <span style="color:#f92672">==</span> BH_FAILURE;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isRunning</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus <span style="color:#f92672">==</span> BH_RUNNING;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">getStatus</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    Status m_eStatus;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h4 id="复合节点">复合节点</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Composite</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Behavior
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> addChild(Behavior<span style="color:#f92672">*</span> child) { m_Children.push_back(child); }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">removeChild</span>(Behavior<span style="color:#f92672">*</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">clearChildren</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">typedef</span> std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>Behavior<span style="color:#f92672">*&gt;</span> Behaviors;
+</span></span><span style="display:flex;"><span>    Behaviors m_Children;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h5 id="sequence">Sequence</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sequence</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Composite
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Sequence()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        m_CurrentChild <span style="color:#f92672">=</span> m_Children.begin();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status <span style="color:#a6e22e">update</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Keep going until a child behavior says it&#39;s running.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">for</span> (;;)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            Status s <span style="color:#f92672">=</span> (<span style="color:#f92672">*</span>m_CurrentChild)<span style="color:#f92672">-&gt;</span>tick();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// If the child fails, or keeps running, do the same.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> (s <span style="color:#f92672">!=</span> BH_SUCCESS)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> s;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Hit the end of the array, job done!
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">++</span>m_CurrentChild <span style="color:#f92672">==</span> m_Children.end())
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> BH_SUCCESS;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Behaviors<span style="color:#f92672">::</span>iterator m_CurrentChild;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h5 id="selector">Selector</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Selector</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Composite
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Selector()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        m_Current <span style="color:#f92672">=</span> m_Children.begin();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status <span style="color:#a6e22e">update</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Keep going until a child behavior says its running.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">for</span> (;;)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            Status s <span style="color:#f92672">=</span> (<span style="color:#f92672">*</span>m_Current)<span style="color:#f92672">-&gt;</span>tick();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// If the child succeeds, or keeps running, do the same.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> (s <span style="color:#f92672">!=</span> BH_FAILURE)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> s;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Hit the end of the array, it didn&#39;t end well...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">++</span>m_Current <span style="color:#f92672">==</span> m_Children.end())
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> BH_FAILURE;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Behaviors<span style="color:#f92672">::</span>iterator m_Current;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h3 id="v2共享结构">v2：共享结构</h3>
+<p>一个简单的行为树原型很容易实现，但有内存占用的问题：即使它们使用同一个行为树，使用它的每个 Agent 都要创建各自的行为树实例。解决的办法就是分离行为数据。</p>
+<p>节点</p>
+<ul>
+<li>所有行为树的公共数据</li>
+<li>树的基本结构</li>
+<li>所有参数和其它设置</li>
+</ul>
+<p>任务</p>
+<ul>
+<li>运行时实例的特定数据</li>
+<li>指针，计数器……</li>
+</ul>
+<h4 id="基本节点">基本节点</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Task</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Status</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	BH_INVALID,
+</span></span><span style="display:flex;"><span>	BH_SUCCESS,
+</span></span><span style="display:flex;"><span>	BH_FAILURE,
+</span></span><span style="display:flex;"><span>	BH_RUNNING,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Node</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> Task<span style="color:#f92672">*</span> create() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">destroy</span>(Task<span style="color:#f92672">*</span>) <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Node() {}
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Task</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	Task(Node<span style="color:#f92672">&amp;</span> node)
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">:</span>	m_pNode(<span style="color:#f92672">&amp;</span>node)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Task() {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> Status <span style="color:#a6e22e">update</span>() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>() {}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onTerminate</span>(Status) {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	Node<span style="color:#f92672">*</span> m_pNode;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Behavior</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	Task<span style="color:#f92672">*</span> m_pTask;
+</span></span><span style="display:flex;"><span>	Node<span style="color:#f92672">*</span> m_pNode;
+</span></span><span style="display:flex;"><span>	Status m_eStatus;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	Behavior()
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">:</span>	m_pTask(NULL)
+</span></span><span style="display:flex;"><span>	,	m_pNode(NULL)
+</span></span><span style="display:flex;"><span>	,	m_eStatus(BH_INVALID)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	Behavior(Node<span style="color:#f92672">&amp;</span> node)
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">:</span>	m_pTask(NULL)
+</span></span><span style="display:flex;"><span>	,	m_pNode(NULL)
+</span></span><span style="display:flex;"><span>	,	m_eStatus(BH_INVALID)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		setup(node);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">~</span>Behavior()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		m_eStatus <span style="color:#f92672">=</span> BH_INVALID;
+</span></span><span style="display:flex;"><span>		teardown();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setup</span>(Node<span style="color:#f92672">&amp;</span> node)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		teardown();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		m_pNode <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>node;
+</span></span><span style="display:flex;"><span>		m_pTask <span style="color:#f92672">=</span> node.create();
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">teardown</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (m_pTask <span style="color:#f92672">==</span> NULL)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		ASSERT(m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING);
+</span></span><span style="display:flex;"><span>		m_pNode<span style="color:#f92672">-&gt;</span>destroy(m_pTask);
+</span></span><span style="display:flex;"><span>		m_pTask <span style="color:#f92672">=</span> NULL;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	Status <span style="color:#a6e22e">tick</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">==</span> BH_INVALID)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			m_pTask<span style="color:#f92672">-&gt;</span>onInitialize();
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		m_eStatus <span style="color:#f92672">=</span> m_pTask<span style="color:#f92672">-&gt;</span>update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			m_pTask<span style="color:#f92672">-&gt;</span>onTerminate(m_eStatus);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">template</span> <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TASK</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>	TASK<span style="color:#f92672">*</span> get() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// NOTE: It&#39;s safe to static_cast, the caller almost
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#75715e">// always knows what kind of task type it is.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">dynamic_cast</span><span style="color:#f92672">&lt;</span>TASK<span style="color:#f92672">*&gt;</span>(m_pTask);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h4 id="复合节点-1">复合节点</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>Node<span style="color:#f92672">*&gt;</span> Nodes;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Composite</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Node
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>	
+</span></span><span style="display:flex;"><span>	Nodes m_Children;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h5 id="sequence-1">Sequence</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sequence</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Task
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	Sequence(Composite<span style="color:#f92672">&amp;</span> node)
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">:</span>	Task(node)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	Composite<span style="color:#f92672">&amp;</span> getNode()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">static_cast</span><span style="color:#f92672">&lt;</span>Composite<span style="color:#f92672">*&gt;</span>(m_pNode);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		m_CurrentChild <span style="color:#f92672">=</span> getNode().m_Children.begin();
+</span></span><span style="display:flex;"><span>		m_CurrentBehavior.setup(<span style="color:#f92672">**</span>m_CurrentChild);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> Status <span style="color:#a6e22e">update</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> (;;)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			Status s <span style="color:#f92672">=</span> m_CurrentBehavior.tick();
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (s <span style="color:#f92672">!=</span> BH_SUCCESS)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> s;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (<span style="color:#f92672">++</span>m_CurrentChild <span style="color:#f92672">==</span> getNode().m_Children.end())
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> BH_SUCCESS;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			m_CurrentBehavior.setup(<span style="color:#f92672">**</span>m_CurrentChild);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	Nodes<span style="color:#f92672">::</span>iterator m_CurrentChild;
+</span></span><span style="display:flex;"><span>	Behavior m_CurrentBehavior;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h5 id="selector-1">Selector</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Selector</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Task
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	Selector(Composite<span style="color:#f92672">&amp;</span> node)
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">:</span>	Task(node)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	Composite<span style="color:#f92672">&amp;</span> getNode()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">static_cast</span><span style="color:#f92672">&lt;</span>Composite<span style="color:#f92672">*&gt;</span>(m_pNode);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		m_CurrentChild <span style="color:#f92672">=</span> getNode().m_Children.begin();
+</span></span><span style="display:flex;"><span>		m_Behavior.setup(<span style="color:#f92672">**</span>m_CurrentChild);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> Status <span style="color:#a6e22e">update</span>()
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> (;;)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			Status s <span style="color:#f92672">=</span> m_Behavior.tick();
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (s <span style="color:#f92672">!=</span> BH_FAILURE)
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> s;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> (<span style="color:#f92672">++</span>m_CurrentChild <span style="color:#f92672">==</span> getNode().m_Children.end())
+</span></span><span style="display:flex;"><span>			{
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">return</span> BH_FAILURE;
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			m_Behavior.setup(<span style="color:#f92672">**</span>m_CurrentChild);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	Nodes<span style="color:#f92672">::</span>iterator m_CurrentChild;
+</span></span><span style="display:flex;"><span>	Behavior m_Behavior;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h4 id="特点">特点</h4>
+<p><strong>优点</strong></p>
+<ul>
+<li>易于实现</li>
+<li>易于调试</li>
+<li>易于理解
+<strong>缺点</strong></li>
+<li>代码完全基于轮询</li>
+<li>一系列的虚函数调用</li>
+<li>遍历过程涉及大量内存访问</li>
+<li>栈的最大大小取决于数据，潜在的栈溢出问题</li>
+</ul>
+<h2 id="modern-bts">Modern BTs</h2>
+<p>为了解决上述问题，可以编写一个专门的解释器，能够比C++更好地处理行为树。</p>
+<p>优化策略：</p>
+<ol>
+<li>使用暴力法
+<ul>
+<li>设计数据结构</li>
+<li>减少函数调用</li>
+<li>考量内存访问</li>
+</ul>
+</li>
+<li>使用领域知识
+<ul>
+<li>理解BT使用场景</li>
+<li>优化架构/算法</li>
+<li>简化BT结构</li>
+</ul>
+</li>
+</ol>
+<h3 id="v3-data-oriented-bt">v3: Data-Oriented BT</h3>
+<h4 id="优化内存分配">优化内存分配</h4>
+<p>降低Cache miss，提高缓存一致性，内存分配采取以下方法：</p>
+<ul>
+<li>使用栈分配器为整个行为树分配内存</li>
+<li>连续分配行为树节点的内存</li>
+<li>默认使用深度优先顺序存储节点</li>
+<li>子节点紧随其父节点</li>
+</ul>
+<h5 id="代码实现">代码实现</h5>
+<p>基础部分没有什么变化</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Status</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    BH_INVALID,
+</span></span><span style="display:flex;"><span>    BH_SUCCESS,
+</span></span><span style="display:flex;"><span>    BH_FAILURE,
+</span></span><span style="display:flex;"><span>    BH_RUNNING,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Behavior</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    Behavior()
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">:</span>	m_eStatus(BH_INVALID)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Behavior()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">tick</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">==</span> BH_INVALID)
+</span></span><span style="display:flex;"><span>            onInitialize();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>            onTerminate(m_eStatus);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">virtual</span> Status update() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>() {}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onTerminate</span>(Status) {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status m_eStatus;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>Behavior<span style="color:#f92672">*&gt;</span> Behaviors;
+</span></span></code></pre></div><p>变化在这里：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> size_t k_MaxBehaviorTreeMemory <span style="color:#f92672">=</span> <span style="color:#ae81ff">8192</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BehaviorTree</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    BehaviorTree()
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">:</span>	m_pBuffer(<span style="color:#66d9ef">new</span> <span style="color:#66d9ef">uint8_t</span>[k_MaxBehaviorTreeMemory])
+</span></span><span style="display:flex;"><span>    ,	m_iOffset(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">~</span>BehaviorTree()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">delete</span> [] m_pBuffer;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">template</span> <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">typename</span> T<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>    T<span style="color:#f92672">&amp;</span> allocate()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>		T<span style="color:#f92672">*</span> node <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ((<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>)((uintptr_t)m_pBuffer <span style="color:#f92672">+</span> m_iOffset)) T;
+</span></span><span style="display:flex;"><span>        m_iOffset <span style="color:#f92672">+=</span> <span style="color:#66d9ef">sizeof</span>(T);
+</span></span><span style="display:flex;"><span>		ASSERT(m_iOffset <span style="color:#f92672">&lt;</span> k_MaxBehaviorTreeMemory);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span>node;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">uint8_t</span><span style="color:#f92672">*</span> m_pBuffer;
+</span></span><span style="display:flex;"><span>    size_t m_iOffset;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h4 id="使用节点索引">使用节点索引</h4>
+<p>降低内存消耗，可以使用以下方法：</p>
+<ul>
+<li>不依赖指针</li>
+<li>使用下标或相对偏移量</li>
+<li>让复合节点的子节点更易查找</li>
+</ul>
+<h5 id="代码实现-1">代码实现</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> size_t k_MaxChildrenPerComposite <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Composite</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Behavior
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    Composite()
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">:</span>	m_ChildCount(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">addChild</span>(Behavior<span style="color:#f92672">&amp;</span> child)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>		ASSERT(m_ChildCount <span style="color:#f92672">&lt;</span> k_MaxChildrenPerComposite);
+</span></span><span style="display:flex;"><span>		ptrdiff_t p <span style="color:#f92672">=</span> (uintptr_t)<span style="color:#f92672">&amp;</span>child <span style="color:#f92672">-</span> (uintptr_t)<span style="color:#66d9ef">this</span>;
+</span></span><span style="display:flex;"><span>		ASSERT(p <span style="color:#f92672">&lt;</span> std<span style="color:#f92672">::</span>numeric_limits<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">uint16_t</span><span style="color:#f92672">&gt;::</span>max());
+</span></span><span style="display:flex;"><span>		m_Children[m_ChildCount<span style="color:#f92672">++</span>] <span style="color:#f92672">=</span> <span style="color:#66d9ef">static_cast</span><span style="color:#f92672">&lt;</span><span style="color:#66d9ef">uint16_t</span><span style="color:#f92672">&gt;</span>(p);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	Behavior<span style="color:#f92672">&amp;</span> getChild(size_t index)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>		ASSERT(index <span style="color:#f92672">&lt;</span> m_ChildCount);
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span>(Behavior<span style="color:#f92672">*</span>)((uintptr_t)<span style="color:#66d9ef">this</span> <span style="color:#f92672">+</span> m_Children[index]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	size_t <span style="color:#a6e22e">getChildCount</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_ChildCount;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">uint16_t</span> m_Children[k_MaxChildrenPerComposite];
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">uint16_t</span> m_ChildCount;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sequence</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Composite
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Sequence()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        m_Current <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status <span style="color:#a6e22e">update</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> (;;)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            Status s <span style="color:#f92672">=</span> getChild(m_Current).tick();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (s <span style="color:#f92672">!=</span> BH_SUCCESS)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> s;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            ASSERT(m_Current <span style="color:#f92672">&lt;</span> std<span style="color:#f92672">::</span>numeric_limits<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">uint16_t</span><span style="color:#f92672">&gt;::</span>max() <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">++</span>m_Current <span style="color:#f92672">==</span> getChildCount())
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> BH_SUCCESS;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">uint16_t</span> m_Current;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Selector</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Composite
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Selector()
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        m_Current <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status <span style="color:#a6e22e">update</span>()
+</span></span><span style="display:flex;"><span>    {		
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">for</span> (;;)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            Status s <span style="color:#f92672">=</span> getChild(m_Current).tick();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (s <span style="color:#f92672">!=</span> BH_FAILURE)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> s;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            ASSERT(m_Current <span style="color:#f92672">&lt;</span> std<span style="color:#f92672">::</span>numeric_limits<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">uint16_t</span><span style="color:#f92672">&gt;::</span>max() <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">++</span>m_Current <span style="color:#f92672">==</span> getChildCount())
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> BH_FAILURE;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">uint16_t</span> m_Current;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h4 id="特点-1">特点</h4>
+<p><strong>优点</strong></p>
+<ul>
+<li>实现难度不算太大</li>
+<li>优化方法简单易行</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>不易调试，需要借助工具</li>
+<li>代码不易阅读和理解</li>
+</ul>
+<h3 id="v4-event-driven-bt">v4: Event-Driven BT</h3>
+<h4 id="执行顺序">执行顺序</h4>
+<p>首次遍历</p>
+<ul>
+<li>所有节点按深度优先顺序开始</li>
+<li>一切照旧</li>
+</ul>
+<p>后续遍历</p>
+<ul>
+<li>不再从根节点遍历！</li>
+<li>子节点会广播其状态变化</li>
+<li>父节点做出响应并应用</li>
+<li>只在最坏的情况下，重新从根节点开始</li>
+</ul>
+<h4 id="代码实现-2">代码实现</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Status</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    BH_INVALID,
+</span></span><span style="display:flex;"><span>    BH_SUCCESS,
+</span></span><span style="display:flex;"><span>    BH_FAILURE,
+</span></span><span style="display:flex;"><span>    BH_RUNNING,
+</span></span><span style="display:flex;"><span>    BH_SUSPENDED,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">typedef</span> std<span style="color:#f92672">::</span>function<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">void</span> (Status)<span style="color:#f92672">&gt;</span> BehaviorObserver;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Behavior</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    Behavior()
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">:</span>	m_eStatus(BH_INVALID)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Behavior()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">tick</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">==</span> BH_INVALID)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            onInitialize();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            onTerminate(m_eStatus);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status <span style="color:#a6e22e">update</span>() <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>() {}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onTerminate</span>(Status) {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status m_eStatus;
+</span></span><span style="display:flex;"><span>    BehaviorObserver m_Observer;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BehaviorTree</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> start(Behavior<span style="color:#f92672">&amp;</span> bh, BehaviorObserver<span style="color:#f92672">*</span> observer <span style="color:#f92672">=</span> NULL)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (observer <span style="color:#f92672">!=</span> NULL)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            bh.m_Observer <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>observer;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        m_Behaviors.push_front(<span style="color:#f92672">&amp;</span>bh);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">stop</span>(Behavior<span style="color:#f92672">&amp;</span> bh, Status result)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        ASSERT(result <span style="color:#f92672">!=</span> BH_RUNNING);
+</span></span><span style="display:flex;"><span>        bh.m_eStatus <span style="color:#f92672">=</span> result;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (bh.m_Observer)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            bh.m_Observer(result);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">tick</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Insert an end-of-update marker into the list of tasks.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        m_Behaviors.push_back(NULL);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Keep going updating tasks until we encounter the marker.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">while</span> (step())
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">continue</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">step</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        Behavior<span style="color:#f92672">*</span> current <span style="color:#f92672">=</span> m_Behaviors.front();
+</span></span><span style="display:flex;"><span>        m_Behaviors.pop_front();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// If this is the end-of-update marker, stop processing.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (current <span style="color:#f92672">==</span> NULL)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> false;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Perform the update on this individual task.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (current<span style="color:#f92672">-&gt;</span>m_eStatus <span style="color:#f92672">!=</span> Status<span style="color:#f92672">::</span>BH_SUSPENDED)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            current<span style="color:#f92672">-&gt;</span>tick();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Process the observer if the task terminated.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (current<span style="color:#f92672">-&gt;</span>m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING  <span style="color:#f92672">&amp;&amp;</span>  current<span style="color:#f92672">-&gt;</span>m_Observer)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            current<span style="color:#f92672">-&gt;</span>m_Observer(current<span style="color:#f92672">-&gt;</span>m_eStatus);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span> <span style="color:#75715e">// Otherwise drop it into the queue for the next tick().
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        {
+</span></span><span style="display:flex;"><span>            m_Behaviors.push_back(current);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> true;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>deque<span style="color:#f92672">&lt;</span>Behavior<span style="color:#f92672">*&gt;</span> m_Behaviors;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// ============================================================================
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Composite</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Behavior
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">typedef</span> std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>Behavior<span style="color:#f92672">*&gt;</span> Behaviors;
+</span></span><span style="display:flex;"><span>    Behaviors m_Children;
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sequence</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> Composite
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    Sequence(BehaviorTree<span style="color:#f92672">&amp;</span> bt)
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">:</span>	m_pBehaviorTree(<span style="color:#f92672">&amp;</span>bt)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">protected</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    BehaviorTree<span style="color:#f92672">*</span> m_pBehaviorTree;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        m_Current <span style="color:#f92672">=</span> m_Children.begin();
+</span></span><span style="display:flex;"><span>        BehaviorObserver observer <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>bind(<span style="color:#f92672">&amp;</span>Sequence<span style="color:#f92672">::</span>onChildComplete, <span style="color:#66d9ef">this</span>, std<span style="color:#f92672">::</span>placeholders<span style="color:#f92672">::</span>_1);
+</span></span><span style="display:flex;"><span>        m_pBehaviorTree<span style="color:#f92672">-&gt;</span>start(<span style="color:#f92672">**</span>m_Current, <span style="color:#f92672">&amp;</span>observer);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onChildComplete</span>(Status)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        Behavior<span style="color:#f92672">&amp;</span> child <span style="color:#f92672">=</span> <span style="color:#f92672">**</span>m_Current;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (child.m_eStatus <span style="color:#f92672">==</span> BH_FAILURE)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            m_pBehaviorTree<span style="color:#f92672">-&gt;</span>stop(<span style="color:#f92672">*</span><span style="color:#66d9ef">this</span>, BH_FAILURE);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        ASSERT(child.m_eStatus <span style="color:#f92672">==</span> BH_SUCCESS);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">++</span>m_Current <span style="color:#f92672">==</span> m_Children.end())
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            m_pBehaviorTree<span style="color:#f92672">-&gt;</span>stop(<span style="color:#f92672">*</span><span style="color:#66d9ef">this</span>, BH_SUCCESS);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            BehaviorObserver observer <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>bind(<span style="color:#f92672">&amp;</span>Sequence<span style="color:#f92672">::</span>onChildComplete, <span style="color:#66d9ef">this</span>, std<span style="color:#f92672">::</span>placeholders<span style="color:#f92672">::</span>_1);
+</span></span><span style="display:flex;"><span>            m_pBehaviorTree<span style="color:#f92672">-&gt;</span>start(<span style="color:#f92672">**</span>m_Current, <span style="color:#f92672">&amp;</span>observer);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status <span style="color:#a6e22e">update</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> BH_RUNNING;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Behaviors<span style="color:#f92672">::</span>iterator m_Current;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h4 id="特点-2">特点</h4>
+<p><strong>优点</strong></p>
+<ul>
+<li>保证最小计算量</li>
+<li>容易实现一个单步调试工具</li>
+<li>优雅简洁</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>使用回调函数，代码不直观，不易理解。</li>
+<li>不只依赖于优化技巧，还需要其他方面的知识。</li>
+</ul>
+<h2 id="what-next">What Next?</h2>
+<h3 id="尚未实现的部分">尚未实现的部分</h3>
+<p><strong>节点</strong></p>
+<ul>
+<li>装饰节点（Decorators）</li>
+<li>并行节点（Parellel）</li>
+</ul>
+<p><strong>API</strong></p>
+<ul>
+<li>如何 <code>abort()</code>行为以及整个行为树</li>
+<li>如何支持不可中断的行为。</li>
+</ul>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="https://www.youtube.com/watch?v=n4aREFb3SsU">https://www.youtube.com/watch?v=n4aREFb3SsU</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf">https://www.gameaipro.com/GameAIPro/GameAIPro_Chapter06_The_Behavior_Tree_Starter_Kit.pdf</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="https://github.com/aigamedev/btsk">Behavior Tree Starter Kit (github.com)</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+		</section>
+
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/game-dev">game dev</a></li>
+					
+					<li><a href="/tags/behavior-tree">behavior tree</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
+<script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="title"
+        label="💬comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+		
+	</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

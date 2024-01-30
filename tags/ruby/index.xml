@@ -1,5 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>ruby on LimboNova</title><link>/tags/ruby/</link><description>Recent content in ruby on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© Anthony</copyright><lastBuildDate>Fri, 12 Apr 2013 12:16:03 +0800</lastBuildDate><atom:link href="/tags/ruby/index.xml" rel="self" type="application/rss+xml"/><item><title>Ruby on Rails 入门体验</title><link>/posts/ror-tutorial-review/</link><pubDate>Fri, 12 Apr 2013 12:16:03 +0800</pubDate><guid>/posts/ror-tutorial-review/</guid><description>&lt;p>今年年初时决定学习一下 Web 开发方面的知识，因为对 Ruby 早有耳闻，所以很自然地就选择了 Ruby on Rails 作为目标。在网上看到 Ruby on Rails Tutorial的教程，于是就跟着教程，边学边做地把这本书看完了。对 RoR 有了一个大概的了解，包括框架结构和开发流程，还有一些常用的Gems，确实是一本不错的实践入门书。&lt;/p>
-&lt;h2 id="关于教程">关于教程&lt;/h2>
-&lt;p>一开始时看的是英文原版，阅读速度缓慢，而我对实践充满热情，迫切希望早点学完自己动手做。恰好发现 Andor Chen 已经翻译了大部分章节，遇到有疑问的地方，就对照英文检查语句和代码。顺便修正一些译文里的错误，然后发送 pull request 让作者合并。&lt;/p>
-&lt;p>这本书和以前看的 Flex 入门书——《Flex 3 权威指南》类似，都是以构建一个应用为主线，由浅入深地介绍 RoR 开发的基本知识，从最开始的静态页面到模型生成，控制器，路由，数据库，Ajax，还有贯彻整个开发过程的测试。教程里开发的是一个微博站点，而 Twitter 以前就是使用 RoR 开发的，做起来也饶有趣味。&lt;/p>
-&lt;p>花了差不多两个月的业余时间看完了这个教程，并最终完成了那个微博网站，包括大部分练习题的功能。总的来说，还是有点挑战的。由于书中大部分都是编写步骤，注重手把手的教学实践。在原理的介绍上篇幅很少，而 RoR 这样“约定优于配置”的理念让我有点不适应，书中并无约定方面的解释，很多方法像变戏法一般地已经实现好了，而我却想一探究竟，搞清楚其幕后的动作。但毕竟这是一本入门书，或许是我要求太高了。&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ruby on LimboNova</title>
+    <link>/tags/ruby/</link>
+    <description>Recent content in ruby on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© Anthony</copyright>
+    <lastBuildDate>Fri, 12 Apr 2013 12:16:03 +0800</lastBuildDate>
+    <atom:link href="/tags/ruby/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ruby on Rails 入门体验</title>
+      <link>/posts/ror-tutorial-review/</link>
+      <pubDate>Fri, 12 Apr 2013 12:16:03 +0800</pubDate>
+      <guid>/posts/ror-tutorial-review/</guid>
+      <description>&lt;p&gt;今年年初时决定学习一下 Web 开发方面的知识，因为对 Ruby 早有耳闻，所以很自然地就选择了 Ruby on Rails 作为目标。在网上看到 Ruby on Rails Tutorial的教程，于是就跟着教程，边学边做地把这本书看完了。对 RoR 有了一个大概的了解，包括框架结构和开发流程，还有一些常用的Gems，确实是一本不错的实践入门书。&lt;/p&gt;&#xA;&lt;h2 id=&#34;关于教程&#34;&gt;关于教程&lt;/h2&gt;&#xA;&lt;p&gt;一开始时看的是英文原版，阅读速度缓慢，而我对实践充满热情，迫切希望早点学完自己动手做。恰好发现 Andor Chen 已经翻译了大部分章节，遇到有疑问的地方，就对照英文检查语句和代码。顺便修正一些译文里的错误，然后发送 pull request 让作者合并。&lt;/p&gt;&#xA;&lt;p&gt;这本书和以前看的 Flex 入门书——《Flex 3 权威指南》类似，都是以构建一个应用为主线，由浅入深地介绍 RoR 开发的基本知识，从最开始的静态页面到模型生成，控制器，路由，数据库，Ajax，还有贯彻整个开发过程的测试。教程里开发的是一个微博站点，而 Twitter 以前就是使用 RoR 开发的，做起来也饶有趣味。&lt;/p&gt;&#xA;&lt;p&gt;花了差不多两个月的业余时间看完了这个教程，并最终完成了那个微博网站，包括大部分练习题的功能。总的来说，还是有点挑战的。由于书中大部分都是编写步骤，注重手把手的教学实践。在原理的介绍上篇幅很少，而 RoR 这样“约定优于配置”的理念让我有点不适应，书中并无约定方面的解释，很多方法像变戏法一般地已经实现好了，而我却想一探究竟，搞清楚其幕后的动作。但毕竟这是一本入门书，或许是我要求太高了。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

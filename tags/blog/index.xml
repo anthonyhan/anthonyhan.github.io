@@ -1,1 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>blog on LimboNova</title><link>/tags/blog/</link><description>Recent content in blog on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© Anthony</copyright><lastBuildDate>Thu, 18 Aug 2016 14:12:40 +0800</lastBuildDate><atom:link href="/tags/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Markdown Syntax zhTW</title><link>/posts/markdown-syntax-zhtw/</link><pubDate>Thu, 18 Aug 2016 14:12:40 +0800</pubDate><guid>/posts/markdown-syntax-zhtw/</guid><description>NOTE: This is Traditional Chinese Edition Document of Markdown Syntax. If you are seeking for English Edition Document. Please refer to Markdown: Syntax. Markdown: Syntax 概述 哲學 行內 HTML 特殊字元自動轉換 區塊元素 段落和換行 標題 區塊引言 清單 程式碼區塊 分隔線 區段元素 連</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>blog on LimboNova</title>
+    <link>/tags/blog/</link>
+    <description>Recent content in blog on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© Anthony</copyright>
+    <lastBuildDate>Thu, 18 Aug 2016 14:12:40 +0800</lastBuildDate>
+    <atom:link href="/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Markdown Syntax zhTW</title>
+      <link>/posts/markdown-syntax-zhtw/</link>
+      <pubDate>Thu, 18 Aug 2016 14:12:40 +0800</pubDate>
+      <guid>/posts/markdown-syntax-zhtw/</guid>
+      <description>NOTE: This is Traditional Chinese Edition Document of Markdown Syntax. If you are seeking for English Edition Document. Please refer to Markdown: Syntax. Markdown: Syntax 概述 哲學 行內 HTML 特殊字元自動轉換 區塊元素 段落和換行 標題 區塊引言 清單 程式碼區塊 分隔線 區段元素 連</description>
+    </item>
+  </channel>
+</rss>

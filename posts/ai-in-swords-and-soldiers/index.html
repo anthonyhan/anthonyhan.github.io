@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>AI in Swords and Soldiers - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="前言
+偶然发现收藏夹里躺了多年的文章链接1，写作时间是2011年前后，作者是 Ronimo Games 的联合创始人 Joost van Dongen，简述了当时他们如何构建《剑与勇士》的 AI。《剑与勇士》（Swords &amp; Soldiers）是 Ronimo Games 在2009年开发的一款2D横向卷轴RTS游戏。
+简单翻译整理了一下，看看有没有参考价值。
+译文
+众所周知，为策略游戏创建良好的 AI 是一项艰巨的任务。AI 设计当然从来都不是一件容易的事，但对于策略游戏来说，选项和情况的复杂性非常高。我认为《剑与勇士》是第一款在游戏中实现真正出色 AI 的游戏，所以我想看看我们是如何做到这一点的会很有趣。
+
+人工智能领域要么解决非常简单的问题，比如国际象棋（与实时战略游戏相比，国际象棋非常简单，更不用说与现实世界相比了！），要么只会提供大量精巧高效的辅助算法，比如寻路。在复杂情况下做出真正的决策本质上是一个尚未解决的问题，而且不会在短期内得到解决。" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="AI in Swords and Soldiers" />
+<meta property="og:description" content="前言
+偶然发现收藏夹里躺了多年的文章链接1，写作时间是2011年前后，作者是 Ronimo Games 的联合创始人 Joost van Dongen，简述了当时他们如何构建《剑与勇士》的 AI。《剑与勇士》（Swords &amp; Soldiers）是 Ronimo Games 在2009年开发的一款2D横向卷轴RTS游戏。
+简单翻译整理了一下，看看有没有参考价值。
+译文
+众所周知，为策略游戏创建良好的 AI 是一项艰巨的任务。AI 设计当然从来都不是一件容易的事，但对于策略游戏来说，选项和情况的复杂性非常高。我认为《剑与勇士》是第一款在游戏中实现真正出色 AI 的游戏，所以我想看看我们是如何做到这一点的会很有趣。
+
+人工智能领域要么解决非常简单的问题，比如国际象棋（与实时战略游戏相比，国际象棋非常简单，更不用说与现实世界相比了！），要么只会提供大量精巧高效的辅助算法，比如寻路。在复杂情况下做出真正的决策本质上是一个尚未解决的问题，而且不会在短期内得到解决。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/ai-in-swords-and-soldiers/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-10-18T20:22:12+08:00" />
+<meta property="article:modified_time" content="2021-10-18T20:22:12+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="AI in Swords and Soldiers"/>
+<meta name="twitter:description" content="前言
+偶然发现收藏夹里躺了多年的文章链接1，写作时间是2011年前后，作者是 Ronimo Games 的联合创始人 Joost van Dongen，简述了当时他们如何构建《剑与勇士》的 AI。《剑与勇士》（Swords &amp; Soldiers）是 Ronimo Games 在2009年开发的一款2D横向卷轴RTS游戏。
+简单翻译整理了一下，看看有没有参考价值。
+译文
+众所周知，为策略游戏创建良好的 AI 是一项艰巨的任务。AI 设计当然从来都不是一件容易的事，但对于策略游戏来说，选项和情况的复杂性非常高。我认为《剑与勇士》是第一款在游戏中实现真正出色 AI 的游戏，所以我想看看我们是如何做到这一点的会很有趣。
+
+人工智能领域要么解决非常简单的问题，比如国际象棋（与实时战略游戏相比，国际象棋非常简单，更不用说与现实世界相比了！），要么只会提供大量精巧高效的辅助算法，比如寻路。在复杂情况下做出真正的决策本质上是一个尚未解决的问题，而且不会在短期内得到解决。"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">AI in Swords and Soldiers</h1>
+			<div class="meta">Posted on Oct 18, 2021</div>
+		</div>
+		
+
+		<section class="body">
+			<h2 id="前言">前言</h2>
+<p>偶然发现收藏夹里躺了多年的文章链接<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，写作时间是2011年前后，作者是 Ronimo Games 的联合创始人 Joost van Dongen，简述了当时他们如何构建《剑与勇士》的 AI。<a href="https://store.steampowered.com/app/63500/Swords_and_Soldiers_HD">《剑与勇士》（Swords &amp; Soldiers）</a>是 Ronimo Games 在2009年开发的一款2D横向卷轴RTS游戏。</p>
+<p>简单翻译整理了一下，看看有没有参考价值。</p>
+<h2 id="译文">译文</h2>
+<p>众所周知，为策略游戏创建良好的 AI 是一项艰巨的任务。AI 设计当然从来都不是一件容易的事，但对于策略游戏来说，选项和情况的复杂性非常高。我认为《剑与勇士》是第一款在游戏中实现真正出色 AI 的游戏，所以我想看看我们是如何做到这一点的会很有趣。</p>
+<p><img src="/images/ai-in-swords-and-soldiers/swords_and_soldiers.webp" alt="swords_and_soldiers"></p>
+<p>人工智能领域要么解决非常简单的问题，比如国际象棋（与实时战略游戏相比，国际象棋非常简单，更不用说与现实世界相比了！），要么只会提供大量精巧高效的辅助算法，比如寻路。在复杂情况下做出真正的决策本质上是一个尚未解决的问题，而且不会在短期内得到解决。</p>
+<p>事实证明，大多数游戏 AI 都是完全脚本化的。它没有那么聪明。可能只是一长串的 if-then-else-if-then-else。为了增加趣味性而做一些变化，可能会加入一些随机性，但这也不值得用<em>人工智能</em>一词。真正的人工智能可以做出明智的决策，而这些决策并不是由 AI 设计师直接编写的。这样的游戏这是非常罕见的（<a href="https://zh.wikipedia.org/zh-hans/%E5%96%84%E8%88%87%E6%83%A1">黑与白</a>的决策树浮现在脑海中）。</p>
+<p>《剑与勇士》也不例外地使用了脚本。编写 AI 脚本的诀窍是简单地添加尽可能多的特定情况，并为每个情况编写一个聪明的反应。如果你能定义数百种不同的情况及其反应，那么你就可以达到当今大多数游戏中看到的人工智能的质量。</p>
+<p>关键在于如何以一种智能而易于管理的方式编写脚本。对于一个学校项目，我在某些时候通过用 C++ 编写长 if-then-else 结构来编写 AI 脚本，但这么做很糟糕。编程需要很长时间，并且很难对此有一个很好的概述，因此也很难保持它没有错误。</p>
+<p><img src="/images/ai-in-swords-and-soldiers/old_school_project.webp" alt="old_school_project"></p>
+<p>因此，对于 Ronimo 公司的首款官方游戏（顺便说一句，该游戏已被取消），我们希望做一些不同寻常的事情，于是我们引入了 Lua 脚本语言。将脚本添加到游戏中正是当前的潮流，而像《魔兽世界》这样的大型游戏包含大量类似于这样的脚本代码。脚本的好处在于你不再需要编译，而且游戏设计师可以编写AI脚本。</p>
+<p>我得出的结论是， Lua 对于这个目标来说并不理想。在 Lua 中编写复杂的 AI 与在C++中一样困难，因此你基本上仍然需要一位优秀的程序员来完成。幸运的是，我们的一位设计师具有一些正经的脚本技能。但你仍然无法清晰地了解你的 AI 结构，并且将所有必要的数据从C++暴露到 Lua 是一项繁重的工作。随着我们的敌人变得更加复杂，找到并修复其中的错误变得越来越困难。因此，这个路子也行不通。</p>
+<p>在我彻底对 Lua 感到厌倦的时候，我发现了Bungie关于<a href="https://www.gamedeveloper.com/programming/gdc-2005-proceeding-handling-complexity-in-the-i-halo-2-i-ai">如何为《光环2》构建行为树系统</a>的一篇精彩文章。当时，《光环2》以其出色的 AI 而闻名，可以执行一些像包围玩家和团队合作等操作。</p>
+<p><img src="/images/ai-in-swords-and-soldiers/ai_in_halo2.webp" alt="ai_in_halo2"></p>
+<p>行为树的基本思想是条件和动作。如果满足条件，那么执行特定的动作。在许多方面，它只是一个if-then-else结构的图形表示。因此我们构建了一个图形化的行为树编辑器。</p>
+<p><img src="/images/ai-in-swords-and-soldiers/simple_example_01.webp" alt="simple_example_01"></p>
+<p>我们对使用行为树感到非常满意。我们的设计师用它制作了很酷的东西。作为程序员，我不需要参与他们的设计工作。尽管我们的全新秘密游戏<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>也使用了行为树，但那是一款与《剑与勇士》完全不同类型的游戏！</p>
+<p><img src="/images/ai-in-swords-and-soldiers/simple_example_02.webp" alt="simple_example_02"></p>
+<p>上面的小型 AI 很好地说明了《剑与勇士》的 AI 是如何工作的。首先要注意的是，行为树基于优先级。假定 AI 始终希望执行最上层的动作，如果该动作可以执行，它就不会再考虑后面。在这种情况下，顶部的动作是对死灵法师释放闪电（useAbility）。因为死灵法师会创造大量骷髅，所以首先消灭它们。</p>
+<p>为了使这个优先级系统有效运行，顶部的动作必须是最迫切的需求，否则下面的动作将永远不会执行。在这个例子中：只有在附近有敌对的死灵法师并且你有足够的法力值时，才会使用闪电。</p>
+<p>由于 AI 还必须开采金矿，因此下面的动作是生产工人（createUnit）。在《剑与勇士》中，玩家最多只能有10名工人，所以只要 AI 的工人少于10名（unitCount），并且有足够的金币（goldAmount），它会每隔10秒生产一个工人（timeSinceLastUnit）。</p>
+<p>最后，当不释放闪电或生产工人时，这个 AI 会尽可能多地生产狂战士（createUnit，在底部）。</p>
+<p>这个系统的有趣之处在于，这些行为树相当容易使用，因此你不需要程序员来制作。诚然，你需要一个善于逻辑思维的设计师，但我认为这是每个称职的设计师都应该首先擅长的事情。</p>
+<p>如何使这些树易于管理？关键在于有足够的块（节点）可供使用，并将所有复杂性隐藏在这些块的内部。一个简单的例子是<code>unitNear</code>块。这个块的C++代码会查找关卡中所有的敌对死灵法师，并计算到每一个死灵法师的距离，以查看是否附近有死灵法师。找到死灵法师等操作的复杂性被隐藏在一个C++类中，设计师不需要知道任何相关的内容。</p>
+<p>不过，在《剑与勇士》中，我认为我们做得不是很好：我们的小规模战斗 AI 非常庞大和复杂。通过来使用更多更智能的条件和动作，我认为我们的设计师可以把一些树的尺寸缩小一半。</p>
+<p><img src="/images/ai-in-swords-and-soldiers/zoom_out_view.webp" alt="zoom_out_view"></p>
+<p>使用行为树的一个有趣的意外结果是，它们也非常适合故事脚本。《剑与勇士》经常在关卡中间触发带有对话之类的小剧情画面。决定何时触发这些剧情，可以很容易地在行为树内部完成，因为行为树已经拥有所有这些动作和条件。</p>
+<p>最初，我强烈反对这个想法，因为我想保持 AI 的清晰，并且不将其与剧情混在一起。我认为这会变得太混乱和不清晰。然而，我们的设计师说服我无论如何都要这样做。回过头来看，他们是完全正确的：使用这个系统触发和播放剧情非常简单。</p>
+<p>最后，让我们简要地看一下我们为 Ronimo 的全新秘密游戏对行为树系统进行的重大改变。在开发《剑与勇士》时，我们苦于如何使 AI 同时执行多个任务。AI 在建造单位的同时施放法术是有有意义的。由于优先级系统，做这种事情变得非常混乱。优先级系统只在你始终希望一次只执行一件事情时才能起作用。</p>
+<p>绕过这个问题使 AI 在某些地方变得难以阅读，因此对于 Ronimo 的全新秘密游戏，我们完全删除了优先级系统。相反，我们现在只是有一个大的if-else树。它仍然有条件和动作，外观也非常相似，但 AI 在找到可以执行的动作时不会停下来。这使得它更容易阅读，也使添加else结构变得更容易。在《剑与勇士》中，我们基本上只有 if-then 结构，而现在我们还有if-then-else结构。</p>
+<p>最后，我要说我们对我们的行为树系统和我们自己的编辑器感到非常满意，我们将在未来的几款游戏中继续使用它。</p>
+<p>最终，这也意味着我们的 AI 的实际行为是由我们的游戏设计师编写的。对于《剑与勇士》来说，这主要是由 Jasper 完成的，但也有很多工作由 Fabian 和 Tom 完成。作为一名程序员，看到设计师如何使用我们提供的工具制作各种令人惊叹的东西真是太好了。我们的设计师经常用这些工具做出的东西让我感到非常惊讶，他们所能做的比我自己想到的多得多！因此，《剑与勇士》能有如此出色的 AI，真正的功劳当然归功于我们的设计师们！^-^</p>
+<h2 id="总结">总结</h2>
+<p>对于《剑与勇士》这样的轻量游戏，相较于使用 Lua 脚本，使用行为树确实是一个更好的方案，尤其是有 Halo 2 这样的AAA游戏珠玉在前。遗憾的是，作者没有介绍实现细节，也没有谈到开发过程中遇到的实际问题。</p>
+<p><strong>更新:</strong></p>
+<p>《剑与勇士》的评价非常不错，在Steam上依然能保持90%的特别好评，Ronimo Games 的其它游戏评价也不算差，然而 Ronimo Games 于 2023 年 8 月 22 日宣布破产了。</p>
+<p>Joost van Dongen 于 2022年创立了 Galaxy Grove。发售了一款全新的游戏<a href="https://store.steampowered.com/app/2272400/_Station_to_Station/">《站点连连》（Station to Station）</a></p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="http://joostdevblog.blogspot.com/2010/12/ai-in-swords-soldiers-part-1.html">http://joostdevblog.blogspot.com/2010/12/ai-in-swords-soldiers-part-1.html</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>估计是 <a href="https://en.wikipedia.org/wiki/Awesomenauts">《王牌英雄》（Awesomenauts）</a>，<a href="https://store.steampowered.com/app/204300/Awesomenauts__the_2D_moba">Awesomenauts - the 2D moba</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+		</section>
+
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/game-dev">game dev</a></li>
+					
+					<li><a href="/tags/behavior-tree">behavior tree</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
+<script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="title"
+        label="💬comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+		
+	</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

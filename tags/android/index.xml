@@ -1,22 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>android on LimboNova</title><link>/tags/android/</link><description>Recent content in android on LimboNova</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© Anthony</copyright><lastBuildDate>Sun, 19 Aug 2012 11:30:08 +0800</lastBuildDate><atom:link href="/tags/android/index.xml" rel="self" type="application/rss+xml"/><item><title>连接Kindle Fire到ADB(实体机调试)</title><link>/posts/connecting-your-kindle-fire-to-adb/</link><pubDate>Sun, 19 Aug 2012 11:30:08 +0800</pubDate><guid>/posts/connecting-your-kindle-fire-to-adb/</guid><description>&lt;h2 id="前提条件">前提条件&lt;/h2>
-&lt;p>为开发环境下载安装下列包:&lt;/p>
-&lt;ul>
-&lt;li>&lt;a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java JDK&lt;/a>&lt;/li>
-&lt;li>&lt;a href="http://developer.android.com/sdk/index.html">Android SDK&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;p>使用 Android SDK Manager 下载安装下列SDK包：&lt;/p>
-&lt;ul>
-&lt;li>Android 2.3.3 (API10) =&amp;gt; SDK Platform&lt;/li>
-&lt;li>Tools =&amp;gt; Android SDK Tools&lt;/li>
-&lt;li>Tools =&amp;gt; Android SDK Platform-tools&lt;/li>
-&lt;li>Extras =&amp;gt; Google USB Driver package&lt;/li>
-&lt;/ul>
-&lt;h2 id="osx设置">OSX设置&lt;/h2>
-&lt;p>修改 adb_usb.ini&lt;/p>
-&lt;ol>
-&lt;li>打开文件： ~/.android/adb_usb.ini&lt;/li>
-&lt;li>添加一行： 0x1949&lt;/li>
-&lt;li>添加一行： 0x0006&lt;/li>
-&lt;li>保存文件&lt;/li>
-&lt;/ol>
-&lt;p>注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>android on LimboNova</title>
+    <link>/tags/android/</link>
+    <description>Recent content in android on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© Anthony</copyright>
+    <lastBuildDate>Sun, 19 Aug 2012 11:30:08 +0800</lastBuildDate>
+    <atom:link href="/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>连接Kindle Fire到ADB(实体机调试)</title>
+      <link>/posts/connecting-your-kindle-fire-to-adb/</link>
+      <pubDate>Sun, 19 Aug 2012 11:30:08 +0800</pubDate>
+      <guid>/posts/connecting-your-kindle-fire-to-adb/</guid>
+      <description>&lt;h2 id=&#34;前提条件&#34;&gt;前提条件&lt;/h2&gt;&#xA;&lt;p&gt;为开发环境下载安装下列包:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;http://www.oracle.com/technetwork/java/javase/downloads/index.html&#34;&gt;Java JDK&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;http://developer.android.com/sdk/index.html&#34;&gt;Android SDK&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;使用 Android SDK Manager 下载安装下列SDK包：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Android 2.3.3 (API10) =&amp;gt; SDK Platform&lt;/li&gt;&#xA;&lt;li&gt;Tools =&amp;gt; Android SDK Tools&lt;/li&gt;&#xA;&lt;li&gt;Tools =&amp;gt; Android SDK Platform-tools&lt;/li&gt;&#xA;&lt;li&gt;Extras =&amp;gt; Google USB Driver package&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;osx设置&#34;&gt;OSX设置&lt;/h2&gt;&#xA;&lt;p&gt;修改 adb_usb.ini&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;打开文件： ~/.android/adb_usb.ini&lt;/li&gt;&#xA;&lt;li&gt;添加一行： 0x1949&lt;/li&gt;&#xA;&lt;li&gt;添加一行： 0x0006&lt;/li&gt;&#xA;&lt;li&gt;保存文件&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

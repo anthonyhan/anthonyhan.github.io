@@ -1,4 +1,8 @@
-<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>基于TypeScript的PixiJS开发环境设置（browserify篇） - LimboNova</title><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>基于TypeScript的PixiJS开发环境设置（browserify篇） - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。
 前提
 不可或缺的当然是node。
 node --version
@@ -32,7 +36,10 @@ npm install --save-dev typescript
 其它
 
 npm install --save-dev browserify browserify-shim http-server tsify tslint
-"><meta property="og:image" content><meta property="og:title" content="基于TypeScript的PixiJS开发环境设置（browserify篇）"><meta property="og:description" content="PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。
+" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="基于TypeScript的PixiJS开发环境设置（browserify篇）" />
+<meta property="og:description" content="PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。
 前提
 不可或缺的当然是node。
 node --version
@@ -66,7 +73,14 @@ npm install --save-dev typescript
 其它
 
 npm install --save-dev browserify browserify-shim http-server tsify tslint
-"><meta property="og:type" content="article"><meta property="og:url" content="/posts/setup-pixijs-with-typescript-using-browserify/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2017-09-18T21:28:22+08:00"><meta property="article:modified_time" content="2017-09-18T21:28:22+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="基于TypeScript的PixiJS开发环境设置（browserify篇）"><meta name=twitter:description content="PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/setup-pixijs-with-typescript-using-browserify/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-09-18T21:28:22+08:00" />
+<meta property="article:modified_time" content="2017-09-18T21:28:22+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="基于TypeScript的PixiJS开发环境设置（browserify篇）"/>
+<meta name="twitter:description" content="PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。
 前提
 不可或缺的当然是node。
 node --version
@@ -100,90 +114,267 @@ npm install --save-dev typescript
 其它
 
 npm install --save-dev browserify browserify-shim http-server tsify tslint
-"><script src=/js/feather.min.js></script>
-<link href=/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css rel=stylesheet><link rel=stylesheet type=text/css media=screen href=/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css><link id=darkModeStyle rel=stylesheet type=text/css href=/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css media="(prefers-color-scheme: dark)"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css><script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js></script>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
-<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script></head><body><div class=content><header><div class=main><a href=/>LimboNova</a></div><nav><a href=/>Home</a>
-<a href=/posts>Archives</a>
-<a href=/tags>Tags</a>
-<a href=/about>About</a></nav></header><main><article><div class=title><h1 class=title>基于TypeScript的PixiJS开发环境设置（browserify篇）</h1><div class=meta>Posted on Sep 18, 2017</div></div><section class=body><p>PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。</p><h2 id=前提>前提</h2><p>不可或缺的当然是node。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>node --version
-</span></span></code></pre></div><h2 id=安装>安装</h2><h3 id=初始化项目>初始化项目</h3><ol><li>创建项目目录</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>mkdir ts_pixi
-</span></span><span style=display:flex><span>cd ts_pixi
-</span></span><span style=display:flex><span>mkdir assets src dist
-</span></span></code></pre></div><ol start=2><li>新建项目文件</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>touch index.html
-</span></span><span style=display:flex><span>touch src/main.ts
-</span></span></code></pre></div><ol start=3><li>初始化项目</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>npm init
-</span></span></code></pre></div><h3 id=安装模块>安装模块</h3><ol><li>PixiJS</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>npm install --save pixi.js
-</span></span></code></pre></div><ol start=2><li>TypeScript</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>npm install --save-dev typescript
-</span></span></code></pre></div><ol start=3><li>其它</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>npm install --save-dev browserify browserify-shim http-server tsify tslint
-</span></span></code></pre></div><ul><li><code>tslint</code> TypeScript代码风格控制工具，用于辅助执行编码规范，控制代码质量。</li><li><code>browserify</code> 模块加载和打包工具，参照了Node中的模块系统，约定用require()来引入其他模块，用module.exports来引出模块。</li><li><code>Browserify-Shim</code> 模块转换器，把非 CommonJS 的模块转换成 CommonJS 模块。同时可以通过全局变量暴露模块文件所提供的公开接口。</li><li><code>tsify</code> Browserify的插件，能够访问TypeScript编译器，让Browserify能够处理TypeScript文件。</li><li><code>http-server</code> 简单易用的http服务器，用于运行调试，也可以选择安装<code>live-server</code>。</li></ul><p>如果使用Visual Studio Code作为IDE，可以安装以下<code>@types</code>文件，用于代码提示等功能。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>npm install --save-dev @types/pixi.js @types/node
-</span></span></code></pre></div><h3 id=初始化模块>初始化模块</h3><ol><li>生成 tsconfig.json</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>node_modules/.bin/tsc --init
-</span></span></code></pre></div><ol start=2><li>生成 tslint.json</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>node_modules/.bin/tslint --init
-</span></span></code></pre></div><h2 id=设置>设置</h2><h3 id=packagejson-设置>package.json 设置</h3><p>配置scripts中的构建和测试命令，并增加<code>browserify-shim</code>的配置。</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-json data-lang=json><span style=display:flex><span>{
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;name&#34;</span>: <span style=color:#e6db74>&#34;ts_pixi&#34;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;version&#34;</span>: <span style=color:#e6db74>&#34;1.0.0&#34;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;description&#34;</span>: <span style=color:#e6db74>&#34;&#34;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;main&#34;</span>: <span style=color:#e6db74>&#34;index.html&#34;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;scripts&#34;</span>: {
-</span></span><span style=display:flex><span>	<span style=color:#f92672>&#34;build&#34;</span>: <span style=color:#e6db74>&#34;node browserify.js &gt; dist/bundle.js&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;test&#34;</span>: <span style=color:#e6db74>&#34;node_modules/.bin/http-server -c-1&#34;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;browserify-shim&#34;</span>: {
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;pixi&#34;</span>: <span style=color:#e6db74>&#34;global:PIXI&#34;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;author&#34;</span>: <span style=color:#e6db74>&#34;&#34;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;license&#34;</span>: <span style=color:#e6db74>&#34;ISC&#34;</span>,
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;dependencies&#34;</span>: {
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;pixi.js&#34;</span>: <span style=color:#e6db74>&#34;^4.5.6&#34;</span>
-</span></span><span style=display:flex><span>  },
-</span></span><span style=display:flex><span>  <span style=color:#f92672>&#34;devDependencies&#34;</span>: {
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;@types/node&#34;</span>: <span style=color:#e6db74>&#34;^8.0.28&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;@types/pixi.js&#34;</span>: <span style=color:#e6db74>&#34;^4.5.4&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;browserify&#34;</span>: <span style=color:#e6db74>&#34;^14.4.0&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;browserify-shim&#34;</span>: <span style=color:#e6db74>&#34;^3.8.14&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;http-server&#34;</span>: <span style=color:#e6db74>&#34;^0.10.0&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;tsify&#34;</span>: <span style=color:#e6db74>&#34;^3.0.3&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;tslint&#34;</span>: <span style=color:#e6db74>&#34;^5.7.0&#34;</span>,
-</span></span><span style=display:flex><span>    <span style=color:#f92672>&#34;typescript&#34;</span>: <span style=color:#e6db74>&#34;^2.5.2&#34;</span>
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h3 id=browserifyjs设置>browserify.js设置</h3><ol><li>在项目根目录下新建新建文件<code>browserify.js</code></li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>touch browserify.js
-</span></span></code></pre></div><ol start=2><li>修改文件内容为</li></ol><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-JavaScript data-lang=JavaScript><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>browserify</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;browserify&#39;</span>);
-</span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>tsify</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>require</span>(<span style=color:#e6db74>&#39;tsify&#39;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>browserify</span>()
-</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>add</span>(<span style=color:#e6db74>&#39;src/main.ts&#39;</span>)
-</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>plugin</span>(<span style=color:#a6e22e>tsify</span>, { <span style=color:#a6e22e>project</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#39;.&#39;</span> })
-</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>transform</span>(<span style=color:#e6db74>&#39;browserify-shim&#39;</span>)
-</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>bundle</span>()
-</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>on</span>(<span style=color:#e6db74>&#39;error&#39;</span>, <span style=color:#66d9ef>function</span> (<span style=color:#a6e22e>error</span>) { <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>error</span>(<span style=color:#a6e22e>error</span>.<span style=color:#a6e22e>toString</span>()); })
-</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>pipe</span>(<span style=color:#a6e22e>process</span>.<span style=color:#a6e22e>stdout</span>);
-</span></span></code></pre></div><h2 id=测试>测试</h2><h3 id=修改文件>修改文件</h3><h4 id=maints>main.ts</h4><p>写一段测试代码，如下所示：</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-TypeScript data-lang=TypeScript><span style=display:flex><span><span style=color:#66d9ef>import</span> <span style=color:#f92672>*</span> <span style=color:#66d9ef>as</span> <span style=color:#a6e22e>PIXI</span> <span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#34;pixi.js&#34;</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>//Create the renderer
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>renderer</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>PIXI</span>.<span style=color:#a6e22e>autoDetectRenderer</span>(<span style=color:#ae81ff>256</span>, <span style=color:#ae81ff>256</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>//Add the canvas to the HTML document
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>document.<span style=color:#a6e22e>body</span>.<span style=color:#a6e22e>appendChild</span>(<span style=color:#a6e22e>renderer</span>.<span style=color:#a6e22e>view</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>//Create a container object called the `stage`
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>stage</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>PIXI</span>.<span style=color:#a6e22e>Container</span>();
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>//Tell the `renderer` to `render` the `stage`
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#a6e22e>renderer</span>.<span style=color:#a6e22e>render</span>(<span style=color:#a6e22e>stage</span>);
-</span></span></code></pre></div><h4 id=indexhtml>index.html</h4><p>修改文件内容为</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-html data-lang=html><span style=display:flex><span><span style=color:#75715e>&lt;!DOCTYPE html&gt;</span>
-</span></span><span style=display:flex><span>&lt;<span style=color:#f92672>html</span>&gt;
-</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>head</span>&gt;
-</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>meta</span> <span style=color:#a6e22e>charset</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;UTF-8&#34;</span> /&gt;
-</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>title</span>&gt;Hello World, Pixi!&lt;/<span style=color:#f92672>title</span>&gt;
-</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>head</span>&gt;
-</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>body</span>&gt;
-</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>script</span> <span style=color:#a6e22e>src</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;./dist/bundle.js&#34;</span>&gt;&lt;/<span style=color:#f92672>script</span>&gt;
-</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>body</span>&gt;
-</span></span><span style=display:flex><span>&lt;/<span style=color:#f92672>html</span>&gt;
-</span></span></code></pre></div><h3 id=编译测试>编译测试</h3><h4 id=编译>编译</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>npm run build
-</span></span></code></pre></div><p>此举将会执行<code>package.json</code>中设置的<code>build</code>命令，编译TypeScript文件，并打包至<code>dist/bundle.js</code>中</p><h4 id=测试-1>测试</h4><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-fallback data-lang=fallback><span style=display:flex><span>npm test
-</span></span></code></pre></div><p>执行命令，打开相应的网址，测试刚刚编写的代码，查看代码是否正确执行。</p><h2 id=总结>总结</h2><p>不熟悉 node.js 开发，配置的时候遇到了不少问题，不过也都很快解决了。相比 Native 的开发，Web 的工具实在太好用了，很适合前期的原型构建。</p><hr><p><strong>参考资料</strong></p><ol><li><a href=http://augix.me/archives/5246>http://augix.me/archives/5246</a></li><li><a href=http://www.mishengqiang.com/index.php/101.html>http://www.mishengqiang.com/index.php/101.html</a></li><li><a href=https://github.com/kittykatattack/learningPixi>https://github.com/kittykatattack/learningPixi</a></li><li><a href=https://zhuanlan.zhihu.com/p/21611724>https://zhuanlan.zhihu.com/p/21611724</a></li></ol></section><br><br><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/game-dev>game dev</a></li><li><a href=/tags/pixijs>PixiJS</a></li><li><a href=/tags/typescript>TypeScript</a></li><li><a href=/tags/html5>HTML5</a></li></ul></nav></div><script src=https://utteranc.es/client.js repo issue-term=title label=💬comment theme=github-light crossorigin=anonymous async></script></article></main><footer><div style=display:flex><a class=soc href=https://github.com/anthonyhan rel=me title=GitHub><i data-feather=github></i></a>
-<a class=border></a><a class=soc href=https://twitter.com/_qhan_ rel=me title=Twitter><i data-feather=twitter></i></a>
-<a class=border></a><a class=soc href=/index.xml rel=me title=Rss><i data-feather=rss></i></a>
-<a class=border></a></div><div class=footer-info>2023 © Anthony | <a href=https://github.com/athul/archie>Archie Theme</a> | Built with <a href=https://gohugo.io>Hugo</a></div></footer><script>feather.replace()</script></div></body></html>
+"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">基于TypeScript的PixiJS开发环境设置（browserify篇）</h1>
+			<div class="meta">Posted on Sep 18, 2017</div>
+		</div>
+		
+
+		<section class="body">
+			<p>PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。</p>
+<h2 id="前提">前提</h2>
+<p>不可或缺的当然是node。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>node --version
+</span></span></code></pre></div><h2 id="安装">安装</h2>
+<h3 id="初始化项目">初始化项目</h3>
+<ol>
+<li>创建项目目录</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mkdir ts_pixi
+</span></span><span style="display:flex;"><span>cd ts_pixi
+</span></span><span style="display:flex;"><span>mkdir assets src dist
+</span></span></code></pre></div><ol start="2">
+<li>新建项目文件</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>touch index.html
+</span></span><span style="display:flex;"><span>touch src/main.ts
+</span></span></code></pre></div><ol start="3">
+<li>初始化项目</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm init
+</span></span></code></pre></div><h3 id="安装模块">安装模块</h3>
+<ol>
+<li>PixiJS</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save pixi.js
+</span></span></code></pre></div><ol start="2">
+<li>TypeScript</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev typescript
+</span></span></code></pre></div><ol start="3">
+<li>其它</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev browserify browserify-shim http-server tsify tslint
+</span></span></code></pre></div><ul>
+<li><code>tslint</code> TypeScript代码风格控制工具，用于辅助执行编码规范，控制代码质量。</li>
+<li><code>browserify</code> 模块加载和打包工具，参照了Node中的模块系统，约定用require()来引入其他模块，用module.exports来引出模块。</li>
+<li><code>Browserify-Shim</code> 模块转换器，把非 CommonJS 的模块转换成 CommonJS 模块。同时可以通过全局变量暴露模块文件所提供的公开接口。</li>
+<li><code>tsify</code> Browserify的插件，能够访问TypeScript编译器，让Browserify能够处理TypeScript文件。</li>
+<li><code>http-server</code> 简单易用的http服务器，用于运行调试，也可以选择安装<code>live-server</code>。</li>
+</ul>
+<p>如果使用Visual Studio Code作为IDE，可以安装以下<code>@types</code>文件，用于代码提示等功能。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev @types/pixi.js @types/node
+</span></span></code></pre></div><h3 id="初始化模块">初始化模块</h3>
+<ol>
+<li>生成 tsconfig.json</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>node_modules/.bin/tsc --init
+</span></span></code></pre></div><ol start="2">
+<li>生成 tslint.json</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>node_modules/.bin/tslint --init
+</span></span></code></pre></div><h2 id="设置">设置</h2>
+<h3 id="packagejson-设置">package.json 设置</h3>
+<p>配置scripts中的构建和测试命令，并增加<code>browserify-shim</code>的配置。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;ts_pixi&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;main&#34;</span>: <span style="color:#e6db74">&#34;index.html&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;scripts&#34;</span>: {
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;build&#34;</span>: <span style="color:#e6db74">&#34;node browserify.js &gt; dist/bundle.js&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;test&#34;</span>: <span style="color:#e6db74">&#34;node_modules/.bin/http-server -c-1&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;browserify-shim&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;pixi&#34;</span>: <span style="color:#e6db74">&#34;global:PIXI&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;license&#34;</span>: <span style="color:#e6db74">&#34;ISC&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;dependencies&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;pixi.js&#34;</span>: <span style="color:#e6db74">&#34;^4.5.6&#34;</span>
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;devDependencies&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;@types/node&#34;</span>: <span style="color:#e6db74">&#34;^8.0.28&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;@types/pixi.js&#34;</span>: <span style="color:#e6db74">&#34;^4.5.4&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;browserify&#34;</span>: <span style="color:#e6db74">&#34;^14.4.0&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;browserify-shim&#34;</span>: <span style="color:#e6db74">&#34;^3.8.14&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;http-server&#34;</span>: <span style="color:#e6db74">&#34;^0.10.0&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tsify&#34;</span>: <span style="color:#e6db74">&#34;^3.0.3&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tslint&#34;</span>: <span style="color:#e6db74">&#34;^5.7.0&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;typescript&#34;</span>: <span style="color:#e6db74">&#34;^2.5.2&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="browserifyjs设置">browserify.js设置</h3>
+<ol>
+<li>在项目根目录下新建新建文件<code>browserify.js</code></li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>touch browserify.js
+</span></span></code></pre></div><ol start="2">
+<li>修改文件内容为</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-JavaScript" data-lang="JavaScript"><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">browserify</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;browserify&#39;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">tsify</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;tsify&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">browserify</span>()
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">add</span>(<span style="color:#e6db74">&#39;src/main.ts&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">plugin</span>(<span style="color:#a6e22e">tsify</span>, { <span style="color:#a6e22e">project</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;.&#39;</span> })
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">transform</span>(<span style="color:#e6db74">&#39;browserify-shim&#39;</span>)
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">bundle</span>()
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">on</span>(<span style="color:#e6db74">&#39;error&#39;</span>, <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">error</span>) { <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">error</span>(<span style="color:#a6e22e">error</span>.<span style="color:#a6e22e">toString</span>()); })
+</span></span><span style="display:flex;"><span>    .<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">process</span>.<span style="color:#a6e22e">stdout</span>);
+</span></span></code></pre></div><h2 id="测试">测试</h2>
+<h3 id="修改文件">修改文件</h3>
+<h4 id="maints">main.ts</h4>
+<p>写一段测试代码，如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-TypeScript" data-lang="TypeScript"><span style="display:flex;"><span><span style="color:#66d9ef">import</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">as</span> <span style="color:#a6e22e">PIXI</span> <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#34;pixi.js&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//Create the renderer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">renderer</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">PIXI</span>.<span style="color:#a6e22e">autoDetectRenderer</span>(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//Add the canvas to the HTML document
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>document.<span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">appendChild</span>(<span style="color:#a6e22e">renderer</span>.<span style="color:#a6e22e">view</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//Create a container object called the `stage`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">stage</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">PIXI</span>.<span style="color:#a6e22e">Container</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//Tell the `renderer` to `render` the `stage`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">renderer</span>.<span style="color:#a6e22e">render</span>(<span style="color:#a6e22e">stage</span>);
+</span></span></code></pre></div><h4 id="indexhtml">index.html</h4>
+<p>修改文件内容为</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span><span style="color:#75715e">&lt;!DOCTYPE html&gt;</span>
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#f92672">html</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#f92672">meta</span> <span style="color:#a6e22e">charset</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;UTF-8&#34;</span> /&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#f92672">title</span>&gt;Hello World, Pixi!&lt;/<span style="color:#f92672">title</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">head</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>        &lt;<span style="color:#f92672">script</span> <span style="color:#a6e22e">src</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;./dist/bundle.js&#34;</span>&gt;&lt;/<span style="color:#f92672">script</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;/<span style="color:#f92672">body</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#f92672">html</span>&gt;
+</span></span></code></pre></div><h3 id="编译测试">编译测试</h3>
+<h4 id="编译">编译</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm run build
+</span></span></code></pre></div><p>此举将会执行<code>package.json</code>中设置的<code>build</code>命令，编译TypeScript文件，并打包至<code>dist/bundle.js</code>中</p>
+<h4 id="测试-1">测试</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm test
+</span></span></code></pre></div><p>执行命令，打开相应的网址，测试刚刚编写的代码，查看代码是否正确执行。</p>
+<h2 id="总结">总结</h2>
+<p>不熟悉 node.js 开发，配置的时候遇到了不少问题，不过也都很快解决了。相比 Native 的开发，Web 的工具实在太好用了，很适合前期的原型构建。</p>
+<hr>
+<p><strong>参考资料</strong></p>
+<ol>
+<li><a href="http://augix.me/archives/5246">http://augix.me/archives/5246</a></li>
+<li><a href="http://www.mishengqiang.com/index.php/101.html">http://www.mishengqiang.com/index.php/101.html</a></li>
+<li><a href="https://github.com/kittykatattack/learningPixi">https://github.com/kittykatattack/learningPixi</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/21611724">https://zhuanlan.zhihu.com/p/21611724</a></li>
+</ol>
+		</section>
+
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/game-dev">game dev</a></li>
+					
+					<li><a href="/tags/pixijs">PixiJS</a></li>
+					
+					<li><a href="/tags/typescript">TypeScript</a></li>
+					
+					<li><a href="/tags/html5">HTML5</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
+<script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="title"
+        label="💬comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+		
+	</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

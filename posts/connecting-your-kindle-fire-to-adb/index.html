@@ -1,4 +1,8 @@
-<!doctype html><html><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><title>连接Kindle Fire到ADB(实体机调试) - LimboNova</title><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="前提条件
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>连接Kindle Fire到ADB(实体机调试) - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="前提条件
 为开发环境下载安装下列包:
 
 Java JDK
@@ -6,10 +10,10 @@ Android SDK
 
 使用 Android SDK Manager 下载安装下列SDK包：
 
-Android 2.3.3 (API10) => SDK Platform
-Tools => Android SDK Tools
-Tools => Android SDK Platform-tools
-Extras => Google USB Driver package
+Android 2.3.3 (API10) =&gt; SDK Platform
+Tools =&gt; Android SDK Tools
+Tools =&gt; Android SDK Platform-tools
+Extras =&gt; Google USB Driver package
 
 OSX设置
 修改 adb_usb.ini
@@ -19,7 +23,10 @@ OSX设置
 添加一行： 0x0006
 保存文件
 
-注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。"><meta property="og:image" content><meta property="og:title" content="连接Kindle Fire到ADB(实体机调试)"><meta property="og:description" content="前提条件
+注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="连接Kindle Fire到ADB(实体机调试)" />
+<meta property="og:description" content="前提条件
 为开发环境下载安装下列包:
 
 Java JDK
@@ -27,10 +34,10 @@ Android SDK
 
 使用 Android SDK Manager 下载安装下列SDK包：
 
-Android 2.3.3 (API10) => SDK Platform
-Tools => Android SDK Tools
-Tools => Android SDK Platform-tools
-Extras => Google USB Driver package
+Android 2.3.3 (API10) =&gt; SDK Platform
+Tools =&gt; Android SDK Tools
+Tools =&gt; Android SDK Platform-tools
+Extras =&gt; Google USB Driver package
 
 OSX设置
 修改 adb_usb.ini
@@ -40,7 +47,14 @@ OSX设置
 添加一行： 0x0006
 保存文件
 
-注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。"><meta property="og:type" content="article"><meta property="og:url" content="/posts/connecting-your-kindle-fire-to-adb/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2012-08-19T11:30:08+08:00"><meta property="article:modified_time" content="2012-08-19T11:30:08+08:00"><meta name=twitter:card content="summary"><meta name=twitter:title content="连接Kindle Fire到ADB(实体机调试)"><meta name=twitter:description content="前提条件
+注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/connecting-your-kindle-fire-to-adb/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2012-08-19T11:30:08+08:00" />
+<meta property="article:modified_time" content="2012-08-19T11:30:08+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="连接Kindle Fire到ADB(实体机调试)"/>
+<meta name="twitter:description" content="前提条件
 为开发环境下载安装下列包:
 
 Java JDK
@@ -48,10 +62,10 @@ Android SDK
 
 使用 Android SDK Manager 下载安装下列SDK包：
 
-Android 2.3.3 (API10) => SDK Platform
-Tools => Android SDK Tools
-Tools => Android SDK Platform-tools
-Extras => Google USB Driver package
+Android 2.3.3 (API10) =&gt; SDK Platform
+Tools =&gt; Android SDK Tools
+Tools =&gt; Android SDK Platform-tools
+Extras =&gt; Google USB Driver package
 
 OSX设置
 修改 adb_usb.ini
@@ -61,15 +75,203 @@ OSX设置
 添加一行： 0x0006
 保存文件
 
-注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。"><script src=/js/feather.min.js></script>
-<link href=/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css rel=stylesheet><link rel=stylesheet type=text/css media=screen href=/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css><link id=darkModeStyle rel=stylesheet type=text/css href=/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css media="(prefers-color-scheme: dark)"><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css><script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js></script>
-<script defer src=https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
-<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script></head><body><div class=content><header><div class=main><a href=/>LimboNova</a></div><nav><a href=/>Home</a>
-<a href=/posts>Archives</a>
-<a href=/tags>Tags</a>
-<a href=/about>About</a></nav></header><main><article><div class=title><h1 class=title>连接Kindle Fire到ADB(实体机调试)</h1><div class=meta>Posted on Aug 19, 2012</div></div><section class=body><h2 id=前提条件>前提条件</h2><p>为开发环境下载安装下列包:</p><ul><li><a href=http://www.oracle.com/technetwork/java/javase/downloads/index.html>Java JDK</a></li><li><a href=http://developer.android.com/sdk/index.html>Android SDK</a></li></ul><p>使用 Android SDK Manager 下载安装下列SDK包：</p><ul><li>Android 2.3.3 (API10) => SDK Platform</li><li>Tools => Android SDK Tools</li><li>Tools => Android SDK Platform-tools</li><li>Extras => Google USB Driver package</li></ul><h2 id=osx设置>OSX设置</h2><p>修改 adb_usb.ini</p><ol><li>打开文件： ~/.android/adb_usb.ini</li><li>添加一行： 0x1949</li><li>添加一行： 0x0006</li><li>保存文件</li></ol><p>注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。</p><p>重启ADB服务器，确认检测到Kindle Fire ：</p><ol><li>打开终端窗口</li><li>执行命令：adb kill-server</li><li>执行命令：adb start-server</li><li>执行命令：adb devices ，查看Kindle Fire是否在显示的设备列表里。</li></ol><p>如果没有检测到 Kindle Fire，可能需要重启计算机或者注销重新登录让变更生效。</p><h2 id=win7设置>Win7设置</h2><p>须拥有管理员权限修改 adb_usb.ini</p><ol><li>打开文件：C:Users&lt;你的用户名>.androidadb_usb.ini</li><li>添加一行：0x1949</li><li>保存文件</li></ol><p>注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。</p><p><strong>修改 Google USB Driver 包</strong></p><ol><li>打开Google USB Driver 文件夹，标准安装位置是 C:Program Files (x86)Androidandorid-sdkextrasgoogleusb_driver</li><li>找到 android_winusb.inf 配置文件并修改权限允许写入：<ol><li>右键单击文件，选择”属性“</li><li>切换到”安全“标签</li><li>点击”编辑“按钮</li><li>在上面的列表框中选择选择你的组或者用户名</li><li>检查下面列表中，确认”写入“权限被设置为”允许“</li><li>应用设置</li></ol></li><li>打开 android_winusb.inf 文件</li><li>在 [Google.NTx86] 和 [Google.NTamd64] 这两段后面分别添加下列设置：</li></ol><blockquote><p>;Kindle Fire
+注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">连接Kindle Fire到ADB(实体机调试)</h1>
+			<div class="meta">Posted on Aug 19, 2012</div>
+		</div>
+		
+
+		<section class="body">
+			<h2 id="前提条件">前提条件</h2>
+<p>为开发环境下载安装下列包:</p>
+<ul>
+<li><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java JDK</a></li>
+<li><a href="http://developer.android.com/sdk/index.html">Android SDK</a></li>
+</ul>
+<p>使用 Android SDK Manager 下载安装下列SDK包：</p>
+<ul>
+<li>Android 2.3.3 (API10) =&gt; SDK Platform</li>
+<li>Tools =&gt; Android SDK Tools</li>
+<li>Tools =&gt; Android SDK Platform-tools</li>
+<li>Extras =&gt; Google USB Driver package</li>
+</ul>
+<h2 id="osx设置">OSX设置</h2>
+<p>修改 adb_usb.ini</p>
+<ol>
+<li>打开文件： ~/.android/adb_usb.ini</li>
+<li>添加一行： 0x1949</li>
+<li>添加一行： 0x0006</li>
+<li>保存文件</li>
+</ol>
+<p>注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。</p>
+<p>重启ADB服务器，确认检测到Kindle Fire ：</p>
+<ol>
+<li>打开终端窗口</li>
+<li>执行命令：adb kill-server</li>
+<li>执行命令：adb start-server</li>
+<li>执行命令：adb devices ，查看Kindle Fire是否在显示的设备列表里。</li>
+</ol>
+<p>如果没有检测到 Kindle Fire，可能需要重启计算机或者注销重新登录让变更生效。</p>
+<h2 id="win7设置">Win7设置</h2>
+<p>须拥有管理员权限修改 adb_usb.ini</p>
+<ol>
+<li>打开文件：C:Users&lt;你的用户名&gt;.androidadb_usb.ini</li>
+<li>添加一行：0x1949</li>
+<li>保存文件</li>
+</ol>
+<p>注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。</p>
+<p><strong>修改 Google USB Driver 包</strong></p>
+<ol>
+<li>打开Google USB Driver 文件夹，标准安装位置是 C:Program Files (x86)Androidandorid-sdkextrasgoogleusb_driver</li>
+<li>找到 android_winusb.inf 配置文件并修改权限允许写入：
+<ol>
+<li>右键单击文件，选择”属性“</li>
+<li>切换到”安全“标签</li>
+<li>点击”编辑“按钮</li>
+<li>在上面的列表框中选择选择你的组或者用户名</li>
+<li>检查下面列表中，确认”写入“权限被设置为”允许“</li>
+<li>应用设置</li>
+</ol>
+</li>
+<li>打开 android_winusb.inf 文件</li>
+<li>在 [Google.NTx86] 和 [Google.NTamd64] 这两段后面分别添加下列设置：</li>
+</ol>
+<blockquote>
+<p>;Kindle Fire
 %SingleAdbInterface% = USB_Install, USBVID_1949&amp;PID_0006
-%CompositeAdbInterface% = USB_Install, USBVID_1949&amp;PID_0006&amp;MI_01</p></blockquote><ol start=5><li>保存文件</li></ol><p><strong>安装Google USB Driver</strong></p><ol><li>通过USB连接Kindle Fire 到计算机</li><li>右击桌面上的”计算机”或Window资源管理器，选择”管理“</li><li>在左侧的面板中选择 计算机管理=> 系统工具 => 设备管理器</li><li>在右侧的面板中找到并打开”其它设备“分支</li><li>右击名叫”Kindle”的设备，并选择”更新驱动程序软件…“，将启动硬件更新向导；</li><li>点击”浏览计算机以查找驱动程序软件“；</li><li>点击浏览并选择包含之前修改的android_winusb.inf 那个文件夹</li><li>单击下一步安装驱动</li><li>当提示Windows安全警告时，选择始终安装该驱动程序。</li><li>安装成功后Kindle Fire 将会在设备管理器中显示： Android Phones =>Android Composite ADB Interface</li></ol><p>重启ADB服务器，确认检测到Kindle Fire ：</p><ol><li>打开命令提示符窗口</li><li>切换到Android SDK platform tools目录，标准安装位置是：C:Program Files (x86)Androidandorid-sdkplatform-tools</li><li>执行命令：adb kill-server</li><li>执行命令：adb start-server</li><li>执行命令：adb devices ，查看Kindle Fire是否在显示的设备列表里。</li></ol><hr><p><strong>参考资料</strong></p><ol><li><a href=https://developer.amazon.com/help/faq.html#KindleFire>https://developer.amazon.com/help/faq.html#KindleFire</a></li><li><a href=http://g-ecx.images-amazon.com/images/G/01/sdk/Connecting_your_Kindle_Fire_to_ADB.pdf>http://g-ecx.images-amazon.com/images/G/01/sdk/Connecting_your_Kindle_Fire_to_ADB.pdf</a></li></ol></section><br><br><div class=post-tags><nav class="nav tags"><ul class=tags><li><a href=/tags/android>android</a></li></ul></nav></div><script src=https://utteranc.es/client.js repo issue-term=title label=💬comment theme=github-light crossorigin=anonymous async></script></article></main><footer><div style=display:flex><a class=soc href=https://github.com/anthonyhan rel=me title=GitHub><i data-feather=github></i></a>
-<a class=border></a><a class=soc href=https://twitter.com/_qhan_ rel=me title=Twitter><i data-feather=twitter></i></a>
-<a class=border></a><a class=soc href=/index.xml rel=me title=Rss><i data-feather=rss></i></a>
-<a class=border></a></div><div class=footer-info>2023 © Anthony | <a href=https://github.com/athul/archie>Archie Theme</a> | Built with <a href=https://gohugo.io>Hugo</a></div></footer><script>feather.replace()</script></div></body></html>
+%CompositeAdbInterface% = USB_Install, USBVID_1949&amp;PID_0006&amp;MI_01</p>
+</blockquote>
+<ol start="5">
+<li>保存文件</li>
+</ol>
+<p><strong>安装Google USB Driver</strong></p>
+<ol>
+<li>通过USB连接Kindle Fire 到计算机</li>
+<li>右击桌面上的”计算机”或Window资源管理器，选择”管理“</li>
+<li>在左侧的面板中选择 计算机管理=&gt; 系统工具 =&gt; 设备管理器</li>
+<li>在右侧的面板中找到并打开”其它设备“分支</li>
+<li>右击名叫”Kindle”的设备，并选择”更新驱动程序软件…“，将启动硬件更新向导；</li>
+<li>点击”浏览计算机以查找驱动程序软件“；</li>
+<li>点击浏览并选择包含之前修改的android_winusb.inf 那个文件夹</li>
+<li>单击下一步安装驱动</li>
+<li>当提示Windows安全警告时，选择始终安装该驱动程序。</li>
+<li>安装成功后Kindle Fire 将会在设备管理器中显示： Android Phones =&gt;Android Composite ADB Interface</li>
+</ol>
+<p>重启ADB服务器，确认检测到Kindle Fire ：</p>
+<ol>
+<li>打开命令提示符窗口</li>
+<li>切换到Android SDK platform tools目录，标准安装位置是：C:Program Files (x86)Androidandorid-sdkplatform-tools</li>
+<li>执行命令：adb kill-server</li>
+<li>执行命令：adb start-server</li>
+<li>执行命令：adb devices ，查看Kindle Fire是否在显示的设备列表里。</li>
+</ol>
+<hr>
+<p><strong>参考资料</strong></p>
+<ol>
+<li><a href="https://developer.amazon.com/help/faq.html#KindleFire">https://developer.amazon.com/help/faq.html#KindleFire</a></li>
+<li><a href="http://g-ecx.images-amazon.com/images/G/01/sdk/Connecting_your_Kindle_Fire_to_ADB.pdf">http://g-ecx.images-amazon.com/images/G/01/sdk/Connecting_your_Kindle_Fire_to_ADB.pdf</a></li>
+</ol>
+		</section>
+
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/android">android</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
+<script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="title"
+        label="💬comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+		
+	</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>
