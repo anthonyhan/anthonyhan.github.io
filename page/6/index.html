@@ -77,6 +77,168 @@
 				
 				
 				<section class="list-item">
+					<h1 class="title"><a href="/posts/book-review-on-top-of-tides/">观潮与弄潮</a></h1>
+					<time>Feb 20, 2013</time>
+					<br><div class="description">
+	
+	<p><img src="https://img3.doubanio.com/lpic/s6807265.jpg" alt="cover"></p>
+<p>春节期间看完了这本书，收获颇多。一开始看到介绍，我以为这是一本记述IT简史的书，看到后面，越发现远远不止这些。</p>
+<h2 id="观潮时代的浪潮">观潮：时代的浪潮</h2>
+<p>IT技术人员，特别是作者这样的计算机科学家，历来对贝尔实验室有着无比的崇敬和向往。故事从贝尔实验室的东家 —— AT&amp;T 公司开始，悉数介绍了 AT&amp;T，IBM，Apple，Intel，Microsoft，Cisco，Yahoo，HP，Motorola，Google 等科技浪潮中各领风骚的著名企业，还有 Sun，Novell，Netscape，RealNetworks 这些“与机会失之交臂的公司”。回顾科技工业一百多年来的发展历程，分析了这些公司成功失败的原因。</p>
+<p>在谈到微软时，吴军描述比尔·盖茨在起家时，包括微软成立后的十几年里，一直惯用冒险的空手套白狼手法抢占先机。当年操作系统领域的专家 Jim Allchin 对微软的技术根本瞧不上，他说，你们微软的东西是最烂的。而盖茨做到了保守和冒险的平衡，打动了 Allchin等一批技术大牛，完成研发上的布局。对于市场的策略则是：薄利多销和来者不拒。这个可以从早期的微软广告中窥见一斑，比如史蒂夫·鲍尔默做的DOS广告等等。</p>
+<p>Cisco，我只知道这是一家卖路由器等网络设备的公司，还参与过GFW这样为虎作伥的项目。没想到思科的历史这么久远，尤其是善待离职创业的员工，以及对其创业公司的扶持和收购，真是十分高明的手法。</p>
+<p>作者形容摩托罗拉是一家贵族式的公司，这个在模拟通信领域的佼佼者，在数字通信时代显得力不从心，依然孤傲地以技术为重心，却眼睁睁地看着木工厂起家的诺基亚超越了自己。在商业竞争中，光有技术显然是不行的。正如作者所言，“从技术角度看，铱星移动通信系统是非常成功的。这是真正的科技精品。我常常想，我们这些被成为高科技公司的互联网公司做到的东西和铱星系统相比，简直就像是玩具。” 君子之泽，五世而斩，虽然贵族式的摩托罗拉被Google收购，即便Google看中的是它若干的通信专利，但是至少它的技术创造依然造福于人。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/book-review-on-top-of-tides/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/fix-nvidia-driver-on-kernel-3-7-7/">3.7.7内核的nVidia驱动安装</a></h1>
+					<time>Feb 17, 2013</time>
+					<br><div class="description">
+	
+	<p>更新3.7.7内核之后，nVidia显卡驱动需要重新编译，但是这次和以前不一样，安装时报错导致无法继续。</p>
+<h2 id="问题分析">问题分析</h2>
+<p>根据报错的信息，可以打开日志文件查看详细的原因：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>    less /var/log/nvidia-installer.log</span></span></code></pre></div>
+<p>日志信息如下：</p>
+<blockquote>
+<p>-&gt; Kernel source path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/source&rsquo;
+-&gt; Kernel output path: &lsquo;/lib/modules/3.7.7-201.fc18.i686.PAE/build&rsquo;
+ERROR: If you are using a Linux 2.4 kernel, please make sure
+you either have configured kernel sources matching your
+kernel or the correct set of kernel headers installed
+on your system.</p>
+<p>If you are using a Linux 2.6 kernel, please make sure
+you have configured kernel sources matching your kernel
+installed on your system. If you specified a separate
+output directory using either the &ldquo;KBUILD_OUTPUT&rdquo; or
+the &ldquo;O&rdquo; KBUILD parameter, make sure to specify this
+directory with the SYSOUT environment variable or with
+the equivalent nvidia-installer command line option.</p>
+<p>Depending on where and how the kernel sources (or the
+kernel headers) were installed, you may need to specify
+their location with the SYSSRC environment variable or
+the equivalent nvidia-installer command line option.
+ERROR: Installation has failed. Please see the file
+&lsquo;/var/log/nvidia-installer.log&rsquo; for details. You may find suggestions
+on fixing installation problems in the README available on the Linux
+driver download page at <a href="https://www.nvidia.com">www.nvidia.com</a>.</p>
+</blockquote>
+<p>大概原因是安装脚本无法确认系统版本，因而没有指定KBUILD_OUTPUT之类的参数。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/fix-nvidia-driver-on-kernel-3-7-7/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/install-nvidia-driver-on-fedora/">在Fedora上安装nVidia显卡驱动程序</a></h1>
+					<time>Jan 24, 2013</time>
+					<br><div class="description">
+	
+	<p>自从Linus骂了nVidia一顿之后，似乎起到了点作用。前不久nVidia还和Steam联手，致力提高Linux下的游戏体验，发布了据说性能提升十分显著的R300驱动，不管是否如此，对桌面用户也是大有裨益的。本文参考了nVidia官方安装文档，结合本人的安装R310.19的经历整理而成。</p>
+<h2 id="系统需求">系统需求</h2>
+<h3 id="软件需求">软件需求</h3>
+<blockquote>
+<p><em>Software Element</em>  <em>Supported versions</em>    <em>Check With&hellip;</em>
+Linux kernel        2.4.22 and newer        cat /proc/version
+XFree86*            4.0.1 and newer         XFree86 -version
+X.Org*              1.0 - 1.13              Xorg -version
+Kernel modutils     2.1.121 and newer       insmod &ndash;version
+glibc               2.0                     ls /lib/libc.so.* &gt; 6</p>
+</blockquote>
+<h3 id="硬件需求">硬件需求</h3>
+<p>当然是你的显卡要在驱动的支持列表内；</p>
+<p>参见 <a href="http://us.download.nvidia.com/XFree86/Linux-x86/310.19/README/supportedchips.html">Supported NVIDIA GPU Products</a></p>
+<h2 id="安装步骤">安装步骤</h2>
+<h3 id="禁用nouveau">禁用nouveau</h3>
+<h4 id="blacklist">blacklist</h4>
+<ol>
+<li>操作前保证有足够的权限，打开文件</li>
+</ol>
+<blockquote>
+<p>vi /etc/modprobe.d/balcklist.conf</p>
+</blockquote>
+<ol start="2">
+<li>找到 nvidiafb这一行，注释掉</li>
+</ol>
+<blockquote>
+<p>#blacklist nvidiafb</p>
+</blockquote>
+<ol start="3">
+<li>(可跳过，驱动会自动创建)新建文件 vi /etc/modprobe.d/disable-nouveau.conf,添加以下：</li>
+</ol>
+<blockquote>
+<p>blacklist nouveau
+options nouveau modeset=0</p>
+</blockquote>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/install-nvidia-driver-on-fedora/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/install-ruby-on-rails-on-fedora/">在Fedora上安装Ruby on Rails</a></h1>
+					<time>Jan 20, 2013</time>
+					<br><div class="description">
+	
+	<blockquote>
+<p>Practically all the software in the world is either broken or very difficult to use. So users dread software. They’ve been trained that whenever they try to install something, or even fill out a form online, it’s not going to work. I dread installing stuff, and I have a Ph.D. in computer science.
+Paul Graham, Founders at Work</p>
+</blockquote>
+<p>这几年一直在用AS3.0做开发，已经很久没有接触Linux了。博客上挂着Fedora的倒计时牌子，每次看到新版本倒计时一个接一个地陆续发布，这个周末重新装上了Fedora，学习一些其他的Web开发知识。虽说Ruby on Rails这几年不是很流行了，而且近期Twitter改用java引起了不小的震动，有些人认为RoR过时了,Ruby日薄西山了。我倒是觉得技术人员与其关注这些，不如去专注学习技术。</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Ruby_on_Rails_logo.jpg" alt="ror_logo"></p>
+<h2 id="安装步骤">安装步骤</h2>
+<p>Fedora更新非常快，我用的是目前最新的Fedora 18。虽然按照文档和教程一步一步安装的，但还是遇到了很多问题。安装的方法有很多种，这个和Ruby语言的特性也很相似 😉 。考虑到环境配置和开发工作，使用RVM安装比较好，RVM可以管理多个Ruby版本和RubyGem，在开发时可以根据需要切换版本，配置环境也很方便。使用yum安装ruby，管理比较麻烦，不适合开发工作。</p>
+<h3 id="安装git和curl">安装git和cURL</h3>
+<p>可以考虑先更新所有包</p>
+<blockquote>
+<p>yum update</p>
+</blockquote>
+<p>安装git</p>
+<blockquote>
+<p>yum install git-core</p>
+</blockquote>
+<p>安装curl</p>
+<blockquote>
+<p>yum install curl</p>
+</blockquote>
+<h3 id="安装rvm">安装RVM</h3>
+<p>RVM，即Ruby Version Manager，可以管理多个版本Ruby，RubyGem，Rails，对开发来说非常有用。</p>
+<blockquote>
+<p>curl -L get.rvm.io | bash -s stable
+source ~/.rvm/scripts/rvm</p>
+</blockquote>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/install-ruby-on-rails-on-fedora/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/visioning-games-from-dear-esther-and-journey/">从《Dear Esther》和《Journey》看当今游戏发展</a></h1>
+					<time>Jan 3, 2013</time>
+					<br><div class="description">
+	
+	<p><strong>标题：</strong> 从《Dear Esther》和《Journey》看当今游戏发展
+<strong>译者：</strong> <a href="http://gamerboom.com/archives/53084">游戏邦</a></p>
+<p><strong>原文：</strong> Visioning games – what we can learn from games like Dear Esther and Journey
+<strong>作者：</strong> <a href="http://krillbite.com/blog/05/visioning-games-what-we-can-learn-from-games-like-dear-esther-and-journey/">Adrian Tingstad Husby</a></p>
+<blockquote>
+<p>这是一篇转载的文章，已获得译者许可。原文发表于2012年5月8日，前段时间体验完Dear Esther，无意中看到了这篇译文，恰巧 Journey被评为IGN 2012年度最佳游戏。文章讲得很有道理，“除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。”</p>
+</blockquote>
+<p>游戏所具有的程序，互动和（潜在的）非线型属性让它们能够更好地处理一些人类心智问题（比起其它静态且线型媒体来说）。但是通常情况下，因为游戏总是会受到一些条条框框和人们无尽期望的束缚，所以很难体现出同等艺术媒体所具有的情感或故事。</p>
+<p>我既是一名游戏玩家也是游戏开发者，但是纵观今天的游戏，我们看到的却只是一些“有趣的”骗人玩意儿。除了少数一些例外，大多数游戏都只是围绕着一些幼稚的故事和呆板的竞争游戏机制展开。引用Scott Brodie的话来说就是“比起其它受欢迎的艺术形式，游戏产业从整体来看显得更加平庸与幼稚。”尽管觉得遗憾，但是我真的非常同意Scott的说法。</p>
+<p>我认为我们有必要在此讨论一些重要的问题。即是否能够创造一款不是通过进度条或高分而推动奖励的电子游戏？这是一种与趣味情感相互协调的机制，但是它们是否能够与其它复杂且相对严肃的情感结合在一起？是否正是因为玩家对于外部奖励的狂热追求才促使游戏区别于浪漫的戏剧和纪录片？</p>
+<p>最近我到gameosphere网站玩了《Journey》和新版的《Dear Esther》，并发现这两款游戏在设计方面有许多共同点。这些共同点都遵循着一种发展趋势——尽管都是基于独立场景而言。我个人认为这类型的游戏不仅能够让我对未来的游戏媒体发展充满期待，同时它们也完美地体现出我对于游戏的一些想法。</p>
+<p>真心希望当前的游戏领域现状能够发生改变。而我们也同时在当前的游戏身上找到了许多值得讨论和学习之处。</p>
+<p><img src="http://gamerboom.com/wp-content/uploads/2012/05/Journeyfrom-tmeink.com%EF%BC%89.jpg" alt="journey" title="Journey"></p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/visioning-games-from-dear-esther-and-journey/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
 					<h1 class="title"><a href="/posts/less-is-more-dear-esther-review/">Less is more : Dear Esther 简评</a></h1>
 					<time>Dec 31, 2012</time>
 					<br><div class="description">
@@ -88,213 +250,6 @@
 	
 </div>
 					<a class="readmore" href="/posts/less-is-more-dear-esther-review/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/">Flash Player 11.5 Beta &amp; AIR 3.5 Beta 特性</a></h1>
-					<time>Sep 27, 2012</time>
-					<br><div class="description">
-	
-	FP11.4发布没多长时间，很多新功能还没有用上，FP11.5 Beta就已经发布了。 主要特性及优点(不定期更新)： 在Flash Player的&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/new-features-in-flash-player-11-5-beta-and-air-3-5-beta/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/gif-animation-in-flash-player/">在 Flash Player 中显示GIF动画</a></h1>
-					<time>Sep 26, 2012</time>
-					<br><div class="description">
-	
-	<p>之前遇到这个需求，本人坚持”不重复发明轮子”的原则，弘扬”积极的偷懒不算偷懒”的精神，找到了两个解决方案。因为之前研究了GIF格式和LWZ算法，所以理解起来，没有太大的问题。</p>
-<!-- raw HTML omitted -->
-<h2 id="方案一as3gif">方案一：as3gif</h2>
-<p>作者：Thibault Imbert
-项目地址：http://code.google.com/p/as3gif/</p>
-<p>2007年Thibault 在他的Blog里介绍了这个方法，从java GIF encoder 移植而来，可以实现gif的编码、解码和显示。调用也很简单，代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-actionscript" data-lang="actionscript"><span style="display:flex;"><span>	<span style="color:#75715e">// we create the GIFPlayer, it plays automatically by default
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">myGIFPlayer</span><span style="color:#f92672">:</span><span style="color:#a6e22e">GIFPlayer</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">GIFPlayer</span>();
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// we show it
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">addChild</span> ( <span style="color:#a6e22e">myGIFPlayer</span> );
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// we load a gif file
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">load</span> ( <span style="color:#66d9ef">new</span> URLRequest (<span style="color:#e6db74">&#34;animation.gif&#34;</span>) );
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// you can also load any valid GIF stream (ByteArray) with the loadBytes method (version 0.2)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">loadBytes</span> ( <span style="color:#a6e22e">gifStream</span> );
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// listen for the IOErrorEvent.IO_ERROR event, dispatched when the GIF fails to load
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">addEventListener</span> ( IOErrorEvent.<span style="color:#a6e22e">IO_ERROR</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">onIOError</span> );
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// listen for the GIFPlayerEvent.COMPLETE event, dispatched when GIF is loaded
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">addEventListener</span> ( <span style="color:#a6e22e">GIFPlayerEvent</span>.<span style="color:#a6e22e">COMPLETE</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">onCompleteGIFLoad</span> );
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// listen for the FrameEvent.FRAME_RENDERED event, dispatched when a GIF frame is rendered on screen
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">addEventListener</span> ( <span style="color:#a6e22e">FrameEvent</span>.<span style="color:#a6e22e">FRAME_RENDERED</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">onFrameRendered</span> );
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// listen for the FileTypeEvent.INVALID event, dispatched when an invalid file is loaded
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">addEventListener</span> ( <span style="color:#a6e22e">FileTypeEvent</span>.<span style="color:#a6e22e">INVALID</span><span style="color:#f92672">,</span> <span style="color:#a6e22e">onInvalidFileLoaded</span> );
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// get total frames
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">totalFrames</span><span style="color:#f92672">;</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// standard methods
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">play</span>();
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">stop</span>();
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">gotoAndStop</span>(<span style="color:#ae81ff">3</span>);
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">myGIFPlayer</span>.<span style="color:#a6e22e">gotoAndPlay</span>(<span style="color:#ae81ff">3</span>);</span></span></code></pre></div>
-<p>优点：简单易用，接口丰富，满足一般应用。具备GIF编码类，可将位图数据添加至GIF动画帧中。</p>
-<p>缺点：解码和播放的性能不太理想。在加载大的文件时耗时太长，动画帧控制不准确。</p>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/gif-animation-in-flash-player/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/gif-format-and-lzw/">GIF 格式及LZW算法浅析</a></h1>
-					<time>Sep 20, 2012</time>
-					<br><div class="description">
-	
-	<p>前段时间得知一个产品需求，需要在Flash Player中显示gif动画图片。虽然Flash支持gif图像的载入，但无法播放动画。</p>
-<p>花了不少时间去了解GIF格式，虽然顺利解决了问题，但是知其然也知其所以然，了解了这些知识，对理解编码/解码的过程和解决问题有非常大的帮助。</p>
-<p><img src="/images/diego.gif" alt="gif sample" title="GIF 多帧动画"></p>
-<h2 id="gif概述">GIF概述</h2>
-<p>Graphics Interchange Format（GIF，图形交换格式）是一种位图的图形文件格式，以8位色（即256种颜色）重现真彩色的图像。它实际上是一种压缩文档，采用LZW压缩算法进行编码，有效地减少了图像文件在网络上传输的时间。是目前广泛应用于网络传输的图像格式之一。</p>
-<p>GIF主要分为两个版本，即GIF 87a和GIF 89a：</p>
-<p>GIF 87a：是在1987年制定的版本；
-GIF 89a：是在1989年制定的版本。在这个版本中，为GIF文档扩充了图形控制区块、备注、说明、应用程序接口等四个区块，并提供了对透明色和多帧动画的支持。</p>
-<h2 id="gif格式结构">GIF格式结构</h2>
-<p>GIF文件由文件头，描述块，彩色表，数据块，扩展块和结束符构成，GIF87a和GIF89a的区别在于：后者较前者增加了扩展块，从功能上看即提供了对透明色和多帧动画的支持。</p>
-<h3 id="结构组成">结构组成</h3>
-<p>结构如下表所示：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Header</td>
-<td>Header</td>
-<td>Header</td>
-</tr>
-<tr>
-<td>Logical Screen Descriptor</td>
-<td>Screen Descriptor Block</td>
-<td>GIF Data Stream</td>
-</tr>
-<tr>
-<td>Global Color Table</td>
-<td>Global Color Table(optional)</td>
-<td></td>
-</tr>
-<tr>
-<td>Application Extension</td>
-<td>Extension Blocks(optional, repeated)</td>
-<td></td>
-</tr>
-<tr>
-<td>Graphic Control Extension*</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>…</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Image Descriptor</td>
-<td>Image Blocks(repeated)</td>
-<td></td>
-</tr>
-<tr>
-<td>Local Color Table</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Table Based Image Data</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>…</td>
-<td>Extension Blocks(optional, repeated)</td>
-<td></td>
-</tr>
-<tr>
-<td>Trailer</td>
-<td>Trailer</td>
-<td>Trailer</td>
-</tr>
-</tbody>
-</table>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/gif-format-and-lzw/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/asc2-release-notes/">Adobe® ActionScript® Compiler 2.0 (ASC2.0)版本说明</a></h1>
-					<time>Aug 31, 2012</time>
-					<br><div class="description">
-	
-	<p>伴随着Flash Builder 4.7 beta的发布，正如Adobe所承诺的那样，新的编译器也浮出水面。全新的编译器到底有哪些改进和新特性，想必是大多数ActionScript开发比较关心的问题。简单翻译了下ASC2.0官方发布说明，希望能对同行们有一点帮助。</p>
-<p>如果要了解Flash Builder 4.7，可以参看zrong的<a href="http://zengrong.net/post/1676.htm">这篇文章</a>。</p>
-<p>** August 2012 – Adobe® ActionScript® Compiler 2.0 (Build 2.0.0.345083) **
-Welcome to the Adobe ActionScript Compiler 2.0 (ASC 2.0) Preview.</p>
-<p>ASC 2.0 是一个新的ActionScript® 3.0 (AS3)编译器。相比之前版本更遵循AS3语言规范，编译性能方面有了很大改善。在内存压力下更稳定，并包含一些演示性的优化选项（内联，无用代码删除），这些选项可以有选择地启用。</p>
-<p>这个编译器已经包含在刚发布的 Flash Builder® 4.7 预览版中。其单独版本已经同AIR SDK 3.4 一起打包发布。</p>
-<p>注意：ASC 2.0支持编译AS3应用，虽然留有熟悉的mxmlc和compc命令行入口，但是不支持Flex应用的编译。</p>
-<p>当有更多信息时，该文档可能会不定期更新。</p>
-<h2 id="版本说明--august-2012">版本说明 – August 2012</h2>
-<ul>
-<li>这是新编译器ASC 2.0 的第一个公开预览版；</li>
-<li>Flash Builder 4.7 and the ASC 2.0 command-line compiler now share the same code model. This avoids duplicate representations of a program and means the IDE has an accurate representation of the language – matching the compiler. （没看懂，不清楚code model，representation的定义）</li>
-<li>全新多线程架构，支持多文件同时编译，减少编译时间；</li>
-<li>更佳的常数合并和常数传播带来运行时更佳性能的代码；</li>
-<li>通过移除不必要的活动记录减少函数开销；</li>
-<li>包含内联和无用代码删除相关的字节码优化；</li>
-<li>加入新关键字”goto”，实现AS3的非线性控制流；</li>
-<li>现在支持SWF 13的LZMA压缩了。</li>
-<li>新的符号管理系统，意味着包含Flash 和 AIR项目的Flash Builder 4.7 AS工作空间，编译起来应该会快多了；</li>
-<li>fontswf, optimizer，swfdump和swcdepends ，基于ASC 2.0的新版本可以用了；</li>
-<li>Asdoc，fdb的旧版本依然包括在内；</li>
-<li>字体转码已经从[Embed]语法中移除，现在字体需要先预转码并作为SWF嵌入，可以通过工具（如fontswf或Flash Professional CS6）来完成。</li>
-<li>源代码中的相对路径（[Embed] assets, includes, etc…）将从其包含文件相对解析。要指定一个相对于源文件根目录的路径，需要在你的路径前加”/”；</li>
-<li>英文编译器错误信息已经翻译成法文，日文，中文，区域取决于JVM的设置，并可以通过 -tools-locale 设置项改写。</li>
-</ul>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/asc2-release-notes/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/connecting-your-kindle-fire-to-adb/">连接Kindle Fire到ADB(实体机调试)</a></h1>
-					<time>Aug 19, 2012</time>
-					<br><div class="description">
-	
-	<h2 id="前提条件">前提条件</h2>
-<p>为开发环境下载安装下列包:</p>
-<ul>
-<li><a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Java JDK</a></li>
-<li><a href="http://developer.android.com/sdk/index.html">Android SDK</a></li>
-</ul>
-<p>使用 Android SDK Manager 下载安装下列SDK包：</p>
-<ul>
-<li>Android 2.3.3 (API10) =&gt; SDK Platform</li>
-<li>Tools =&gt; Android SDK Tools</li>
-<li>Tools =&gt; Android SDK Platform-tools</li>
-<li>Extras =&gt; Google USB Driver package</li>
-</ul>
-<h2 id="osx设置">OSX设置</h2>
-<p>修改 adb_usb.ini</p>
-<ol>
-<li>打开文件： ~/.android/adb_usb.ini</li>
-<li>添加一行： 0x1949</li>
-<li>添加一行： 0x0006</li>
-<li>保存文件</li>
-</ol>
-<p>注意：确保每行一条配置。如果文件不存在，新建文件并确认具备已配置完毕的Android SDK。</p>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/connecting-your-kindle-fire-to-adb/">Read more ⟶</a>
 				</section>
 				
 				

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>面向数据的行为树（5）：行为树结构剖析 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第5篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。
+系列文章目录
+《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：
+
+面向数据的行为树（1）：行为树入门
+面向数据的行为树（2）：震惊！面向对象行为树并不面向数据
+面向数据的行为树（3）：数据导向流催生的行为树
+面向数据的行为树（4）：面向数据的行为树概述
+面向数据的行为树（5）：行为树结构剖析
+
+前言
+今天我们来看看行为树运行时实现的主要数据结构，以及在行为树更新期间它们是如何相互作用的。
+![[/images/behavior-tree-entrails/treebeard.webp]]" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="面向数据的行为树（5）：行为树结构剖析" />
+<meta property="og:description" content="这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第5篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。
+系列文章目录
+《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：
+
+面向数据的行为树（1）：行为树入门
+面向数据的行为树（2）：震惊！面向对象行为树并不面向数据
+面向数据的行为树（3）：数据导向流催生的行为树
+面向数据的行为树（4）：面向数据的行为树概述
+面向数据的行为树（5）：行为树结构剖析
+
+前言
+今天我们来看看行为树运行时实现的主要数据结构，以及在行为树更新期间它们是如何相互作用的。
+![[/images/behavior-tree-entrails/treebeard.webp]]" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/data-oriented-bt-series-5-behavior-tree-entrails/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-02-18T22:24:57+08:00" />
+<meta property="article:modified_time" content="2024-02-18T22:24:57+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="面向数据的行为树（5）：行为树结构剖析"/>
+<meta name="twitter:description" content="这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第5篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。
+系列文章目录
+《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：
+
+面向数据的行为树（1）：行为树入门
+面向数据的行为树（2）：震惊！面向对象行为树并不面向数据
+面向数据的行为树（3）：数据导向流催生的行为树
+面向数据的行为树（4）：面向数据的行为树概述
+面向数据的行为树（5）：行为树结构剖析
+
+前言
+今天我们来看看行为树运行时实现的主要数据结构，以及在行为树更新期间它们是如何相互作用的。
+![[/images/behavior-tree-entrails/treebeard.webp]]"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">面向数据的行为树（5）：行为树结构剖析</h1>
+			<div class="meta">Posted on Feb 18, 2024</div>
+		</div>
+		
+
+		<section class="body">
+			<p>这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第5篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。</p>
+<h2 id="系列文章目录">系列文章目录</h2>
+<p>《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：</p>
+<ol>
+<li>面向数据的行为树（1）：行为树入门</li>
+<li>面向数据的行为树（2）：震惊！面向对象行为树并不面向数据</li>
+<li>面向数据的行为树（3）：数据导向流催生的行为树</li>
+<li>面向数据的行为树（4）：面向数据的行为树概述</li>
+<li>面向数据的行为树（5）：行为树结构剖析</li>
+</ol>
+<h2 id="前言">前言</h2>
+<p>今天我们来看看行为树运行时实现的主要数据结构，以及在行为树更新期间它们是如何相互作用的。</p>
+<p>![[/images/behavior-tree-entrails/treebeard.webp]]</p>
+<h2 id="数据结构">数据结构</h2>
+<p>在本系列的上一篇文章里，我们了解了面向数据行为树背后的核心思想。核心思路是尽量减少存储和处理行为树的所需内存，并将数据流式传输到计算单元的本地缓存变得容易（尚未经验证）。</p>
+<p>该实现基于三个主要的数据结构：</p>
+<ul>
+<li><strong><code>shape</code></strong>：行为树的形状或整体结构<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>；</li>
+<li><strong><code>actor</code></strong> ：Agent 的行为执行状态，例如正在运行的动作；</li>
+<li><strong><code>interpreter</code></strong> ：解释器数据，在行为树更新时，解释器处理<code>shape</code>和<code>actor</code>数据，缓存生成的新状态。</li>
+</ul>
+<h3 id="shape树的形状">Shape：树的形状</h3>
+<p>形状描述了行为树的静态结构。 行为树被扁平化成一个一维数组或流。 数组元素是表示树节点的<strong>形状项（shape item）</strong>。</p>
+<p>形状项根据其类型进行区分。 内部节点，即分支节点，就是根据何时运行哪些子节点来决定遍历的<strong>决策器（decider）</strong>。 因此决策器驱动着行为树的遍历。 叶节点及其形状是<strong>动作</strong>（持续动作，即时动作，或延迟动作）。</p>
+<p>目前所有形状项的大小都是 64 bit，包含一个类型字段和不同节点类型的数据的联合体。 是否将其削减到32位？然后在必要时使用多个项来表示一个节点，或者采用 Niklas Frykholm 在他的 《 Managing Decoupling Part 3 – C++ Duck Typing》<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>中描述的二进制 blob 设计。</p>
+<p>一个形状数据结构涉及:</p>
+<ul>
+<li>它的形状项流数据；</li>
+<li>一个形状项索引数组，其索引位置反映了存储在 <em><code>actor</code></em> 数据结构中的持久状态，以此在 Actor 的持久状态与提供状态的形状项之间建立映射关系；</li>
+<li>指定 <em><code>actor</code></em> 和 <em><code>inpterpreter</code></em> 状态缓冲区容量的规范。</li>
+</ul>
+<h3 id="actor执行状态">Actor：执行状态</h3>
+<p>多个 Agent 可能共享相同的行为树形状，但由于每个 Agent 都有不同的世界观，所以它们的行为执行状态不同。</p>
+<p>一个<code>actor</code>数据结构由以下部分组成：</p>
+<ul>
+<li>即时动作和延迟动作的执行状态，以及先前运行的延迟动作的终止状态；</li>
+<li>上次更新周期的决策器状态；</li>
+<li>Agent 的所有持久状态，包括持续动作的状态；</li>
+<li>对 Agent 黑板的引用。</li>
+</ul>
+<p><strong>动作状态(Action states)</strong> 对动作的行为或执行状态（ <em>就绪(<code>ready</code>)、运行(<code>running</code>)、成功(<code>success</code>)、失败(<code>fail</code>)</em> ）进行编码。 动作通过相关形状项在形状项流中的索引识别。 为了节省内存，只存储非默认状态。</p>
+<p>当游戏系统为 Agent 完成延迟动作的执行时，它会将 Actor 的动作状态更改为终止状态，以便在下一更新期间的解释过程可以对更改（事件）做出反应。</p>
+<p><strong>决策器状态(Decider states)</strong> 包含从上一更新保留的决策器的非默认遍历状态，并通过索引将其连接到决策器的形状项。 例如，序列节点决策器状态携带上次运行的子形状项索引，使序列节点能够从该子形状项开始遍历。</p>
+<p><strong>持久状态(Persistent states)</strong> 属于持续动作，或装饰节点（计时/计数器）的形状项。</p>
+<p>所有状态都按其形状项索引的升序存储。 这使形状项及其状态的迭代顺序与更新周期中的顺序一致。</p>
+<p>目前,每种状态都有其自己的定长位数据结构，但可将其拆分为单独存储形状项索引和数据，以节省内存并统一搜索和排序形状项状态的代码。</p>
+<p>Agent 的 <strong>黑板(blackboard)</strong> 汇总了所有特定于 Agent 的游戏世界知识。 为避免缓存未命中问题，它是即时动作函数允许访问的唯一数据。 黑板数据结构可能只是一个C struct，其字段与 blob<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> 的字段类似，可以轻松保持或流传输到本地内存/缓存。</p>
+<h3 id="interpreter解释数据">Interpreter：解释数据</h3>
+<p>更新过程促使一个<strong>解释器</strong>数据结构来收集下一个动作和决策器状态，以及<strong>启动</strong>或<strong>取消</strong>延迟动作的请求。 它还包含用于<strong>持久状态变更</strong>的缓冲区。</p>
+<p>此外，解释器维护其在行为形状项流和解释 Actor 的决策器、动作和持久状态缓冲区中的读取位置的索引。</p>
+<p>解释器包含一个<strong>取消标记（cancellation token）</strong>。 它表示在较高层决策器放弃先前运行的子行为及其活动操作时需要明确取消或停用的形状项范围。</p>
+<p>最后但同样重要的是，用于所谓 <strong>决策器守卫（decider guards）</strong> 的堆栈用于捕获行为树层次结构中的当前遍历位置。 堆栈顶端的决策器守卫代表当前遍历的形状项的父决策器，并处理与其关联的决策器节点的遍历语义。</p>
+<p>每个决策器守卫存储：</p>
+<ul>
+<li>其决策器的形状项索引；</li>
+<li>它的决策器类型；</li>
+<li>第一个形状项后的索引，用来检测下一个要访问的形状项是否仍属于决策器的子流；</li>
+<li>最后遍历到的子节点的索引，例如，用来保存序列节点在下次更新回到运行的子行为；</li>
+<li>如果取消，则回滚解释器的决策器状态、持久状态变更和动作启动请求缓冲区的索引，用来将缓冲区重置为进入被守护决策器之前的状态；</li>
+<li>并行决策器守卫存储一个“汇总状态”，只要没有子任务失败，运行中的子任务就会将整个并发决策器转变为运行状态。</li>
+</ul>
+<h2 id="解释决策和执行调度">解释决策和执行调度</h2>
+<p>当将形状项和 <code>actor</code> 状态视为通过使用解释器缓冲区进行处理的指令和数据流时，解释过程本身可以理解为虚拟机(VM)或内核。</p>
+<p>在更新 Agent 的决策制定和行动调度过程之前，会收集不同游戏系统的延迟执行状态更新，并用于更新 Agent 的 <code>actor</code> 数据中存储的延迟执行状态。之后编辑阶段可能会更改形状流并相应地调整存储的形状项索引状态（在更改形状项索引时，也不要忘记告诉运行延迟动作的游戏系统）。</p>
+<p>要对 Agent 的更新进行计时，调用带有解释器、形状和 Actor 数据的解释器函数。 此外还向解释器函数传递用于即时动作的函数数组，以及用于存储所有 Actor 延迟动作和启动请求的缓冲区。 然后遍历形状项流，并针对每个所选形状项执行以下步骤：</p>
+<ol>
+<li>执行具有确定状态的形状项类型相关函数，解释形状项。</li>
+<li>确定要解释的下一个形状项:
+<ul>
+<li>2.1. 如果决策器守卫堆栈为空，则转到 3。</li>
+<li>2.2. 解释决策器守卫堆栈的顶部元素，获取下一个形状项建议和取消标记。</li>
+<li>2.3. 如果下一个形状项索引在被守护的形状项索引范围内，则转到 3，否则弹出决策器警卫堆栈并转到 2.1。</li>
+</ul>
+</li>
+<li>如果必要，取消行为。</li>
+<li>如果守卫堆栈不为空，则循环到 1。</li>
+<li>完成更新。</li>
+</ol>
+<p>让我们依次看一下这些步骤，下图以另一种视角展示了这一过程。</p>
+<p>![[/images/behavior-tree-entrails/interpreting-diagram.webp]]</p>
+<h3 id="1-执行形状项">1. 执行形状项</h3>
+<p>调用形状项类型特定的函数来解释索引/选定的形状项。 它在 Actor 状态缓冲区中搜索与形状项索引相关联的状态。 如果未找到，则创建默认状态，例如启动操作或从第一个子级启动序列。</p>
+<p>持续动作简单地返回其状态作为其执行状态。</p>
+<p>通过调用即时动作数组中对应的函数，并将状态和 Actor 的黑板传递给它来解释即时动作形状项。 如果它返回正在运行（<code>running</code>）的执行状态，则将该状态推送到解释器的动作状态缓冲区。</p>
+<p>对延迟动作形状的解释是通过在接收到准备或启动状态时，将启动请求推送到解释器的延迟动作请求缓冲区来作出反应。在接收到运行状态时，它会传递到解释器的动作状态缓冲区。终止状态只是简单地返回给解释器，而不保留其状态。</p>
+<p>处理动作后，形状项索引 +1。</p>
+<p>通过将决策器守卫推送到解释器的决策器警卫堆栈上，根据其遍历语义来处理决策器。 根据状态，解释器的形状项索引将前进到下一个要访问的子行为。</p>
+<h3 id="2-确定要解释的下一个形状项">2. 确定要解释的下一个形状项</h3>
+<p>存储在解释器中的形状项索引，这仅仅是一项建议，针对要解释的下一个形状项的。</p>
+<p>如果最后一个形状项是动作，则当前决策器守卫堆栈的顶部根据动作返回的执行状态进行解释。 如果受守护决策器的遍历语义指示离开决策器并向上遍历，例如，由于序列节点下面的动作失败了，那么形状项索引建议设置为受守护决策器子流的索引之后，并且将守卫的执行状态返回给解释器，否则形状项索引属于要遍历的下一个子节点。</p>
+<p>如果细化的形状项索引在决策器守卫堆栈顶部的子流之外，则弹出守卫堆栈，并且守卫堆栈新的顶层查看最后一个执行状态和索引建议，从而决定进一步遍历，如此等等。</p>
+<p>空的守卫堆栈表示遍历离开了行为树根节点，Actor 更新完成。</p>
+<p>另外，决策器守卫还需要考虑取消动作的处理：</p>
+<ul>
+<li>并行决策器守卫可能已经处理了一些正在运行和一些成功的子行为，此时有一个子任务失败。 这意味着整个决策器失败，它需要取消所有正在运行的子任务，即它刚刚遍历的子任务和上次更新中具有正在运行状态的还未访问的子任务。</li>
+<li>当优先决策器守卫从优先级更高的子级，而不是上次更新返回正在运行或成功的执行状态的子节点时，它需要放弃和取消它在当前更新周期中不会访问的先前运行的较低优先级行为。</li>
+</ul>
+<p>在上述情况下,决策器守卫会扩展解释器的取消范围以包含需要取消的受保护子流的部分。</p>
+<p>并行决策器守卫将解释器的决策器状态缓冲区、持久状态变更缓冲区和动作启动请求缓冲区回滚到进入决策器之前的状态。 没有决策器状态等于在下一次更新期间的默认状态，持久状态变更不会应用，延迟动作启动请求也不会提交给它们的游戏系统。</p>
+<h3 id="3-如果必要取消行为">3. 如果必要，取消行为</h3>
+<p>当决策器守卫堆栈为空或遍历不向上而是向下进入树时，会到达此步骤。 向下步骤意味着可能会生成新的动作状态。 在发生之前，检查解释器的取消范围以确定是否需要取消操作，以及需要从解释器的动作状态缓冲区中清除状态。</p>
+<p>如果取消范围不为空，则取消分两步完成:</p>
+<ol>
+<li>如果取消范围开始于当前形状项索引之前，例如，因为并行决策器守卫希望取消刚遍历的动作，那么取消范围内存储在解释器动作状态缓冲区中的所有下一个动作状态都用于调用其相关的立即动作并传递取消执行状态，同时动作取消请求被推送到解释器的动作取消栈。</li>
+<li>如果取消范围在当前形状项后面结束，则取消范围内的 Actor 动作状态（来自上次更新的状态）按上述方式取消。</li>
+</ol>
+<p>完成取消后，重置取消范围为空。</p>
+<p>优先选择器可能在取消先前运行的较低优先级动作之前，执行所有高优先级子行为的动作。 较高优先级的操作则需要先处理副作用，这些副作用来自尚未取消的较低优先级动作，它们影响着角色的黑板。</p>
+<h3 id="4-循环到-1">4. 循环到 1</h3>
+<p>顾名思义，循环回到步骤 1 以解释下一个选定的形状项。</p>
+<h3 id="5-完成更新">5. 完成更新</h3>
+<p>末日临近，至少对于 Agent 的行为树一次更新来说。</p>
+<p>对于此模拟步骤，所有决策已做出，所有操作已被计时或请求已被收集。 要完成更新计时：</p>
+<ol>
+<li>按状态形状项索引的升序对解释器的下一个决策器状态缓冲区进行排序。 当其守卫离开时，这是必要的，因为决策器守卫会为它们所守护的决策器创建状态，而当在下次执行期间进入决策器时,状态需要在 Actor 的决策器状态缓冲区中可用。 然后使用解释器的决策器状态替换 Actor 决策器状态。</li>
+<li>明确发出的持久状态变更根据其形状项索引排序，然后迭代应用到 Actor 的持久状态。</li>
+<li>对于每个延迟动作启动请求，将正在运行的动作状态插入解释器的下一个动作状态缓冲区。 之后对缓冲区进行排序，然后替换 Actor 的动作状态。</li>
+<li>收集的所有动作启动和取消请求被复制到动作请求缓冲区，从而传递给解释器函数。</li>
+<li>清空解释器的缓冲区，以准备解释下一个 Agent (可能甚至由不同的形状流控制)。</li>
+</ol>
+<h2 id="节奏继续">节奏继续</h2>
+<p>对于所有坚持阅读到此的人：你们真棒！为好奇和热情的读者欢呼！ 作者的忏悔：”我删除了最初写的近一半文本，以使此文保持在合理（？）的篇幅。“</p>
+<p>”我已经有一段时间没有写博客了，因为我把写作时间投入到了描述的行为树实现和用于存储和管理多个形状和 Actor 的系统中。 我现在正在开始将实验代码转移和清理到一个开源项目中（BSD类型许可证）。 希望我今年可以揭开帷幕。“</p>
+<h2 id="参考资料">参考资料</h2>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>Gestalt，格式塔是德文Gestalt的译音，意即“模式、形状、形式”等，意思是指“动态的整体”。&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://github.com/niklasfrykholm/blog/blob/master/2011/managing-coupling-3.md">Managing Decoupling Part 3 - C++ Duck Typing</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="https://bitsquid.blogspot.com/2010/02/blob-and-i.html">bitsquid: development blog: The Blob and I</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+		</section>
+
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/game-dev">game dev</a></li>
+					
+					<li><a href="/tags/game-ai">game ai</a></li>
+					
+					<li><a href="/tags/behavior-tree">behavior tree</a></li>
+					
+					<li><a href="/tags/data-oriented-design">data oriented design</a></li>
+					
+					<li><a href="/tags/altdevblogaday">AltDevBlogADay</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
+<script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="title"
+        label="💬comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+		
+	</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

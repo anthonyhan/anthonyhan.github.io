@@ -7,8 +7,43 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>© Anthony</copyright>
-    <lastBuildDate>Wed, 26 Oct 2022 12:26:33 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 18 Feb 2024 22:24:57 +0800</lastBuildDate>
     <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AltDevBlogADay</title>
+      <link>/tags/altdevblogaday/</link>
+      <pubDate>Sun, 18 Feb 2024 22:24:57 +0800</pubDate>
+      <guid>/tags/altdevblogaday/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>behavior tree</title>
+      <link>/tags/behavior-tree/</link>
+      <pubDate>Sun, 18 Feb 2024 22:24:57 +0800</pubDate>
+      <guid>/tags/behavior-tree/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>data oriented design</title>
+      <link>/tags/data-oriented-design/</link>
+      <pubDate>Sun, 18 Feb 2024 22:24:57 +0800</pubDate>
+      <guid>/tags/data-oriented-design/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>game ai</title>
+      <link>/tags/game-ai/</link>
+      <pubDate>Sun, 18 Feb 2024 22:24:57 +0800</pubDate>
+      <guid>/tags/game-ai/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>game dev</title>
+      <link>/tags/game-dev/</link>
+      <pubDate>Sun, 18 Feb 2024 22:24:57 +0800</pubDate>
+      <guid>/tags/game-dev/</guid>
+      <description></description>
+    </item>
     <item>
       <title>book</title>
       <link>/tags/book/</link>
@@ -38,86 +73,86 @@
       <description></description>
     </item>
     <item>
+      <title>HFSM</title>
+      <link>/tags/hfsm/</link>
+      <pubDate>Wed, 10 Nov 2021 16:06:11 +0800</pubDate>
+      <guid>/tags/hfsm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>HTN</title>
+      <link>/tags/htn/</link>
+      <pubDate>Wed, 10 Nov 2021 16:06:11 +0800</pubDate>
+      <guid>/tags/htn/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>planner</title>
+      <link>/tags/planner/</link>
+      <pubDate>Wed, 10 Nov 2021 16:06:11 +0800</pubDate>
+      <guid>/tags/planner/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>utility ai</title>
+      <link>/tags/utility-ai/</link>
+      <pubDate>Wed, 10 Nov 2021 16:06:11 +0800</pubDate>
+      <guid>/tags/utility-ai/</guid>
+      <description></description>
+    </item>
+    <item>
       <title>ai</title>
       <link>/tags/ai/</link>
-      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
+      <pubDate>Tue, 07 Sep 2021 15:46:59 +0800</pubDate>
       <guid>/tags/ai/</guid>
       <description></description>
     </item>
     <item>
-      <title>AltDevBlogADay</title>
-      <link>/tags/altdevblogaday/</link>
-      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
-      <guid>/tags/altdevblogaday/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>behavior tree</title>
-      <link>/tags/behavior-tree/</link>
-      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
-      <guid>/tags/behavior-tree/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>game ai</title>
-      <link>/tags/game-ai/</link>
-      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
-      <guid>/tags/game-ai/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>game dev</title>
-      <link>/tags/game-dev/</link>
-      <pubDate>Tue, 19 Apr 2022 20:22:48 +0800</pubDate>
-      <guid>/tags/game-dev/</guid>
+      <title>halo</title>
+      <link>/tags/halo/</link>
+      <pubDate>Sun, 20 Jun 2021 21:17:08 +0800</pubDate>
+      <guid>/tags/halo/</guid>
       <description></description>
     </item>
     <item>
       <title>FSM</title>
       <link>/tags/fsm/</link>
-      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
+      <pubDate>Tue, 25 May 2021 23:10:09 +0000</pubDate>
       <guid>/tags/fsm/</guid>
       <description></description>
     </item>
     <item>
       <title>GOAP</title>
       <link>/tags/goap/</link>
-      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
+      <pubDate>Tue, 25 May 2021 23:10:09 +0000</pubDate>
       <guid>/tags/goap/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>HFSM</title>
-      <link>/tags/hfsm/</link>
-      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
-      <guid>/tags/hfsm/</guid>
       <description></description>
     </item>
     <item>
       <title>learning</title>
       <link>/tags/learning/</link>
-      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
+      <pubDate>Tue, 25 May 2021 23:10:09 +0000</pubDate>
       <guid>/tags/learning/</guid>
       <description></description>
     </item>
     <item>
       <title>navigation</title>
       <link>/tags/navigation/</link>
-      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
+      <pubDate>Tue, 25 May 2021 23:10:09 +0000</pubDate>
       <guid>/tags/navigation/</guid>
       <description></description>
     </item>
     <item>
       <title>planning</title>
       <link>/tags/planning/</link>
-      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
+      <pubDate>Tue, 25 May 2021 23:10:09 +0000</pubDate>
       <guid>/tags/planning/</guid>
       <description></description>
     </item>
     <item>
       <title>utility-based</title>
       <link>/tags/utility-based/</link>
-      <pubDate>Sat, 03 Apr 2021 00:36:28 +0000</pubDate>
+      <pubDate>Tue, 25 May 2021 23:10:09 +0000</pubDate>
       <guid>/tags/utility-based/</guid>
       <description></description>
     </item>
@@ -196,20 +231,6 @@
       <link>/tags/programming/</link>
       <pubDate>Fri, 02 Dec 2016 18:12:31 +0800</pubDate>
       <guid>/tags/programming/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>blog</title>
-      <link>/tags/blog/</link>
-      <pubDate>Thu, 18 Aug 2016 14:12:40 +0800</pubDate>
-      <guid>/tags/blog/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>markdown</title>
-      <link>/tags/markdown/</link>
-      <pubDate>Thu, 18 Aug 2016 14:12:40 +0800</pubDate>
-      <guid>/tags/markdown/</guid>
       <description></description>
     </item>
     <item>

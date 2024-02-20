@@ -77,6 +77,115 @@
 				
 				
 				<section class="list-item">
+					<h1 class="title"><a href="/posts/actionscript-3-0-closure/">ActionScript 3.0 闭包及作用域</a></h1>
+					<time>Aug 5, 2012</time>
+					<br><div class="description">
+	
+	<p>闭包作为动态语言的基石，在OO实现和框架构建上有着-十分重要的作用。但是闭包的定义比较抽象，不利于理解，闭包在各语言中的实现不尽相同，闭包的函数作用域也有区别。</p>
+<p>参考整理了这篇文章(非原创),主要内容来自</p>
+<ul>
+<li>IBM Thoughtworks 文档：<a href="http://www.ibm.com/developerworks/cn/linux/l-cn-closure">闭包的概念、形式与应用</a>；</li>
+<li>Adobe官方文档：<a href="http://www.ibm.com/developerworks/cn/linux/l-cn-closure/">Flash ActionScript 3.0 编程- 函数作用域</a>。</li>
+</ul>
+<h2 id="什么是闭包">什么是闭包</h2>
+<p>闭包的概念出现于60年代，最早实现闭包的程序语言是<a href="http://zh.wikipedia.org/wiki/Scheme">Scheme</a>。关于闭包的定义，说法比较多。</p>
+<ul>
+<li>
+<p><a href="http://zh.wikipedia.org/wiki/Scheme">Scheme</a>语言设计者这样定义闭包：”we introduce the notion of a closure which is a data structure containing a lambda expression, and an environment to be used when that lambda expression is applied to arguments.”</p>
+</li>
+<li>
+<p>英文Wikipedia 则是解释为：”a closure (also lexical closure or function closure) is a <a href="http://en.wikipedia.org/wiki/Function_(computer_science)">function</a> together with a referencing environment for the <a href="http://en.wikipedia.org/wiki/Non-local_variable">non-local variables</a> of that function. “。</p>
+</li>
+<li>
+<p>中文维基百科：”在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，是引用了<a href="http://zh.wikipedia.org/wiki/%E8%87%AA%E7%94%B1%E5%8F%98%E9%87%8F">自由变量</a>的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。”
+综合这些定义，可以认为闭包一种特殊的数据结构，不仅仅是函数，还包括与其相关的引用环境。闭包只是在形式和表现上像函数，但实际上不是函数。函数是一些可执行的代码，这些代码在函数被定义后就确定了，不会在执行时发生变化，所以一个函数只有一个实例。闭包在运行时可以有多个实例，不同的引用环境和相同的函数组合可以产生不同的实例。所谓引用环境是指在程序执行中的某个点所有处于活跃状态的约束所组成的集合。其中的约束是指一个变量的名字和其所代表的对象之间的联系。那么为什么要把引用环境与函数组合起来呢？这主要是因为在支持嵌套作用域的语言中，有时不能简单直接地确定函数的引用环境。这样的语言一般具有这样的特性：</p>
+</li>
+<li>
+<p>函数是一阶值（First-class value），即函数可以作为另一个函数的返回值或参数，还可以作为一个变量的值。</p>
+</li>
+<li>
+<p>函数可以嵌套定义，即在一个函数内部可以定义另一个函数。</p>
+</li>
+</ul>
+<h2 id="闭包作用域">闭包作用域</h2>
+<p>函数的范围不但决定了可以在程序中的什么位置调用函数，而且还决定了函数可以访问哪些定义。适用于变量标识符的作用域规则同样也适用于函数标识符。在全局作用域中声明的函数在整个代码中都可用。例如，ActionScript 3.0 包含可在代码中的任意位置使用的全局函数，如 isNaN() 和 parseInt()。嵌套函数（即在另一个函数中声明的函数）可以在声明它的函数中的任意位置上使用。</p>
+<h3 id="作用域链the-scope-chain">作用域链(The scope chain)</h3>
+<p>无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/actionscript-3-0-closure/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/actionscript3-inheritance-mechanism/">ActionScript3的继承机制</a></h1>
+					<time>Jul 31, 2012</time>
+					<br><div class="description">
+	
+	<p>因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循<a href="http://zh.wikipedia.org/zh/ECMAScript">ECMAScript</a> 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。</p>
+<p>本文主要内容源自Adobe官方教程：<a href="http://help.adobe.com/zh_CN/ActionScript/3.0_ProgrammingAS3/WS5b3ccc516d4fbf351e63e3d118a9b90204-7f3f.html">ActionScript 中面向对象的编程-高级主题</a> ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。</p>
+<p>本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。</p>
+<h2 id="actionscript-oop-支持的历史">ActionScript OOP 支持的历史</h2>
+<p>由于 ActionScript 3.0 是在以前版本的 ActionScript 基础上构建的，了解 ActionScript 对象模型的发展过程可能有所帮助。ActionScript 最初作为早期版本的 Flash 创作工具的简单编写脚本机制。后来，程序员开始使用 ActionScript 建立更加复杂的应用程序。为了迎合这些程序员的需要，每个后续版本都添加了一些语言功能以帮助创建复杂的应用程序。</p>
+<h3 id="actionscript-10">ActionScript 1.0</h3>
+<p>ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本。即使在这个早期开发阶段，ActionScript 对象模型也是建立在基础数据类型对象的概念的基础上。ActionScript 对象是由一组属性 构成的复合数据类型。讨论对象模型时，术语属性 包括附加到对象的所有内容，如变量、函数或方法。</p>
+<p>尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C++ 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。</p>
+<p>要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/actionscript3-inheritance-mechanism/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/flash-player-11-4-bytearray-compression/">Flash Player 11.4 ByteArray压缩算法初探</a></h1>
+					<time>Jul 27, 2012</time>
+					<br><div class="description">
+	
+	Flash Player 11.4 更新中，增加了ByteArray 对LZMA压缩算法的支持，压缩能力明显加强。 ByteArray “ByteArray 类提供用于优化读取、写入以及处理二进&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/flash-player-11-4-bytearray-compression/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/flash-builder-plugins/">Flash Builder 插件</a></h1>
+					<time>Jul 23, 2012</time>
+					<br><div class="description">
+	
+	<p>Eclipse IDE的插件十分丰富，适当地使用可以使开发效率大大提高。而Flash Builder是基于Eclipse 开发的，因此或多或少可以使用一些Eclipse的插件。介绍几个开发中常用的几个插件。</p>
+<h2 id="easy-explore">Easy Explore</h2>
+<p>这个小插件可以调用Window资源管理器，浏览”包资源管理器”里的包和文件。省去开发者在资源管理器里一级一级地找文件。使用时，只要右键单击包或者文件，在弹出的菜单中选择”Easy Explore…”。</p>
+<p>Y.Boy 把这个插件中文化并更换了图标，比原版更赏心悦目了 🙂 。</p>
+<p><img src="http://riaoo.com/wp-content/uploads/2012/06/easyexplore.jpg" alt="easy explore"></p>
+<p>下载链接：</p>
+<ul>
+<li>原版：http://sourceforge.net/projects/easystruts/files/Easy%20Explorer%20for%20Eclipse/easy-explore-1.0.4/</li>
+<li>中文版(Y.Boy)：http://riaoo.com/wp-content/uploads/2012/06/easyexplore_1.0.4.zip</li>
+</ul>
+<h2 id="todofixme-任务插件">TODO/FIXME 任务插件</h2>
+<p>Eclipse本来支持TODO/FIXME注释标记的，但是Flash Builder却不支持.as的TODO/FIXME标记。注释//TODO or //FIXME ，即可在任务视图(Task View)中显示任务。</p>
+<p>打开任务视图：Flash Builder Menu: Window -&gt; Show View -&gt; Other-&gt;Basic–&gt;Tasks（任务）。
+<img src="https://public.bay.livefilestore.com/y1p_8XUsluDOfrZSUTcmbR8tt7igd0EjRHAYM6Xd0Jl3Tk8ptAh30MkvxIozrwMsIeLChAN_4N2N9zRG8Sk5MVPBQ/todo.png" alt="task plugins"></p>
+<p>下载链接：</p>
+<ul>
+<li><a href="http://www.richinternet.de/blog/download/flexbuilderTask_1.0.0.zip">http://www.richinternet.de/blog/download/flexbuilderTask_1.0.0.zip</a></li>
+</ul>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/flash-builder-plugins/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/native-mouse-cursors-in-flash/">Flash中使用原生鼠标指针</a></h1>
+					<time>Jul 11, 2012</time>
+					<br><div class="description">
+	
+	Flash 10.2 版本有很多值得注意的新功能，StageVideo，多屏幕支持，原生鼠标指针等等。其中原生鼠标指针是一个非常引人注目的新特性。可以直接通过&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/native-mouse-cursors-in-flash/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
 					<h1 class="title"><a href="/posts/apache-flex-4-8-0-news-trial/">Apache Flex 4.8.0 近况及试用</a></h1>
 					<time>Jul 9, 2012</time>
 					<br><div class="description">
@@ -85,61 +194,6 @@
 	
 </div>
 					<a class="readmore" href="/posts/apache-flex-4-8-0-news-trial/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/flex-4-fun-reading-notes/">Flex 4 Fun Reading Notes</a></h1>
-					<time>Aug 1, 2011</time>
-					<br><div class="description">
-	
-	You are about to embark on a great journey with the best possible companions:the solid Flash engine, the versatile Flex framework and a very good &gt; teacher.You will seldom enjoy a programming book as much as you will this one. Romain Guy About the Book 从N神的 RIABook.cn 找到的一本介绍Flex 4 开发的书，还不到&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/flex-4-fun-reading-notes/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/flex3-tfs-reading-summary/">《Flex3权威指南》阅读总结</a></h1>
-					<time>Jul 25, 2011</time>
-					<br><div class="description">
-	
-	这本书比较全面地介绍了Flex 3 SDK的各项组件和功能。这是一个基于web前端技术的框架。作者从Flex组件开始讲解，以flexGrocer&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/flex3-tfs-reading-summary/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/flex3-tfs-notes-04/">《Flex3权威指南》学习笔记 04</a></h1>
-					<time>Jul 18, 2011</time>
-					<br><div class="description">
-	
-	Lesson 21：部署Flex应用程序 AIR: Adobe Integrated Runtime AIR 特点： 直接访问文件系统； 可以从操作系统拖拽文件到AIR应用中； 使用窗口API，可实现自定义应用外观； 提&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/flex3-tfs-notes-04/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/flex3-tfs-notes-03/">《Flex3权威指南》学习笔记 03</a></h1>
-					<time>Jul 6, 2011</time>
-					<br><div class="description">
-	
-	Lesson 16：自定义Flex应用程序的外观 样式和皮肤； 使用标签属性设置样式：如 color，disabledColor，fontSize，fontS&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/flex3-tfs-notes-03/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/flex3-tfs-notes-02/">《Flex3权威指南》学习笔记 02</a></h1>
-					<time>Jul 5, 2011</time>
-					<br><div class="description">
-	
-	Lesson 9：使用自定义事件 松耦合架构：可以使用自定义事件，将更改通知其他组件，不要求组件知道应用程序其余部分的信息； View 通过 事件 与 Controller 建立联系； 无论何&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/flex3-tfs-notes-02/">Read more ⟶</a>
 				</section>
 				
 				

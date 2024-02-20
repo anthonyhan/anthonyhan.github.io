@@ -77,198 +77,215 @@
 				
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-2/">游戏AI入门指南(Part 2)</a></h1>
-					<time>Mar 25, 2021</time>
+					<h1 class="title"><a href="/posts/the-behavior-tree-starter-kit/">行为树入门工具包</a></h1>
+					<time>Mar 28, 2022</time>
 					<br><div class="description">
 	
-	<p><strong>原文：</strong> <a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&rsquo;s Guide to Game AI</a>
-<strong>作者：</strong> <a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer</a>
-<strong>译者：</strong> <a href="https://www.limbonova.com/about/#blog-author">Anthony Han</a></p>
-<h2 id="进阶决策">进阶决策</h2>
-<p>虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。</p>
-<h3 id="有限状态机">有限状态机</h3>
-<p>有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。</p>
-<p>这非常适用于游戏中的NPC。一个警卫可能具有以下状态：</p>
+	<!-- raw HTML omitted -->
+<p>偶然看到一个2012年 Alex Champandard 的演讲<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，本想看看有什么可以借鉴，看到一半后，发现就是 Game AI Pro 的文章 《The Behavior Tree Starter Kit<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>》的演示版。结合代码<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>，对照着看一遍，有助于理解。</p>
+<h2 id="motivation">Motivation</h2>
+<p>行为树广泛应用于各个系统：角色，策略，小队，动画，镜头……</p>
+<p>使用案例：</p>
 <ul>
-<li>巡逻</li>
-<li>攻击</li>
-<li>逃跑</li>
+<li>Rockstar Games： R.A.G.E.</li>
+<li>Guerrilla Games：Killzone 2 &amp; 3</li>
+<li>Uncharted 2</li>
+<li>Halo 3</li>
+<li>NBA &lsquo;09</li>
+<li>Metro 2033</li>
+<li>Crysis: Warhead</li>
+<li>League of Legends</li>
 </ul>
-<p>当状态改变时，你可能会想到这些规则：</p>
-<ul>
-<li>如果警卫看到敌人，就立即攻击</li>
-<li>如果警卫正在攻击但无法再看到敌人，那么返回巡逻</li>
-<li>如果警卫正在攻击但受了重伤，那么开始逃跑</li>
-</ul>
-<p>这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：</p>
-<ul>
-<li>空闲（巡逻期间）</li>
-<li>搜寻（刚才发现的敌人躲起来时）</li>
-<li>求助（发现敌人，但因为敌人太强而无法独自作战时）</li>
-</ul>
-<p>通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。</p>
-<p>如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。</p>&hellip;
+<h2 id="the-basics">The Basics</h2>
+<h3 id="v1原型">v1：原型</h3>
+<p>一个基本的行为树实现：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Status</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Return values of and valid states for behaviors.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    BH_INVALID,
+</span></span><span style="display:flex;"><span>    BH_SUCCESS,
+</span></span><span style="display:flex;"><span>    BH_FAILURE,
+</span></span><span style="display:flex;"><span>    BH_RUNNING,
+</span></span><span style="display:flex;"><span>    BH_ABORTED,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Behavior</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Base class for actions, conditions and composites.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status update()				<span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()			{}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onTerminate</span>(Status)	{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Behavior()
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">:</span>   m_eStatus(BH_INVALID)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Behavior()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">tick</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            onInitialize();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            onTerminate(m_eStatus);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">reset</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> BH_INVALID;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">abort</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        onTerminate(BH_ABORTED);
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> BH_ABORTED;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isTerminated</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus <span style="color:#f92672">==</span> BH_SUCCESS  <span style="color:#f92672">||</span>  m_eStatus <span style="color:#f92672">==</span> BH_FAILURE;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isRunning</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus <span style="color:#f92672">==</span> BH_RUNNING;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">getStatus</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    Status m_eStatus;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-2/">Read more ⟶</a>
+					<a class="readmore" href="/posts/the-behavior-tree-starter-kit/">Read more ⟶</a>
 				</section>
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-1/">游戏AI入门指南(Part 1)</a></h1>
-					<time>Mar 20, 2021</time>
+					<h1 class="title"><a href="/posts/deciding-on-an-ai-architecture-which-tool-for-the-job/">如何选择游戏AI架构</a></h1>
+					<time>Nov 10, 2021</time>
 					<br><div class="description">
 	
-	<p><strong>原文：</strong> <a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&rsquo;s Guide to Game AI</a>
-<strong>作者：</strong> <a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer</a>
-<strong>译者：</strong> <a href="https://www.limbonova.com/about/#blog-author">Anthony Han</a></p>
+	<p><strong>Conference:</strong> GDC 2010</p>
+<p><strong>Session Name:</strong> Deciding on an AI Architecture: Which Tool for the Job?</p>
+<p><strong>Speaker(s):</strong> Alex Champandard, Michael Dawe, Dave Mark, Steve Rabin, Charles Rich</p>
+<p><strong>Track / Format:</strong> AI Summit</p>
+<p><strong>Video:</strong> <a href="https://gdcvault.com/play/1012411/Deciding-on-an-AI-Architecture">GDC Vault - Deciding on an AI Architecture: Which Tool for the Job?</a></p>
 <blockquote>
-<p>这是一篇非常好的综述类文章，对当今的游戏AI常用技术和实现方法做了简单介绍，参考了近年来的 Game AI Pro 系列。虽然不及论文那样严谨，但全文条理清晰，通俗易懂。确实是一篇入门指南佳作。花了点业余时间翻译出来，为了分享，也希望能温故知新。</p>
+<p><strong>“工欲善其事，必先利其器。”</strong></p>
+<p><strong>—— 《论语·卫灵公》</strong></p>
 </blockquote>
-<h2 id="引言">引言</h2>
-<p>本文将介绍游戏人工智能（或简称“游戏AI”）的入门概念，让读者了解使用哪些方法来处理AI问题，它们如何协同工作以及如何使用相应的语言或引擎来实现。</p>
-<p>我们假设你具备电子游戏的基本知识，并掌握几何，三角函数等数学概念。大多数代码示例为伪代码，因此不需要特定的编程语言知识。</p>
-<h2 id="什么是游戏ai">什么是游戏AI?</h2>
-<p>游戏AI主要关注实体根据当前条件所采取的行动。这就是传统人工智能文献所指的控制“<a href="https://en.wikipedia.org/wiki/Intelligent_agent">智能代理</a>”，代理通常是游戏中的角色，但也可以是车辆，机器人。或者更抽象的东西，例如一组实体，甚至一个国家或文明。智能代理需要在各种情况下观察周围环境，依此做出决策，并采取行动。这就是所谓的“感知/思考/行动(Sense/Think/Act)”循环：</p>
+<p>AI 架构的选择是 AI 程序员需要解决的最重要问题之一。这个选择将为项目奠定基础，同时也决定了未来的方向。主要的 AI 架构都有自己的优缺点，很难确定哪一个架构最适合一个项目。</p>
+<p>本次讨论将从独特的角度探讨这个问题。每一种主流架构都有一位代言人，他们将被提供假想的游戏例子，并被要求解释为什么他们支持的架构是最合适的选择，而其他的则不合适。通过不同架构的代言人就同一问题进行讨论和分析，可以更全面地评估每种架构的优劣，并对具体项目做出更合适的建议。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/deciding-on-an-ai-architecture-which-tool-for-the-job/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/ai-in-swords-and-soldiers/">《剑与勇士(Swords &amp; Soldiers)》的游戏AI设计</a></h1>
+					<time>Oct 18, 2021</time>
+					<br><div class="description">
+	
+	<h2 id="前言">前言</h2>
+<p>偶然发现收藏夹里躺了多年的文章链接<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，写作时间是2011年前后，作者是 Ronimo Games 的联合创始人 Joost van Dongen，简述了当时他们如何构建《剑与勇士》的 AI。<a href="https://store.steampowered.com/app/63500/Swords_and_Soldiers_HD">《剑与勇士》（Swords &amp; Soldiers）</a>是 Ronimo Games 在2009年开发的一款2D横向卷轴RTS游戏。</p>
+<p>简单翻译整理了一下，看看有没有参考价值。</p>
+<h2 id="译文">译文</h2>
+<p>众所周知，为策略游戏创建良好的 AI 是一项艰巨的任务。AI 设计当然从来都不是一件容易的事，但对于策略游戏来说，选项和情况的复杂性非常高。我认为《剑与勇士》是第一款在游戏中实现真正出色 AI 的游戏，所以我想看看我们是如何做到这一点的会很有趣。</p>
+<p><img src="/images/ai-in-swords-and-soldiers/swords_and_soldiers.webp" alt="swords_and_soldiers"></p>
+<p>人工智能领域要么解决非常简单的问题，比如国际象棋（与实时战略游戏相比，国际象棋非常简单，更不用说与现实世界相比了！），要么只会提供大量精巧高效的辅助算法，比如寻路。在复杂情况下做出真正的决策本质上是一个尚未解决的问题，而且不会在短期内得到解决。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/ai-in-swords-and-soldiers/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/behavior-trees-in-gigantic/">《巨兽战争(Gigantic)》的游戏AI行为树设计</a></h1>
+					<time>Sep 7, 2021</time>
+					<br><div class="description">
+	
+	<p>偶然看到 <a href="https://medium.com/@gautamv/managing-ai-in-gigantic-523dc84763cf">Managing AI in Gigantic</a> 和 <a href="https://medium.com/@gautamv/advanced-behavior-tree-structures-4b9dc0516f92">Advanced Behavior Tree Structures</a> 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。</p>
+<h2 id="背景">背景</h2>
+<p><img src="/images/behavior-trees-in-gigantic/image_gigantic_banner.webp" alt="image_gigantic_banner.webp"></p>
+<p><a href="https://store.steampowered.com/app/327690/Gigantic/">Gigantic</a>是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。</p>
+<p>作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。</p>
+<p>有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/behavior-trees-in-gigantic/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/managing-complexity-in-the-halo-2-ai-system/">《光环 2》的游戏AI系统设计</a></h1>
+					<time>Jun 20, 2021</time>
+					<br><div class="description">
+	
+	<p><strong>Conference:</strong> GDC 2005</p>
+<p><strong>Speaker(s)  :</strong> Damian Isla</p>
+<p><strong>Video:</strong> <a href="https://www.youtube.com/watch?v=m9W-hpxuApk">Managing Complexity in the Halo 2 AI System - YouTube</a></p>
+<p>《光环》系列的 AI 久负盛名，其行为树的应用堪称业界典范。而 Damian Isla 在 GDC 2005 的演讲《Managing Complexity in the Halo 2 AI System》成了行为树架构设计绕不开的参考资料。结合演讲视频和演示幻灯片，精读了文章《GDC 2005 Proceeding: Handling Complexity in the Halo 2 AI》。</p>
+<h2 id="复杂性问题">复杂性问题</h2>
+<h3 id="可扩展性的复杂性">可扩展性的复杂性</h3>
+<p>可扩展性（Scalability）的3个维度：</p>
 <ul>
-<li>感知：代理侦测到或被告知环境中可能影响其行为的事物（例如：附近的威胁，要收集的物品，要调查的兴趣点）。</li>
-<li>思考：代理决定采取的应对措施（例如：考虑是否足够安全来收集物品，或者决定应该先集中精力战斗还是躲藏）。</li>
-<li>行动：代理将先前的决定付诸行动（例如：沿着通向敌人或物品等的路径移动）。由于代理做出了行动，形势已经改变，因此再次重复循环。</li>
+<li>Variety： 大量不同的角色：野猪兽，精英，鬼面兽，猎人，地狱伞兵，海军陆战队……</li>
+<li>Variation： 不同的使用故事场景：叙事性，节奏性，戏剧性，挑战性……</li>
+<li>Volume： 大量不同的行为：近战，射击，驾驶，躲藏……</li>
 </ul>
-<p>现实世界中的AI，特别是成为新闻热点的那些，通常主要关注循环中的“感知”部分。例如，自动驾驶汽车拍摄道路的图像，结合其他数据（例如雷达和光达），并分析所看到的状况。这个过程一般是通过机器学习来完成，机器学习尤其擅长这方面，获取大量现实世界中有噪声的数据（如汽车前方的道路照片或视频）并加以分析理解，提取诸如“前方20码处有一辆汽车”这类的语义信息。这些被称为“<a href="https://zh.wikipedia.org/wiki/%E7%BB%9F%E8%AE%A1%E5%88%86%E7%B1%BB">分类问题</a>”。</p>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-1/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/debian-redmine-backup-and-restore/">Debian Redmine 备份与恢复</a></h1>
-					<time>Jan 23, 2019</time>
-					<br><div class="description">
-	
-	<p>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。</p>
-<h2 id="系统需求">系统需求</h2>
-<ol>
-<li>Redmine 3.3 installed with apt on Debian 9 (stretch).</li>
-<li>Database: PostgreSQL</li>
-</ol>
-<h2 id="备份">备份</h2>
-<h3 id="配置文件">配置文件</h3>
-<p>配置文件包含路径：<code>/etc/redmine/{instance}</code></p>
-<p>例如，默认实例名称为<code>default</code>，则配置文件路径为<code>/etc/redmine/{default}</code>。包含以下配置文件：</p>
+<h3 id="设计需求的复杂性">设计需求的复杂性</h3>
 <ul>
-<li>configuration.yml</li>
-<li>database.xml</li>
-<li>secret_key.txt</li>
-</ul>&hellip;
+<li><strong>Transparency</strong>：即使是不了解 AI 内部工作原理的外行观察者（玩家）能够对AI的内部状态做出合理的推断，并以此来解释和预测AI的行为。</li>
+<li><strong>Coherence</strong>：保持行为的连贯性和一致性。为了让AI的行为更连贯自然，需要注意启动、停止动作的时机合理。还要特别防止 AI 行为中出现摇摆不定问题，即在两个选项间反复切换的现象。</li>
+<li><strong>Directability</strong>：保证可指挥性，AI 系统应该能够接受设计师的指示和命令。</li>
+<li><strong>Workability</strong>：对设计和开发它的工程师应该要有足够的可操作性，工程师需要能够读取、理解AI系统内部的状态和运作机制，对 AI 系统进行测试、调试、修改与优化。</li>
+</ul>
+<h2 id="如何管理复杂性">如何管理复杂性</h2>
+<h3 id="决策机制">决策机制</h3>
+<h4 id="行为-dag">行为 DAG</h4>
+<p>Halo 2 AI实现了行为树，更具体地说，是行为DAG（有向无环图），因为单个行为（或行为子树）可以占据图中的多个位置。下图为Halo 2的实际核心行为DAG的精简版本，原图包含50种不同的行为。</p>
+<p><img src="/images/managing-complexity-in-the-halo-2-ai-system/behavior-dag.webp" alt="example of behavior-dag"></p>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/debian-redmine-backup-and-restore/">Read more ⟶</a>
+					<a class="readmore" href="/posts/managing-complexity-in-the-halo-2-ai-system/">Read more ⟶</a>
 				</section>
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/transistor-a-sonnet-to-cyberpunk/">晶体管：献给赛博朋克的十四行诗</a></h1>
-					<time>Apr 26, 2018</time>
+					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-3/">游戏AI入门指南(Part 3)</a></h1>
+					<time>May 25, 2021</time>
 					<br><div class="description">
 	
-	<blockquote>
-<p>When I first saw you up on that stage back there.
-It was like&hellip;
-everyone loved you.
-Everyone except for them.</p>
-</blockquote>
-<p>《晶体管》(Transistor) 是一款由《堡垒》(Bastion)开发商 <a href="https://www.supergiantgames.com/">Supergiant Games</a> 所开发的科幻题材作品。游戏讲述了主角——云堤城 (Cloudbank) 歌星红伶 (Red)，躲过卡梅拉塔组织 (The Camerata) 刺杀后，意外获得了一件名叫“晶体管” (Transistor) 的武器，并以此复仇的故事。</p>
-<p>虽然《晶体管》被官方定义为 ARPG ，但确切地说，它更应该被称作为一款 TRPG (Tactical RPG)。类似 XCOM 或者 神界：原罪 (Divinity: Original Sin) 的战斗规则 但又有所不同。首先，在行动规划阶段没有移动的次序和限制，玩家可以移动多次，并且在发动技能前后都可以移动，行动规划如同施放“时间暂停”一般。其次，个别技能会影响敌人位置，如拉近/击飞等效果。而在行动规划期间，受到此类效果影响的敌人并不会实时改变其位置，因为是规划嘛，所以需要一定的预判，游戏中会给出相应的提示。</p>
-<p><img src="/images/screenshots/20180426140854_1.jpg" alt="transistor"></p>&hellip;
+	<h2 id="学习能力和适应能力">学习能力和适应能力</h2>
+<p>我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。</p>
+<h3 id="统计和概率">统计和概率</h3>
+<p>在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。</p>
+<p>但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的<a href="https://en.wikipedia.org/wiki/Moving_average">移动平均(windowed average)</a>，如只考虑最后20个数据点。</p>
+<p>假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！</p>
+<p>另一个有趣的方法是使用<a href="https://zh.wikipedia.org/zh-hans/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8">朴素贝叶斯分类器(Naive Bayes Classifier)</a>来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。</p>
+<p>使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。</p>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/transistor-a-sonnet-to-cyberpunk/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/setup-pixijs-with-typescript-using-webpack/">基于TypeScript的PixiJS开发环境设置（webpack篇）</a></h1>
-					<time>Sep 21, 2017</time>
-					<br><div class="description">
-	
-	<p>前几天写了一篇<a href="http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify">用<code>Browserify</code>打包的 PixiJS 的开发环境配置流程</a>，但是Web技术一日千里，开发工具也日新月异， Webpack 就是其中之一。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Webpack 作为模块打包工具的开发环境的配置过程，遵循简化易用的原则，省略了一些非必要模块的安装。</p>
-<h2 id="安装">安装</h2>
-<h3 id="项目结构">项目结构</h3>
-<ol>
-<li>创建项目目录</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mkdir ts_pixi
-</span></span><span style="display:flex;"><span>cd ts_pixi
-</span></span><span style="display:flex;"><span>mkdir assets src dist
-</span></span></code></pre></div><ol start="2">
-<li>新建项目文件</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>touch index.html
-</span></span><span style="display:flex;"><span>touch src/main.ts
-</span></span></code></pre></div><ol start="3">
-<li>初始化项目</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm init
-</span></span></code></pre></div><h3 id="安装模块">安装模块</h3>
-<ol>
-<li>PixiJS</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev pixi.js
-</span></span></code></pre></div><ol start="2">
-<li>TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应<code>@types</code>文件，用于代码提示等功能。</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev typescript @types/pixi.js @types/node
-</span></span></code></pre></div><ol start="3">
-<li>其它</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>npm install <span style="color:#f92672">--</span>save<span style="color:#f92672">-</span>dev ts<span style="color:#f92672">-</span>loader webpack webpack<span style="color:#f92672">-</span>dev<span style="color:#f92672">-</span>server
-</span></span></code></pre></div>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/setup-pixijs-with-typescript-using-webpack/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/setup-pixijs-with-typescript-using-browserify/">基于TypeScript的PixiJS开发环境设置（browserify篇）</a></h1>
-					<time>Sep 18, 2017</time>
-					<br><div class="description">
-	
-	<p>PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。</p>
-<h2 id="前提">前提</h2>
-<p>不可或缺的当然是node。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>node --version
-</span></span></code></pre></div><h2 id="安装">安装</h2>
-<h3 id="初始化项目">初始化项目</h3>
-<ol>
-<li>创建项目目录</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mkdir ts_pixi
-</span></span><span style="display:flex;"><span>cd ts_pixi
-</span></span><span style="display:flex;"><span>mkdir assets src dist
-</span></span></code></pre></div><ol start="2">
-<li>新建项目文件</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>touch index.html
-</span></span><span style="display:flex;"><span>touch src/main.ts
-</span></span></code></pre></div><ol start="3">
-<li>初始化项目</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm init
-</span></span></code></pre></div><h3 id="安装模块">安装模块</h3>
-<ol>
-<li>PixiJS</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save pixi.js
-</span></span></code></pre></div><ol start="2">
-<li>TypeScript</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev typescript
-</span></span></code></pre></div><ol start="3">
-<li>其它</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev browserify browserify-shim http-server tsify tslint
-</span></span></code></pre></div>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/setup-pixijs-with-typescript-using-browserify/">Read more ⟶</a>
+					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-3/">Read more ⟶</a>
 				</section>
 				
 				

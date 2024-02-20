@@ -77,152 +77,198 @@
 				
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/behavior-trees-for-ai-how-they-work/">AI行为树的工作原理</a></h1>
-					<time>Sep 13, 2017</time>
+					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-2/">游戏AI入门指南(Part 2)</a></h1>
+					<time>Apr 3, 2021</time>
 					<br><div class="description">
 	
-	<p><strong>原文：</strong> <a href="https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php">Behavior trees for AI: How they work</a>
-<strong>作者：</strong> Chris Simpson
-<strong>译者：</strong> Anthony Han</p>
+	<p><strong>原文：</strong> <a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&rsquo;s Guide to Game AI</a>
+<strong>作者：</strong> <a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer</a>
+<strong>译者：</strong> <a href="https://www.limbonova.com/about/#blog-author">Anthony Han</a></p>
+<h2 id="进阶决策">进阶决策</h2>
+<p>虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。</p>
+<h3 id="有限状态机">有限状态机</h3>
+<p>有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。</p>
+<p>这非常适用于游戏中的NPC。一个警卫可能具有以下状态：</p>
+<ul>
+<li>巡逻</li>
+<li>攻击</li>
+<li>逃跑</li>
+</ul>
+<p>当状态改变时，你可能会想到这些规则：</p>
+<ul>
+<li>如果警卫看到敌人，就立即攻击</li>
+<li>如果警卫正在攻击但无法再看到敌人，那么返回巡逻</li>
+<li>如果警卫正在攻击但受了重伤，那么开始逃跑</li>
+</ul>
+<p>这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：</p>
+<ul>
+<li>空闲（巡逻期间）</li>
+<li>搜寻（刚才发现的敌人躲起来时）</li>
+<li>求助（发现敌人，但因为敌人太强而无法独自作战时）</li>
+</ul>
+<p>通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。</p>
+<p>如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-2/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-1/">游戏AI入门指南(Part 1)</a></h1>
+					<time>Mar 20, 2021</time>
+					<br><div class="description">
+	
+	<p><strong>原文：</strong> <a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&rsquo;s Guide to Game AI</a>
+<strong>作者：</strong> <a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer</a>
+<strong>译者：</strong> <a href="https://www.limbonova.com/about/#blog-author">Anthony Han</a></p>
 <blockquote>
-<p>最近在研究行为树相关的内容，看了不少很好的文章。不同于其它文章阐述行为树的原理和实现，这篇文章着重于实践使用，介绍了行为树一般用法，还有一些开阔眼界的特别技巧。为加深印象，我利用业余时间翻译了一下，也希望对他人也有帮助。</p>
+<p>这是一篇非常好的综述类文章，对当今的游戏AI常用技术和实现方法做了简单介绍，参考了近年来的 Game AI Pro 系列。虽然不及论文那样严谨，但全文条理清晰，通俗易懂。确实是一篇入门指南佳作。花了点业余时间翻译出来，为了分享，也希望能温故知新。</p>
 </blockquote>
 <h2 id="引言">引言</h2>
-<p>虽然网上有很多行为树的教程和指南，但是在研究能不能用在 <a href="http://store.steampowered.com/app/108600">Project Zomboid</a> 中时，我总是遇到同样的问题。许多教程把重点放在行为树的代码实现上，或者仅仅专注在无上下文的流程图上，而没有任何真正适用的示例，其图表就像这样：
-<img src="/images/bt_for_ai_image_01.png" alt="image"></p>
-<p>虽然在帮助我理解行为树的核心原则方面，这些教程是非常有价值的。但我发现自己处于一种情况：即使知道行为树的运作机制，我也不知道我应该为游戏创建什么样的节点，或者一个真正的完全成型的行为树是什么样子。</p>
-<p>我花了大量的时间进行实验（由于Zomboid项目是用Java写的，我一直在用很棒的JBT —— Java行为树（ <a href="http://sourceforge.net/projects/jbt/">http://sourceforge.net/projects/jbt/</a> ），所以我没有必要关心自己的实际代码实现。尽管有很多教程的重点在这方面，还有许多常用的游戏引擎中的实现。</p>
-<p>我在这篇文章提到的某些特定装饰器的节点类型，可能来自于 JBT 而不是一般的行为树概念，但是我发现它们是行为树系统中不可或缺的一部分。如果你的行为树不支持的话，你可以考虑实现一下。</p>
-<p>我不会自称是这个方面的专家，但是经过 Project Zomboid 游戏中NPC的开发工作，我觉得我还是有点本事的，所以我想我要爆料一些东西。如果我早点知道会让我的第一次尝试更顺利，或者至少打开了我的眼界，让我了解通过行为树可以做到什么。我不打算深入进行实现，但会给出一些在 Zomboid 项目中使用的抽象示例。</p>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/behavior-trees-for-ai-how-they-work/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/asked-an-architect-about-the-game-prison-architect/">建筑师谈《监狱建筑师》</a></h1>
-					<time>Aug 8, 2017</time>
-					<br><div class="description">
-	
-	<p><strong>原文：</strong> <a href="https://motherboard.vice.com/en_us/article/gvyzm4/we-asked-an-architect-about-the-game-prison-architect">We Asked an Architect About the Game &lsquo;Prison Architect&rsquo;</a></p>
-<p><strong>作者：</strong> EMANUEL MAIBERG</p>
-<p><strong>译者：</strong> Anthony Han</p>
-<blockquote>
-<p>这是一篇我自己翻译的文章，主要动力源于几个月前玩的《监狱建筑师》这款游戏。因琐事所累，当时没有写下自己的体验感受。只留下书签栏中的这篇文章，或许可以从另一个角度来看这款游戏并审视其独特题材的社会意义。</p>
-</blockquote>
-<p><img src="https://www.introversion.co.uk/prisonarchitect/images/screenshots/large/prison-architect-12.jpg" alt="prison architect"></p>
-<p>《监狱建筑师》，一款类似模拟城市的监狱模拟经营游戏，恰到好处地探究到了其主题的骇人之处。</p>
-<p>玩家作为《监狱建筑师》的首要任务是用电椅处死一个囚犯，但在你按那个死亡开关前，你还得弄清楚很多细节。你需要建一个单独的建筑，带有一个执行室和拘留室。如果你心肠好的话，可以加一个窗和书架。每个房间需要一定的大小，并使用不同类型的地板。每个房间还需要连接到监狱的电网，电椅会消耗很多电力，所以你要为你的发电机增加一些电容器。</p>
-<p>当你处死囚犯的时候，这个事只是众多的待办事项中的一项：建更多的牢房，扩大食堂，建一个实施戒毒方案的公共房间，修复淋浴管道。还有，哦，处死这个囚犯。</p>
-<p>游戏开发商 Introversion Software 的创意总监克里斯·迪莱（Chris Delay）说，他们特意挑选了监狱生活中最黑暗的部分作为游戏的第一章节。他说：“如果把它当成建造酒店或者其它东西的游戏就会非常轻松。”“但从一开始，我们就认识到，必须让玩家知道这是不一样的体验，他必须要有不一样的思路。”</p>
-<p>游戏的最基本的建筑单元就是那些构成地图的方块。如何解决问题就看你如何有效使用分配给你的空间，经过足够长的时间后，你就会得到自己看待世界的方式（以自己的想法来构建世界），这就是模拟经营游戏的乐趣。这是一个关于最优化的练习。如果你像我一样，看到整齐有序的书架或者清洁干净的桌面感到莫名的享受时，玩模拟经营游戏尤其满足。</p>
-<p>但是，我依然会记得这个游戏的主题，尤其知道现实生活中这一切都是真实存在的之后，我意识到，原来我在游戏里干得很棒的工作竟然如此可怕。</p>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/asked-an-architect-about-the-game-prison-architect/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/a-conversation-with-anders-hejlsberg/">Anders Hejlsberg谈C#、Java和C&#43;&#43;中的泛型</a></h1>
-					<time>Dec 2, 2016</time>
-					<br><div class="description">
-	
-	<p><strong>标题：</strong> <a href="http://www.cstc.net.cn/docs/docs.php?id=258">Anders Hejlsberg谈C#、Java和C++中的泛型</a>
-<strong>译者：</strong> lover_P</p>
-<p><strong>原文：</strong> <a href="http://www.artima.com/intv/generics.html">Generics in C#, Java, and C++: A Conversation with Anders Hejlsberg, Part VII</a>
-<strong>作者：</strong> Bill Venners、Bruce Eckel</p>
-<p><strong>人物介绍</strong>
-Anders Hejlsberg，微软著名工程师，带领他的小组设计了C#（读作：C-Sharp）程序设计语言。Hejlsberg第一次登上软件界历史舞台是在80年代早期，因为他为MS-DOS和CP/M设计了Pascal编译器。当时，还是一个小公司的Borland很快雇用了他，并买下了他的编译器，改称Turbo Pascal。在Borland，Hejlsberg继续开发Turbo Pascal，并最终带领他的小组设计了Turbo Pascal的替代品：Delphi。1996年，在进入Borland 13年后，Hejlsberg加入了微软。最初，他做Visual J++和Windows Fundatioin Classes（WFC）的架构师。随后，Hejlsberg成为C#的首席设计师和.NET Framework的关键参与者。目前，Anders Hejlsberg还在领导着C#程序设计语言的继续开发。</p>
-<p>Bruce Eckel，Think in C++（C++编程思想）和Think in Java（Java编程思想）的作者。</p>
-<p>Bill Venners，Artima.com的主编。</p>
-<p><strong>内容</strong></p>
+<p>本文将介绍游戏人工智能（或简称“游戏AI”）的入门概念，让读者了解使用哪些方法来处理AI问题，它们如何协同工作以及如何使用相应的语言或引擎来实现。</p>
+<p>我们假设你具备电子游戏的基本知识，并掌握几何，三角函数等数学概念。大多数代码示例为伪代码，因此不需要特定的编程语言知识。</p>
+<h2 id="什么是游戏ai">什么是游戏AI?</h2>
+<p>游戏AI主要关注实体根据当前条件所采取的行动。这就是传统人工智能文献所指的控制“<a href="https://en.wikipedia.org/wiki/Intelligent_agent">智能代理</a>”，代理通常是游戏中的角色，但也可以是车辆，机器人。或者更抽象的东西，例如一组实体，甚至一个国家或文明。智能代理需要在各种情况下观察周围环境，依此做出决策，并采取行动。这就是所谓的“感知/思考/行动(Sense/Think/Act)”循环：</p>
 <ul>
-<li>泛型概述</li>
-<li>C#中的泛型</li>
-<li>C#泛型和java泛型的比较</li>
-<li>C#泛型和C++模板的比较</li>
-<li>C#泛型中的约束</li>
-</ul>&hellip;
+<li>感知：代理侦测到或被告知环境中可能影响其行为的事物（例如：附近的威胁，要收集的物品，要调查的兴趣点）。</li>
+<li>思考：代理决定采取的应对措施（例如：考虑是否足够安全来收集物品，或者决定应该先集中精力战斗还是躲藏）。</li>
+<li>行动：代理将先前的决定付诸行动（例如：沿着通向敌人或物品等的路径移动）。由于代理做出了行动，形势已经改变，因此再次重复循环。</li>
+</ul>
+<p>现实世界中的AI，特别是成为新闻热点的那些，通常主要关注循环中的“感知”部分。例如，自动驾驶汽车拍摄道路的图像，结合其他数据（例如雷达和光达），并分析所看到的状况。这个过程一般是通过机器学习来完成，机器学习尤其擅长这方面，获取大量现实世界中有噪声的数据（如汽车前方的道路照片或视频）并加以分析理解，提取诸如“前方20码处有一辆汽车”这类的语义信息。这些被称为“<a href="https://zh.wikipedia.org/wiki/%E7%BB%9F%E8%AE%A1%E5%88%86%E7%B1%BB">分类问题</a>”。</p>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/a-conversation-with-anders-hejlsberg/">Read more ⟶</a>
+					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-1/">Read more ⟶</a>
 				</section>
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/bitnami-redmine-upgrade-guide/">Bitnami Redmine 升级简易指南</a></h1>
-					<time>Sep 27, 2016</time>
+					<h1 class="title"><a href="/posts/debian-redmine-backup-and-restore/">Debian Redmine 备份与恢复</a></h1>
+					<time>Jan 23, 2019</time>
 					<br><div class="description">
 	
-	<p>顺利地将项目组的 Redmine 从3.1.0 升到3.3.0，没遇到什么问题。因为用的是 Bitnami 集成包，结合 Bitnami 和 Redmine 的文档，很快就完成了升级。</p>
+	<p>几年前装了 Debian 作为服务器，顺便把以前的 Bitnami Redmine (Windows) 迁移了过来。好多年过去也没再去干预，系统一直稳定运行，每周定时备份。最近因为考虑迁移这些工具到Docker上，重新整理一遍备份和恢复流程，以备不时之需。</p>
 <h2 id="系统需求">系统需求</h2>
-<p>适用于Windows平台的 Bitnami Redmine 2.x+ 升级到 3.3，Redmine 的 Ruby， Rails 系统需求见下表</p>
-<table>
-<thead>
-<tr>
-<th>Redmine version</th>
-<th>Supported Ruby versions</th>
-<th>Rails version used</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>3.3, current trunk</td>
-<td>ruby 1.9.3, 2.0.0, 2.1, 2.21, 2.3</td>
-<td>Rails 4.2</td>
-</tr>
-<tr>
-<td>3.2, 3.1</td>
-<td>ruby 1.9.3, 2.0.0, 2.1, 2.21</td>
-<td>Rails 4.2</td>
-</tr>
-</tbody>
-</table>
-<p>Redmine 3.2 or lower does not support Ruby 2.3. Redmine 3.3 supports Ruby 2.3.
-Redmine does not support JRuby because some gems do not support Rails 4.2.
-细节参看 <a href="http://www.redmine.org/projects/redmine/wiki/RedmineInstall#Requirements">Requirements</a></p>
-<h2 id="备份数据">备份数据</h2>
-<h3 id="bitnami-stack">Bitnami Stack</h3>
-<p>若使用 Bitnami 集成包，可以直接备份整个目录即可。</p>
-<h3 id="redmine">Redmine</h3>
-<p>若只升级 Redmine 则先确认系统需求然后执行备份。</p>
-<h4 id="备份文件">备份文件</h4>
-<p>最好备份整个 redmine 目录，主要包括</p>
+<ol>
+<li>Redmine 3.3 installed with apt on Debian 9 (stretch).</li>
+<li>Database: PostgreSQL</li>
+</ol>
+<h2 id="备份">备份</h2>
+<h3 id="配置文件">配置文件</h3>
+<p>配置文件包含路径：<code>/etc/redmine/{instance}</code></p>
+<p>例如，默认实例名称为<code>default</code>，则配置文件路径为<code>/etc/redmine/{default}</code>。包含以下配置文件：</p>
 <ul>
-<li>上传文件(apps\redmine\htdocs\files)</li>
-<li>插件(apps\redmine\htdocs\plugins)</li>
-<li>主题(apps\redmine\htdocs\themes)</li>
-<li>配置文件(apps\redmine\htdocs\config)</li>
+<li>configuration.yml</li>
+<li>database.xml</li>
+<li>secret_key.txt</li>
 </ul>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/bitnami-redmine-upgrade-guide/">Read more ⟶</a>
+					<a class="readmore" href="/posts/debian-redmine-backup-and-restore/">Read more ⟶</a>
 				</section>
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/markdown-syntax-zhtw/">Markdown Syntax zhTW</a></h1>
-					<time>Aug 18, 2016</time>
+					<h1 class="title"><a href="/posts/transistor-a-sonnet-to-cyberpunk/">晶体管：献给赛博朋克的十四行诗</a></h1>
+					<time>Apr 26, 2018</time>
 					<br><div class="description">
 	
-	NOTE: This is Traditional Chinese Edition Document of Markdown Syntax. If you are seeking for English Edition Document. Please refer to Markdown: Syntax. Markdown: Syntax 概述 哲學 行內 HTML 特殊字元自動轉換 區塊元素 段落和換行 標題 區塊引言 清單 程式碼區塊 分隔線 區段元素 連&hellip;
+	<blockquote>
+<p>When I first saw you up on that stage back there.
+It was like&hellip;
+everyone loved you.
+Everyone except for them.</p>
+</blockquote>
+<p>《晶体管》(Transistor) 是一款由《堡垒》(Bastion)开发商 <a href="https://www.supergiantgames.com/">Supergiant Games</a> 所开发的科幻题材作品。游戏讲述了主角——云堤城 (Cloudbank) 歌星红伶 (Red)，躲过卡梅拉塔组织 (The Camerata) 刺杀后，意外获得了一件名叫“晶体管” (Transistor) 的武器，并以此复仇的故事。</p>
+<p>虽然《晶体管》被官方定义为 ARPG ，但确切地说，它更应该被称作为一款 TRPG (Tactical RPG)。类似 XCOM 或者 神界：原罪 (Divinity: Original Sin) 的战斗规则 但又有所不同。首先，在行动规划阶段没有移动的次序和限制，玩家可以移动多次，并且在发动技能前后都可以移动，行动规划如同施放“时间暂停”一般。其次，个别技能会影响敌人位置，如拉近/击飞等效果。而在行动规划期间，受到此类效果影响的敌人并不会实时改变其位置，因为是规划嘛，所以需要一定的预判，游戏中会给出相应的提示。</p>
+<p><img src="/images/screenshots/20180426140854_1.jpg" alt="transistor"></p>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/markdown-syntax-zhtw/">Read more ⟶</a>
+					<a class="readmore" href="/posts/transistor-a-sonnet-to-cyberpunk/">Read more ⟶</a>
 				</section>
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/cascading-combobox-with-xml-dataprovider/">XML数据源的级联ComboBox</a></h1>
-					<time>Jul 12, 2013</time>
+					<h1 class="title"><a href="/posts/setup-pixijs-with-typescript-using-webpack/">基于TypeScript的PixiJS开发环境设置（webpack篇）</a></h1>
+					<time>Sep 21, 2017</time>
 					<br><div class="description">
 	
-	<h2 id="background">Background</h2>
-<p>要做一个表单，其中自然少不了ComboBox，数据源不是从后台动态获取的，竟然是一个Excel表格文件！这个数据量很大，而且还有可能会修改，所以只能采用外部加载的方式。写一个解析Excel数据的库自然是不现实的，所以决定把Excel转换成XML格式，然后再加载。</p>
-<h2 id="excel转换成xml">Excel转换成XML</h2>
-<p>一般直接将Excel是不能导出成XML的，因为“不包含任何XML映射”，所以首先需要建立一个XML映射，其实就是设计一个XML结构，然后将Excel数据映射到对应的节点上。这一步其实很简单，但是颇具技巧性。</p>
-<h3 id="开发工具选项卡">“开发工具”选项卡</h3>
-<p>导出XML需要“开发工具”功能，一般Excel不会显示这个选项卡，需要打开“文件”-&ldquo;选项&rdquo;-“自定义功能区”对话框，勾选“开发工具”。</p>&hellip;
+	<p>前几天写了一篇<a href="http://www.limbonova.com/2017/09/setup-pixijs-with-typescript-using-browserify">用<code>Browserify</code>打包的 PixiJS 的开发环境配置流程</a>，但是Web技术一日千里，开发工具也日新月异， Webpack 就是其中之一。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Webpack 作为模块打包工具的开发环境的配置过程，遵循简化易用的原则，省略了一些非必要模块的安装。</p>
+<h2 id="安装">安装</h2>
+<h3 id="项目结构">项目结构</h3>
+<ol>
+<li>创建项目目录</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mkdir ts_pixi
+</span></span><span style="display:flex;"><span>cd ts_pixi
+</span></span><span style="display:flex;"><span>mkdir assets src dist
+</span></span></code></pre></div><ol start="2">
+<li>新建项目文件</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>touch index.html
+</span></span><span style="display:flex;"><span>touch src/main.ts
+</span></span></code></pre></div><ol start="3">
+<li>初始化项目</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm init
+</span></span></code></pre></div><h3 id="安装模块">安装模块</h3>
+<ol>
+<li>PixiJS</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev pixi.js
+</span></span></code></pre></div><ol start="2">
+<li>TypeScript，如果使用Visual Studio Code作为IDE，可以安装相应<code>@types</code>文件，用于代码提示等功能。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev typescript @types/pixi.js @types/node
+</span></span></code></pre></div><ol start="3">
+<li>其它</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-gdscript3" data-lang="gdscript3"><span style="display:flex;"><span>npm install <span style="color:#f92672">--</span>save<span style="color:#f92672">-</span>dev ts<span style="color:#f92672">-</span>loader webpack webpack<span style="color:#f92672">-</span>dev<span style="color:#f92672">-</span>server
+</span></span></code></pre></div>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/cascading-combobox-with-xml-dataprovider/">Read more ⟶</a>
+					<a class="readmore" href="/posts/setup-pixijs-with-typescript-using-webpack/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/setup-pixijs-with-typescript-using-browserify/">基于TypeScript的PixiJS开发环境设置（browserify篇）</a></h1>
+					<time>Sep 18, 2017</time>
+					<br><div class="description">
+	
+	<p>PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。</p>
+<h2 id="前提">前提</h2>
+<p>不可或缺的当然是node。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>node --version
+</span></span></code></pre></div><h2 id="安装">安装</h2>
+<h3 id="初始化项目">初始化项目</h3>
+<ol>
+<li>创建项目目录</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mkdir ts_pixi
+</span></span><span style="display:flex;"><span>cd ts_pixi
+</span></span><span style="display:flex;"><span>mkdir assets src dist
+</span></span></code></pre></div><ol start="2">
+<li>新建项目文件</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>touch index.html
+</span></span><span style="display:flex;"><span>touch src/main.ts
+</span></span></code></pre></div><ol start="3">
+<li>初始化项目</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm init
+</span></span></code></pre></div><h3 id="安装模块">安装模块</h3>
+<ol>
+<li>PixiJS</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save pixi.js
+</span></span></code></pre></div><ol start="2">
+<li>TypeScript</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev typescript
+</span></span></code></pre></div><ol start="3">
+<li>其它</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev browserify browserify-shim http-server tsify tslint
+</span></span></code></pre></div>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/setup-pixijs-with-typescript-using-browserify/">Read more ⟶</a>
 				</section>
 				
 				

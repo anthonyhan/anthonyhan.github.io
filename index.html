@@ -77,25 +77,116 @@
 				
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/reading-notes-counselling-for-toads-a-psychological-adventure/">读书笔记：蛤蟆先生去看心理医生</a></h1>
-					<time>Oct 26, 2022</time>
+					<h1 class="title"><a href="/posts/data-oriented-bt-series-5-behavior-tree-entrails/">面向数据的行为树（5）：行为树结构剖析</a></h1>
+					<time>Feb 18, 2024</time>
 					<br><div class="description">
 	
-	<p><img src="/images/books/counselling-for-toads.jpg" alt="book-cover"></p>
-<p>《蛤蟆先生去看心理医生》这本书借用《柳林风声》中的角色，讲述了蛤蟆先生的抑郁症状。在心理咨询师苍鹭的帮助下，蛤蟆先生发现自己的心理状态与童年经历息息相关。最终，他认识到自我，学会控制情绪，摆脱抑郁，并开始新的生活。</p>&hellip;
+	<p>这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第5篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。</p>
+<h2 id="系列文章目录">系列文章目录</h2>
+<p>《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：</p>
+<ol>
+<li>面向数据的行为树（1）：行为树入门</li>
+<li>面向数据的行为树（2）：震惊！面向对象行为树并不面向数据</li>
+<li>面向数据的行为树（3）：数据导向流催生的行为树</li>
+<li>面向数据的行为树（4）：面向数据的行为树概述</li>
+<li>面向数据的行为树（5）：行为树结构剖析</li>
+</ol>
+<h2 id="前言">前言</h2>
+<p>今天我们来看看行为树运行时实现的主要数据结构，以及在行为树更新期间它们是如何相互作用的。</p>
+<p>![[/images/behavior-tree-entrails/treebeard.webp]]</p>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/reading-notes-counselling-for-toads-a-psychological-adventure/">Read more ⟶</a>
+					<a class="readmore" href="/posts/data-oriented-bt-series-5-behavior-tree-entrails/">Read more ⟶</a>
 				</section>
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/">面向对象的行为树不是面向数据的</a></h1>
-					<time>Apr 19, 2022</time>
+					<h1 class="title"><a href="/posts/data-oriented-bt-series-4-data-oriented-behavior-tree-overview/">面向数据的行为树（4）：面向数据的行为树概述</a></h1>
+					<time>Feb 3, 2024</time>
 					<br><div class="description">
 	
-	<p>原文：<a href="https://jahej.com/alt/2011_03_10_shocker-naive-object-oriented-behavior-tree-isnt-data-oriented.html">Shocker: Naive Object-Oriented Behavior Tree Isn’t Data-Oriented (jahej.com)</a></p>
-<p>作者：<a href="http://bjoernknafla.com/">Bjoern Knafla</a></p>
-<p>文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。即使时隔多年，很多文章仍值得一看。</p>
+	<p>这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第4篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。</p>
+<h2 id="系列文章目录">系列文章目录</h2>
+<p>《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：</p>
+<ol>
+<li>面向数据的行为树（1）：行为树入门</li>
+<li>面向数据的行为树（2）：震惊！面向对象行为树并不面向数据</li>
+<li>面向数据的行为树（3）：数据导向流催生的行为树</li>
+<li>面向数据的行为树（4）：面向数据的行为树概述</li>
+<li>面向数据的行为树（5）：行为树结构剖析</li>
+</ol>
+<h2 id="前言">前言</h2>
+<p>上一篇关于面向数据行为树的文章对许多人来说太长，很难找到足够的时间完整阅读。我自己也会有困难抽出足够时间和精力完全消化它。因此，剥离面向数据设计的诸多实践内容后，这篇文章就是上篇文章的高层次概述。</p>
+<h2 id="动机">动机</h2>
+<p>目前和未来硬件中，相比计算机在寄存器中的数据计算，内存访问和数据移动具有更高的成本（能量和时钟周期）。到主内存的内存带宽是有限的。测量以处理器周期为单位，内存访问速度和计算性能之间的差距是一个令人恐惧的鸿沟（夸张的说法）。缓存未命中和/或从主内存而不是 CPU 缓存获取数据的必要性是计算的瓶颈，并且可能窃取运行在其他核心上的计算任务的内存带宽。</p>
+<p>依赖于节点指向其他节点的传统层次结构的行为树（BT）实现，在遍历树时很容易导致许多随机内存访问。每次随机内存访问都是一个潜在的缓存未命中（Cache Miss），这意味着等待数据并浪费时钟周期。</p>
+<p>另外，如果叶节点调用的动作处理大量的数据，那么会发生更多的缓存未命中——请求的数据到达 CPU 时可能会逐出行为树数据，一旦树遍历继续，则需要从主内存中恢复。</p>
+<p>虽然许多行为树的使用在性能分析器中不会看到其遍历的影响，但我们想了解并学习如何构建更高效的硬件和更面向数据的行为树，从而使许多实体（Entity）运行大量的行为树，甚至在 PS3 的 SPU 上。</p>
+<p>在开发过程中，快速迭代和支持游戏 AI 的监控和调试是提高游戏性（玩家体验）的一个重要因素。我希望游戏运行时的行为树支持实时调整，而不是因为行为树变化，需要重新编译，重新启动游戏。</p>
+<h2 id="要点概括">要点概括</h2>
+<p>为了满足在游戏中快速遍历行为树，以及快速修改和开发期间观察游戏的需求，我们使用两种不同的行为树表示形式，分别用于运行时和开发时。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/data-oriented-bt-series-4-data-oriented-behavior-tree-overview/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/data-oriented-bt-series-3-data-oriented-streams-spring-behavior-trees/">面向数据的行为树（3）：数据导向流催生的行为树</a></h1>
+					<time>Jan 10, 2024</time>
+					<br><div class="description">
+	
+	<p>这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第3篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。</p>
+<h2 id="系列文章目录">系列文章目录</h2>
+<p>《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：</p>
+<ol>
+<li>面向数据的行为树（1）：行为树入门</li>
+<li>面向数据的行为树（2）：震惊！面向对象行为树并不面向数据</li>
+<li>面向数据的行为树（3）：数据导向流催生的行为树</li>
+<li>面向数据的行为树（4）：面向数据的行为树概述</li>
+<li>面向数据的行为树（5）：行为树结构剖析</li>
+</ol>
+<h2 id="前言">前言</h2>
+<p>如何使行为树及其分支、情境依赖性遍历以及它们的非规则数据访问模式与游戏平台的内存层次结构协调？如何将数据导向设计付诸实践？在运行时进行快速迭代和行为调整又该如何实现？</p>
+<p>这些问题激发了作者对面向数据的行为树的探索。在第一篇文章中，我们了解了行为树的概念，在第二篇文章中，我们理解了平台的内存系统对发挥性能的关键作用，面向数据思想，以及如何适应这一编程思想，现在是时候将这些知识付诸实践了。</p>
+<h2 id="目标和需求">目标和需求</h2>
+<h3 id="功能需求">功能需求</h3>
+<p>行为树是一种工具，也是一种模型。它可以描述 Actor 的行为，并将整个决策过程分解为多个行为的组合。行为节点也具有明确的语义，它可以影响行为树的遍历方式，从而影响 Actor 的决策过程和执行结果。它的功能应该具备：</p>
+<ul>
+<li>易于创建、理解 Actor 的决策过程；</li>
+<li>简化行为的重用，具备重用的行为库；</li>
+<li>能够实现游戏内 AI 行为的快速迭代、调试、优化；</li>
+<li>提供直观的调试信息，最终实现AI内部运作信息的可视化。</li>
+</ul>
+<h3 id="性能需求">性能需求</h3>
+<p>一款游戏可能只有几个，或者有数百到数千个，由行为树控制的实体（也称为 Actor）。在这两种情况下，游戏人工智能（AI）通常每帧只有很少的时间预算，行为树不应该夺走”导航“和”视线感知“所需的计算时间。宝贵的计算周期也不应该浪费在等待数据进入 CPU 核心寄存器上。对于我们这个实验，在运行时实现高效的决策制定和角色控制，以下因素至关重要：</p>
+<ul>
+<li>最小化缓存碎片，减少随机内存访问，警惕内存访问延迟<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>；</li>
+<li>可以将 Actor 的行为树数据作为一个整体或逐块地移动到计算核心的本地内存中<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>；</li>
+<li>节约内存带宽，保持较低的内存需求，利用内存分层结构内的数据共享；</li>
+<li>了解最坏情况下的内存使用情况，预先分配内存并简化在游戏主机上的运行；</li>
+<li>不要失去对调用堆栈深度的控制；</li>
+<li>利用并发的优势。</li>
+</ul>
+<p>总结起来就是，在游戏建模或开发阶段要求灵活性和快速迭代，而游戏运行阶段则要求执行效率和高性能。这些需求在很大程度上是相互对立的，因此<strong>此次尝试的前提条件是：对行为树的开发时和运行时表示使用单独的表示，然后再将二者巧妙地连接起来，两全其美</strong>，代价就是更大的代码量和复杂性。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/data-oriented-bt-series-3-data-oriented-streams-spring-behavior-trees/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/data-oriented-bt-series-2-shocker-naive-object-oriented-behavior-tree-isnt-data-oriented/">面向数据的行为树（2）：震惊！面向对象行为树并不面向数据</a></h1>
+					<time>Dec 20, 2023</time>
+					<br><div class="description">
+	
+	<p>这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第2篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。</p>
+<h2 id="系列文章目录">系列文章目录</h2>
+<p>《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：</p>
+<ol>
+<li>面向数据的行为树（1）：行为树入门</li>
+<li>面向数据的行为树（2）：震惊！面向对象行为树并不面向数据</li>
+<li>面向数据的行为树（3）：数据导向流催生的行为树</li>
+<li>面向数据的行为树（4）：面向数据的行为树概述</li>
+<li>面向数据的行为树（5）：行为树结构剖析</li>
+</ol>
 <h2 id="背景">背景</h2>
 <p>简单的行为树可以使用面向对象方式来实现，如果性能满足需求，非常适合人手不多开发时间紧张的小型团队。</p>
 <p>简单实现如下：</p>
@@ -158,167 +249,46 @@
 </span></span><span style="display:flex;"><span>};
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// ... and so on with other node types...
-</span></span></span></code></pre></div><p>Tony Albrecht 在 演讲 <a href="https://www.youtube.com/watch?v=VAT9E-M-PoE">Pitfalls of Object Oriented Programming, Revisited -  (TGC 2017) - YouTube</a> 中指出了面向对象编程的一些缺点，如忽视了内存访问模型以及目标平台内存系统需求。他还演示了如何将面向对象的场景树重写为以数据为中心的结构，从而获得了显著的性能提升。</p>&hellip;
+</span></span></span></code></pre></div>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/">Read more ⟶</a>
+					<a class="readmore" href="/posts/data-oriented-bt-series-2-shocker-naive-object-oriented-behavior-tree-isnt-data-oriented/">Read more ⟶</a>
 				</section>
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/the-behavior-tree-starter-kit/">The Behavior Tree Starter Kit</a></h1>
-					<time>Mar 28, 2022</time>
+					<h1 class="title"><a href="/posts/data-oriented-bt-series-1-introduction-to-behavior-trees/">面向数据的行为树（1）：行为树入门</a></h1>
+					<time>Nov 29, 2023</time>
 					<br><div class="description">
 	
-	<!-- raw HTML omitted -->
-<p>偶然看到一个2012年 Alex Champandard 的演讲<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，本想看看有什么可以借鉴，看到一半后，发现就是 Game AI Pro 的文章 《The Behavior Tree Starter Kit<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>》的演示版。结合代码<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>，对照着看一遍，有助于理解。</p>
-<h2 id="motivation">Motivation</h2>
-<p>行为树广泛应用于各个系统：角色，策略，小队，动画，镜头……</p>
-<p>使用案例：</p>
-<ul>
-<li>Rockstar Games： R.A.G.E.</li>
-<li>Guerrilla Games：Killzone 2 &amp; 3</li>
-<li>Uncharted 2</li>
-<li>Halo 3</li>
-<li>NBA &lsquo;09</li>
-<li>Metro 2033</li>
-<li>Crysis: Warhead</li>
-<li>League of Legends</li>
-</ul>
-<h2 id="the-basics">The Basics</h2>
-<h3 id="v1原型">v1：原型</h3>
-<p>一个基本的行为树实现：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Status</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Return values of and valid states for behaviors.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    BH_INVALID,
-</span></span><span style="display:flex;"><span>    BH_SUCCESS,
-</span></span><span style="display:flex;"><span>    BH_FAILURE,
-</span></span><span style="display:flex;"><span>    BH_RUNNING,
-</span></span><span style="display:flex;"><span>    BH_ABORTED,
-</span></span><span style="display:flex;"><span>};
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Behavior</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Base class for actions, conditions and composites.
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status update()				<span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()			{}
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onTerminate</span>(Status)	{}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Behavior()
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">:</span>   m_eStatus(BH_INVALID)
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Behavior()
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">tick</span>()
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
-</span></span><span style="display:flex;"><span>        {
-</span></span><span style="display:flex;"><span>            onInitialize();
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> update();
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
-</span></span><span style="display:flex;"><span>        {
-</span></span><span style="display:flex;"><span>            onTerminate(m_eStatus);
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">reset</span>()
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> BH_INVALID;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">abort</span>()
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        onTerminate(BH_ABORTED);
-</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> BH_ABORTED;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isTerminated</span>() <span style="color:#66d9ef">const</span>
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus <span style="color:#f92672">==</span> BH_SUCCESS  <span style="color:#f92672">||</span>  m_eStatus <span style="color:#f92672">==</span> BH_FAILURE;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isRunning</span>() <span style="color:#66d9ef">const</span>
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus <span style="color:#f92672">==</span> BH_RUNNING;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">getStatus</span>() <span style="color:#66d9ef">const</span>
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>    Status m_eStatus;
-</span></span><span style="display:flex;"><span>};
-</span></span></code></pre></div>&hellip;
+	<p>这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第1篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。</p>
+<h2 id="系列文章目录">系列文章目录</h2>
+<p>《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：</p>
+<ol>
+<li>面向数据的行为树（1）：行为树入门</li>
+<li>面向数据的行为树（2）：震惊！面向对象行为树并不面向数据</li>
+<li>面向数据的行为树（3）：数据导向流催生的行为树</li>
+<li>面向数据的行为树（4）：面向数据的行为树概述</li>
+<li>面向数据的行为树（5）：行为树结构剖析</li>
+</ol>
+<h2 id="行为树简介">行为树简介</h2>
+<p>什么是行为树？它的工作原理是什么？它在游戏AI中又起什么作用？</p>
+<p><img src="http://images4.wikia.nocookie.net/__cb20100617193929/harrypotter/images/8/8e/Whomping_Willow_PA.jpg" alt="The mis-behaving Whomping Willow tree from the movie Harry Potter and the Prisoner of Azkaban - picture hosted by the Harry Potter Wiki"></p>
+<p>本文介绍了作者将面向数据、内存优化的行为树二者结合，以简化开发过程中的创建和修改的试验（读作：探索）经历。作者写这篇文章是为了记录其发现和决定，并征求读者的反馈意见，最终实现一个真正有用的BSD许可的BT工具包。</p>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/the-behavior-tree-starter-kit/">Read more ⟶</a>
+					<a class="readmore" href="/posts/data-oriented-bt-series-1-introduction-to-behavior-trees/">Read more ⟶</a>
 				</section>
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/ai-in-swords-and-soldiers/">AI in Swords and Soldiers</a></h1>
-					<time>Oct 18, 2021</time>
+					<h1 class="title"><a href="/posts/reading-notes-counselling-for-toads-a-psychological-adventure/">读书笔记：蛤蟆先生去看心理医生</a></h1>
+					<time>Oct 26, 2022</time>
 					<br><div class="description">
 	
-	<h2 id="前言">前言</h2>
-<p>偶然发现收藏夹里躺了多年的文章链接<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，写作时间是2011年前后，作者是 Ronimo Games 的联合创始人 Joost van Dongen，简述了当时他们如何构建《剑与勇士》的 AI。<a href="https://store.steampowered.com/app/63500/Swords_and_Soldiers_HD">《剑与勇士》（Swords &amp; Soldiers）</a>是 Ronimo Games 在2009年开发的一款2D横向卷轴RTS游戏。</p>
-<p>简单翻译整理了一下，看看有没有参考价值。</p>
-<h2 id="译文">译文</h2>
-<p>众所周知，为策略游戏创建良好的 AI 是一项艰巨的任务。AI 设计当然从来都不是一件容易的事，但对于策略游戏来说，选项和情况的复杂性非常高。我认为《剑与勇士》是第一款在游戏中实现真正出色 AI 的游戏，所以我想看看我们是如何做到这一点的会很有趣。</p>
-<p><img src="/images/ai-in-swords-and-soldiers/swords_and_soldiers.webp" alt="swords_and_soldiers"></p>
-<p>人工智能领域要么解决非常简单的问题，比如国际象棋（与实时战略游戏相比，国际象棋非常简单，更不用说与现实世界相比了！），要么只会提供大量精巧高效的辅助算法，比如寻路。在复杂情况下做出真正的决策本质上是一个尚未解决的问题，而且不会在短期内得到解决。</p>&hellip;
+	<p><img src="/images/books/counselling-for-toads.jpg" alt="book-cover"></p>
+<p>《蛤蟆先生去看心理医生》这本书借用《柳林风声》中的角色，讲述了蛤蟆先生的抑郁症状。在心理咨询师苍鹭的帮助下，蛤蟆先生发现自己的心理状态与童年经历息息相关。最终，他认识到自我，学会控制情绪，摆脱抑郁，并开始新的生活。</p>&hellip;
 	
 </div>
-					<a class="readmore" href="/posts/ai-in-swords-and-soldiers/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/behavior-trees-in-gigantic/">Behavior Trees in Gigantic</a></h1>
-					<time>Sep 7, 2021</time>
-					<br><div class="description">
-	
-	<p>偶然看到 <a href="https://medium.com/@gautamv/managing-ai-in-gigantic-523dc84763cf">Managing AI in Gigantic</a> 和 <a href="https://medium.com/@gautamv/advanced-behavior-tree-structures-4b9dc0516f92">Advanced Behavior Tree Structures</a> 这两篇文章，简述了一款 PvPvE 游戏 Gigantic 的 AI 架构，提供了一些不一样的思路。</p>
-<h2 id="背景">背景</h2>
-<p><img src="/images/behavior-trees-in-gigantic/image_gigantic_banner.webp" alt="image_gigantic_banner.webp"></p>
-<p><a href="https://store.steampowered.com/app/327690/Gigantic/">Gigantic</a>是一个结合了PVE的5v5的多人对战游戏。对战双方各有一个叫做守护者的NPC巨兽。玩家通过在己方泉水召唤生物，定时收集泉水，通过击杀敌方英雄或泉水召唤物来为己方巨兽充能。双方围绕保护己方巨兽，攻击敌方巨兽来展开对抗，直到消灭对方巨兽，赢得胜利。</p>
-<p>作为一款快节奏的PvPvE游戏，NPC守护者是游戏的关键要素，其AI的表现至关重要。</p>
-<p>有限状态机不够灵活，重用节点不方便。使用行为树可以解决这一问题，而且可以轻松地同 Utility AI，GOAP 等其它方案结合。</p>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/behavior-trees-in-gigantic/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-3/">游戏AI入门指南(Part 3)</a></h1>
-					<time>Apr 3, 2021</time>
-					<br><div class="description">
-	
-	<h2 id="学习能力和适应能力">学习能力和适应能力</h2>
-<p>我们在一开始就提到游戏AI通常不使用“机器学习”，因为它不适合游戏世界中智能代理的实时控制。但这并不意味着我们不能从机器学习领域中汲取灵感。也许我们希望射击游戏中的AI对手去学习寻找最佳位置，以便获得最多的击杀数。或者在像《铁拳》或《街头霸王》这样的格斗游戏中，当我们使用一遍又一遍地使用相同的“组合技”时，AI对手能学会应对从而迫使我们使用其它的战术。因此有时候一定程度的机器学习还是很有用处的。</p>
-<h3 id="统计和概率">统计和概率</h3>
-<p>在我们研究更复杂的例子之前，值得考虑一下：通过使用一些简单测量得出的数据来做出决策，我们可以走多远？例如，假设有一个即时战略游戏(Real-time strategy game)，我们要猜测玩家是否会在前几分钟内发起一次快攻，以此来决定是否需要加强防御。也许我们可以从玩家的过去行为中推断出未来的行为。一开始我们没有可以推断的玩家数据，但每次AI与人类对手对战时，它都可以记录第一次攻击的时间。经过多次对战，这些时间的平均值可以非常近似于将来该玩家攻击的时间。</p>
-<p>但简单地平均化存在一个的问题：它会随着时间的推移而趋向于居中。因此如果玩家在前20次采用快攻策略，而在接下来的20次采用较慢的策略，那么平均数将处于中间位置，这个数值对我们来说一点用处也没有。纠正此问题的一种方法是简单的<a href="https://en.wikipedia.org/wiki/Moving_average">移动平均(windowed average)</a>，如只考虑最后20个数据点。</p>
-<p>假设玩家过去的偏好会延续到将来，在估计某些动作发生的可能性时可以使用类似的方法。例如，如果玩家用火球术攻击5次，闪电箭攻击2次，又进行了1次近战攻击，那么他很可能喜欢火球术，每8次使用5次。由此推论，我们可以得出使用不同攻击的概率为：火球术= 62.5％，闪电箭= 25％，近战= 12.5％。建议我们的AI角色找一些抗火装备！</p>
-<p>另一个有趣的方法是使用<a href="https://zh.wikipedia.org/zh-hans/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%88%86%E7%B1%BB%E5%99%A8">朴素贝叶斯分类器(Naive Bayes Classifier)</a>来检查大量输入数据并对当前情况进行分类，以便AI代理可以适当地做出反应。贝叶斯分类器最著名的应用就是电子邮件垃圾邮件过滤，它会检查电子邮件中的单词，比较这些单词在之前主要出现在垃圾邮件还是非垃圾邮件中，以此来判断新邮件是不是垃圾邮件。我们也可以做类似的事情，只是我们的输入数据有点少。通过记录所有我们了解到的有用信息（如建造了哪些敌方单位，使用了哪些法术，研究了哪些科技），然后记录由此产生的结果（战争还是和平，速攻策略还是防御策略等），根据这些我们可以选择适当的行为。</p>
-<p>使用所有这些学习方法，足够(通常更可取的是）在发售之前进行游戏测试期间对收集的数据进行处理。让AI可以应对游戏测试者的不同策略，但在游戏发售后不会改变。相比之下，发售后能够应对玩家的AI可能最终会变得过于可预测而呆板乏味，或者太难而以击败。</p>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-3/">Read more ⟶</a>
+					<a class="readmore" href="/posts/reading-notes-counselling-for-toads-a-psychological-adventure/">Read more ⟶</a>
 				</section>
 				
 				

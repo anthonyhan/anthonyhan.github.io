@@ -2,16 +2,49 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/tags/altdevblogaday/</loc>
+    <lastmod>2024-02-18T22:24:57+08:00</lastmod>
+  </url><url>
+    <loc>/tags/behavior-tree/</loc>
+    <lastmod>2024-02-18T22:24:57+08:00</lastmod>
+  </url><url>
+    <loc>/tags/data-oriented-design/</loc>
+    <lastmod>2024-02-18T22:24:57+08:00</lastmod>
+  </url><url>
+    <loc>/tags/game-ai/</loc>
+    <lastmod>2024-02-18T22:24:57+08:00</lastmod>
+  </url><url>
+    <loc>/tags/game-dev/</loc>
+    <lastmod>2024-02-18T22:24:57+08:00</lastmod>
+  </url><url>
+    <loc>/</loc>
+    <lastmod>2024-02-18T22:24:57+08:00</lastmod>
+  </url><url>
+    <loc>/posts/</loc>
+    <lastmod>2024-02-18T22:24:57+08:00</lastmod>
+  </url><url>
+    <loc>/tags/</loc>
+    <lastmod>2024-02-18T22:24:57+08:00</lastmod>
+  </url><url>
+    <loc>/posts/data-oriented-bt-series-5-behavior-tree-entrails/</loc>
+    <lastmod>2024-02-18T22:24:57+08:00</lastmod>
+  </url><url>
+    <loc>/posts/data-oriented-bt-series-4-data-oriented-behavior-tree-overview/</loc>
+    <lastmod>2024-02-03T12:14:47+08:00</lastmod>
+  </url><url>
+    <loc>/posts/data-oriented-bt-series-3-data-oriented-streams-spring-behavior-trees/</loc>
+    <lastmod>2024-01-10T19:40:32+08:00</lastmod>
+  </url><url>
+    <loc>/posts/data-oriented-bt-series-2-shocker-naive-object-oriented-behavior-tree-isnt-data-oriented/</loc>
+    <lastmod>2023-12-20T20:51:18+08:00</lastmod>
+  </url><url>
+    <loc>/posts/data-oriented-bt-series-1-introduction-to-behavior-trees/</loc>
+    <lastmod>2023-11-29T15:03:07+08:00</lastmod>
+  </url><url>
     <loc>/tags/book/</loc>
     <lastmod>2022-10-26T12:26:33+08:00</lastmod>
   </url><url>
     <loc>/tags/book-review/</loc>
-    <lastmod>2022-10-26T12:26:33+08:00</lastmod>
-  </url><url>
-    <loc>/</loc>
-    <lastmod>2022-10-26T12:26:33+08:00</lastmod>
-  </url><url>
-    <loc>/posts/</loc>
     <lastmod>2022-10-26T12:26:33+08:00</lastmod>
   </url><url>
     <loc>/tags/psychology/</loc>
@@ -20,32 +53,26 @@
     <loc>/tags/reading-notes/</loc>
     <lastmod>2022-10-26T12:26:33+08:00</lastmod>
   </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2022-10-26T12:26:33+08:00</lastmod>
-  </url><url>
     <loc>/posts/reading-notes-counselling-for-toads-a-psychological-adventure/</loc>
     <lastmod>2022-10-26T12:26:33+08:00</lastmod>
   </url><url>
-    <loc>/tags/ai/</loc>
-    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
-  </url><url>
-    <loc>/tags/altdevblogaday/</loc>
-    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
-  </url><url>
-    <loc>/tags/behavior-tree/</loc>
-    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
-  </url><url>
-    <loc>/tags/game-ai/</loc>
-    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
-  </url><url>
-    <loc>/tags/game-dev/</loc>
-    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
-  </url><url>
-    <loc>/posts/naive-object-oriented-behavior-tree-is-not-data-oriented/</loc>
-    <lastmod>2022-04-19T20:22:48+08:00</lastmod>
-  </url><url>
     <loc>/posts/the-behavior-tree-starter-kit/</loc>
     <lastmod>2022-03-28T23:44:48+08:00</lastmod>
+  </url><url>
+    <loc>/tags/hfsm/</loc>
+    <lastmod>2021-11-10T16:06:11+08:00</lastmod>
+  </url><url>
+    <loc>/tags/htn/</loc>
+    <lastmod>2021-11-10T16:06:11+08:00</lastmod>
+  </url><url>
+    <loc>/tags/planner/</loc>
+    <lastmod>2021-11-10T16:06:11+08:00</lastmod>
+  </url><url>
+    <loc>/tags/utility-ai/</loc>
+    <lastmod>2021-11-10T16:06:11+08:00</lastmod>
+  </url><url>
+    <loc>/posts/deciding-on-an-ai-architecture-which-tool-for-the-job/</loc>
+    <lastmod>2021-11-10T16:06:11+08:00</lastmod>
   </url><url>
     <loc>/posts/ai-in-swords-and-soldiers/</loc>
     <lastmod>2021-10-18T20:22:12+08:00</lastmod>
@@ -53,32 +80,38 @@
     <loc>/posts/behavior-trees-in-gigantic/</loc>
     <lastmod>2021-09-07T15:46:59+08:00</lastmod>
   </url><url>
+    <loc>/tags/ai/</loc>
+    <lastmod>2021-09-07T15:46:59+08:00</lastmod>
+  </url><url>
+    <loc>/posts/managing-complexity-in-the-halo-2-ai-system/</loc>
+    <lastmod>2021-06-20T21:17:08+08:00</lastmod>
+  </url><url>
+    <loc>/tags/halo/</loc>
+    <lastmod>2021-06-20T21:17:08+08:00</lastmod>
+  </url><url>
     <loc>/tags/fsm/</loc>
-    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-05-25T23:10:09+00:00</lastmod>
   </url><url>
     <loc>/tags/goap/</loc>
-    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
-  </url><url>
-    <loc>/tags/hfsm/</loc>
-    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-05-25T23:10:09+00:00</lastmod>
   </url><url>
     <loc>/tags/learning/</loc>
-    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-05-25T23:10:09+00:00</lastmod>
   </url><url>
     <loc>/tags/navigation/</loc>
-    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-05-25T23:10:09+00:00</lastmod>
   </url><url>
     <loc>/tags/planning/</loc>
-    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-05-25T23:10:09+00:00</lastmod>
   </url><url>
     <loc>/tags/utility-based/</loc>
-    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-05-25T23:10:09+00:00</lastmod>
   </url><url>
     <loc>/posts/the-total-beginners-guide-to-game-ai-part-3/</loc>
-    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
+    <lastmod>2021-05-25T23:10:09+00:00</lastmod>
   </url><url>
     <loc>/posts/the-total-beginners-guide-to-game-ai-part-2/</loc>
-    <lastmod>2021-03-25T23:10:09+00:00</lastmod>
+    <lastmod>2021-04-03T00:36:28+00:00</lastmod>
   </url><url>
     <loc>/posts/the-total-beginners-guide-to-game-ai-part-1/</loc>
     <lastmod>2021-03-20T20:30:43+00:00</lastmod>
@@ -139,15 +172,6 @@
   </url><url>
     <loc>/posts/bitnami-redmine-upgrade-guide/</loc>
     <lastmod>2016-09-27T11:00:54+08:00</lastmod>
-  </url><url>
-    <loc>/tags/blog/</loc>
-    <lastmod>2016-08-18T14:12:40+08:00</lastmod>
-  </url><url>
-    <loc>/tags/markdown/</loc>
-    <lastmod>2016-08-18T14:12:40+08:00</lastmod>
-  </url><url>
-    <loc>/posts/markdown-syntax-zhtw/</loc>
-    <lastmod>2016-08-18T14:12:40+08:00</lastmod>
   </url><url>
     <loc>/tags/actionscript/</loc>
     <lastmod>2013-07-12T19:48:33+08:00</lastmod>

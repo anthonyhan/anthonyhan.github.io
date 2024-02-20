@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>utility ai on LimboNova</title>
+    <link>/tags/utility-ai/</link>
+    <description>Recent content in utility ai on LimboNova</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© Anthony</copyright>
+    <lastBuildDate>Wed, 10 Nov 2021 16:06:11 +0800</lastBuildDate>
+    <atom:link href="/tags/utility-ai/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何选择游戏AI架构</title>
+      <link>/posts/deciding-on-an-ai-architecture-which-tool-for-the-job/</link>
+      <pubDate>Wed, 10 Nov 2021 16:06:11 +0800</pubDate>
+      <guid>/posts/deciding-on-an-ai-architecture-which-tool-for-the-job/</guid>
+      <description>&lt;p&gt;&lt;strong&gt;Conference:&lt;/strong&gt; GDC 2010&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Session Name:&lt;/strong&gt; Deciding on an AI Architecture: Which Tool for the Job?&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Speaker(s):&lt;/strong&gt; Alex Champandard, Michael Dawe, Dave Mark, Steve Rabin, Charles Rich&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Track / Format:&lt;/strong&gt; AI Summit&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Video:&lt;/strong&gt; &lt;a href=&#34;https://gdcvault.com/play/1012411/Deciding-on-an-AI-Architecture&#34;&gt;GDC Vault - Deciding on an AI Architecture: Which Tool for the Job?&lt;/a&gt;&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;strong&gt;“工欲善其事，必先利其器。”&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;—— 《论语·卫灵公》&lt;/strong&gt;&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;AI 架构的选择是 AI 程序员需要解决的最重要问题之一。这个选择将为项目奠定基础，同时也决定了未来的方向。主要的 AI 架构都有自己的优缺点，很难确定哪一个架构最适合一个项目。&lt;/p&gt;&#xA;&lt;p&gt;本次讨论将从独特的角度探讨这个问题。每一种主流架构都有一位代言人，他们将被提供假想的游戏例子，并被要求解释为什么他们支持的架构是最合适的选择，而其他的则不合适。通过不同架构的代言人就同一问题进行讨论和分析，可以更全面地评估每种架构的优劣，并对具体项目做出更合适的建议。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>面向数据的行为树（1）：行为树入门 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第1篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。
+系列文章目录
+《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：
+
+面向数据的行为树（1）：行为树入门
+面向数据的行为树（2）：震惊！面向对象行为树并不面向数据
+面向数据的行为树（3）：数据导向流催生的行为树
+面向数据的行为树（4）：面向数据的行为树概述
+面向数据的行为树（5）：行为树结构剖析
+
+行为树简介
+什么是行为树？它的工作原理是什么？它在游戏AI中又起什么作用？
+
+本文介绍了作者将面向数据、内存优化的行为树二者结合，以简化开发过程中的创建和修改的试验（读作：探索）经历。作者写这篇文章是为了记录其发现和决定，并征求读者的反馈意见，最终实现一个真正有用的BSD许可的BT工具包。" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="面向数据的行为树（1）：行为树入门" />
+<meta property="og:description" content="这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第1篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。
+系列文章目录
+《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：
+
+面向数据的行为树（1）：行为树入门
+面向数据的行为树（2）：震惊！面向对象行为树并不面向数据
+面向数据的行为树（3）：数据导向流催生的行为树
+面向数据的行为树（4）：面向数据的行为树概述
+面向数据的行为树（5）：行为树结构剖析
+
+行为树简介
+什么是行为树？它的工作原理是什么？它在游戏AI中又起什么作用？
+
+本文介绍了作者将面向数据、内存优化的行为树二者结合，以简化开发过程中的创建和修改的试验（读作：探索）经历。作者写这篇文章是为了记录其发现和决定，并征求读者的反馈意见，最终实现一个真正有用的BSD许可的BT工具包。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/data-oriented-bt-series-1-introduction-to-behavior-trees/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-11-29T15:03:07+08:00" />
+<meta property="article:modified_time" content="2023-11-29T15:03:07+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="面向数据的行为树（1）：行为树入门"/>
+<meta name="twitter:description" content="这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第1篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。
+系列文章目录
+《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：
+
+面向数据的行为树（1）：行为树入门
+面向数据的行为树（2）：震惊！面向对象行为树并不面向数据
+面向数据的行为树（3）：数据导向流催生的行为树
+面向数据的行为树（4）：面向数据的行为树概述
+面向数据的行为树（5）：行为树结构剖析
+
+行为树简介
+什么是行为树？它的工作原理是什么？它在游戏AI中又起什么作用？
+
+本文介绍了作者将面向数据、内存优化的行为树二者结合，以简化开发过程中的创建和修改的试验（读作：探索）经历。作者写这篇文章是为了记录其发现和决定，并征求读者的反馈意见，最终实现一个真正有用的BSD许可的BT工具包。"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">面向数据的行为树（1）：行为树入门</h1>
+			<div class="meta">Posted on Nov 29, 2023</div>
+		</div>
+		
+
+		<section class="body">
+			<p>这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第1篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。</p>
+<h2 id="系列文章目录">系列文章目录</h2>
+<p>《面向数据的行为树》系列文章介绍了作者在面向数据的行为树设计过程中的思考和探索，以下是系列文章的目录：</p>
+<ol>
+<li>面向数据的行为树（1）：行为树入门</li>
+<li>面向数据的行为树（2）：震惊！面向对象行为树并不面向数据</li>
+<li>面向数据的行为树（3）：数据导向流催生的行为树</li>
+<li>面向数据的行为树（4）：面向数据的行为树概述</li>
+<li>面向数据的行为树（5）：行为树结构剖析</li>
+</ol>
+<h2 id="行为树简介">行为树简介</h2>
+<p>什么是行为树？它的工作原理是什么？它在游戏AI中又起什么作用？</p>
+<p><img src="http://images4.wikia.nocookie.net/__cb20100617193929/harrypotter/images/8/8e/Whomping_Willow_PA.jpg" alt="The mis-behaving Whomping Willow tree from the movie Harry Potter and the Prisoner of Azkaban - picture hosted by the Harry Potter Wiki"></p>
+<p>本文介绍了作者将面向数据、内存优化的行为树二者结合，以简化开发过程中的创建和修改的试验（读作：探索）经历。作者写这篇文章是为了记录其发现和决定，并征求读者的反馈意见，最终实现一个真正有用的BSD许可的BT工具包。</p>
+<h2 id="背景">背景</h2>
+<p>越来越多的游戏AI程序员采用了行为树(BT)来实现虚拟生物的响应式决策和控制，正如 Alex Champandard 在 &ldquo;retrospective for 2010 and outlook for 2011&rdquo;<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> 提到的那样。</p>
+<h2 id="行为树及其原理">行为树及其原理</h2>
+<p>作者对行为树的观点和理解很大程度上受到 Alex Champandard 的 AiGameDev.com 教程和线上大师课的影响。Alex 的行为树定义非常详实精细。关于游戏中行为树的其他重要在线资源包括 Damian Isla 关于 Halo 2 中 AI 的文章<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>、Max Dyckhoff 的 &ldquo;Decision Making and Knowledge Representation in Halo 3&rdquo;<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>，以及 Ricard Pillosu 的 &ldquo;Coordinating Agents with Behavior Trees&rdquo;<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup> 幻灯片中介绍其在孤岛危机中的应用。Joost van Dongen 在博客中介绍了行为树在《剑与勇士》中的使用<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup><sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>.</p>
+<p>以作者的理解，行为树不仅仅是树，而是有向无环图（DAG）。一个节点可以有多个父节点，父节点可以重用子树，从而实现模块化。</p>
+<p>行为树使用限制性更强但也更结构化的遍历定义方法，它取代了有限状态机 （FSM） 混乱难搞的状态转换。行为树是由节点组成的行为子树分层组织而成。访问一个节点，或者说访问以它为根的子树，它会按照它的预定行为或功能来运行。节点或子行为树的执行会产生一个汇总的返回状态，例如：</p>
+<ul>
+<li>节点在调用之前已经准备就绪，状态为 <em>ready</em></li>
+<li>已成功完成，状态为 <em>success</em></li>
+<li>行为尚未完成，仍在运行中，状态为 <em>running</em></li>
+<li>运行失败，没有副作用，状态为 <em>failed</em></li>
+<li>运行时发生错误，存在副作用，需要明确处理，状态为 <em>error</em></li>
+</ul>
+<p>更新行为树时，始终以_深度优先_顺序从其根节点开始遍历。每个遍历的节点都会影响遍历过程。 <em>选择器（Selector）</em> 节点会选择其中一个子节点（如果有的话）进行下一步遍历。在第一个子节点及其子树被遍历后，选择节点会重新运行以响应子节点返回的状态，从而决定是否应该向上遍历到其自身的父节点，还是选择下一个子节点进行下一步遍历。</p>
+<p>内部节点明确控制遍历语义，例如：</p>
+<ul>
+<li>在每次遍历时，<em>优先选择器（ priority selector）<sup id="fnref:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup></em> 要按优先顺序运行哪个子节点，直到第一个子节点成功或返回正在运行。这里有两种处理选择：
+<ol>
+<li>在下一次行为树更新时再次调用最后仍在运行的节点。</li>
+<li>始终从最高优先级子节点重新开始遍历，如果上一个正在运行的子节点没被选中时，取消它的运行。</li>
+</ol>
+</li>
+<li><em>序列选择器（ sequence selector）</em> 一个接一个地运行子节点以完成。如果一个或多个失败，则整个序列也失败。在没有重置或完成最后一个子节点的情况下，序列将存储最后运行的子节点，以便在下一次遍历时立即回到这个节点。</li>
+<li><em>循环（Loop）</em> 就像序列一样，但是它们在遍历到最后一个子节点时又会从头开始，而不是像序列节点那样返回到父节点。</li>
+<li><em>随机选择器（Random Selector）</em> 随机选择要访问的子节点。如果一个运行中的节点再次访问，直到它完成。</li>
+<li><em>并发（Concurrent）</em><sup id="fnref:8"><a href="#fn:8" class="footnote-ref" role="doc-noteref">8</a></sup> 节点在每次遍历中访问其所有子节点。预先指定的数量的子节点需要失败才能使并发节点失败。与真正并行运行其子节点不同，可能存在一种特定的遍历顺序，可以在向并发节点添加条件（见下文）时利用，因为一个早期失败的条件会阻止其后续并发兄弟节点的运行。</li>
+<li><em>装饰器（Decorator）</em> 节点通常只有一个子节点，并用于强制执行某种返回状态或执行定时/计数，从而限制子节点在给定时间内运行的频率，或者在不暂停的情况下可以执行的次数。</li>
+</ul>
+<p>叶节点可以分为：</p>
+<ul>
+<li><em>动作（Action）</em> ：最终引起角色或游戏世界状态的变化，例如规划路径并移动，探测最近的敌人，显示特定的动画，切换武器或播放指定的声音。动作通常会协调并调用不同的游戏系统。它们可能在一个模拟时钟周期（一帧）内运行，或者可能需要在多帧内才能完成其工作。</li>
+<li><em>条件（Condition）</em> ：检查某些角色或游戏世界状态是否为真。如果序列节点的一个子节点是条件，那么条件失败将阻止其在更新期间遍历后续节点。如果把条件节点放在并发节点下时，条件成为一种不变性检定，如果必要的状态变为非法，则阻止其兄弟节点运行。</li>
+</ul>
+<p>在行为树更新过程中，通过传递给其角色（Actor）特定黑板（Blackboard）上收集的或预先计算的值，动作和条件来获取对角色和世界状态的访问。</p>
+<h2 id="此处有龙9一个示例行为树及其遍历">”此处有龙“<sup id="fnref:9"><a href="#fn:9" class="footnote-ref" role="doc-noteref">9</a></sup>——一个示例行为树及其遍历</h2>
+<p>直到开始亲自实现行为树的更新遍历，才能真正理解了所有细节。为了缩短这一过程，我们先看一个龙的行为树，这是一个简单的行为树示例：</p>
+<ul>
+<li>
+<ol start="0">
+<li>根节点  <em>priority selector</em></li>
+</ol>
+<ul>
+<li>
+<ol>
+<li>守护宝藏 <em>concurrent selector</em></li>
+</ol>
+<ul>
+<li>1.1. 宝藏附近的小偷能否被发现？ <em>condition</em></li>
+<li>1.2. 赶跑（或吃掉）小偷 <em>sub-behavior</em></li>
+</ul>
+</li>
+<li>
+<ol start="2">
+<li>抢得更多财宝 <em>sequence selector</em></li>
+</ol>
+<ul>
+<li>2.1. 选择飞去的目标城堡！ <em>action</em></li>
+<li>2.2. 飞向城堡！ <em>action</em></li>
+<li>2.3. 攻击（并吃掉）守卫 <em>sub-behavior</em></li>
+<li>2.4. 是否有力气携带宝藏回去？ <em>condition</em></li>
+<li>2.5. 带上金子！ <em>action</em></li>
+<li>2.6. 飞回巢穴！ <em>action</em></li>
+<li>2.7. 将新抢来的宝藏放好！ <em>action</em></li>
+</ul>
+</li>
+<li>
+<ol start="3">
+<li>发一张宝藏照片到 Facebook <em>sub-behavior</em></li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<p>每个子节点（以及子节点的子节点，以及&hellip; 你懂的）可能是另一个定义行为的子树。在这个例子中，我们只要考虑子节点1和2的情况。</p>
+<p>实例中的根节点是一个 <em>优先（Priority）</em> 节点（id为0）。</p>
+<p><img src="/images/data-oriented-bt-introduction//images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_000.webp" alt=""></p>
+<p><em>节点1（守护宝藏）</em> 是一个有2个子节点的 <em>并行节点（concurrent）</em>。
+<em>节点1.1（宝藏附近的小偷能否被发现？）</em> 只有在宝藏附近的入侵者被发现时，才会返回 <em>success</em> ，否则返回 <em>failed</em>。要注意不仅要测试小偷是否靠近藏宝处，还要检查龙是否处于可以发现小偷的位置。如果龙目前正在去找黄金，它就会因为没看到小偷而不会攻击。请记住，优先选择器可能会首先检查其优先级最高的子行为，而不是继续执行上次“<em>running</em>”状态的子行为。</p>
+<p><em>节点1.2（赶跑（或吃掉）小偷）</em> 可以是一个子树，也可以是一个激活战斗系统的 <em>action</em>。</p>
+<p>回到根节点的第二个子节点，<em>节点2（抢得更多财宝）</em> 是一个序列（sequence）节点。<em>节点2.1</em> 是一个选择要袭击的城堡并搜索到达路径的动作。通过 <em>节点2.2</em>，龙沿着计算出的路径飞行到城堡。以上就是在示例遍历过程中涵盖的节点，其他节点也可以根据名称非常容易理解。</p>
+<p>遍历开始之前，所有节点的状态都是  <em>ready</em>，为执行做好准备。 </p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_001.webp" alt=""></p>
+<p>当行为树首次更新开始时，它会首先访问并运行状态为 <em>ready</em> 的根节点 0。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_002.webp" alt=""></p>
+<p>该优先节点从第一个子节点开始检查，直到某个子节点返回“<em>success</em>”或“<em>running</em>”状态。如果找不到成功或运行中的子节点，则该节点失败。</p>
+<p>优先节点的第一个子节点。是一个Id 为 1 ，状态为 <em>ready</em> 的并行节点。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_003.webp" alt=""></p>
+<p>要遍历它，就要同时访问它的所有的子节点。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_004.webp" alt=""></p>
+<p>它的子节点——条件节点 <em>1.1. 宝藏附近的小偷能否被发现？</em> 执行失败，因为没有看到入侵者。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_005.webp" alt=""></p>
+<p>因此整个并行节点 <em>1.（守护宝藏）</em> 执行失败。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_006.webp" alt=""></p>
+<p>优先节点 <em>0. 根节点</em> 尝试按其优先级顺序运行下一个子节点。 节点 <em>2. 抢得更多财宝</em> 已处于  <em>ready</em> 状态，因此被访问。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_007.webp" alt=""></p>
+<p>序列节点首先将遍历引导到其子节点  <em>2.1. 选择飞去的目标城堡！</em></p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_008.webp" alt=""></p>
+<p>目标城堡已成功被选中。
+A target castle has been chosen successfully.</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_009.webp" alt=""></p>
+<p>执行序列节点的下一个子节点 - 节点 <em>2.2. 飞向城堡！</em></p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_010.webp" alt=""></p>
+<p>由于城堡很远，因此在这一次更新步骤中无法到达，因此它返回  ”<em>running</em>“ 状态。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_011.webp" alt=""></p>
+<p>序列节点 2. 不能再往前，并且会返回 <em>running</em> 状态 至其父节点。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_012.webp" alt=""></p>
+<p>优先节点 根节点也以 <em>running</em> 状态退出，它找到了一个正在运行的子节点，因此不需要继续遍历优先级较低的子节点。此次更新遍历已完成。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_013.webp" alt=""></p>
+<p>在下一次遍历之前，所有未运行的节点都设置为 <em>ready</em> 状态。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_014.webp" alt=""></p>
+<p>在下一个模拟步骤中，行为树将再次更新，遍历将在根节点重新启动。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_100.webp" alt=""></p>
+<p>它会检查第一个子节点，但仍然失败，因为龙看不到它宝藏附近的小偷。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_101.webp" alt=""></p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_102.webp" alt=""></p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_103.webp" alt=""></p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_104.webp" alt=""></p>
+<p>因此遍历到达优先节点的下一个子节点 <em>2. 抢得更多财宝</em>，它还没有重置其 <em>running</em> 状态，并且仍然保存着上一次执行的子节点，因为没有更高优先级的兄弟节点运行，所以它没有被重置。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_105.webp" alt=""></p>
+<p>序列节点 <em>2. 抢得更多财宝</em> 已经存储了它最后访问的子节点：动作  <em>2.2.飞向城堡！</em>，在本次更新步骤中它可能会成功，继续运行，或者失败。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_intro_dragon_behavior_tree_example_106.webp" alt=""></p>
+<p>行为树的遍历图解暂时告一段落。</p>
+<h2 id="行为树与有限状态机的对比">行为树与有限状态机的对比</h2>
+<p>为什么要用行为树替代有限状态机（FSM）？</p>
+<p>FSM 状态之间的转换带来了很大的自由度，但也陷入了一个难以理解和追踪的混乱状态，随着状态的增多，这种情况变得越来越严重。不过分层有限状态机（HFSM）在这方面有所帮助。</p>
+<p>行为树的主要优点在于它们相对于有限状态机来说语义更加清晰，即使有点受限。更容易专注于设计者想要表达的内容，而对于复杂的有限状态机，常常让人感到有些迷茫和不知所措。在这种情况下，约束是有益的——它会为我们的思考指引方向。</p>
+<p>选择器迫使我们以一种非常具体的方式思考和看待问题，使得 FSM 状态转换的局限性显现出来。</p>
+<p>此外，作为原子构建块的 <em>条件（condition）</em> 和 <em>动作（action）</em> 可以插入选择器中，使其更具可重用性。一个动作甚至整个行为子树可以出现在树的多个位置。<em>条件（condition）</em> 和 <em>动作（action）</em> 节点也可以和特定的条件相结合，保证树的不同位置的行为正确执行。如果有与战斗招式相关的动作，那么将其与条件相结合，这些动作就可以在角色接近敌人并有足够的空间使用特定招式时执行。</p>
+<p>Alex Champamdard 经常强调要把动作、行为和子树视为要实现的目标，这些目标构成了行为树<sup id="fnref:10"><a href="#fn:10" class="footnote-ref" role="doc-noteref">10</a></sup>。行为树在运行时会检查它们是否可以完成，执行一系列步骤来接近目标，还要确保没有其他更高优先级的目标来“吸引”角色的关注。</p>
+<p>由于行为树清晰明了的结构，让内存组织结构的优化成为可能，从而能够实现非常有效的遍历，目前这在有限状态机上是无法想象的。</p>
+<h2 id="下一步计划">下一步计划</h2>
+<p>这篇文章就到这里了。希望能给你一个很好的介绍，让你了解行为树是什么，以及它是如何运作的。下一篇文章将解释为什么需要一个流式内存布局的行为树，这种面向数据的行为树是什么样子的，并且开始实现一个基于测试驱动的行为树。</p>
+<p><img src="/images/data-oriented-bt-introduction/altdev_bt_int_dragon_on_treasure.webp" alt=""></p>
+<h2 id="参考资料">参考资料</h2>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="http://web.archive.org/web/20111012155805/http://aigamedev.com/open/editorial/2010-retrospective/">&ldquo;This Year in Game AI: Analysis, Trends from 2010 and Predictions for 2011 by Alex J. Champandard&rdquo;</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://www.gamedeveloper.com/programming/gdc-2005-proceeding-handling-complexity-in-the-i-halo-2-i-ai">Isla. 2005. <em>Managing Complexity in the Halo 2 AI System</em></a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="http://web.archive.org/web/20111012155805/http://www.bungie.net/images/Inside/publications/presentations/publicationsdes/engineering/nips07.pdf">&ldquo;Dyckhoff. 2008. <em>Decision Making and Knowledge Representation in Halo 3</em>&rdquo;</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p><a href="http://web.archive.org/web/20111012155805/http://staff.science.uva.nl/~aldersho/GameProgramming/Papers/Coordinating_Agents_with_Behaviour_Trees.pdf">Pillosu. 2009. <em>Coordinating Agents with Behaviour Trees</em></a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5">
+<p><a href="http://joostdevblog.blogspot.com/2010/12/ai-in-swords-soldiers-part-1.html">Joost&rsquo;s Dev Blog, <em>AI in Swords &amp; Soldiers (part 1)</em></a>&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:6">
+<p><a href="http://joostdevblog.blogspot.com/2011/01/ai-in-swords-soldiers-part-2.html">Joost&rsquo;s Dev Blog, <em>AI in Swords &amp; Soldiers (part 2)</em></a>&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:7">
+<p>译注：作者的术语和目前常用BT术语有差别，Selector 指的是 Composite，Priority Selector 对应 Selector，Sequence Selector 对应 Sequence。&#160;<a href="#fnref:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:8">
+<p>译注：Concurrent 对应 Parallel 节点。&#160;<a href="#fnref:8" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:9">
+<p>译注：“这里有龙”（拉丁语：hic sunt dracones）是指将龙、海怪和其他神话生物的插图放置在地图上未被探索的、被认为存在潜在危险的区域。&#160;<a href="#fnref:9" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:10">
+<p>Alex J. Champandard’s <em>Getting Started with Decision Making and Control Systems</em>, AI Game Programming Wisdom 4, section 3.4, pp. 257–264, Course Technology, 2008&#160;<a href="#fnref:10" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+		</section>
+
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/game-dev">game dev</a></li>
+					
+					<li><a href="/tags/game-ai">game ai</a></li>
+					
+					<li><a href="/tags/behavior-tree">behavior tree</a></li>
+					
+					<li><a href="/tags/data-oriented-design">data oriented design</a></li>
+					
+					<li><a href="/tags/altdevblogaday">AltDevBlogADay</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
+<script src="https://utteranc.es/client.js"
+        repo=""
+        issue-term="title"
+        label="💬comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+		
+	</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>
