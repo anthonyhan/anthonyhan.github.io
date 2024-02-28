@@ -14,7 +14,7 @@
 
 前言
 今天我们来看看行为树运行时实现的主要数据结构，以及在行为树更新期间它们是如何相互作用的。
-![[/images/behavior-tree-entrails/treebeard.webp]]" />
+" />
 	<meta property="og:image" content=""/>
 	<meta property="og:title" content="面向数据的行为树（5）：行为树结构剖析" />
 <meta property="og:description" content="这篇文章是 Bjoern Knafla 撰写的系列文章《面向数据的行为树（Data-oriented Behavior Tree Series）》 第5篇。文章原载于AltDevBlogADay，AltDevBlogADay 是一个技术文集，主要由游戏业界老兵们于2011-2014年撰写。原站已经关闭，即使时隔多年，很多文章仍值得一看。
@@ -29,7 +29,7 @@
 
 前言
 今天我们来看看行为树运行时实现的主要数据结构，以及在行为树更新期间它们是如何相互作用的。
-![[/images/behavior-tree-entrails/treebeard.webp]]" />
+" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/posts/data-oriented-bt-series-5-behavior-tree-entrails/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2024-02-18T22:24:57+08:00" />
@@ -48,7 +48,7 @@
 
 前言
 今天我们来看看行为树运行时实现的主要数据结构，以及在行为树更新期间它们是如何相互作用的。
-![[/images/behavior-tree-entrails/treebeard.webp]]"/>
+"/>
 <script src="/js/feather.min.js"></script>
 	
 	
@@ -124,7 +124,7 @@
 </ol>
 <h2 id="前言">前言</h2>
 <p>今天我们来看看行为树运行时实现的主要数据结构，以及在行为树更新期间它们是如何相互作用的。</p>
-<p>![[/images/behavior-tree-entrails/treebeard.webp]]</p>
+<p><img src="/images/data-oriented-bt-entrails/treebeard.webp" alt=""></p>
 <h2 id="数据结构">数据结构</h2>
 <p>在本系列的上一篇文章里，我们了解了面向数据行为树背后的核心思想。核心思路是尽量减少存储和处理行为树的所需内存，并将数据流式传输到计算单元的本地缓存变得容易（尚未经验证）。</p>
 <p>该实现基于三个主要的数据结构：</p>
@@ -191,7 +191,7 @@
 <li>完成更新。</li>
 </ol>
 <p>让我们依次看一下这些步骤，下图以另一种视角展示了这一过程。</p>
-<p>![[/images/behavior-tree-entrails/interpreting-diagram.webp]]</p>
+<p><img src="/images/data-oriented-bt-entrails/interpreting-diagram.webp" alt=""></p>
 <h3 id="1-执行形状项">1. 执行形状项</h3>
 <p>调用形状项类型特定的函数来解释索引/选定的形状项。 它在 Actor 状态缓冲区中搜索与形状项索引相关联的状态。 如果未找到，则创建默认状态，例如启动操作或从第一个子级启动序列。</p>
 <p>持续动作简单地返回其状态作为其执行状态。</p>

@@ -162,13 +162,13 @@
 </ol>
 <p>限制即时动作仅访问 Actor 的黑板，延迟动作执行，并引入持续动作。基于节点和指针的行为树实现也可以使用这些设计。</p>
 <p>为了摆脱节点在树结构上下追逐指针的随机内存访问，可以通过预先遍历将图形展平为节点数组—— 流。</p>
-<p>![[/images/data-oriented-bt-overview/depth-first-behavior-tree-traversal.webp]]</p>
+<p><img src="/images/data-oriented-bt-overview/depth-first-behavior-tree-traversal.webp" alt=""></p>
 <p>这个流描述了行为树的静态 <em>形状（shape）</em> 。</p>
-<p>![[/images/data-oriented-bt-overview/behavior-tree-shape-token-stream-for-traversal-stack-approach-with-marked-inner-node-scopes.webp]]</p>
+<p><img src="/images/data-oriented-bt-overview/behavior-tree-shape-token-stream-for-traversal-stack-approach-with-marked-inner-node-scopes.webp" alt=""></p>
 <p>形状流的遍历主要是向前遍历的（如果父节点中止时子节点（即子行为）被放弃，则会向后跳转，停止正在运行的动作），子行为流可能会跳过。因此，数据的流式传输甚至预取是一种选择。 由于行为树的分支性质，前向跳过可能会减少数组存储方法的性能收益。</p>
 <p>每个行为树实例，也称为Actor，都有自己的遍历状态（例如，上次遍历期间哪个序列的子节点正在运行，以便在下一次决策更新期间再次访问）和 <em>动作状态</em>（准备运行（ready），运行中（running），成功完成（success），没有副作用的失败（fail），有副作用的错误（error）），这些都是基于静态形状流。只有内部节点（非动作节点）有一个遍历状态。 由于所有内部节点决定如何遍历 Actor 的行为树，因此决定运行哪些动作，所以我将它们的状态称为 <em>决策器状态（decider state）</em> 而不是 <em>遍历状态（traversal state）</em> 。</p>
 <p>状态（用于动作和决策节点）包含与其对应的形状项索引,并根据索引以递增顺序排序。 为了更新 Actor 的决策过程，解释器（一种虚拟机（VM）或处理内核）从 Actor 的行为形状流的开头开始遍历。 如果当前访问的节点没有找到状态，则使用其默认状态。 这种方式可以存储较少的状态数据。相比始终为每个形状节点存储状态，这个方案降低了状态数据移动的带宽需求。</p>
-<p>![[/images/data-oriented-bt-overview/behavior-tree-data-and-interpreter.webp]]</p>
+<p><img src="/images/data-oriented-bt-overview/behavior-tree-data-and-interpreter.webp" alt=""></p>
 <p>通过分析行为树的静态形状，能够确定动作和决策器状态的数量。 因此可以进行必要的内存预分配。</p>
 <h3 id="编辑时">编辑时</h3>
 <p>我们将在后续文章继续研究编辑时。 主要考虑的内容有:</p>
@@ -180,14 +180,14 @@
 </ul>
 <h3 id="执行">执行</h3>
 <p>行为树系统在每个更新期间按四个阶段运行:</p>
-<p>![[/images/data-oriented-bt-overview/behavior-tree-runtime-processing-with-edit-stage.webp]]</p>
+<p><img src="/images/data-oriented-bt-overview/behavior-tree-runtime-processing-with-edit-stage.webp" alt=""></p>
 <ol>
 <li>收集延迟和持续动作触发的动作状态变更。 将 Actor 黑板更新。
-![[/images/data-oriented-bt-overview/behavior-tree-input-stage.webp]]</li>
+<img src="/images/data-oriented-bt-overview/behavior-tree-input-stage.webp" alt=""></li>
 <li>将编辑更改应用于受影响的行为形状流，及其 Actor 动作和遍历状态。
-![[/images/data-oriented-bt-overview/behavior-tree-update-of-many-actors-by-multiple-interpreters.webp]] </li>
+<img src="/images/data-oriented-bt-overview/behavior-tree-update-of-many-actors-by-multiple-interpreters.webp" alt=""> </li>
 <li>遍历与不同行为树相关联的 Actor ，尽可能并发执行。
-![[/images/data-oriented-bt-overview/behavior-tree-update-and-action-request-generation.webp]]</li>
+<img src="/images/data-oriented-bt-overview/behavior-tree-update-and-action-request-generation.webp" alt=""></li>
 <li>将收集的动作执行和取消请求分发到各自的系统。</li>
 </ol>
 <p>决策更新由解释器执行，也可以称之为内核，或工作在行为树形状、决策，以及动作状态流上的虚拟机（VM）。</p>

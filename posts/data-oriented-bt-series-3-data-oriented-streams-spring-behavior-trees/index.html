@@ -244,43 +244,43 @@
 <h3 id="数据处理">数据处理</h3>
 <h4 id="扁平化处理">扁平化处理</h4>
 <p>让我们再次看一下这个系列第一篇文章中的示例行为树：</p>
-<p>![[/images/data-oriented-bt-streams-spring/example-behavior-tree.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/example-behavior-tree.webp" alt=""></p>
 <p>根节点是一个优先选择器，它会重新运行返回 <em><code>running</code></em> 状态的子节点，而不是每次从第一个子节点重新运行。节点 3 是一个子树的占位符。</p>
 <p>让我们跟踪第一次遍历的路径：</p>
-<p>![[/images/data-oriented-bt-streams-spring/traversal-of-an-example-behavior-tree.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/traversal-of-an-example-behavior-tree.webp" alt=""></p>
 <p>在更新过程中，优先节点 <code>0</code> 首先尝试执行其第一个子节点：并行节点 <code>1</code>。然而它的第一个子节点 <code>1.1</code>，一个检查 Actor 黑板数据某个条件的 <em>即时动作</em>，失败了。遍历返回到根优先节点，然后尝试下一个子树：序列节点 <code>2</code>，访问其第一个子节点 <code>2.1</code>。这个 <em>即时动作</em> 返回 <em><code>success</code></em>，因此序列接着运行子节点 <code>2.2</code>，它发出一个延迟动作请求并返回 <em><code>running</code></em> 状态。序列节点同样以 <em><code>running</code></em> 状态退出，优先节点也是如此。第一次遍历完成。图中橙色线条表示遍历路径。</p>
 <p>通过行为树的遍历留下的路径作为它的踪迹。行为树更新从其根部开始，这是一个深度优先的遍历，然后由内部节点的遍历语义控制。在进入时访问每个内部节点。基于内部节点的更新语义，可能会访问其中一个子节点。从子树返回时，再次访问内部节点以对返回的子节点结果状态做出反应，决定是进入另一个子节点，还是离开内部节点？在节点 <code>2</code> 和它的子节点之间的之字形线条明确展示了这个内部节点到子节点再返回的遍历过程。</p>
 <p>如果按照深度优先的方式遍历整个树，即访问每个节点而不考虑内部节点的遍历语义：</p>
-<p>![[/images/data-oriented-bt-streams-spring/depth-first-behavior-tree-traversal.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/depth-first-behavior-tree-traversal.webp" alt=""></p>
 <p>在每次访问节点时，我们为其分配一个编号。分配的值从一个节点到另一个节点递增。从编号为<code>0</code>的根节点开始，我们对所有节点进行编号：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-with-nodes-enumerated-depth-first.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-with-nodes-enumerated-depth-first.webp" alt=""></p>
 <p>为了简化后续的遍历图，删除了节点类型名称，并缩小了节点符号：</p>
-<p>![[simplified-behavior-tree-with-nodes-enumerated-depth-first.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/simplified-behavior-tree-with-nodes-enumerated-depth-first.webp" alt=""></p>
 <p>现在，将每个节点的编号解释为数组或流中的索引。整个行为树被扁平化为一系列连续的标记，代表节点的普通数据结构（POD）。内部父节点标记始终位于其子节点的扁平化子树之前。这个 <em>行为流（behavior stream）</em> 描述了行为树的结构，虽然它是扁平化的，它的形状也称为 <em>行为树形状标记流（behavior tree shape token stream）</em> ：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-shape-token-stream-for-traversal-stack-approach-with-marked-inner-node-scopes.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-shape-token-stream-for-traversal-stack-approach-with-marked-inner-node-scopes.webp" alt=""></p>
 <p>由相同行为树控制的所有 Actor 共享其 <em>形状（Shape）</em>。但 Actor 的遍历状态是基于其自己的世界知识，所以它是不共享的。</p>
 <p>典型的树遍历通过从索引为 <code>0</code> 的根标记开始迭代流。代表内部节点的标记影响迭代，例如通过跳过扁平化子树所占用的索引范围，来直接跳转到最后要运行的子节点。跳转到子节点意味着迭代到子树的根节点标记的索引。</p>
 <p>当一个子树返回时，其父节点需要对结果状态做出反应，以决定是继续下一个子树（之字形）还是离开并将遍历决策权交给更高级别的父节点。如何跟踪父节点及其遍历语义，从而对返回的状态做出反应？一种解决方案是 <em>纯流</em> 或 <em>形状流</em> 的方法，另一种方法涉及到遍历栈。这两种方法都允许从形状标记到形状标记的迭代，并保持函数调用栈平坦。处理标记时会调用一个基于标记类型的相关函数。在离开函数后，轮到流中的下一个标记。简单地遍历行为树会调用每个节点的更新函数 <em><code>update()</code></em> ，该函数本身调用子节点的更新函数，后果是：无法控制函数的调用栈深度。</p>
 <h5 id="纯流遍历">纯流遍历</h5>
 <p>最直接的之字形处理方式不仅在行为流中存储一个单一的节点标记，而且在内部节点的每个扁平化子树后面存储一个额外的标记。这些特殊的 <em>守卫</em> 标记存储了如何对子树的结果状态做出何种反应信息，它们“守卫”着这些子树。一个序列守卫标记会在 <em><code>fail</code></em> 的返回状态下跳转到最后一个子守卫标记后面的那个标记，这个标记表示序列子树及其所有直接和间接子节点的标记范围的结束。跳转将会落在序列的父节点的守卫标记上。我们称这个处理内部节点的语义和范围的方法为 <em>“纯流遍历法”</em> 。</p>
 <p>下面是包括守卫标记的扁平化示例（在其相关节点的编号后面标有“g”），橙色线条表示遍历方向和遍历轨迹：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-pure-token-stream-with-explicilty-marked-inner-node-child-guard-token.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-pure-token-stream-with-explicilty-marked-inner-node-child-guard-token.webp" alt=""></p>
 <p>回到上面的示例，这次我们用字符 <code>A</code> 到 <code>K</code> 标注遍历 <code>0</code> 的每个节点访问：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-traversal-0-steps-a-k.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-traversal-0-steps-a-k.webp" alt=""></p>
 <p>这是对应的纯流遍历：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-pure-stream&mdash;traversal-0-steps-a-k.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-pure-stream---traversal-0-steps-a-k.webp" alt=""></p>
 <p>我们没有明确标记出守卫标记，只显示其内部节点的符号和编号。纯行为形状标记流是单向迭代的，沿着相同的迭代方向，未访问的节点标记会被跳过。</p>
 <p>下一次行为树更新从根节点上次 <code>running</code>状态的子节点开始遍历。该子节点，即序列节点 <code>4</code>，遍历状态指示遍历到它的最后 <code>running</code> 的子节点，即节点 <code>6</code>，其发出的动作已经以 <code>success</code> 状态完成，并为 Actor 设置了该状态。因此，遍历继续到节点 <code>7</code> 的形状标记，该标记发出一个延迟的动作请求，并立即以 <code>running</code> 状态返回。行为标记节点 <code>4</code> 和 <code>0</code> 也以 <code>running</code> 状态相继退出。</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-traversal-1-steps-a-g.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-traversal-1-steps-a-g.webp" alt=""></p>
 <p>使用纯流表示法，本次遍历如下所示：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-pure-stream&mdash;traversal-1-steps-a-g.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-pure-stream---traversal-1-steps-a-g.webp" alt=""></p>
 <p>节点 <code>1</code> 及其子节点和子守卫标记的整个结构被跳过。序列节点标记 <code>4</code> 直接跳到它上次 <code>running</code> 状态的子节点，即节点 <code>6</code> 的标记，以继续更新遍历。它返回了 <code>success</code> 状态，节点 <code>4</code> 的守卫标记决定在序列中继续前进，到达标记 <code>7</code>。标记 <code>7</code> 请求了其相应的延迟动作之后，其后面的守卫标记会以 <code>running</code>  状态离开序列，并跳到下一个节点 <code>0</code> 的序列守卫标记。这个守卫标记也以 <code>running</code> 状态退出了 。遍历 <code>1</code> 完成。</p>
 <h5 id="使用遍历栈进行遍历">使用遍历栈进行遍历</h5>
 <p>处理这种之字形跳跃的另一种方式是使用形状标记的行为流，行为流中每个节点仅包含一个标记。在更新过程中使用 <em>遍历栈（traversal stack）</em> 将当前表示内部节点范围的形状标记压入/弹出。我们可以分析行为树，以确定所需的最大遍历深度，从而确定所需的栈大小。</p>
 <p>在遍历形状标记流时，每当遇到/进入内部节点标记时，就会将一个栈标记推送到遍历栈上。在处理完形状标记后，会检查顶部遍历栈标记。它定义了上一个处理的形状标记所属的父节点，并决定如何处理上一个处理的形状标记返回的状态。它还包含有关其内部节点直接和间接子节点的索引范围信息。因此，它可以确定最后处理的标记索引是否仍属于内部节点索引范围。</p>
 <p>为了退出内部节点，将弹出遍历栈，增加流迭代索引以离开内部节点及其子节点的索引范围，并且（如果存在的话）新的栈顶的标记处理退出的结果状态。它可能选择进入其下一个子节点的首个形状标记进行遍历，或者像上面描述的那样退出，依此类推。</p>
 <p>让我们再次看看以下深度优先展平的行为树示例：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-shape-token-stream-for-traversal-stack-approach-with-marked-inner-node-scopes.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-shape-token-stream-for-traversal-stack-approach-with-marked-inner-node-scopes.webp" alt=""></p>
 <p>优先节点 <code>0</code> 的遍历栈标记知道它的子树跨越从<code>0</code>（栈标记本身的内部节点）到<code>12</code>的标记索引范围。内部节点<code>1</code>的遍历堆栈标记跨越从<code>1</code>到<code>3</code>的索引范围，而序列节点<code>4</code>的栈标记的索引范围从索引<code>4</code>到索引<code>11</code>。例如，如果节点<code>5</code>返回<code>success</code>的结果状态，那么其直接父节点<code>4</code>的栈标记会看到它仍在其范围内，并且流迭代应该继续到标记<code>6</code>。但如果节点<code>11</code>的标记返回<code>success</code>，则栈节点标记会检测到它是序列节点<code>4</code>的最后一个返回的子节点，因此将退出序列，并且序列的父节点的栈标记应决定遍历如何继续。</p>
 <p>将一个栈标记视作一个守卫，可为内部节点的所有子节点重复使用。</p>
 <p>这就是 <em>遍历栈方法</em> 。下面结合遍历状态处理，展示了一个示例行为树遍历。</p>
@@ -308,61 +308,61 @@
 <h5 id="行为流遍历示例">行为流遍历示例</h5>
 <p><strong>使用遍历堆栈和缓冲区收集节点遍历状态</strong></p>
 <p>现在抛开抽象描述，让我们把所有的内容都放到一起。利用已经介绍过的行为树遍历示例，我们来研究遍历堆栈和遍历状态如何引导对行为树形状标记流的迭代。快速回顾一下遍历步骤 <code>0</code> 是什么样子的：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-traversal-0-steps-a-k.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-traversal-0-steps-a-k.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>Start</code>：以下是所有由同一行为树控制的所有 Actor 共享的形状流，以及遍历堆栈，上次遍历状态流和下次遍历状态缓冲区：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-start.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-start.webp" alt=""></p>
 <p>上次遍历状态流为空，所有节点都处于默认初始遍历状态下。例如，序列节点将从第一个子节点开始遍历。</p>
 <p>形状标记的符号是暗淡的，这是由于它们在遍历步骤 <code>0</code> 期间尚未被遍历到：</p>
-<p>![[/images/data-oriented-bt-streams-spring/legend-of-symbols-used-for-behavior-stream-iteration-with-a-traversal-stack-figures.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/legend-of-symbols-used-for-behavior-stream-iteration-with-a-traversal-stack-figures.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>A</code>： 第一次迭代步骤进入优先节点根节点 <code>0</code> 的标记。没有关联的遍历状态，它访问了第一个子节点 <code>1</code>。优先节点是一个内部节点，因此将一个优先节点的遍历栈标记压入到遍历堆栈上：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-a.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-step-a.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>B</code>：步骤 <code>B</code> 处理了节点 <code>1</code> 的形状标记。并行节点需要对其子节点的行为结果状态做出反应。为此，它将自己的遍历栈标记压入堆栈：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-b.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-step-b.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>C</code>：并行节点从左到右运行其子节点，并且只在子节点返回 <code>fail</code> 或 <code>error</code> 状态时提前退出。子节点 <code>2</code> 的即时动作形状标记更新并返回 <code>fail</code> ：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-c.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-step-c.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>D</code>：在步骤 D 中，并行节点 <code>1</code> 通过其遍历栈上的标记，对子节点的 <code>fail</code> 结果作出反应。它决定也使用  <code>fail</code> 状态放弃。这意味着遍历堆栈被弹出（请参见步骤 <code>E</code> 中的效果），形状流迭代器向前推进，离开并行子树的索引范围。由于并行节点始终会尝试重新运行所有子节点，因此不需要存储遍历状态：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-d.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-step-d.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>E</code>：在弹出遍历堆栈后，我们立即检查（重新）出现的堆栈顶部的标记，执行其对应节点的遍历语义，上一个子节点的行为返回状态是什么，流迭代器是否到达堆栈顶部标记对应的流范围的末尾？在目前情况下，遍历仍在节点 <code>0</code> 的索引范围内，并且已推进到第二个子树的起始标记 <code>4</code>。由于第一个子节点失败，优先节点尝试运行这个子节点：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-e.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-step-e.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>F</code>：处理序列节点 <code>4</code> 的标记，将它的堆栈标记压入遍历栈，并将流迭代器推进到它的第一个子节点 <code>5</code>：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-f.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-step-f.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>G</code>：在步骤 <code>G </code>中，处理即时动作标记 <code>5</code> 成功，并将形状流迭代器推进到节点 4 的下一个子节点：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-g.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-step-g.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>H</code>：一如既往地，在处理形状标记后，顶部遍历栈标记被解释，要对上一个返回的行为状态做出反应。对于序列标记<code>4</code>来说，它可以安全地遍历到下一个子节点<code>6</code>：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-h.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-step-h.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>I</code>：节点 <code>6</code> 的形状标记在步骤 <code>I</code> 中发出了延迟动作请求，并返回结果状态 <code>running</code>：</p>
-<p>![[/images/data-oriented-bt-streams-spring/bt_traversal_behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-i.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/bt_traversal_behavior-tree-stream-with-traversal-stack---traversal-0-step-i.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>J</code>：步骤<code>J</code>包括处理序列节点<code>4</code>的顶部堆栈标记。由于子节点返回 <code>running</code> 时，序列会退出，它会将形状流迭代器推进到节点 <code>4</code> 的子节点（和它们的子节点）范围的末尾。为了下次更新作准备，序列的遍历状态，即上次正在运行的子节点，被添加到下次遍历状态缓冲区中。退出序列时也会弹出其遍历栈标记：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-j.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-step-j.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>K</code>：弹出遍历堆栈后，处理新的顶部遍历标记，发现优先节点<code>0</code>的堆栈标记，它最后尝试的子节点返回 <code>running</code> 状态，因此它也以 <code>running</code> 状态退出。为此，它首先将其上次正在运行的子节点记录在下次遍历状态缓冲区中，然后弹出遍堆栈，并将形状流迭代器推进到其范围的末尾：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-step-k.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-step-k.webp" alt=""></p>
 <p>Traversal <code>0</code> Step <code>End</code>：在步骤<code>K</code>中，形状流的末尾已经到达。更新遍历<code>0</code>结束：
 In step <code>K</code> the end of the shape stream has been reached – update traversal <code>0</code> ends:</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-end.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-end.webp" alt=""></p>
 <p>为下一次更新做准备，下次遍历状态缓冲区被重新排序：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-0-reorder-state.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-0-reorder-state.webp" alt=""></p>
 <p>下一轮，以下是下一个更新，遍历<code>1</code>的路径：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-traversal-1-steps-a-g.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-traversal-1-steps-a-g.webp" alt=""></p>
 <p>Traversal <code>1</code> Step <code>Start</code>：在开始更新遍历<code>1</code>之前，重新排序的下次遍历状态被复制为上次遍历状态流，并清除下次遍历状态缓冲区：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-1-start.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-1-start.webp" alt=""></p>
 <p>Traversal <code>1</code> Step <code>A</code>：遍历<code>1</code>的步骤<code>A</code>处理形状标记<code>0</code>，它在 <em>上次遍历状态流</em> 上检测到上次遍历状态。节点的遍历堆栈标记被压入到遍历堆栈上，形状流迭代器被推进到上次<code>running</code>的子节点<code>4</code>，并增加 <em>上次遍历状态流</em> 的迭代器：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-1-step-a.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-1-step-a.webp" alt=""></p>
 <p>Traversal <code>1</code> Step <code>B</code>：在步骤<code>B</code>中，形状标记<code>4</code>发现了它的上次遍历状态，增加上次遍历状态流迭代器，将形状流迭代器跳到它上次<code>running</code> 的子节点<code>6</code>，并压入一个遍历堆栈标记到遍历堆栈上：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-1-step-b.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-1-step-b.webp" alt=""></p>
 <p>Traversal <code>1</code> Step <code>C</code>：自上次行为树更新以来，通过形状标记<code>6</code>请求的动作已经执行并成功：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-1-step-c.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-1-step-c.webp" alt=""></p>
 <p>Traversal <code>1</code> Step <code>D</code>：序列节点<code>4</code>的堆栈标记允许其前进到子节点<code>7</code>：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-1-step-d.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-1-step-d.webp" alt=""></p>
 <p>Traversal <code>1</code> Step <code>E</code>：形状标记<code>7</code>为 Actor 请求了一个延迟动作，并返回一个 <code>running</code> 的行为状态：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-1-step-e.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-1-step-e.webp" alt=""></p>
 <p>Traversal <code>1</code> Step <code>F</code>：处理完每个形状标记后都会检查顶部遍历堆栈标记。堆栈标记决定退出其序列形状流的索引范围，将序列<code>4</code>的遍历状态添加到下次遍历状态缓冲区中，并返回<code>running</code>状态。弹出遍历堆栈（请参阅步骤G的效果）：</p>
-<p>![[/images/data-oriented-bt-streams-spring/bt_traversal_and_stbehavior-tree-stream-with-traversal-stack&mdash;traversal-1-step-f.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/bt_traversal_and_stbehavior-tree-stream-with-traversal-stack---traversal-1-step-f.webp" alt=""></p>
 <p>Traversal <code>1</code> Step <code>G</code>：一如既往：弹出遍历堆栈后会检查新的顶部堆栈标记。优先节点<code>0</code>发现它的子节点以  <code>running</code> 状态退出了。因此，它的工作也完成了——在下次遍历状态缓冲区保存下一次遍历要从哪个子节点开始，将形状流推进到它范围的末尾，并弹出遍历堆栈：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-1-step-g.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-1-step-g.webp" alt=""></p>
 <p>Traversal <code>1</code> Step <code>End</code>：遍历<code>1</code>结束，已经到达形状流的末尾，并且遍历堆栈为空：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal1-end.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal1-end.webp" alt=""></p>
 <p>我们将下次遍历缓冲区重新排序，然后结束遍历示例：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack&mdash;traversal-1-reorder-state.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-stream-with-traversal-stack---traversal-1-reorder-state.webp" alt=""></p>
 <p>请记住，<strong>行为树形状流中的节点标记、遍历堆栈和状态缓冲区都是不同的数据类型</strong>。而且遍历状态标识了序列或选择节点要运行的下一个子节点，或者包含了装饰节点的计数器或计时器，而节点返回的行为结果状态指定了相关行为是 <em>成功（<code>success</code>）</em> 、 <em>正在运行（<code>running</code>）</em> 、 <em>失败（<code>fail</code>）</em> 还是发生了 <em>错误（<code>error</code>）</em> 。</p>
 <h3 id="行为流处理">行为流处理</h3>
 <p>这真是一个相当漫长的过程。让我们总结一下我们得到的东西：</p>
@@ -376,7 +376,7 @@ In step <code>K</code> the end of the shape stream has been reached – update
 </ul>
 <p>排序流形状标记、状态缓冲区、以及状态流，从而实现简单的单向流迭代。每次遍历都会生成一个新的遍历状态流和延迟动作请求缓冲区。简而言之：行为树、 Actor 的遍历状态、动作请求完全用数据表示，并且数据存储在数组中。不需要指针，只需要索引来遍历行为流。Actor 的行为树遍历将这些数据转换并生成下一次遍历数据。这有点像一个虚拟机（VM）在指令和数据流之间处理，或者像数据流通过计算内核。</p>
 <p>对所有 Actor 的行为树进行更新，可以分为多个阶段，如下图所示：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-runtime-processing-stages-without-edit-stage.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-runtime-processing-stages-without-edit-stage.webp" alt=""></p>
 <p>橙色阶段由行为树组件/系统直接控制，而白色块表示与行为树交互的阶段，但它们受其他组件/系统控制。</p>
 <p>在每个游戏 AI 模拟步骤中：</p>
 <ol>
@@ -439,7 +439,7 @@ In step <code>K</code> the end of the shape stream has been reached – update
 <p>分析增量命令队列以合并更改来优化和缩短更改数量是明智的,例如,如果后续命令中将删除前面命令添加的节点,为什么要通过第一批增量命令添加这些节点呢。</p>
 <p>分析增量命令队列以合并更改，从而优化和缩短更改数量，这个做法是有意义的。例如，如果前一个命令添加的节点会被后一个命令删除，为什么还要添加这些节点呢。</p>
 <p>将增量命令集成到运行时的额外 <em>“编辑阶段”</em> 中：</p>
-<p>![[/images/data-oriented-bt-streams-spring/behavior-tree-runtime-processing-with-edit-stage.webp]]</p>
+<p><img src="/images/data-oriented-bt-streams-spring/behavior-tree-runtime-processing-with-edit-stage.webp" alt=""></p>
 <p>在后续的博文中，我们将探讨关于模块化、行为查找节点，以及如何应用 Actor 的运行时变更，编辑阶段也会发挥重要作用。</p>
 <p>为了调试和监控运行时行为，开发时组件从指定的 Actor 和行为形状流接收数据。开发方面要能够发现游戏运行时、其行为流以及相关的 Actor 状态。需要运行时扩展来收集完整的遍历路径。需要从形状标记索引映射到编辑组件节点，从而进行可视化，设想树中更新的节点的高亮显示就像一种闪耀的“圣诞树”。除此之外，结合运行时流断点来单步执行 Actor 或所有 Actor 的遍历，这样也有助于调试。</p>
 <p>在行为树开发期间，树遍历的速度或效率似乎没那么重要。在 GUI 中，每次只操作一个行为树方案，而不是遍历多个树和每个树中的众多 Actor。或许调试和监控运行时需要在编辑组件中进行高效的可视化，但在确定之前，我们将针对不同类型的节点去实现基于指针的方式，因为它最接近开发期间对行为层次结构中的父子关系的关注。</p>
