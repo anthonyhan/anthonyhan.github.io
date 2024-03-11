@@ -76,45 +76,8 @@
 				
 				
 				<section class="list-item">
-					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-2/">游戏AI入门指南(Part 2)</a></h1>
-					<time>Apr 3, 2021</time>
-					<br><div class="description">
-	
-	<p><strong>原文：</strong> <a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&rsquo;s Guide to Game AI</a>
-<strong>作者：</strong> <a href="https://www.gamedev.net/profile/2996-kylotan/">Ben Sizer</a>
-<strong>译者：</strong> <a href="https://www.limbonova.com/about/#blog-author">Anthony Han</a></p>
-<h2 id="进阶决策">进阶决策</h2>
-<p>虽然简单的反应型系统已十分强大，但在很多情况下还是不够完善的。有时我们想根据代理当前正在做的事情做出不同的决定，并将其作为一个条件来使用，那么就会有些不太方便。有时因为条件太多，导致无法在决策树或脚本中表达清楚。有时在决定下一步行动之前，需要先思考再评估情况将如何变化。对于这些问题，我们需要更复杂的解决方案。</p>
-<h3 id="有限状态机">有限状态机</h3>
-<p>有限状态机（Finite State Machine，简称FSM）是一个花哨的专用术语，来描述这样的东西：举例来说，某个AI代理目前处于几种可能的状态中，它可以从一个状态转换到另一个状态。而这些状态的数量有限，因此得名。现实生活中的例子如一组交通信号灯，它会从红色变成黄色，再变成绿色，然后再变回红色。不同的地方有不同的亮灯顺序，但原理是相同的——每个状态代表某种事物（例如“停止”，“前进”，“尽可能停止”等），任何时候都仅处于一种状态，并且它会根据简单的规则从一个状态过渡到另一个状态。</p>
-<p>这非常适用于游戏中的NPC。一个警卫可能具有以下状态：</p>
-<ul>
-<li>巡逻</li>
-<li>攻击</li>
-<li>逃跑</li>
-</ul>
-<p>当状态改变时，你可能会想到这些规则：</p>
-<ul>
-<li>如果警卫看到敌人，就立即攻击</li>
-<li>如果警卫正在攻击但无法再看到敌人，那么返回巡逻</li>
-<li>如果警卫正在攻击但受了重伤，那么开始逃跑</li>
-</ul>
-<p>这个规则很简单，你可以直接把它写成硬编码的if语句，用一个变量来保存警卫的状态，并进行各种检查：查看附近是否有敌人，警卫的健康状况如何等等。但如果我们要添加更多的状态：</p>
-<ul>
-<li>空闲（巡逻期间）</li>
-<li>搜寻（刚才发现的敌人躲起来时）</li>
-<li>求助（发现敌人，但因为敌人太强而无法独自作战时）</li>
-</ul>
-<p>通常在每个状态下可做出的选择是有限的——例如当警卫的健康状况不佳时，他们可能不想寻找敌人。</p>
-<p>如果最终用一长串的“if (x and y but not z) then p”来表示，就显得有些笨拙了。如果以一种通用统一的方式来实现状态之间的转换，应该会有所帮助。为此我们要考虑所有状态，并且在每个状态下，列出到其它状态的所有转换和条件。我们还要指定一个初始状态来决定在条件适用之前从哪里开始。</p>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/the-total-beginners-guide-to-game-ai-part-2/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
 					<h1 class="title"><a href="/posts/the-total-beginners-guide-to-game-ai-part-1/">游戏AI入门指南(Part 1)</a></h1>
-					<time>Mar 20, 2021</time>
+					<time>Mar 20, 2020</time>
 					<br><div class="description">
 	
 	<p><strong>原文：</strong> <a href="https://www.gamedev.net/articles/programming/artificial-intelligence/the-total-beginners-guide-to-game-ai-r4942/">The Total Beginner&rsquo;s Guide to Game AI</a>
@@ -184,6 +147,133 @@ Everyone except for them.</p>
 				</section>
 				
 				<section class="list-item">
+					<h1 class="title"><a href="/posts/deciding-on-an-ai-architecture-which-tool-for-the-job/">如何选择游戏AI架构</a></h1>
+					<time>Dec 10, 2017</time>
+					<br><div class="description">
+	
+	<p><strong>Conference:</strong> GDC 2010</p>
+<p><strong>Session Name:</strong> Deciding on an AI Architecture: Which Tool for the Job?</p>
+<p><strong>Speaker(s):</strong> Alex Champandard, Michael Dawe, Dave Mark, Steve Rabin, Charles Rich</p>
+<p><strong>Track / Format:</strong> AI Summit</p>
+<p><strong>Video:</strong> <a href="https://gdcvault.com/play/1012411/Deciding-on-an-AI-Architecture">GDC Vault - Deciding on an AI Architecture: Which Tool for the Job?</a></p>
+<blockquote>
+<p><strong>“工欲善其事，必先利其器。”</strong></p>
+<p><strong>—— 《论语·卫灵公》</strong></p>
+</blockquote>
+<p>AI 架构的选择是 AI 程序员需要解决的最重要问题之一。这个选择将为项目奠定基础，同时也决定了未来的方向。主要的 AI 架构都有自己的优缺点，很难确定哪一个架构最适合一个项目。</p>
+<p>本次讨论将从独特的角度探讨这个问题。每一种主流架构都有一位代言人，他们将被提供假想的游戏例子，并被要求解释为什么他们支持的架构是最合适的选择，而其他的则不合适。通过不同架构的代言人就同一问题进行讨论和分析，可以更全面地评估每种架构的优劣，并对具体项目做出更合适的建议。</p>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/deciding-on-an-ai-architecture-which-tool-for-the-job/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
+					<h1 class="title"><a href="/posts/the-behavior-tree-starter-kit/">行为树入门工具包</a></h1>
+					<time>Nov 28, 2017</time>
+					<br><div class="description">
+	
+	<!-- raw HTML omitted -->
+<p>偶然看到一个2012年 Alex Champandard 的演讲<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，本想看看有什么可以借鉴，看到一半后，发现就是 Game AI Pro 的文章 《The Behavior Tree Starter Kit<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>》的演示版。结合代码<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>，对照着看一遍，有助于理解。</p>
+<h2 id="motivation">Motivation</h2>
+<p>行为树广泛应用于各个系统：角色，策略，小队，动画，镜头……</p>
+<p>使用案例：</p>
+<ul>
+<li>Rockstar Games： R.A.G.E.</li>
+<li>Guerrilla Games：Killzone 2 &amp; 3</li>
+<li>Uncharted 2</li>
+<li>Halo 3</li>
+<li>NBA &lsquo;09</li>
+<li>Metro 2033</li>
+<li>Crysis: Warhead</li>
+<li>League of Legends</li>
+</ul>
+<h2 id="the-basics">The Basics</h2>
+<h3 id="v1原型">v1：原型</h3>
+<p>一个基本的行为树实现：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">Status</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Return values of and valid states for behaviors.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    BH_INVALID,
+</span></span><span style="display:flex;"><span>    BH_SUCCESS,
+</span></span><span style="display:flex;"><span>    BH_FAILURE,
+</span></span><span style="display:flex;"><span>    BH_RUNNING,
+</span></span><span style="display:flex;"><span>    BH_ABORTED,
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Behavior</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Base class for actions, conditions and composites.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> Status update()				<span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onInitialize</span>()			{}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onTerminate</span>(Status)	{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Behavior()
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">:</span>   m_eStatus(BH_INVALID)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#f92672">~</span>Behavior()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">tick</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            onInitialize();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (m_eStatus <span style="color:#f92672">!=</span> BH_RUNNING)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            onTerminate(m_eStatus);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">reset</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> BH_INVALID;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">abort</span>()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        onTerminate(BH_ABORTED);
+</span></span><span style="display:flex;"><span>        m_eStatus <span style="color:#f92672">=</span> BH_ABORTED;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isTerminated</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus <span style="color:#f92672">==</span> BH_SUCCESS  <span style="color:#f92672">||</span>  m_eStatus <span style="color:#f92672">==</span> BH_FAILURE;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">bool</span> <span style="color:#a6e22e">isRunning</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus <span style="color:#f92672">==</span> BH_RUNNING;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Status <span style="color:#a6e22e">getStatus</span>() <span style="color:#66d9ef">const</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> m_eStatus;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    Status m_eStatus;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/the-behavior-tree-starter-kit/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
 					<h1 class="title"><a href="/posts/setup-pixijs-with-typescript-using-webpack/">基于TypeScript的PixiJS开发环境设置（webpack篇）</a></h1>
 					<time>Sep 21, 2017</time>
 					<br><div class="description">
@@ -223,51 +313,6 @@ Everyone except for them.</p>
 	
 </div>
 					<a class="readmore" href="/posts/setup-pixijs-with-typescript-using-webpack/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/setup-pixijs-with-typescript-using-browserify/">基于TypeScript的PixiJS开发环境设置（browserify篇）</a></h1>
-					<time>Sep 18, 2017</time>
-					<br><div class="description">
-	
-	<p>PixiJS 作为一款出色的WebGL 2D渲染引擎，除了支持JavaScript之外，还支持 TypeScript 。 TypeScript 的优点不言而喻，支持静态类型检查，IDE代码提示，具有较好的可读性。所以用来替代JavaScript开发项目，也有利于将来的代码重构。本文介绍了以 TypeScript 作为开发语言， PixiJS 作为图形渲染引擎， Browserify 作为模块打包工具的开发环境的配置过程。</p>
-<h2 id="前提">前提</h2>
-<p>不可或缺的当然是node。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>node --version
-</span></span></code></pre></div><h2 id="安装">安装</h2>
-<h3 id="初始化项目">初始化项目</h3>
-<ol>
-<li>创建项目目录</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>mkdir ts_pixi
-</span></span><span style="display:flex;"><span>cd ts_pixi
-</span></span><span style="display:flex;"><span>mkdir assets src dist
-</span></span></code></pre></div><ol start="2">
-<li>新建项目文件</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>touch index.html
-</span></span><span style="display:flex;"><span>touch src/main.ts
-</span></span></code></pre></div><ol start="3">
-<li>初始化项目</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm init
-</span></span></code></pre></div><h3 id="安装模块">安装模块</h3>
-<ol>
-<li>PixiJS</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save pixi.js
-</span></span></code></pre></div><ol start="2">
-<li>TypeScript</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev typescript
-</span></span></code></pre></div><ol start="3">
-<li>其它</li>
-</ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>npm install --save-dev browserify browserify-shim http-server tsify tslint
-</span></span></code></pre></div>&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/setup-pixijs-with-typescript-using-browserify/">Read more ⟶</a>
 				</section>
 				
 				

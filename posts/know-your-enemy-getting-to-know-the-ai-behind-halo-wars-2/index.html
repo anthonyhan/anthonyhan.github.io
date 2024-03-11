@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html><head lang="zh-cn">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>了解敌人：《光环战争2》的AI设计 - LimboNova</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="
+前言
+Title: Know Your Enemy: Getting to Know the AI Behind Halo Wars 2
+Reporter: Drerek Fagan
+Conference: Game AI North, 2017
+在《Know Your Enemy: Getting to Know the AI Behind Halo Wars 2》1 这次演讲中，Drerek Fagan 介绍了《光环战争2》指挥官 AI 的工作原理，以及整个 AI 系统从战术层面到战略层面的设计和实现。
+Derek Fagan 是 Creative Assembly 公司《全面战争》游戏团队中的一名 AI 程序员。2015年，他加入该公司开发了《光环战争2》的指挥官 AI 系统，从此开启了自己游戏开发的职业生涯。Derek 对人工智能的主要兴趣领域是 NPC 行为和机器学习。他于2016年从都柏林圣三一学院获得了计算机科学博士学位，论文研究主题是多智能体强化学习。" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="了解敌人：《光环战争2》的AI设计" />
+<meta property="og:description" content="
+前言
+Title: Know Your Enemy: Getting to Know the AI Behind Halo Wars 2
+Reporter: Drerek Fagan
+Conference: Game AI North, 2017
+在《Know Your Enemy: Getting to Know the AI Behind Halo Wars 2》1 这次演讲中，Drerek Fagan 介绍了《光环战争2》指挥官 AI 的工作原理，以及整个 AI 系统从战术层面到战略层面的设计和实现。
+Derek Fagan 是 Creative Assembly 公司《全面战争》游戏团队中的一名 AI 程序员。2015年，他加入该公司开发了《光环战争2》的指挥官 AI 系统，从此开启了自己游戏开发的职业生涯。Derek 对人工智能的主要兴趣领域是 NPC 行为和机器学习。他于2016年从都柏林圣三一学院获得了计算机科学博士学位，论文研究主题是多智能体强化学习。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/posts/know-your-enemy-getting-to-know-the-ai-behind-halo-wars-2/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-08-18T21:53:22+08:00" />
+<meta property="article:modified_time" content="2020-08-18T21:53:22+08:00" />
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="了解敌人：《光环战争2》的AI设计"/>
+<meta name="twitter:description" content="
+前言
+Title: Know Your Enemy: Getting to Know the AI Behind Halo Wars 2
+Reporter: Drerek Fagan
+Conference: Game AI North, 2017
+在《Know Your Enemy: Getting to Know the AI Behind Halo Wars 2》1 这次演讲中，Drerek Fagan 介绍了《光环战争2》指挥官 AI 的工作原理，以及整个 AI 系统从战术层面到战略层面的设计和实现。
+Derek Fagan 是 Creative Assembly 公司《全面战争》游戏团队中的一名 AI 程序员。2015年，他加入该公司开发了《光环战争2》的指挥官 AI 系统，从此开启了自己游戏开发的职业生涯。Derek 对人工智能的主要兴趣领域是 NPC 行为和机器学习。他于2016年从都柏林圣三一学院获得了计算机科学博士学位，论文研究主题是多智能体强化学习。"/>
+<script src="/js/feather.min.js"></script>
+	
+	
+        <link href="/css/fonts.11a1877508139eac0b5b4852ceb110c35641b3533321e66e39149e901ed5756b.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
+	
+
+	
+	
+
+	
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.js"></script>
+		<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+		
+		
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+					renderMathInElement(document.body, {
+							delimiters: [
+									{left: "$$", right: "$$", display: true},
+									{left: "$", right: "$", display: false}
+							]
+					});
+			});
+			</script>
+	
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="/">LimboNova</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/posts">Archives</a>
+		
+		<a href="/tags">Tags</a>
+		
+		<a href="/about">About</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">了解敌人：《光环战争2》的AI设计</h1>
+			<div class="meta">Posted on Aug 18, 2020</div>
+		</div>
+		
+
+		<section class="body">
+			<p><img src="/images/know-your-enemy-ai-behind-halo-wars-2/halo-wars-2-wallpaper.webp" alt="halo wars 2"></p>
+<h2 id="前言">前言</h2>
+<p><strong>Title:</strong> Know Your Enemy: Getting to Know the AI Behind Halo Wars 2<br>
+<strong>Reporter:</strong> Drerek Fagan<br>
+<strong>Conference:</strong> Game AI North, 2017</p>
+<p>在《Know Your Enemy: Getting to Know the AI Behind Halo Wars 2》<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> 这次演讲中，Drerek Fagan 介绍了《光环战争2》指挥官 AI 的工作原理，以及整个 AI 系统从战术层面到战略层面的设计和实现。</p>
+<p>Derek Fagan 是 Creative Assembly 公司《全面战争》游戏团队中的一名 AI 程序员。2015年，他加入该公司开发了《光环战争2》的指挥官 AI 系统，从此开启了自己游戏开发的职业生涯。Derek 对人工智能的主要兴趣领域是 NPC 行为和机器学习。他于2016年从都柏林圣三一学院获得了计算机科学博士学位，论文研究主题是多智能体强化学习。</p>
+<h2 id="游戏介绍2">游戏介绍<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></h2>
+<p><img src="https://images.nvidia.com/geforce-com/international/images/halo-wars-2-available-february-21/halo-wars-banner.jpg" alt="halo-wars-banner.jpg (1920×1080) (nvidia.com)"></p>
+<p>《光环战争2(Halo Wars 2)》是一款由 Creative Assembly 与 343 Industries 工作室联合设计制作的 RTS 游戏。</p>
+<p>本作是《光环战争》的续作，首作 <em>《光环战争 (Halo Wars)》</em> 发生于 2531 年，即《光环：战斗进化 (Halo: Combat Evolved)》（开启整个“光环 (Halo)”系列游戏的第一作）故事背景的 20 年前。《光环战争 2 (Halo Wars 2)》剧情紧接《光环 5：守护者 (Halo 5: Guardians)》。在这一续作中，游戏角色将会发现自己遇到“先行者 (Forerunner)”的装置“方舟 (Ark)”，其拥有制造 Halo 环带的能力。而后者是一种“先行者 (Forerunner)”曾用于检测与遏制“洪魔 (Flood)”的超巨型构造。在“方舟 (Ark)”上，UNSC 部队将会遭遇“被放逐者 (Banished)”，一个从“星盟 (Covenant)”中分裂出的雇佣兵军团。</p>
+<!-- raw HTML omitted -->
+<p>《光环战争 2 (Halo Wars 2)》精心构建并将许多源自《光环战争 1 (Halo Wars 1)》的概念发扬光大，包括一套类似石头剪刀布的单位平衡系统。举例来说，地面战车单位可用于消灭步兵单位，而步兵单位在对抗飞行单位方面极为有效。同时，飞行单位又是对付地面战车单位的有效力量。这种平衡方式使得 RTS 新手能够轻易上手，同时又为精于策略的老玩家留出足够的战术深度以供研究。游戏由 Microsoft 的 343 Industries 工作室以及广受赞誉的 Creative Assembly 开发，后者曾制作出诸多口碑一流的 RTS 大作，如《中世纪：全面战争 (Medieval: Total War )》1 和 2、《全面战争：幕府将军 2 (Total War: Shogun 2)》、《全面战争：战锤 (Total War: Warhammer)》等等。</p>
+<p><img src="https://images.nvidia.com/geforce-com/international/images/halo-wars-2/HW2_Campaign_01.png" alt="HW2_Campaign_01.png (1920×1080) (nvidia.com)"></p>
+<p>您将以俯视角度，控制基地建造、管理资源分配、建造单位、守卫目标以及征服敌人基地。随着游戏进程的展开，各种操作应接不暇，还需要充分发挥快速反应能力、多线操作能力以及战术能力，方能完成任务。“光环 (Halo)”系列的老玩家一定会觉得许多单位非常熟悉。您可在游戏中操作 M12 军用战车“疣猪” (M12 Force Application Vehicle Warthogs)、M808 主战坦克“天蝎” (M808 Main Battle Tank Scorpions)、G77S“鹈鹕”武装直升机 (G77S Pelican Gunships) 等单位。亦有全新的《光环战争 (Halo Wars)》单位，比如野兔轻战车 (Jackrabbit)、棕熊坦克 (Kodiak) 及 EV-44 支援型 VTOL 飞行器 (EV-44 Support VTOL)。</p>
+<!-- raw HTML omitted -->
+<p>游戏还提供各种多人游戏模式。在遭遇战 (Skirmish) 模式中，您可设置想要的环境以及多人模式类型，在其中对抗不同难度的大量 AI 敌人。同时，还能与 AI 或您的伙伴（通过合作模式）组队对抗敌人。在快节奏且限时的据点 (Stronghold) 模式中，您需要在时间结束时比对手占领更多的基地才能获得胜利。然后是满怀《光环战争 (Halo Wars)》传统 RTS 要素（基地、部队单位建造等）的统治 (Domination) 模式，当然还有《光环战争 2 (Halo Wars 2)》中全新的单位、领袖和特殊能力。还有死斗 (Deathmatch) 模式，玩家在其中进行 1v1 或 3v3 的对抗，直到决出最后的胜利者或团队。</p>
+<p><img src="/images/know-your-enemy-ai-behind-halo-wars-2/halo-wars-2-screenshot.webp" alt="halo wars 2 screenshot"></p>
+<p>闪电战 (Blitz) 是全新多人选项中最为独特的模式之一。在闪电战 (Blitz) 模式中，您需要建立一套数字牌组，包括一位代表您军团的领袖、手动挑选的个体单位（或团体单位）以及特殊能力。闪电战 (Blitz) 模式同样支持合作，因此一位玩家可以专注于一个方向（比如治疗），而另一位玩家则负责不同的游戏方向，比如防御或进攻。然后消耗能量（可在游戏地图中随机寻到）从牌组中打出卡牌。由于某些卡牌会比其他卡牌消耗更多的能量，因此这一模式的关键在于建立一套平衡的牌组。游玩单人战役即可获得不同类型的卡牌。您亦可以购买卡包，当然 <a href="https://www.windowscentral.com/everything-you-need-know-about-halo-wars-2-blitz-mode">Creative Assembly 再三保证</a>这不会使游戏变得“氪金至上”。</p>
+<h2 id="需求和目标">需求和目标</h2>
+<h3 id="需求">需求</h3>
+<ul>
+<li>战略上足够出色的敌人（<em>Atriox</em>）</li>
+<li>战役模式
+<ul>
+<li>玩家必须比 <em>Atriox</em> 采取更好的策略来获胜。</li>
+<li>AI 必须能够代表 <em>Atriox</em> 的形象，在战略上极富才华，在战术上也极为致命。</li>
+</ul>
+</li>
+<li>多人模式
+<ul>
+<li>玩家必须比对手采取更好的策略来获胜。</li>
+<li>遭遇战 AI 能够训练和锻炼玩家，使他们为多人对战做好准备。</li>
+</ul>
+</li>
+</ul>
+<h3 id="目标">目标</h3>
+<p>构建一个具备以下能力的<strong>指挥官 AI</strong>：</p>
+<ul>
+<li>教会玩家如何正确地玩游戏，而不只是简单地当作打靶练习。（AI 不只是简单地让玩家攻击，更重要的是通过玩家与 AI 的对抗，教会他们游戏的正确玩法。而不是把 AI 当成纯粹的&quot;靶子&quot;进行无意义的攻击练习。）</li>
+<li>像人类玩家一样玩游戏</li>
+<li>具备个性特征，从而让游戏有众多性格各异的指挥官。</li>
+<li>具备不同的战略风格，比如Rush，Turtle，Fast Tech。</li>
+<li>能够满足不同的游戏模式，如 Skirmish（主要），Death match，Domination，Shtrongholds，Campaign（次要）等等。</li>
+<li>能够根据难度级别调整AI强度，高难度时更聪明，低难度时更笨。</li>
+<li>能够在宏观和微观两个层面上做决策。</li>
+<li><strong>不能作弊</strong></li>
+</ul>
+<h2 id="玩家如何思考">玩家如何思考？</h2>
+<blockquote>
+<p>“You need to know how humans play if you are going to make something that plays like a human.&quot;
+Kimberly Voll - GDC 2015</p>
+</blockquote>
+<ul>
+<li>基于高水平玩家的思路建模 AI</li>
+<li>1v1 对战模式中的冠军</li>
+<li>关键能力
+<ul>
+<li>以非常高的水平来<strong>对战</strong></li>
+<li><strong>分析</strong>自己和他人的游戏过程</li>
+<li><strong>传达</strong>分析结果的发现。将分析结果以简明扼要的方式呈现出来，让其他相关人员能够全面地理解和掌握这些发现的内容和意义。</li>
+</ul>
+</li>
+<li>AI 是否有微操的能力？</li>
+</ul>
+<h2 id="ai-双层架构">AI 双层架构</h2>
+<p><img src="/images/know-your-enemy-ai-behind-halo-wars-2/ai-layers.webp" alt="halo wars 2 AI layers"></p>
+<h3 id="宏观战略层">宏观战略层</h3>
+<p><img src="/images/know-your-enemy-ai-behind-halo-wars-2/ai-layer-macro-map.webp" alt="marco layer mini-map"></p>
+<p><strong>策略类型</strong></p>
+<ul>
+<li><strong>Rush</strong>：以最快的速度集结进攻力量，在对手经济刚起步时就发动猛攻，利用先手优势尽早摧毁敌人的根基。这需要 AI 高效地管理资源,快速生产大量进攻单位，在短时间内形成压倒性的兵力。</li>
+<li><strong>Boom</strong>：在游戏初期快速开拓多个基地，通过积累资源和大量生产单位，逐步在经济和兵力上压倒对手。</li>
+<li><strong>Map Control</strong>：迅速占领关键的战略要地和资源点,从而获得经济、地利等方面的优势,进而建立整体的领先地位。与 Boom 策略类似，都重视经济发展。但 Map Control 更注重快速扩张版图的控制力，采取更加主动进攻的方式。它不仅占领自身的基地点，还会主动出击夺取其他的占领点。</li>
+<li><strong>Fast Tech</strong>：追求快速提升科技等级，率先获得高级单位的生产能力。跳过生产低级单位的阶段，而是先渡过一个科技飞跃期，迅速推进到高级兵种。</li>
+<li><strong>Trutle</strong>：以防御为先，通过最大限度地加强防御力量和经济基础来确保安全。它不太有进攻性，而是尽量拖延战事，让自身力量持续积累。这种策略与 Boom 很相似，但 Turtle AI 更倾向于在一级单位和防御设施上投入更多资源，尽可能延长一级单位的使用时间，同时开拓多个基地并修建防御设施。</li>
+</ul>
+<p><img src="/images/know-your-enemy-ai-behind-halo-wars-2/ai-layer-macro-example.webp" alt="Macro Layer Strategy Example"></p>
+<h3 id="微观战术层">微观战术层</h3>
+<p><strong>微观行为类型</strong></p>
+<ul>
+<li>Pull back（撤回）：在承受攻击或处于不利形势时，将单位临时后撤避免伤亡。</li>
+<li>Kite（放风筝）：使用机动力较强的单位对敌人进行持续骚扰，然后在敌人反击时迅速离开。</li>
+<li>Push Advantage（扩大优势）：当取得一定优势后，持续施加压力将优势扩大到极致，迫使敌人陷入被动。</li>
+<li>Auto garrison（自动驻扎）：当受到攻击时,自动将附近可驻防单位调遣进入建筑物中防御。</li>
+<li>Focus fire（集中火力）：集中火力攻击同一个目标，尽快将其摧毁。</li>
+<li>Hold ground（固守阵地）：命令单位固守阵地，不准后撤。</li>
+<li>Scatter（分散队形）：将集中的单位分散开来，避免遭到范围性攻击的伤害。</li>
+<li>Group up（组队集结）：将分散的单位重新集合，增强实力。</li>
+<li>Heal（治疗）：对受伤单位进行治疗。</li>
+<li>主动技能
+<ul>
+<li>投掷手雷</li>
+<li>地雷相关的行为</li>
+<li>隐形和护盾</li>
+<li>……</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/know-your-enemy-ai-behind-halo-wars-2/ai-layer-micro-example.webp" alt="Micro Layer Behavior Example"></p>
+<h2 id="agent-架构">Agent 架构</h2>
+<p><img src="/images/know-your-enemy-ai-behind-halo-wars-2/ai-agent-arch.webp" alt="Agent Architecture Overview"></p>
+<h3 id="控制级别">控制级别</h3>
+<p>将 AI 分为“宏观”和“微观”两层，可以实现不同程度的控制：</p>
+<ul>
+<li><strong>完全控制</strong>：宏观层(Macro)负责整体战略、经济管理、科研布局等，微观层(Micro)负责每个战斗单位的精细指挥、战术行为等。两层紧密协同，AI可以在战略和战术层面都发挥出色的控制能力。适用于对AI要求最高的场景,如遭遇战(Skirmish)和战役模式(Campaign)。</li>
+<li><strong>部分控制</strong>：只控制微观层(Micro)的行为，宏观层(Macro)由预设脚本或简单的策略系统处理。如脚本设定的战役模式 AI 或火力对抗模式(Firefight Mode)等简化场景。</li>
+<li><strong>无控制</strong>：AI 系统完全不介入控制，交由玩家全权处理游戏内的所有操作。</li>
+</ul>
+<h3 id="心智社会society-of-mind">心智社会(Society of Mind)</h3>
+<p>&ldquo;Society of Mind&quot;是指一种 AI 系统的架构设计理念，来自于 MIT 教授 Marvin Minsky 提出的理论模型。</p>
+<p>在这种设计理念中，智能系统被视为由许多较小的独立进程或“智能Agent”组成的“社会”。每个智能 Agent 负责处理特定的任务,例如视觉、语言、规划等。这些 Agent 相互协作、交互传递信息,共同构成了看似统一的智能系统。</p>
+<p>这种分而治之的方式类似于人类大脑是由众多神经元组成的网络。Society of Mind 的设计思想认为，通过将复杂的智能分解成许多较小的模块,能够更容易地克服人工智能系统设计中的难题。</p>
+<p>基于“心智社会”的理念，《光环战争2》将 AI 拆分为众多不同的模块，如图所示：</p>
+<p><img src="/images/know-your-enemy-ai-behind-halo-wars-2/ai-agent-arch-society-of-mind.webp" alt="Agent Architecture - Society of Mind"></p>
+<p>宏观(Macro)层主要负责战略决策和高层次的管理,包括:</p>
+<ul>
+<li><strong>策略管理器</strong>：在游戏开始时读取策略表的数据。</li>
+<li><strong>策略表</strong>是一个表格，包含以下数据：
+<ul>
+<li>描述 AI 的宏观策略类型，如 Rush，Turtle，Fast Tech等。</li>
+<li>建筑的建造顺序</li>
+<li>任务(Mission)
+<ul>
+<li>攻击</li>
+<li>防御</li>
+<li>侦察</li>
+<li>搜寻</li>
+</ul>
+</li>
+<li>科技的解锁顺序</li>
+<li>指挥官能力的解锁顺序</li>
+<li>静态数据和一些响应式(reactive)数据。静态数据为 AI 提供了基本的框架和方针，响应式数据则赋予了 AI 根据具体情况调整策略的能力。
+ - <strong>警报管理器</strong>：动态添加任务(Mission)和防御建筑到列表中
+ - <strong>策略决策器</strong>：扩展和调整根据策略表执行的决策。</li>
+</ul>
+</li>
+<li><strong>Bid Manager</strong>：负责宏观层级的行为调度和资源分配决策。</li>
+</ul>
+<p>微观(Micro)层则负责具体的战术行为指挥：</p>
+<ul>
+<li><strong>微观操作管理器</strong>：负责指挥单位的微观战术行为，如移动、攻击等。</li>
+<li>结合来自宏观战略层 “<strong>Mission Manager</strong>”的信息，最终输出单位的移动命令(Movement Commands)<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>。</li>
+</ul>
+<h2 id="数据驱动">数据驱动</h2>
+<p><img src="/images/know-your-enemy-ai-behind-halo-wars-2/data-driven-script.webp" alt="Fully Script - full designer control"></p>
+<p>完全脚本化：完全由设计师控制；<br>
+完全硬编码：完全由程序员控制；<br>
+数据驱动：基于 XML 的领域特定语言（Domain Specific Language, DSL），由设计师和程序员共同控制。双方理解系统需求，共同参与设计DSL，能够快速实现 DSL 的迭代和 AI 策略的原型设计。</p>
+<p>通过数据驱动，设计师只需要专注设计各个指挥官的行为，而不必关心这些行为的底层实现。</p>
+<p>策略表(Strategy Table)数量</p>
+<ul>
+<li>发售版本
+<ul>
+<li>战役：28</li>
+<li>遭遇战：66</li>
+</ul>
+</li>
+<li>DLC
+<ul>
+<li>战役：15</li>
+<li>遭遇战：111</li>
+</ul>
+</li>
+<li>总计：220</li>
+</ul>
+<h3 id="策略表的缺点">策略表的缺点</h3>
+<ul>
+<li>需要维护太多策略表。一个可行的解决办法是采用通用的标准化规则，但也允许有一些例外的特殊处理。</li>
+<li>随着游戏的持续更新、平衡性调整以及新DLC的推出，设计师需要持续投入资源来更新维护策略表，才能跟上游戏的变化。</li>
+</ul>
+<p>长期下去，这无疑会带来人力和时间成本的沉重负担。因此,如何在保持 AI 策略先进性的同时，减轻持续维护的工作量，将是策略表面临的一大挑战。</p>
+<h3 id="难度级别">难度级别</h3>
+<p>不同难度级别对应不同的 AI 行为，高难度下会表现得更加智能，低难度下会表现得差一点。因此一个策略文件可以包含多个策略表，每个难度对应一个策略表。这种方法主要用于战役模式，让关卡设计师对 AI 有更强的掌控。</p>
+<p>另一种方法是使用单个策略表，通过调整参数来适配不同的难度级别(heroic/normal/easy)，这种方法用于遭遇战 AI。</p>
+<p>还有其他 AI 属性的调整，调整方式通常是基于难度文件中定义的分段函数。诸如强力单位的数量上限、基地防御炮塔上限、科技/指挥官能力升级限制、微操行为限制等属性，可根据难度等级的不同进行调整。</p>
+<p>原先设置遭遇战的难度，AI 在低难度下倾向于重点防守自身基地而不扩张，虽然 AI 策略受到了限制，但是玩家反映低难度时 AI 反而过于困难。</p>
+<p>后来根据玩家反馈吗，开发团队对低难度 AI 进行了调整。现在的低难度 AI 会扩张，但在限制了升级、指挥官能力使用、防御建设等方面。</p>
+<h2 id="优化">优化</h2>
+<ul>
+<li>将触发脚本迁移到 C++ 代码</li>
+<li>多线程</li>
+<li>时间切片</li>
+<li>Bucketing(轮询)</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>整个演讲解释了《光环战争2》AI 系统的设计需求和目标，介绍了 AI 系统分层架构的设计和实现，基于“心智社会”理念拆散了系统，降低了系统复杂性。同时使用基于 XML 的 DSL 实现了数据驱动，策略表的设计也使得游戏 AI 具有足够的灵活性和可控性。这种灵活性和可控性对于构建高质量、均衡的 AI 系统至关重要，值得借鉴学习。</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="https://www.gameainorth.com/2017/#sessions">Game AI North - GAIN17 Archive</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>本节内容源自 <a href="https://www.nvidia.cn/geforce/news/gfecnt/halo-wars-2-available-february-21-on-pc/">《《光环战争 2 (Halo Wars 2)》将于 2 月 21 日登陆 PC 平台，游戏超棒的附加功能与系统要求亦将一一揭晓 》</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p>这里的“Movement Commands”指的是单位战术命令，可能不仅仅是移动命令。&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+		</section>
+
+		<br>
+		<br>
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/game-dev">game dev</a></li>
+					
+					<li><a href="/tags/game-ai">game ai</a></li>
+					
+					<li><a href="/tags/halo">halo</a></li>
+					
+					<li><a href="/tags/rts">rts</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		
+		
+<script src="https://utteranc.es/client.js"
+        repo="anthonyhan/anthonyhan.github.io"
+        issue-term="pathname"
+        label="💬comment"
+        theme="preferred-color-scheme"
+        crossorigin="anonymous"
+        async>
+</script>
+		
+	</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/anthonyhan" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a><a class="soc" href="https://twitter.com/_qhan_" rel="me" title="Twitter"><i data-feather="twitter"></i></a>
+    <a class="border"></a><a class="soc" href="/index.xml" rel="me" title="Rss"><i data-feather="rss"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  © Anthony |  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

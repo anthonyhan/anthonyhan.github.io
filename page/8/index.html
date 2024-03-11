@@ -76,6 +76,42 @@
 				
 				
 				<section class="list-item">
+					<h1 class="title"><a href="/posts/similar-image-searching-algorithm-as3/">基于AS3.0的相似图像搜索算法实现</a></h1>
+					<time>Aug 14, 2012</time>
+					<br><div class="description">
+	
+	<p>Google的图像搜索，可以根据用户上传或者网络上的图片找到与此最相似的图片(百度也有类似功能)。</p>
+<p><img src="https://pjkm4w.bay.livefilestore.com/y1pOjCa3mvtvwKjegr_UmRLkNG9nUpMQU-uMfHod4eqmrtsEsIHz4jI_4yyhi7oe7xURPx9ZOu-lMQsUi8FbN4reRvqjqVlik3i/google_image_search.png" alt="google image search" title="Google Image Search"></p>
+<p>阮一峰的博客曾经提到过 “感知哈希算法(Perceptual hash algorithm)”，主要介绍了 Dr. Neal Krawetz基于感知哈希算法的”平均哈希算法(Average Hash algorithm)”。相比其他算法，这种算法简单快速，很容易实现。</p>
+<p>对于图像来说，高频信息体现图像的细节，低频信息体现图像的边缘和轮廓。一幅大而清晰的图像不仅包含低频，而且会包含很多高频分量。而小图片因为缺乏细节部分，往往只有低频信息。因此用只包含低频分量的图像来做图像相似度匹配是非常合适的。</p>
+<p>感知哈希算法的基本原理是根据图像特征生成一个特定(但非唯一)的指纹，根据指纹来比较图像的相似度。其特点是，即使图像放大缩小，调整高宽，或者有少许色彩变化（对比度，亮度等等），仍然可以匹配到相似的图像。</p>
+<h2 id="平均哈希算法average-hash-algorithm">平均哈希算法(Average Hash algorithm)</h2>
+<p>实现步骤如下：</p>
+<ol>
+<li>
+<p>缩小尺寸：移除高频部分，将图像缩小至8×8像素,不考虑高宽比；
+{% img <a href="https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg">https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkYhvSu94Q9L0iRya9-bx-0UDrNZDL8yb3_2ODB88DXQAhb3f4Oe8J9Kj8eElRgB1nZy95uSdf8Uye0dNGwDPpWW/reduce_size.jpg</a> 64 64 %}</p>
+</li>
+<li>
+<p>减少颜色：转为灰度图，将64像素的RGB 64×3个颜色值简化为 64个色值；
+{% img <a href="https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg">https://pjkm4w.bay.livefilestore.com/y1pEQIINXhwtkZyypWiFbXh51KEaUsH1RT_1Qli_UpOupdO-_1PbPXCbINY0UQRbfgfHPmXyoTqz0kcq963cYITTxHLInBtZQGl/reduce_color.jpg</a> 64 64 %}</p>
+</li>
+<li>
+<p>计算平均值：计算64个颜色的均值；</p>
+</li>
+<li>
+<p>比较灰度值：将每个像素的颜色值与平均值比较，小于均值记0，否则记1；</p>
+</li>
+<li>
+<p>计算哈希值：将上述的比较结果拼起来构成一个64位的整数。</p>
+</li>
+</ol>&hellip;
+	
+</div>
+					<a class="readmore" href="/posts/similar-image-searching-algorithm-as3/">Read more ⟶</a>
+				</section>
+				
+				<section class="list-item">
 					<h1 class="title"><a href="/posts/actionscript-3-0-closure/">ActionScript 3.0 闭包及作用域</a></h1>
 					<time>Aug 5, 2012</time>
 					<br><div class="description">
@@ -182,17 +218,6 @@
 	
 </div>
 					<a class="readmore" href="/posts/native-mouse-cursors-in-flash/">Read more ⟶</a>
-				</section>
-				
-				<section class="list-item">
-					<h1 class="title"><a href="/posts/apache-flex-4-8-0-news-trial/">Apache Flex 4.8.0 近况及试用</a></h1>
-					<time>Jul 9, 2012</time>
-					<br><div class="description">
-	
-	自从Apache接手Flex已经过去了半年。虽然已经有一年没有开发Flex应用，但是一直关注着对于这个框架的未来和发展。To be or not to be, tha&hellip;
-	
-</div>
-					<a class="readmore" href="/posts/apache-flex-4-8-0-news-trial/">Read more ⟶</a>
 				</section>
 				
 				

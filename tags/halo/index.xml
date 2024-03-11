@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>halo on LimboNova</title>
+    <title>Halo on LimboNova</title>
     <link>/tags/halo/</link>
-    <description>Recent content in halo on LimboNova</description>
+    <description>Recent content in Halo on LimboNova</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>© Anthony</copyright>
-    <lastBuildDate>Sun, 20 Jun 2021 21:17:08 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 18 Aug 2020 21:53:22 +0800</lastBuildDate>
     <atom:link href="/tags/halo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>了解敌人：《光环战争2》的AI设计</title>
+      <link>/posts/know-your-enemy-getting-to-know-the-ai-behind-halo-wars-2/</link>
+      <pubDate>Tue, 18 Aug 2020 21:53:22 +0800</pubDate>
+      <guid>/posts/know-your-enemy-getting-to-know-the-ai-behind-halo-wars-2/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;/images/know-your-enemy-ai-behind-halo-wars-2/halo-wars-2-wallpaper.webp&#34; alt=&#34;halo wars 2&#34;&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;Title:&lt;/strong&gt; Know Your Enemy: Getting to Know the AI Behind Halo Wars 2&lt;br&gt;&#xA;&lt;strong&gt;Reporter:&lt;/strong&gt; Drerek Fagan&lt;br&gt;&#xA;&lt;strong&gt;Conference:&lt;/strong&gt; Game AI North, 2017&lt;/p&gt;&#xA;&lt;p&gt;在《Know Your Enemy: Getting to Know the AI Behind Halo Wars 2》&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 这次演讲中，Drerek Fagan 介绍了《光环战争2》指挥官 AI 的工作原理，以及整个 AI 系统从战术层面到战略层面的设计和实现。&lt;/p&gt;&#xA;&lt;p&gt;Derek Fagan 是 Creative Assembly 公司《全面战争》游戏团队中的一名 AI 程序员。2015年，他加入该公司开发了《光环战争2》的指挥官 AI 系统，从此开启了自己游戏开发的职业生涯。Derek 对人工智能的主要兴趣领域是 NPC 行为和机器学习。他于2016年从都柏林圣三一学院获得了计算机科学博士学位，论文研究主题是多智能体强化学习。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>《光环3》行为树AI的进化</title>
+      <link>/posts/evolving-halo-3-behavior-tree-ai/</link>
+      <pubDate>Wed, 08 Jul 2020 17:46:53 +0800</pubDate>
+      <guid>/posts/evolving-halo-3-behavior-tree-ai/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;https://www.shuspectra.com/wp-content/uploads/2018/11/halo3.jpg&#34; alt=&#34;halo 3&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;这是2007年游戏开发者大会(GDC &amp;lsquo;07)上的一篇演讲，Bungie Studios 的 Max Dyckhoff 介绍了从《光环2》到《光环3》，开发团队对其行为树 AI 系统所做的改进。&lt;/p&gt;&#xA;&lt;h2 id=&#34;stimulus-behaviors&#34;&gt;Stimulus Behaviors&lt;/h2&gt;&#xA;&lt;p&gt;&lt;strong&gt;问题：&lt;/strong&gt; 在行为树每次更新时，很少触发的事件驱动行为也会检查。在一定程度上引起了不必要的性能消耗。&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Halo 2：&lt;/strong&gt; 将行为或冲动以动态或异步的方式添加到行为树的指定位置。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>《光环 2》的游戏AI系统设计</title>
       <link>/posts/managing-complexity-in-the-halo-2-ai-system/</link>
-      <pubDate>Sun, 20 Jun 2021 21:17:08 +0800</pubDate>
+      <pubDate>Sat, 20 Jun 2020 21:17:08 +0800</pubDate>
       <guid>/posts/managing-complexity-in-the-halo-2-ai-system/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Conference:&lt;/strong&gt; GDC 2005&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Speaker(s)  :&lt;/strong&gt; Damian Isla&lt;/p&gt;&#xA;&lt;p&gt;&lt;strong&gt;Video:&lt;/strong&gt; &lt;a href=&#34;https://www.youtube.com/watch?v=m9W-hpxuApk&#34;&gt;Managing Complexity in the Halo 2 AI System - YouTube&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;《光环》系列的 AI 久负盛名，其行为树的应用堪称业界典范。而 Damian Isla 在 GDC 2005 的演讲《Managing Complexity in the Halo 2 AI System》成了行为树架构设计绕不开的参考资料。结合演讲视频和演示幻灯片，精读了文章《GDC 2005 Proceeding: Handling Complexity in the Halo 2 AI》。&lt;/p&gt;&#xA;&lt;h2 id=&#34;复杂性问题&#34;&gt;复杂性问题&lt;/h2&gt;&#xA;&lt;h3 id=&#34;可扩展性的复杂性&#34;&gt;可扩展性的复杂性&lt;/h3&gt;&#xA;&lt;p&gt;可扩展性（Scalability）的3个维度：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Variety： 大量不同的角色：野猪兽，精英，鬼面兽，猎人，地狱伞兵，海军陆战队……&lt;/li&gt;&#xA;&lt;li&gt;Variation： 不同的使用故事场景：叙事性，节奏性，戏剧性，挑战性……&lt;/li&gt;&#xA;&lt;li&gt;Volume： 大量不同的行为：近战，射击，驾驶，躲藏……&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h3 id=&#34;设计需求的复杂性&#34;&gt;设计需求的复杂性&lt;/h3&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Transparency&lt;/strong&gt;：即使是不了解 AI 内部工作原理的外行观察者（玩家）能够对AI的内部状态做出合理的推断，并以此来解释和预测AI的行为。&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Coherence&lt;/strong&gt;：保持行为的连贯性和一致性。为了让AI的行为更连贯自然，需要注意启动、停止动作的时机合理。还要特别防止 AI 行为中出现摇摆不定问题，即在两个选项间反复切换的现象。&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Directability&lt;/strong&gt;：保证可指挥性，AI 系统应该能够接受设计师的指示和命令。&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Workability&lt;/strong&gt;：对设计和开发它的工程师应该要有足够的可操作性，工程师需要能够读取、理解AI系统内部的状态和运作机制，对 AI 系统进行测试、调试、修改与优化。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;如何管理复杂性&#34;&gt;如何管理复杂性&lt;/h2&gt;&#xA;&lt;h3 id=&#34;决策机制&#34;&gt;决策机制&lt;/h3&gt;&#xA;&lt;h4 id=&#34;行为-dag&#34;&gt;行为 DAG&lt;/h4&gt;&#xA;&lt;p&gt;Halo 2 AI实现了行为树，更具体地说，是行为DAG（有向无环图），因为单个行为（或行为子树）可以占据图中的多个位置。下图为Halo 2的实际核心行为DAG的精简版本，原图包含50种不同的行为。&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;/images/managing-complexity-in-the-halo-2-ai-system/behavior-dag.webp&#34; alt=&#34;example of behavior-dag&#34;&gt;&lt;/p&gt;</description>
     </item>
