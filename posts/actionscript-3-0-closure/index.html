@@ -33,7 +33,18 @@ Scheme语言设计者这样定义闭包：”we introduce the notion of a closur
 作用域链(The scope chain)
 无论何时开始执行函数，都会创建许多对象和属性。首先，会创建一个称为激活对象 的特殊对象，该对象用于存储在函数体内声明的参数以及任何局部变量或函数。由于激活对象属于内部机制，因此您无法直接访问它。接着，会创建一个范围链，其中包含由 Flash Player 或 Adobe AIR 检查标识符声明的对象的有序列表。所执行的每个函数都有一个存储在内部属性中的作用域链。对于嵌套函数，范围链始于其自己的激活对象，后跟其父函数的激活对象。作用域链以这种方式延伸，直到到达全局对象。全局对象是在 ActionScript 程序开始时创建的，其中包含所有的全局变量和函数。" />
 	<meta property="og:image" content=""/>
-	<meta property="og:title" content="ActionScript 3.0 闭包及作用域" />
+	
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SVMJ2LPT6E"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-SVMJ2LPT6E', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="ActionScript 3.0 闭包及作用域" />
 <meta property="og:description" content="闭包作为动态语言的基石，在OO实现和框架构建上有着-十分重要的作用。但是闭包的定义比较抽象，不利于理解，闭包在各语言中的实现不尽相同，闭包的函数作用域也有区别。
 参考整理了这篇文章(非原创),主要内容来自
 
@@ -110,7 +121,7 @@ Scheme语言设计者这样定义闭包：”we introduce the notion of a closur
 	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
 		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
 	
-
+	
 	
 	
 
@@ -300,6 +311,17 @@ Scheme语言设计者这样定义闭包：”we introduce the notion of a closur
   </div>
 </footer>
 
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-SVMJ2LPT6E', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 <script>
   feather.replace()

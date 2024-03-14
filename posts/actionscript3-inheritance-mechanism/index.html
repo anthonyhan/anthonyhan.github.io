@@ -12,7 +12,18 @@ ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本�
 尽管第一代 ActionScript 不支持使用 class 关键字定义类，但是可以使用称为原型对象的特殊对象来定义类。Java 和 C&#43;&#43; 等基于类的语言中使用 class 关键字创建要实例化为具体对象的抽象类定义，而 ActionScript 1.0 等基于原型的语言则将现有对象用作其它对象的模型（或原型）。基于类的语言中的对象可能指向作为其模板的类，而基于原型的语言中的对象则指向作为其模板的另一个对象（即其原型）。
 要在 ActionScript 1.0 中创建类，可以为该类定义一个构造函数。在 ActionScript 中，函数不只是抽象定义，还是实际对象。您创建的构造函数用作该类实例的原型对象。以下代码创建一个名为 Shape 的类，还定义一个名为 visible 的属性，该属性默认情况下设置为 true：" />
 	<meta property="og:image" content=""/>
-	<meta property="og:title" content="ActionScript3的继承机制" />
+	
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SVMJ2LPT6E"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-SVMJ2LPT6E', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="ActionScript3的继承机制" />
 <meta property="og:description" content="因为从Flex 3时开始使用ActionScript，所以错过了ActionScript 3.0之前的时代。虽然知晓ActionScript是遵循ECMAScript 标准的动态语言。但是自AS3.0 之后变化很大，看AS2.0 和 AS3.0的代码，如同javaScript 和 java 的差别。后来了解到AS3.0有两种继承机制：原型继承(prototype)和固定属性继承(traits)，从中能明显看出这门语言的所历经的改变和革新：为什么会支持动态类型，为什么用原型继承，为什么又会有固定属性继承？为什么静态属性，静态方法无法被继承……这些由于历史原因而遗留的种种疑问也就迎刃而解。
 本文主要内容源自Adobe官方教程：ActionScript 中面向对象的编程-高级主题 ，图文并茂，外加代码诠释，介绍得详细易懂，因此我也不想加多余的内容。
 本节开始先简单介绍 ActionScript 和 OOP 的历史，然后讨论 ActionScript 3.0 对象模型，以及该模型如何启用新的 ActionScript 虚拟机 (AVM2) 显著提供运行速度（与包含旧 ActionScript 虚拟机 (AVM1) 的以前版本的 Flash Player 相比）。
@@ -47,7 +58,7 @@ ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本�
 	<link rel="stylesheet" type="text/css" media="screen" href="/css/main.d902908ac6e0fab67957de5db5aea1b6455b19ae2ca98eac4c95a4a0fdc02238.css" />
 		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="/css/dark.c95c5dcf5f32f8b67bd36f7dab66680e068fce2b303087294114aabf7a7c080b.css" media="(prefers-color-scheme: dark)"  />
 	
-
+	
 	
 	
 
@@ -280,6 +291,17 @@ ActionScript 1.0 指在 Flash Player 6 和更早版本中使用的语言版本�
   </div>
 </footer>
 
+
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'G-SVMJ2LPT6E', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
 
 <script>
   feather.replace()
